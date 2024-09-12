@@ -7,24 +7,56 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-.DS_Store
-dist
-dist-ssr
-coverage
-*.local
+# Dependency directories
+node_modules/
 
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build directories
+dist/
+dist-ssr/
+coverage/
+
+# Cypress test output
 /cypress/videos/
 /cypress/screenshots/
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# TypeScript build info
 *.tsbuildinfo
+
+# OS generated files
+# macOS files
+.AppleDouble
+.LSOverride
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.apdisk
+
+# Windows files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
