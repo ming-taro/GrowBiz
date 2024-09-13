@@ -103,7 +103,7 @@ def get_real_estate_list(selected_deal_types):
     params = {
         "tabNo": 4,
         "sno": "",
-        "ldongCd": "1168010300",  # 서울 서초구 반포동 예시
+        "ldongCd": "1165010600",  # 서울 서초구 반포동 예시
         "aptNo": "",
         "laCrd": "",
         "loCrd": "",
@@ -117,7 +117,9 @@ def get_real_estate_list(selected_deal_types):
         "dealKindCdListStr": deal_kind_cd_list_str,  # 거래 종류 코드
         "maxBscTnthWuntAmt": "",
         "maxAddTnthWuntAmt": "",
-        "selectPeriod": "PR"
+        # "selectPeriod": "PR",
+        "pageNum": 0,  # 페이지 번호
+        "offset": 100   # 데이터 오프셋
     }
 
     # GET 요청 보내기
