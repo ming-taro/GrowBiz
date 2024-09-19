@@ -1,6 +1,8 @@
 import './assets/main.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'vue-awesome-paginate/dist/style.css';
+import './assets/css/main.css';
+import './assets/css/utility.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
