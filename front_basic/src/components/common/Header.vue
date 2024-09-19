@@ -1,9 +1,9 @@
 <template>
   <header>
     <div
-      class="w-lg-75 mx-2 mx-lg-auto position-relative z-2 px-lg-3 py-0 shadow-5 rounded-3 rounded-lg-pill bg-dark"
+      class="w-lg-75 mx-2 mx-lg-auto position-relative z-2 px-lg-3 py-0 shadow-5 rounded-3 rounded-lg-pill bg-white"
     >
-      <nav class="navbar navbar-expand-lg navbar-dark p-0" id="navbar">
+      <nav class="navbar navbar-expand-lg navbar-black p-0 " id="navbar">
         <div class="container px-sm-0">
           <a class="navbar-brand d-inline-block w-lg-64" href="#"
             ><img
@@ -25,41 +25,47 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav gap-2 mx-lg-auto">
               <li class="nav-item">
-                <a class="nav-link rounded-pill" href="/" aria-current="page"
-                  >Product</a
+                <a class="fw-bold nav-link rounded-pill" href="/" aria-current="page"
+                  >시뮬레이션</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link rounded-pill" href="/pages/dashboard.html"
-                  >Dashboard</a
+                <a class="fw-bold nav-link rounded-pill" href="/pages/dashboard.html"
+                  >가계관리</a
                 >
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link rounded-pill"
+                  class="fw-bold nav-link rounded-pill"
                   href="/pages/page-table-listing.html"
-                  >Trade</a
+                  >커뮤니티</a
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link rounded-pill" href="/pages/page-list.html"
-                  >Stake</a
+                <a class="fw-bold nav-link rounded-pill" href="/pages/page-list.html"
+                  >정보광장</a
                 >
+              </li>
+              <li class="nav-item">
+                <a class="fw-bold nav-link rounded-pill" href="/pages/page-table-listing.html">
+                  마이페이지
+                </a>
               </li>
             </ul>
             <div
               class="navbar-nav align-items-lg-center justify-content-end gap-2 ms-lg-4 w-lg-64"
             >
-              <a
-                class="nav-item nav-link rounded-pill d-none d-lg-block"
-                href="/pages/login.html"
-                >Sign in</a
-              >
-              <a
+            <a
                 href="/pages/register.html"
-                class="btn btn-sm btn-white bg-dark-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
-                >Get started</a
+                class="btn fw-bold btn-sm btn-warning bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
+                >회원가입</a
               >
+              <a
+                class="fw-bold nav-item nav-link rounded-pill d-none d-lg-block"
+                href="/pages/login.html"
+                >로그인</a
+              >
+              
             </div>
           </div>
         </div>
