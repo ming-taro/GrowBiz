@@ -1,8 +1,8 @@
 <template>
   <header>
     <div
-      class="w-lg-75 mx-2 mx-lg-auto position-relative z-2 px-lg-3 py-0 shadow-5 rounded-3 rounded-lg-pill bg-white"
-    >
+      class=" mx-2 mx-lg-auto position-relative z-2 px-lg-3 py-0 rounded-3 rounded-lg-pill bg-white"
+      style="width: 90%">
       <nav class="navbar navbar-expand-lg navbar-black p-0 " id="navbar">
         <div class="container px-sm-0">
           <a class="navbar-brand d-inline-block w-lg-64" href="#"
