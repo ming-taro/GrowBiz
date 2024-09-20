@@ -1,22 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../pages/HomePage.vue';
-import authRotes from './auth';
-import boardRotes from './board';
-import travelRoutes from './travel';
-import galleryRoutes from './gallery';
+import Home from '@/pages/Home.vue';
+import Shop from '@/pages/Shop.vue';
+import Community from '@/pages/community/Community.vue';
+import InfoPlaza from '@/pages/InfoPlaza/InfoPlaza.vue';
+import Report from '@/pages/report/Report.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomePage,
-    },
-    ...authRotes,
-    ...boardRotes,
-    ...travelRoutes,
-    ...galleryRoutes,
+    { path: '/', name: 'Home', component: Home },
+    { path: '/shop', name: 'Shop', component: Shop },
+    { path: '/community', name: 'Community', component: Community },
+    { path: '/infoPlaza', name: 'InfoPlaza', component: InfoPlaza },
+    { path: '/report', name: 'Report', component: Report },
+    // { path: '/input', name: "Input", component: Input },
+    // { path: '/input2', name: "Input2", component: Input2 },
+    // { path: '/update', name: "Update", component: Update },
   ],
 });
 
