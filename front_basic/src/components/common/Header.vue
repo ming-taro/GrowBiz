@@ -37,7 +37,7 @@
               <li class="nav-item">
                 <a
                   class="fw-bold nav-link rounded-pill"
-                  href="/community/community"
+                  href="/community"
                   >커뮤니티</a
                 >
               </li>
