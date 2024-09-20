@@ -37,7 +37,7 @@
               <li class="nav-item">
                 <a
                   class="fw-bold nav-link rounded-pill"
-                  href="/pages/page-table-listing.html"
+                  href="/community/community"
                   >커뮤니티</a
                 >
               </li>
