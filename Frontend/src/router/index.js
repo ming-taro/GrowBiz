@@ -3,6 +3,11 @@ import Home from "@/pages/Home.vue";
 import Shop from "@/pages/Shop.vue";
 import Community from "@/pages/community/Community.vue";
 import InfoPlaza from "@/pages/InfoPlaza/InfoPlaza.vue";
+import PopularIndustry from "@/pages/InfoPlaza/PopularIndustry.vue";
+import StoreInfo from "@/pages/InfoPlaza/StoreInfo.vue";
+import Education from "@/pages/InfoPlaza/Education.vue";
+import LoanInfo from "@/pages/InfoPlaza/LoanInfo.vue";
+import news from "@/pages/InfoPlaza/news.vue";
 import Report from "@/pages/report/Report.vue";
 import MyStore from "@/pages/asset/MyStore.vue";
 
@@ -13,6 +18,15 @@ const router = createRouter({
     { path: "/shop", name: "Shop", component: Shop },
     { path: "/community", name: "Community", component: Community },
     { path: "/infoPlaza", name: "InfoPlaza", component: InfoPlaza },
+    {
+      path: "/infoPlaza/industry",
+      name: "Industry",
+      component: PopularIndustry,
+    },
+    { path: "/infoPlaza/storeInfo", name: "storeInfo", component: StoreInfo },
+    { path: "/infoPlaza/education", name: "education", component: Education },
+    { path: "/infoPlaza/loanInfo", name: "loanInfo", component: LoanInfo },
+    { path: "/infoPlaza/news", name: "news", component: news },
     { path: "/report", name: "Report", component: Report },
     { path: "/asset", name: "MyStore", component: MyStore },
     // { path: '/input', name: "Input", component: Input },

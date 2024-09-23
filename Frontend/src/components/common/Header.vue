@@ -2,7 +2,7 @@
   <header>
     <div
       class="mx-2 mx-lg-auto position-relative z-2 px-lg-3 py-0 rounded-3 rounded-lg-pill bg-white"
-      style="width: 90%; margin-bottom:100px"
+      style="width: 90%"
     >
       <nav class="navbar navbar-expand-lg navbar-black p-0" id="navbar">
         <div class="container px-sm-0">
@@ -48,7 +48,7 @@
               <li class="nav-item">
                 <router-link
                   class="fw-bold nav-link rounded-pill"
-                  to="/infoPlaza"
+                  to="/infoPlaza/industry"
                   >정보광장</router-link
                 >
               </li>
