@@ -13,6 +13,7 @@ import FloatPopular from "@/pages/InfoPlaza/FloatPopular.vue";
 import news from "@/pages/InfoPlaza/news.vue";
 import Report from "@/pages/report/Report.vue";
 import MyStore from "@/pages/asset/MyStore.vue";
+import Video from "@/pages/InfoPlaza/Video.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,7 @@ const router = createRouter({
     { path: "/infoPlaza/storeInfo", name: "storeInfo", component: StoreInfo },
     { path: "/infoPlaza/FloatPopular", name: "FloatPopular", component: FloatPopular },
     { path: "/infoPlaza/education", name: "education", component: Education },
+    { path: "/infoPlaza/education/video", name: "video", component: Video },
     { path: "/infoPlaza/loanInfo", name: "loanInfo", component: LoanInfo },
     { path: "/infoPlaza/news", name: "news", component: news },
     { path: "/report", name: "Report", component: Report },
