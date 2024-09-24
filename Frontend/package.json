@@ -9,11 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@rollup/rollup-darwin-arm64": "^4.22.4",
-=======
     "@popperjs/core": "^2.11.8",
->>>>>>> 1e4b29ce65f35faf2dfabe9d116d44571f3f689b
+    "@rollup/rollup-darwin-arm64": "^4.22.4",
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
