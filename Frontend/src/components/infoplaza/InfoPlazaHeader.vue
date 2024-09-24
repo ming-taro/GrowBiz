@@ -11,7 +11,7 @@
                 <a href="infoPlaza/industry"><h4>인기 업종</h4></a>
               </div>
               <div class="flex-item">
-                <a href="/infoPlaza/FloatPopular"><h4>가게 정보</h4></a>
+                <a href="/infoPlaza/floatpopular"><h4>상권 정보</h4></a>
               </div>
               <div class="flex-item">
                 <a href="/infoPlaza/education"><h4>교육 정보</h4></a>
