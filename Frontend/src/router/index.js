@@ -10,6 +10,8 @@ import TotalTrendingBusinessItems from '@/pages/InfoPlaza/TotalTrendingBusinessI
 import MylocationTrending from '@/pages/InfoPlaza/MyLocatinTrending.vue';
 import CloseRatio from '@/pages/InfoPlaza/CloseRatio.vue';
 import StoreInfo from '@/pages/InfoPlaza/StoreInfo.vue';
+import PersonalLoan from '@/pages/InfoPlaza/PersonalLoan.vue';
+import EnterpriseLoan from '@/pages/InfoPlaza/EnterpriseLoan.vue';
 import Education from '@/pages/InfoPlaza/Education.vue';
 import Video from '@/pages/InfoPlaza/Video.vue';
 import LoanInfo from '@/pages/InfoPlaza/LoanInfo.vue';
@@ -18,6 +20,10 @@ import Report from '@/pages/report/Report.vue';
 import MyStore from '@/pages/asset/MyStore.vue';
 import Mypage from '@/pages/mypage/Mypage.vue';
 import StoreReg from '@/pages/asset/StoreReg.vue';
+import InfoAgree from '@/pages/asset/InfoAgree.vue';
+import AssetSelect from '@/pages/asset/AssetSelect.vue';
+import AssetReg from '@/pages/asset/AssetReg.vue';
+import AssetFin from '@/pages/asset/AssetFin.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -47,6 +53,16 @@ const router = createRouter({
       name: 'closeRatio',
       component: CloseRatio,
     },
+    {
+      path: '/infoPlaza/loanInfo/personalLoan',
+      name: 'personalLoan',
+      component: PersonalLoan,
+    },
+    {
+      path: '/infoPlaza/loanInfo/enterpriseLoan',
+      name: 'enterpriseLoan',
+      component: EnterpriseLoan,
+    },
 
     { path: '/infoPlaza/storeInfo', name: 'storeInfo', component: StoreInfo },
     {
@@ -60,6 +76,10 @@ const router = createRouter({
     { path: '/infoPlaza/education/video', name: 'video', component: Video },
     { path: '/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },
+    { path: '/asset/infoagree', name: 'InfoAgree', component: InfoAgree },
+    { path: '/asset/assetselect', name: 'AssetSelect', component: AssetSelect },
+    { path: '/asset/assetfin', name: 'AssetFin', component: AssetFin },
+    { path: '/asset/assetreg', name: 'AssetReg', component: AssetReg },
     { path: '/mypage', name: 'Mypage', component: Mypage },
     { path: '/storereg', name: 'StoreReg', component: StoreReg },
     // { path: '/input', name: "Input", component: Input },
