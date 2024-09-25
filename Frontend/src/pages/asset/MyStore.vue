@@ -1,7 +1,7 @@
 <template lang="">
-  <AssetHeader/>
+  <AssetHeader />
   <div class="container">
-    <StoreInfo class="mb-5"/>
+    <StoreInfo class="mb-5" />
     <MyAsset class="mb-5" />
     <MyGraph class="mb-5" />
   </div>
@@ -22,9 +22,8 @@ export default {
     AssetHeader,
   },
   setup() {
-    return {
-    };
-  }
+    return {};
+  },
 };
 </script>
 
