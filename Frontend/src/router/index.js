@@ -16,7 +16,7 @@ import Education from '@/pages/InfoPlaza/Education.vue';
 import Video from '@/pages/InfoPlaza/Video.vue';
 import LoanInfo from '@/pages/InfoPlaza/LoanInfo.vue';
 import news from '@/pages/InfoPlaza/news.vue';
-import Report from '@/pages/report/Report.vue';
+import Report from '@/pages/simul/Report.vue';
 import MyStore from '@/pages/asset/MyStore.vue';
 import Mypage from '@/pages/mypage/Mypage.vue';
 import StoreReg from '@/pages/asset/StoreReg.vue';
@@ -24,6 +24,7 @@ import InfoAgree from '@/pages/asset/InfoAgree.vue';
 import AssetSelect from '@/pages/asset/AssetSelect.vue';
 import AssetReg from '@/pages/asset/AssetReg.vue';
 import AssetFin from '@/pages/asset/AssetFin.vue';
+import Simul from '@/pages/simul/Simul.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -74,7 +75,7 @@ const router = createRouter({
     { path: '/infoPlaza/loanInfo', name: 'loanInfo', component: LoanInfo },
     { path: '/infoPlaza/news', name: 'news', component: news },
     { path: '/infoPlaza/education/video', name: 'video', component: Video },
-    { path: '/report', name: 'Report', component: Report },
+    { path: '/simul/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },
     { path: '/asset/infoagree', name: 'InfoAgree', component: InfoAgree },
     { path: '/asset/assetselect', name: 'AssetSelect', component: AssetSelect },
@@ -82,6 +83,7 @@ const router = createRouter({
     { path: '/asset/assetreg', name: 'AssetReg', component: AssetReg },
     { path: '/mypage', name: 'Mypage', component: Mypage },
     { path: '/storereg', name: 'StoreReg', component: StoreReg },
+    { path: '/simul', name: 'Simul', component: Simul },
     // { path: '/input', name: "Input", component: Input },
     // { path: '/input2', name: "Input2", component: Input2 },
     // { path: '/update', name: "Update", component: Update },
