@@ -115,16 +115,6 @@ def extract_columns(ldongCd, result_list):
     print("결과: ", len(result_list))
     total_length += len(result_list)
 
-# DB 정보
-conn = pymysql.connect(
-    host='152.69.193.235', 
-    user='employed', 
-    password='employed', 
-    db='KB', 
-    charset='utf8'
-)
-cursor = conn.cursor()
-
 # 거래 종류 선택
 selected_deal_types = ["월세", "매매"]
 

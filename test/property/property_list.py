@@ -1,9 +1,13 @@
 import requests
 from haversine import haversine
+import pymysql
+import json
 
 # 기본 URL
 base_url = "https://www.serve.co.kr/good/v1/map/getAtclList"
 
+# 거래 종류 선택
+selected_deal_types = ["월세", "매매"]
 
 # 거래 종류에 따른 코드 매핑
 deal_types = {
@@ -13,14 +17,13 @@ deal_types = {
     "단기임대": "B3"
 }
 
-
 # 선택한 거래 종류에 맞는 코드를 생성하는 함수
 def get_deal_kind_codes(selected_deal_types):
     return ",".join([deal_types[deal] for deal in selected_deal_types])
 
 
 # 매물 정보를 가져오는 함수
-def find_property_info_by_dong(ldongCd):
+def find_property_info_by_dong(ldongCd, pageNum, offset):
     deal_kind_cd_list_str = get_deal_kind_codes(selected_deal_types)
     
     params = {
@@ -59,7 +62,7 @@ def find_property_info_by_dong(ldongCd):
 
 
 # 컬럼 추출 함수
-def find_property_within_radius(result_list, current_location, radius):
+def find_property_within_radius(result_list, current_location, radius, report_id):
     property_list = []
 
     for item in result_list:
@@ -69,8 +72,8 @@ def find_property_within_radius(result_list, current_location, radius):
 
         photo_list = item.get('photoList', [])
         image_data = photo_list[0].get('imageData') if photo_list else None # 썸네일 (https://newimg.serve.co.kr/article_photo/2024/09/12/14991786/20240912111323289.png)
-        
-        property_list.append({
+
+        property = {
             'atcl_sfe_cn': item.get('atclSfeCn'),                      # 매물 설명 == 건물 이름(?) (렌트프리 적극협의 신축 2년차 상가, 사무실)
             'mdiat_bzest_addr': item.get('mdiatBzestAddr'),            # 매물 상세 위치 (서울특별시 서초구 반포동 104-1)
             'bsc_tnth_wunt_amt': item.get('bscTnthWuntAmt'),           # 보증금 (1000 만)
@@ -84,24 +87,39 @@ def find_property_within_radius(result_list, current_location, radius):
             'atcl_reg_dttm': item.get('atclRegDttm'),                  # 매물 등록일시 (2024-09-13 12:36:57)
             'la_crd': item.get('laCrd'),    # 위도 (37.4863705)
             'lo_crd': item.get('loCrd'),    # 경도 (126.9939121)
-        })
-    
+        }
+
+        json_data = json.dumps(property)  # property 데이터를 JSON 문자열로 변환
+        query = "INSERT INTO recommand_property_test_table (report_id, property_data) VALUES (%s, %s)"
+        value = (report_id, json_data)
+        property_list.append(property)
+        
+        try:
+            cursor.execute(query, value)
+            print("recommand property inserted successfully.")
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            connection.rollback()
+    connection.commit()
     return property_list
 
 
-# 거래 종류 선택
-selected_deal_types = ["월세", "매매"]
+def main():
+    pageNum = 0
+    offset = 10000
 
-pageNum = 0
-offset = 10000
+    gu_code = 1117013600 # 용산구
+    current_location = (37.52687181000000, 127.00093640000000) # 기준 위치
+    property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset) # 구의 모든 매물 정보 가져오기    
+    property_by_radius = find_property_within_radius(property_by_dong, current_location, 600, 2) # 서울 용구 보광동, 600m 내 매물
+    print("[서울 용구 보광동 600m 내 매물 목록] ->", len(property_by_radius))
+    print(property_by_radius)
 
-# 매물 정보 가져오기
-property_by_dong = find_property_info_by_dong(1117013600)
+    # gu_code = 1168010500 # 강남구
+    # current_location = (37.51396894000000, 127.05612160000000)
+    # property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset)
+    # property_by_radius =find_property_within_radius(property_by_dong, current_location, 600, 1) # 서울 강남구 삼성동, 600m 내 매물
+    # print("[서울 강남구 삼성동 600m 내 매물 목록] ->", len(property_by_radius))
 
-property_by_radius =find_property_within_radius(property_by_dong, (37.52687181000000, 127.00093640000000), 600) # 서울 용구 보광동, 600m 내 매물
-# print("[서울 용구 보광동 600m 내 매물 목록] ->", len(property_by_radius))
-# print(property_by_radius)
-# print()
-# property_by_dong = find_property_info_by_dong(1168010500)
-# property_by_radius =find_property_within_radius(property_by_dong, (37.51396894000000, 127.05612160000000), 600) # 서울 강남구 삼성동, 600m 내 매물
-# print("[서울 강남구 삼성동 600m 내 매물 목록] ->", len(property_by_radius))
+if __name__ == "__main__":
+    main()

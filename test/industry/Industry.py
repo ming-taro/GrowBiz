@@ -8,16 +8,6 @@ import time # time 라이브러리 import
 
 def main():
     load_dotenv()
-    
-    # DB 정보
-    connection = pymysql.connect(
-        host='152.69.193.235', 
-        user='employed', 
-        password='employed', 
-        db='KB', 
-        charset='utf8'
-    )
-    cursor = connection.cursor()
 
     brand_fntn_info = {}  # 창업 비용 정보
     for year in range(datetime.now().year - 1, 2017, -1):
@@ -39,7 +29,7 @@ def main():
     for page in range(1, 2):
         save_brand_info(page, data_count, brand_fntn_info, year, cursor)
         connection.commit()
-    print(f"{time.time()-start:.4f} sec") # 종료와 함께 수행시간 출력
+    print(f"{time.time()-start:.4f} sec") # 종료와 함께 수행시간 출력 -> 1000개 목록 조회 + DB저장 = 868.5183 sec
     cursor.close()
     connection.close()
 
