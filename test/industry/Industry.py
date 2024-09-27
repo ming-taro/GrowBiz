@@ -8,6 +8,14 @@ import time # time 라이브러리 import
 
 def main():
     load_dotenv()
+    # DB 정보
+    connection = pymysql.connect(
+        host=os.environ.get('HOST'),
+        user=os.environ.get('USER'),
+        password=os.environ.get('PASSWORD'), 
+        charset='utf8'
+    )
+    cursor = connection.cursor()
 
     brand_fntn_info = {}  # 창업 비용 정보
     for year in range(datetime.now().year - 1, 2017, -1):
