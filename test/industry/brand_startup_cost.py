@@ -20,11 +20,11 @@ def get_brand_fntn_stats(brand_fntn_info, year):
     response = requests.get(FFTC_BRAND_FNTN_STATS_URL, params=brand_fntn_stats_params)
     total_count = response.json()["totalCount"]
     
-    for i in range(1, int(total_count / 100 + 2)): # 100개씩 저장
+    for i in range(1, int(total_count / 1000 + 2)): # 1000개씩 저장
         brand_fntn_stats_params = {
             "serviceKey": OPEN_DATA_API_KEY,
             "pageNo": i,
-            "numOfRows": 100,
+            "numOfRows": 1000,
             "resultType": "json",
             "yr": year
         }
