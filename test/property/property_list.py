@@ -2,6 +2,7 @@ import requests
 from haversine import haversine
 import pymysql
 import json
+import os
 
 # 기본 URL
 base_url = "https://www.serve.co.kr/good/v1/map/getAtclList"
@@ -19,10 +20,9 @@ deal_types = {
 
 # DB 정보
 connection = pymysql.connect(
-    host='152.69.193.235', 
-    user='employed', 
-    password='employed', 
-    db='KB', 
+    host=os.environ.get('HOST'),
+    user=os.environ.get('USER'),
+    password=os.environ.get('PASSWORD'), 
     charset='utf8'
 )
 cursor = connection.cursor()
