@@ -11,10 +11,9 @@ def main():
     
     # DB 정보
     connection = pymysql.connect(
-        host='152.69.193.235', 
-        user='employed', 
-        password='employed', 
-        db='KB', 
+        host=os.environ.get('HOST'),
+        user=os.environ.get('USER'),
+        password=os.environ.get('PASSWORD'), 
         charset='utf8'
     )
     cursor = connection.cursor()

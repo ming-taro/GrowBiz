@@ -3,8 +3,6 @@ from dotenv import load_dotenv
 import os
 from brand_interrior import find_interior_cost
 from brand_sales import get_brand_frc_bzmn_avrgsls
-import json
-import pymysql
 
 load_dotenv()
 OPEN_DATA_API_KEY = os.environ.get('OPEN_DATA_API_KEY')
