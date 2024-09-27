@@ -116,12 +116,18 @@ onMounted(() => {
   const headerInfoContainers = document.querySelectorAll('.header-info-container');
 
   headerInfoContainers.forEach(container => {
+    const dropdown = container.querySelector('.header-info-dropdown');
+    
     container.addEventListener('mouseover', () => {
-      container.querySelector('.header-info-dropdown').classList.add('show');
+      dropdown.classList.add('show');
     });
 
     container.addEventListener('mouseleave', () => {
-      container.querySelector('.header-info-dropdown').classList.remove('show');
+      dropdown.classList.remove('show');
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+      dropdown.classList.remove('show');
     });
   });
 });
