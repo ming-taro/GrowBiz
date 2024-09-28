@@ -90,7 +90,7 @@ const router = createRouter({
     { path: '/asset/assetfin', name: 'AssetFin', component: AssetFin },
     { path: '/asset/assetreg', name: 'AssetReg', component: AssetReg },
     { path: '/mypage', name: 'Mypage', component: Mypage },
-    { path: '/storereg', name: 'StoreReg', component: StoreReg },
+    { path: '/asset/storereg', name: 'StoreReg', component: StoreReg },
     { path: '/simul', name: 'Simul', component: Simul },
     { path: '/register', name: 'Register', component: Register },
     { path: '/login', name: 'Login', component: Login },

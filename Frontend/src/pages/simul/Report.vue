@@ -8,15 +8,16 @@
       <Location />
     </div>
 
-      <!-- 그래프 -->
+    <!-- 그래프 -->
     <Bar />
 
-      <!-- 교육정보 -->
+    <!-- 교육정보 -->
     <div class="container">
-        <Education  />
+      <Education />
     </div>
     <!-- 대출 -->
-    <div style="background-color: #f6f4f9; padding: 20px;"> <!-- 배경색과 패딩 추가 -->
+    <div style="background-color: #f6f4f9; padding: 20px">
+      <!-- 배경색과 패딩 추가 -->
       <Loan />
     </div>
   </div>

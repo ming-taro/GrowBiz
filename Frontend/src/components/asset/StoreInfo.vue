@@ -2,17 +2,17 @@
   <div>
     <div class="d-flex justify-content-between gap-2">
       <div>
-        <h2 class="mb-2">내 가게</h2>
+        <h2 class="title mb-2">내 가게</h2>
       </div>
       <div class="d-flex align-items-center gap-2">
         <button type="button" class="btn btn-sm btn-neutral mb-3 mt-3">
           수정
         </button>
-        <a href="/storereg"
+        <router-link to="/asset/storereg"
           ><button type="button" class="btn btn-sm btn-primary mb-3 mt-3 ms-0">
             가게 등록
           </button>
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="row g-3 g-xl-6">
