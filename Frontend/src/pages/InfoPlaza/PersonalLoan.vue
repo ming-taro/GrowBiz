@@ -207,7 +207,7 @@
         <PersonalLoanHeader class="" />
       </div>
         <!-- 대출 상품 내용 -->
-        <div class="col-xl-11">
+        <div class="col-xl-11 ps-7">
           <!-- 대출 상품 카드 내용 -->
           <div class="row">
             <!-- 카드 1개 -->
