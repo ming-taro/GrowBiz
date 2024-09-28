@@ -2,7 +2,6 @@
   <div>
     <InfoPlazaHeader />
     <div class="container mw-screen-xl">
-      <PersonalLoanHeader class="mb-10" />
       <!-- Best 금리상품 title-->
       <div class="d-flex justify-content-center align-items-center">
         <div class="row">
@@ -19,6 +18,7 @@
       <div class="card mb-10 p-4" style="background-color: #f6f4f9">
         <!-- Best 금리상품 내용-->
         <div class="row">
+  
           <!-- 카드 1개 -->
           <div class="col-xl-3">
             <a href="#">
@@ -174,113 +174,40 @@
         </div>
       </div>
 
-      <div class="row mb-4">
-        <div class="col-xl-2"></div>
+      <div class="row mb-4 d-flex justify-content-end"> <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
-        <div class="col-xl-10">
-          <div class="col-xl-9 d-flex">
-            <!-- 지역 검색(구) -->
-            <div class="col-md-2">
-              <select
-                class="form-select round-corner"
-                aria-label="Default select example"
-              >
-                <option selected disabled hidden>구분</option>
-                <option value="1">직접대출</option>
-                <option value="2">대리대출</option>
-              </select>
-            </div>
-            <div class="col-md-8"></div>
-            <!-- 검색창 -->
-            <div class="col-md-6">
-              <div class="h-100">
-                <form class="h-100 form-group">
-                  <div class="h-100 input-group input-group-sm">
-                    <input
-                      type="text"
-                      class="rounded form-control ms-1"
-                      placeholder="검색어를 입력해 주세요."
-                    />
-                    <span class="ms-1 rounded input-group-text">
-                      <i class="bi bi-search"></i>
-                    </span>
-                  </div>
-                </form>
-              </div>
+        <div class="col-auto d-flex"> <!-- col-auto 사용 -->
+          <!-- 지역 검색(구) -->
+          <div class="col-3">
+            <select class="form-select round-corner" aria-label="Default select example">
+              <option selected disabled hidden>구분</option>
+              <option value="1">직접대출</option>
+              <option value="2">대리대출</option>
+            </select>
+          </div>
+          <!-- 검색창 -->
+          <div class="col-9">
+            <div class="h-100">
+              <form class="h-100 form-group">
+                <div class="h-100 input-group input-group-sm">
+                  <input type="text" class="rounded form-control ms-1" placeholder="검색어를 입력해 주세요." />
+                  <span class="ms-1 rounded input-group-text">
+                    <i class="bi bi-search"></i>
+                  </span>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
+      
+      
       <div class="row">
-        <!-- 좌측 정책자금 / 국민은행 구분 탭 -->
-        <div class="col-xl-2">
-          <div class="list-group list-group-flush gap-2">
-            <div
-              class="list-group-item gap-3 text-center p-3 bg-body-secondary-hover"
-            >
-              <div class="icon flex-none">
-                <div class="icon flex-none">
-                  <img
-                    src="@/assets/img/infoplaza/popular.png"
-                    class="w-rem-8 h-rem-8"
-                    alt="..."
-                  />
-                </div>
-              </div>
-              <div class="align-items-center flex-fill">
-                <div>
-                  <a
-                    href="#"
-                    class="stretched-link text-heading text-sm fw-bold"
-                    >개인신용대출</a
-                  >
-                </div>
-              </div>
-            </div>
-            <div
-              class="list-group-item gap-3 text-center p-3 bg-body-secondary-hover"
-            >
-              <div class="icon flex-none">
-                <img
-                  src="@/assets/img/infoplaza/storeinfo.png"
-                  class="w-rem-8 h-rem-8"
-                  alt="..."
-                />
-              </div>
-              <div class="align-items-center flex-fill">
-                <div>
-                  <a
-                    href="#"
-                    class="stretched-link text-heading text-sm fw-bold"
-                    >전세자금대출</a
-                  >
-                </div>
-              </div>
-            </div>
-            <div
-              class="list-group-item gap-3 p-3 text-center bg-body-secondary-hover"
-            >
-              <div class="icon flex-none">
-                <img
-                  src="@/assets/img/infoplaza/add_business.png"
-                  class="w-rem-8 h-rem-8"
-                  alt="..."
-                />
-              </div>
-              <div class="align-items-center flex-fill">
-                <div>
-                  <a
-                    href="#"
-                    class="stretched-link text-heading text-sm fw-bold"
-                    >주택담보대출</a
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="col-1">
+        <PersonalLoanHeader class="" />
+      </div>
         <!-- 대출 상품 내용 -->
-        <div class="col-xl-10">
+        <div class="col-xl-11">
           <!-- 대출 상품 카드 내용 -->
           <div class="row">
             <!-- 카드 1개 -->
