@@ -42,4 +42,8 @@ import MypageHeader from '@/components/mypage/MypageHeader.vue';
 .div-input {
   width: 40%;
 }
+
+.h1-title {
+  margin: 10px 0px;
+}
 </style>

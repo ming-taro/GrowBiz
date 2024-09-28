@@ -1,6 +1,5 @@
 <template>
   <div>
-    <MypageHeader />
     <div class="container">
       <ul class="nav nav-underline nav-fill">
         <li class="nav-item">
@@ -26,10 +25,6 @@
   </div>
 </template>
 
-<script setup>
-import MypageHeader from '@/components/mypage/MypageHeader.vue';
-</script>
-
 <style>
 .btn-primary {
   margin: 0px 0px 0px 20px;
@@ -41,5 +36,9 @@ import MypageHeader from '@/components/mypage/MypageHeader.vue';
 }
 .div-input {
   width: 40%;
+}
+
+.h1-title {
+  margin: 10px 0px;
 }
 </style>

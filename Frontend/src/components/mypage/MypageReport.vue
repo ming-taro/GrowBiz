@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <Mypage />
+  <Mypage />
+  <div class="container">
+    <h1 class="h1-title">시뮬레이션 리포트 결과</h1>
     <div class="table-responsive">
       <table class="table table-nowrap table-flush">
         <thead>
@@ -12,13 +13,13 @@
                     <input class="form-check-input" type="checkbox" />
                   </div>
                 </div>
-                <span>시뮬레이션 리포트 결과</span>
+                <span><h4>목록</h4></span>
               </div>
             </th>
-            <th scope="col">자본</th>
-            <th scope="col">분류</th>
-            <th scope="col">추천위치</th>
-            <th scope="col">날짜</th>
+            <th scope="col"><h4>자본</h4></th>
+            <th scope="col"><h4>분류</h4></th>
+            <th scope="col"><h4>추천위치</h4></th>
+            <th scope="col"><h4>날짜</h4></th>
             <th></th>
           </tr>
         </thead>
