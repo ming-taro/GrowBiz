@@ -9,22 +9,41 @@
           </p>
         </div>
         <hr />
-        <div class="row mb-10" style="display: flex;">
-          <div class="col-6" style="display: flex; align-items: stretch;">
-            <img src="@/assets/img/report/clothes.png" alt="" class="full-image" />
+        <div class="row mb-10" style="display: flex">
+          <div class="col-6" style="display: flex; align-items: stretch">
+            <img
+              src="@/assets/img/report/clothes.png"
+              alt=""
+              class="full-image"
+            />
           </div>
-          <div class="col-6" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <h2 class="mb-2" style="font-weight: 800">강남구 유통업</h2>
+          <div
+            class="col-6"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+            "
+          >
+            <div class="d-flex align-items-center">
+              <!-- <img
+                src="@/assets/img/main/round_pushpin.png"
+                alt=""
+                style="height: auto; width: auto"
+              /> -->
+              <h2 class="ms-2" style="font-weight: 600">강남구 유통업</h2>
+            </div>
+
             <div class="row">
               <div class="col-6">
                 <div class="d-flex justify-content-between align-items-end">
                   <h4 style="font-weight: 400" class="mb-2">보증금</h4>
-                  <h1 style="font-weight: 600;">1억</h1>
+                  <h1 style="font-weight: 600">1억</h1>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-end">
-                  <h4 style="font-weight: 400;" class="mb-2">월세</h4>
-                  <h1 style="font-weight: 600;">600만</h1>
+                  <h4 style="font-weight: 400" class="mb-2">월세</h4>
+                  <h1 style="font-weight: 600">600만</h1>
                 </div>
               </div>
               <div class="col-6 mt-1">
@@ -56,8 +75,8 @@
             </div>
           </div>
         </div>
-        <Location class="mb-10"/>
-        <ReportGraph />
+        <Location class="mt-10" />
+        <ReportGraph class="mt-10" />
       </div>
       <Loan class="mb-10" />
     </div>
@@ -72,6 +91,7 @@ import Loan from '@/components/report/Loan.vue';
 
 <style>
 .simul-area {
+  /* border: 0.5px solid #dddddd; */
   background-color: #f6f4f9;
   border-radius: 10px;
   margin: 30px 0px;
