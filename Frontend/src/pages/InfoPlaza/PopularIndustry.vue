@@ -230,12 +230,11 @@
                     >
                       <!--begin::Symbol-->
                       <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
+                        <img
+                          src="@/assets/img/businessItem/한식음식점.png"
+                          alt=""
+                          style="width: 30px"
+                        />
                       </div>
                       <!--end::Symbol-->
                       <!--begin::Content-->
