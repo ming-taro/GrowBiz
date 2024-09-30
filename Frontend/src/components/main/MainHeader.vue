@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="main-container">
+    <!-- 부모 요소에 클래스 추가 -->
     <img src="../../assets/img/main/Main.png" alt="" />
     <a href="/simul">
       <div class="main-overlay">
@@ -14,18 +15,20 @@
 </template>
 
 <style>
+.main-container {
+  position: relative; /* 부모 요소에 relative 추가 */
+}
+
 .main-overlay {
   position: absolute;
-  top: 55%;
-  left: 34%;
-  transform: translateX(-50%);
-  width: 18%;
-  background-color: rgba(255, 255, 255);
+  top: 82%; /* 원하는 위치로 조정 */
+  left: 34%; /* 중앙 정렬 */
+  transform: translate(-50%, -50%); /* 수직 및 수평 중앙 정렬 */
+  width: 18%; /* 버튼 오버레이의 너비 설정 */
   border-radius: 50px;
   z-index: 1;
   box-sizing: border-box;
   box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
-  overflow: hidden; /* 부모 요소에 overflow를 hidden으로 설정 */
 }
 
 .start-btn {

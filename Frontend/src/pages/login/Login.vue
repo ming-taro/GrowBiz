@@ -29,10 +29,10 @@
               class="h-rem-10"
               alt="..."
           /></a>
-          <h1 class="ls-tight fw-bolder h3">맨트 뭘로 하지?</h1>
+          <h1 class="ls-tight fw-bolder h3">로그인</h1>
           <div class="mt-3 text-sm text-muted">
-            <span>뭘로 할지 알려줘</span>
-            <a href="/pages/login.html" class="fw-semibold">윤희</a>에몽
+            <span>회원이 아닌 경우 </span>
+            <a href="/register" class="fw-semibold">회원가입 </a>페이지
           </div>
         </div>
         <form>
