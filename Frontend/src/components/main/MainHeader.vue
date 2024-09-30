@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="../../assets/img/main/Main - HEADER.png" alt="" />
+    <img src="../../assets/img/main/Main.png" alt="" />
     <a href="/simul">
       <img
         src="../../assets/img/main/STARTBTN.png"
