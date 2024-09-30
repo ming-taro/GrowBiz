@@ -1,16 +1,22 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-6 bg">
-        <h4 class="title mb-2">밀집도</h4>
+      <div class="col-6">
+        <div class="title-sm">
+          <div class="custom-line" />
+          밀집도
+          <div class="custom-line" />
+        </div>
         <div></div>
         <div class="p-5">
           <canvas id="bar-chart" style="height: 200px"></canvas>
         </div>
       </div>
-      <div class="col-6 bg">
-        <div>
-          <h4 class="title mb-2">상권의 특성</h4>
+      <div class="col-6">
+        <div class="title-sm">
+          <div class="custom-line" />
+          상권의 특성
+          <div class="custom-line" />
         </div>
         <div class="p-5">
           <canvas id="doughnut-chart" style="height: 200px"></canvas>

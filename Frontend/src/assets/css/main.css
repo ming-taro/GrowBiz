@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'TTLaundryGothicB';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2') format('woff2');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2')
+    format('woff2');
   font-weight: 700;
   font-style: normal;
 }
@@ -424,11 +425,8 @@ body {
   margin: 0;
 }
 hr {
-  color: inherit;
   border: 0;
   border-top: var(--x-border-width) solid;
-  opacity: 0.1;
-  margin: 1rem 0;
 }
 h6,
 .h6,
@@ -11400,8 +11398,6 @@ textarea[resize='horizontal'] {
 }
 .article > hr,
 .prose > hr {
-  margin-top: 3em;
-  margin-bottom: 3em;
 }
 .article > ul,
 .article > ol,

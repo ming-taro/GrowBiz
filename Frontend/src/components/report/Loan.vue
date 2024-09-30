@@ -1,7 +1,11 @@
 <template>
   <div class="loan-section">
-    <div class="container mw-screen-xl">
-      <div class="title mb-3">대출 정보</div>
+    <div class="container mw-screen-xl mt-3">
+      <div class="title-sm">
+        <div class="custom-line" />
+        대출 정보
+        <div class="custom-line" />
+      </div>
       <div class="con-card">
         <!-- Row to contain 4 cards in a single row -->
         <div class="row">

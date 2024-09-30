@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div class="title">추천 위치</div>
+    <div class="title-sm">
+      <div class="custom-line" />
+      추천 위치
+      <div class="custom-line" />
+    </div>
     <div class="row">
       <div class="col-7">
         <div id="map" style="height: 400px"></div>
       </div>
-      <div
-        class="col-5 d-flex justify-content-center align-content-center"
-        style="background-color: white"
-      >
+      <div class="col-5 d-flex justify-content-center align-content-center">
         <div style="display: flex; flex-direction: column; height: 95%">
           <div
             class="d-flex justify-content-between m-4 align-items-stretch"
