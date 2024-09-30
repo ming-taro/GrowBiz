@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebMvc
@@ -43,5 +44,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/");
     }
 
+    // CORS 허용
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 모든 경로에 대해 CORS 설정
+                .allowedOrigins("http://localhost:5173") // 허용할 오리진
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+                .allowCredentials(true); // 자격 증명 허용
+    }
 }
 
