@@ -2,7 +2,7 @@
   <div>
     <img src="@/assets/img/account/card.png" class="result-image mb-10" />
     <div class="container">
-      <div class="result-text">가계관리</div>
+      <div class="result-text">가게관리</div>
     </div>
   </div>
 </template>
