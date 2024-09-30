@@ -3641,8 +3641,8 @@ fieldset:disabled .btn {
 }
 .btn-secondary {
   --x-btn-color: #000;
-  --x-btn-bg: #ff8c00;
-  --x-btn-border-color: #ff8c00;
+  --x-btn-bg: #fcd752;
+  --x-btn-border-color: #fcd752;
   --x-btn-hover-color: #000;
   --x-btn-hover-bg: #ffa333;
   --x-btn-hover-border-color: #ff981a;
@@ -3652,8 +3652,8 @@ fieldset:disabled .btn {
   --x-btn-active-border-color: #ff981a;
   --x-btn-active-shadow: 0 0 0 0 transparent;
   --x-btn-disabled-color: #000;
-  --x-btn-disabled-bg: #ff8c00;
-  --x-btn-disabled-border-color: #ff8c00;
+  --x-btn-disabled-bg: #fcd752;
+  --x-btn-disabled-border-color: #fcd752;
 }
 .btn-success {
   --x-btn-color: #000;

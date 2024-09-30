@@ -94,7 +94,7 @@
               >
                 <a
                   href="/register"
-                  class="btn fw-bold btn-sm btn-warning bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
+                  class="btn fw-bold btn-sm btn-secondary bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
                   >회원가입</a
                 >
                 <a

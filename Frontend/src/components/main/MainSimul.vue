@@ -12,7 +12,7 @@
     </div>
     <div class="simul-area">
       <div class="container">
-        <div class="title-sm">
+        <div class="title-sm mt-5">
           <div class="custom-line" />
           시뮬레이션 결과
           <div class="custom-line" />
@@ -118,6 +118,9 @@ import Loan from '@/components/report/Loan.vue';
 </script>
 
 <style>
+.container {
+  padding: 0 0px;
+}
 .simul-area {
   /* border: 0.5px solid #dddddd; */
   background-color: #f6f6f6;
