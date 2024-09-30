@@ -221,10 +221,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_KB.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -291,10 +288,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -361,10 +355,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_신한.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -431,10 +422,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_우리.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -501,10 +489,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -571,10 +556,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -641,10 +623,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -711,10 +690,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
@@ -781,10 +757,7 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img
-                        src="@/assets/img/banklogo/금융아이콘_PNG_토스.png"
-                        alt=""
-                      />
+                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
