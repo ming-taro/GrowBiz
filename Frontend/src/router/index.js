@@ -3,6 +3,7 @@ import Home from '@/pages/Home.vue';
 import Shop from '@/pages/Shop.vue';
 import Community from '@/pages/community/Community.vue';
 import FloatPopular from '@/pages/InfoPlaza/FloatPopular.vue';
+import RentalInfo from '@/pages/InfoPlaza/RentalInfo.vue';
 import BoardCreate from '@/pages/community/BoardCreate.vue';
 import BoardView from '@/pages/community/BoardView.vue';
 import PopularIndustry from '@/pages/InfoPlaza/PopularIndustry.vue';
@@ -80,6 +81,7 @@ const router = createRouter({
       name: 'FloatPopular',
       component: FloatPopular,
     },
+    { path: '/infoPlaza/rentalinfo', name: 'RentalInfo', component: RentalInfo },
     { path: '/infoPlaza/education', name: 'education', component: Education },
     { path: '/infoPlaza/news', name: 'news', component: news },
     { path: '/infoPlaza/education/video', name: 'video', component: Video },
