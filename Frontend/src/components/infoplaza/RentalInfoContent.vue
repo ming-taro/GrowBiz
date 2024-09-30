@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <CommercialHeader class="ms-10 me-5 col-1" />
-            <div v-if="showLocationInfo" class="col-3 me-5 mt-3">
+            <div v-if="showLocationInfo" class="col-3 me-5 mt-3 p-0">
                 <div class="mb-10">
                     <h4 class="mb-3">현위치</h4>
                     <div class=" mb-5">
@@ -15,32 +15,52 @@
                 <div>
                     <h4 class="mb-3">지역 선택</h4>
                     <div class="card-body card_padding d-flex gap-3">
-                        <div
+                        <!-- <div
                             class="text-muted text-primary-hover dropdown-toggle"
                             id="locationDropdown"
                             data-bs-toggle="dropdown"
                             role="button"
-                        >
-                            <span class="text-muted pe-100">서울특별시 광진구 화양동</span>
-                            <ul class="dropdown-menu dropdown-menu-end w-80" aria-labelledby="locationDropdown">
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                            </ul>
-                        </div>
+                        > -->
+                            <!-- 서울 선택 -->
+                            <select class="d-inline text-muted dropdown-item w-100 city-select" id="city" v-model="selectedCity" @change="updateDistricts">
+                                <option v-for="city in cities" :key="city.name" :value="city.name">{{ city.name }}</option>
+                            </select>
+                            <!-- 구 선택 -->
+                            <select class="text-muted dropdown-item"  id="district" v-model="selectedDistrict" @change="updateTowns" :disabled="!districts.length">
+                                <option v-for="district in districts" :key="district.name" :value="district.name">{{ district.name }}</option>
+                            </select>
+                            <!-- 동 선택 -->
+                            <select class="text-muted dropdown-item"  id="town" v-model="selectedTown" :disabled="!towns.length">
+                                <option v-for="town in towns" :key="town" :value="town">{{ town }}</option>
+                            </select>
+                        <!-- <ul class="dropdown-menu dropdown-menu-end w-80" aria-labelledby="locationDropdown">
+                            <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
+                            <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
+                            <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
+                        </ul> -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
             <div class="col-6 ms-10" ref="mapContainer" style="height: 70vh;"></div>
         </div>
+    
+        <h4>매물 목록</h4>
+        <ul>
+            <li v-for="property in propertys" :key="property.plno">
+                {{ property.atclSfeCn }} - {{ property.bscTnthWuntAmt }} 원
+            </li>
+        </ul>
     </div>
 </template>
 
 <script setup>
 import CommercialHeader from '@/components/infoplaza/CommercialHeader.vue';
 import { onMounted, ref } from 'vue';
+import axios from 'axios';
 
 const mapContainer = ref(null);
+const propertys = ref([]);
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -50,8 +70,9 @@ const props = defineProps({
     },
 });
 
-onMounted(() => {
+onMounted(async () => {
     loadKakaoMap(mapContainer.value);
+    await fetchPropertyListings(); // Fetch property listings after loading the map
 });
 
 // Load Kakao Map
@@ -68,9 +89,54 @@ const loadKakaoMap = (container) => {
                 maxLevel: 5, // Maximum zoom level
             };
 
-            const mapInstance = new window.kakao.maps.Map(container, options); // Create map instance
+            new window.kakao.maps.Map(container, options); // Create map instance
         });
     };
+};
+
+// Fetch property listings
+const fetchPropertyListings = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/property/116');
+        propertys.value = response.data; // Store the fetched data in propertys ref
+        console.log(propertys.value);
+    } catch (error) {
+        console.error('Error fetching property listings:', error);
+    }
+};
+
+
+
+// 초기 데이터 설정
+const cities = [
+    { name: '서울특별시', districts: [
+        { name: '강남구', towns: ['역삼동', '삼성동', '신사동'] },
+        { name: '강동구', towns: ['명일동', '천호동', '암사동'] },
+        { name: '종로구', towns: ['청운효자동', '신문로1가', '삼청동'] },
+    ]}
+  // 추가 도시 및 구 데이터...
+];
+
+const selectedCity = ref('');
+const selectedDistrict = ref('');
+const selectedTown = ref('');
+const districts = ref([]);
+const towns = ref([]);
+
+// 구 업데이트 함수
+const updateDistricts = () => {
+const city = cities.find(city => city.name === selectedCity.value);
+districts.value = city ? city.districts : [];
+selectedDistrict.value = '';
+selectedTown.value = '';
+towns.value = [];
+};
+
+// 동 업데이트 함수
+const updateTowns = () => {
+const district = districts.value.find(district => district.name === selectedDistrict.value);
+towns.value = district ? district.towns : [];
+selectedTown.value = '';
 };
 </script>
 
@@ -80,12 +146,16 @@ const loadKakaoMap = (container) => {
     padding-bottom: 5px;
     padding-left: 0px;
     border: none;
-    box-shadow: none; /* 그림자 제거 */
-    border-bottom: 0.7px solid #D9D9D9; /* 밑에 라인 추가 */
-    border-radius: 0; /* 둥근 테두리 제거 */
+    box-shadow: none; /* Remove shadow */
+    border-bottom: 0.7px solid #D9D9D9; /* Add bottom line */
+    border-radius: 0; /* Remove rounded corners */
 }
 
 .pe-100 {
     padding-right: 100px;
+}
+
+.city-select {
+    width: 200px; /* 원하는 너비로 조정 */
 }
 </style>
