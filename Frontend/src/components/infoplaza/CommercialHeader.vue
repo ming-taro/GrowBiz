@@ -1,24 +1,52 @@
 <template>
 <div class="list-group list-group-flush gap-2">
+    <!-- 유동인구 항목 -->
     <div class="list-group-item gap-3 text-center p-3 bg-body-secondary-hover">
-        <div class="icon flex-none">                                    
-            <div class="icon flex-none"><img src="@/assets/img/infoplaza/popular.png" class="w-rem-8 h-rem-8" alt="..."></div>
-        </div>
-        <div class="align-items-center flex-fill">
-        <div><a href="/infoPlaza/floatpopular" class="stretched-link text-heading text-sm fw-bold">유동인구</a></div>
-        </div>
+    <div class="icon flex-none">
+        <img 
+        :src="currentRoute == '/infoPlaza/floatpopular' || currentRoute == '/'
+                ? popularImg 
+                : nopopularImg" 
+        class="w-rem-8 h-rem-8" 
+        alt="유동인구">
     </div>
+    <div class="align-items-center flex-fill">
+        <div><a href="/infoPlaza/floatpopular" class="stretched-link text-heading text-sm fw-bold">유동인구</a></div>
+    </div>
+    </div>
+
+    <!-- 임대정보 항목 -->
     <div class="list-group-item gap-3 p-3 text-center bg-body-secondary-hover">
-        <div class="icon flex-none"><img src="@/assets/img/infoplaza/add_business.png" class="w-rem-8 h-rem-8" alt="..."></div>
-        <div class="align-items-center flex-fill">
+    <div class="icon flex-none">
+        <img 
+        :src="currentRoute === '/infoPlaza/rentalinfo' 
+                ? addBusinessImg
+                : noAddBusinessImg" 
+        class="w-rem-8 h-rem-8" 
+        alt="임대정보">
+        
+    </div>
+    <div class="align-items-center flex-fill">
         <div><a href="/infoPlaza/rentalinfo" class="stretched-link text-heading text-sm fw-bold">임대정보</a></div>
-        </div>
+    </div>
     </div>
 </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRoute } from 'vue-router';
+
+// 현재 경로를 가져옴
+const route = useRoute();
+const currentRoute = route.path;
+
+// 이미지 경로 설정 (import로 경로를 지정)
+import popularImg from '@/assets/img/infoplaza/popular.png';
+import addBusinessImg from '@/assets/img/infoplaza/add_business.png';
+import noAddBusinessImg from '@/assets/img/infoplaza/no_add_business.png';
+import nopopularImg from '@/assets/img/infoplaza/no_popular.png';
+</script>
 
 <style>
-
+/* 스타일 필요시 추가 */
 </style>
