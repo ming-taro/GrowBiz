@@ -41,6 +41,7 @@ public class BoardController {
 
     @GetMapping("")
     public ResponseEntity<BoardPageResult> getList(BoardParam boardParam) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!");
         BoardPageResult result = service.getBoardList(boardParam);
         return ResponseEntity.ok(result);
     }

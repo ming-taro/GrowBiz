@@ -17,6 +17,7 @@ out/
 !**/src/test/**/out/
 
 ### Eclipse ###
+application.properties
 .apt_generated
 .classpath
 .factorypath
