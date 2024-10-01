@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Log4j
 @Service
@@ -26,5 +23,10 @@ public class DistrictCodeService {
     // 중복 제거한 모든 동 이름 가져오기
     public List<DistrictCodeDTO> getDistinctDongNames(String guName) {
         return mapper.selectDistinctDongNames(guName);
+    }
+
+    // 동 이름에 따른 위도와 경도 가져오기
+    public DistrictCodeDTO getLocationByDongName(String dongName) {
+        return mapper.selectLocationByDongName(dongName);
     }
 }
