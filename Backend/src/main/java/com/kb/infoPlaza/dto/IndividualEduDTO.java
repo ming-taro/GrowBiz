@@ -1,6 +1,5 @@
 package com.kb.infoPlaza.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

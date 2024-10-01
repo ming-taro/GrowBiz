@@ -4,13 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kb.infoPlaza.mapper.IndividualEduMapper">
-
-
         <select id="selectAllIndividualEdu" resultType="IndividualEduDTO">
-            SELECT * FROM Individual_Edu
+            SELECT * FROM individual_edu
         </select>
-        <select id="selectIndividualEduById" parameterType="int" resultType="IndividualEduDTO">
-            SELECT * FROM Individual_Edu WHERE videoId = #{videoId}
+        <select id="selectIndividualEduById" parameterType="string" resultType="IndividualEduDTO">
+            SELECT * FROM individual_edu WHERE videoId = #{videoId}
         </select>
 
 </mapper>

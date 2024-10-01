@@ -353,6 +353,8 @@
 
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import axios from 'axios';
+import { ref, reactive } from 'vue';
 function toggleAll(source) {
   const checkboxes = document.querySelectorAll(
     '.form-check-input:not(#cycleCheckAll)'
@@ -361,6 +363,31 @@ function toggleAll(source) {
     checkbox.checked = source.checked;
   });
 }
+
+const BASEURI = '/infoPlaza/education';
+const totalList = ref({});
+
+// 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
+const fetchTodoList = async () => {
+  try {
+    console.log('TRYING......');
+    // 전체 업종 데이터 불러오기
+    const response = await axios.get(BASEURI + '/list');
+    // const response = await axios.get(
+    //   'http://localhost:8080/api/infoPlaza/education/list'
+    // );
+    if (response.status === 200) {
+      console.log('데이터 조회 시작');
+      totalList.value = response.data;
+      console.log(totalList.value);
+    } else {
+      alert('데이터 조회 실패');
+    }
+  } catch (error) {
+    alert('에러발생 :' + error);
+  }
+};
+fetchTodoList();
 </script>
 
 <style scoped>
@@ -376,5 +403,4 @@ function toggleAll(source) {
 .col-form-label {
   font-weight: 500;
 }
-
 </style>

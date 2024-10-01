@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public class IndividualEduMapper {
-
+public interface IndividualEduMapper {
     List<IndividualEduDTO> selectAllIndividualEdu();
 
     // 특정 매물 조회
