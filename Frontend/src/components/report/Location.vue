@@ -1,12 +1,91 @@
 <template>
-  <div class="">
-    <div class="title">추천 위치</div>
+  <div>
+    <div class="title-sm">
+      <div class="custom-line" />
+      추천 위치
+      <div class="custom-line" />
+    </div>
     <div class="row">
-      <div class="col-6" style="width: 60%">
+      <div class="col-7">
         <div id="map" style="height: 400px"></div>
       </div>
-      <div class="col-6" style="width: 40%">
-        <div style="height: 400px; border: solid 1px">빈칸 입니다</div>
+      <div class="col-5 d-flex justify-content-center align-content-center">
+        <div style="display: flex; flex-direction: column; height: 95%">
+          <div
+            class="d-flex justify-content-between m-4 align-items-stretch"
+            style="height: 50%"
+          >
+            <!-- 왼쪽 텍스트 -->
+            <div
+              class="d-flex flex-column justify-content-between"
+              style="width: 60%"
+            >
+              <div>
+                <h2 class="fw-bolder">신한넥스텔</h2>
+                <h4 class="mainblue mt-1">매매 9,800 ~ 2억 1,000 원</h4>
+                <div class="align-content-center">
+                  <h6 class="mt-2" style="font-weight: 300">
+                    오피스텔·280세대·총1동
+                  </h6>
+                  <h6 style="font-weight: 300">
+                    1998.10.26·36.49㎡ ~ 103.66㎡
+                  </h6>
+                </div>
+              </div>
+              <h5 class="mt-auto align-content-end">
+                매매 9 | 전세 0 | 월세 14
+              </h5>
+            </div>
+
+            <!-- 오른쪽 이미지 -->
+            <div class="d-flex align-items-end" style="width: 36%">
+              <img
+                src="../../assets/img/report/sapmle.jpg"
+                alt=""
+                style="width: 100%; height: auto"
+              />
+            </div>
+          </div>
+
+          <hr />
+          <!-- 가로선 추가 -->
+
+          <div
+            class="d-flex justify-content-between mt-0 m-4 align-items-stretch"
+            style="height: 50%"
+          >
+            <!-- 왼쪽 텍스트 -->
+            <div
+              class="d-flex flex-column justify-content-between"
+              style="width: 60%"
+            >
+              <div>
+                <h2 class="fw-bolder">신한넥스텔</h2>
+                <h4 class="mainblue mt-1">매매 9,800 ~ 2억 1,000</h4>
+                <div class="align-content-center">
+                  <h6 class="mt-2" style="font-weight: 300">
+                    오피스텔·280세대·총1동
+                  </h6>
+                  <h6 style="font-weight: 300">
+                    1998.10.26·36.49㎡ ~ 103.66㎡
+                  </h6>
+                </div>
+              </div>
+              <h5 class="mt-auto align-content-end">
+                매매 9 | 전세 0 | 월세 14
+              </h5>
+            </div>
+
+            <!-- 오른쪽 이미지 -->
+            <div class="d-flex align-items-end" style="width: 36%">
+              <img
+                src="../../assets/img/report/sapmle.jpg"
+                alt=""
+                style="width: 100%; height: auto"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -45,5 +124,11 @@ export default {
   top: -18px;
   font-size: 25px;
   font-weight: bold;
+}
+.mainblue {
+  color: #6184c6;
+}
+.weight {
+  font-weight: 100;
 }
 </style>

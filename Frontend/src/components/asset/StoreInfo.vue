@@ -2,17 +2,17 @@
   <div>
     <div class="d-flex justify-content-between gap-2">
       <div>
-        <h2 class="mb-2">내 가게</h2>
+        <h2 class="title mb-2">내 가게</h2>
       </div>
       <div class="d-flex align-items-center gap-2">
         <button type="button" class="btn btn-sm btn-neutral mb-3 mt-3">
           수정
         </button>
-        <a href="/storereg"
+        <router-link to="/asset/storereg"
           ><button type="button" class="btn btn-sm btn-primary mb-3 mt-3 ms-0">
             가게 등록
           </button>
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="row g-3 g-xl-6">
@@ -37,10 +37,10 @@
           <!-- 카드가 세로로 늘어날 수 있도록 설정 -->
           <div class="card-body pb-5 flex-grow-1">
             <div class="">
-              <div class="d-block stretched-link h4 mb-2 fw-bold">
+              <div class="d-block stretched-link h4 mb-2 fw-bold fs-1">
                 {{ store.storeName }}
               </div>
-              <div class="d-block stretched-link h5 mb-2">
+              <div class="d-block stretched-link h5 mb-2 fs-3">
                 {{ store.location }}
               </div>
               <div class="d-flex justify-content-between gap-4">

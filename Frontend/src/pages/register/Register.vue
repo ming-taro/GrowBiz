@@ -18,8 +18,8 @@
       </div>
     </div>
     <div
-      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column justify-content-center position-relative bg-body border-start-lg shadow-soft-5 "
-      style="height: 100vh;"
+      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column justify-content-center position-relative bg-body border-start-lg shadow-soft-5"
+      style="height: 100vh"
     >
       <div class="w-md-50 mx-auto px-10 px-md-0 py-10">
         <div class="mb-10">
@@ -29,10 +29,10 @@
               class="h-rem-10"
               alt="..."
           /></a>
-          <h1 class="ls-tight fw-bolder h3">맨트 뭘로 하지?</h1>
+          <h1 class="ls-tight fw-bolder h3">회원가입</h1>
           <div class="mt-3 text-sm text-muted">
-            <span>뭘로 할지 알려줘</span>
-            <a href="/pages/login.html" class="fw-semibold">윤희</a>에몽
+            <span>이미 회원이라면</span>
+            <a href="/login" class="fw-semibold"> 로그인 </a>페이지
           </div>
         </div>
         <form>

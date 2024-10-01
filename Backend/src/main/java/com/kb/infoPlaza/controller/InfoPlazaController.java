@@ -1,0 +1,7 @@
+package com.kb.infoPlaza.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class InfoPlazaController {
+}

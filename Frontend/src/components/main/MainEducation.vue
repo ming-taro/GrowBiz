@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mb-5">
       <h3>교육정보</h3>
         <router-link
         to="/infoplaza/education"
@@ -10,7 +10,6 @@
       </router-link>
       </div>
 
-        <hr/>
         <div class="row">
 
         <!-- Row to contain 4 cards in a single row -->
@@ -52,4 +51,8 @@
 </script>
 
 <style scoped>
+.card-img-top {
+  height: 100px; /* 원하는 높이로 조정 */
+  object-fit: cover; /* 이미지 비율 유지하면서 잘리도록 설정 */
+}
 </style>

@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'TTLaundryGothicB';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2') format('woff2');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2')
+    format('woff2');
   font-weight: 700;
   font-style: normal;
 }
@@ -424,11 +425,8 @@ body {
   margin: 0;
 }
 hr {
-  color: inherit;
   border: 0;
   border-top: var(--x-border-width) solid;
-  opacity: 0.1;
-  margin: 1rem 0;
 }
 h6,
 .h6,
@@ -3643,8 +3641,8 @@ fieldset:disabled .btn {
 }
 .btn-secondary {
   --x-btn-color: #000;
-  --x-btn-bg: #ff8c00;
-  --x-btn-border-color: #ff8c00;
+  --x-btn-bg: #fcd752;
+  --x-btn-border-color: #fcd752;
   --x-btn-hover-color: #000;
   --x-btn-hover-bg: #ffa333;
   --x-btn-hover-border-color: #ff981a;
@@ -3654,8 +3652,8 @@ fieldset:disabled .btn {
   --x-btn-active-border-color: #ff981a;
   --x-btn-active-shadow: 0 0 0 0 transparent;
   --x-btn-disabled-color: #000;
-  --x-btn-disabled-bg: #ff8c00;
-  --x-btn-disabled-border-color: #ff8c00;
+  --x-btn-disabled-bg: #fcd752;
+  --x-btn-disabled-border-color: #fcd752;
 }
 .btn-success {
   --x-btn-color: #000;
@@ -11400,8 +11398,6 @@ textarea[resize='horizontal'] {
 }
 .article > hr,
 .prose > hr {
-  margin-top: 3em;
-  margin-bottom: 3em;
 }
 .article > ul,
 .article > ol,

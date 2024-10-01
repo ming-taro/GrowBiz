@@ -3,20 +3,21 @@
     <!-- 헤더 -->
     <Result />
 
-    <div class="container">
+    <div class="container mw-screen-xl">
       <!-- 추천 위치 -->
       <Location />
     </div>
 
-      <!-- 그래프 -->
+    <!-- 그래프 -->
     <Bar />
 
-      <!-- 교육정보 -->
-    <div class="container">
-        <Education  />
+    <!-- 교육정보 -->
+    <div class="container mw-screen-xl">
+      <Education />
     </div>
     <!-- 대출 -->
-    <div style="background-color: #f6f4f9; padding: 20px;"> <!-- 배경색과 패딩 추가 -->
+    <div style="background-color: #f6f4f9; padding: 20px">
+      <!-- 배경색과 패딩 추가 -->
       <Loan />
     </div>
   </div>

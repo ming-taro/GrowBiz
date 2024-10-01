@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.infoPlaza.mapper.DistrictCodeMapper">
+    <!-- 중복 제거한 구 이름 가져오기 -->
+    <select id="selectDistinctGuNames" resultType="DistrictCodeDTO">
+        SELECT DISTINCT gu_name FROM all_district order by gu_name
+    </select>
+    <!-- 구 이름에 맞는 동 이름 가져오기 -->
+    <select id="selectDistinctDongNames" resultType="DistrictCodeDTO">
+        SELECT DISTINCT dong_name FROM all_district where gu_name = #{guName} order by dong_name
+    </select>
+
+    <!-- 동 이름으로 위도와 경도 가져오기 -->
+    <select id="selectLocationByDongName" resultType="DistrictCodeDTO">
+        SELECT DISTINCT latitude, longitude
+        FROM all_district
+        WHERE dong_name = #{dongName}
+    </select>
+</mapper>

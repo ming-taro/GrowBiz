@@ -1,25 +1,29 @@
 <template>
-<div>
+  <div>
     <div class="row">
       <div class="col-6">
-        <div>
-          <h4 class="mb-2">밀집도</h4>
-        </div> 
+        <div class="title-sm">
+          <div class="custom-line" />
+          밀집도
+          <div class="custom-line" />
+        </div>
+        <div></div>
         <div class="p-5">
           <canvas id="bar-chart" style="height: 200px"></canvas>
         </div>
       </div>
       <div class="col-6">
-        <div>
-          <h4 class="mb-2">상권의 특성</h4>
-        </div> 
+        <div class="title-sm">
+          <div class="custom-line" />
+          상권의 특성
+          <div class="custom-line" />
+        </div>
         <div class="p-5">
           <canvas id="doughnut-chart" style="height: 200px"></canvas>
         </div>
       </div>
     </div>
-    
-</div>
+  </div>
 </template>
 
 <script setup>
@@ -62,5 +66,8 @@ canvas {
   max-width: 100%;
   height: auto;
 }
-
+.bg {
+  background-color: white;
+  padding: 5px 5px 5px 5px;
+}
 </style>

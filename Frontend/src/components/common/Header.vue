@@ -84,7 +84,7 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a class="fw-bold nav-link rounded-pill" href="/mypage">
+                  <a class="fw-bold nav-link rounded-pill" href="/mypageupdate">
                     마이페이지
                   </a>
                 </li>
@@ -94,7 +94,7 @@
               >
                 <a
                   href="/register"
-                  class="btn fw-bold btn-sm btn-warning bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
+                  class="btn fw-bold btn-sm btn-secondary bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
                   >회원가입</a
                 >
                 <a
