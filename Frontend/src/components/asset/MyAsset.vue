@@ -1,51 +1,62 @@
-<template lang="">
-  <div class="mb-10">
-    <div class="d-flex justify-content-between gap-2 mt-10">
-      <div>
-        <h2 class="title mb-2">현재 자산</h2>
-        <h4 class="mb-2">등록한 계좌 정보</h4>
+<template>
+  <div>
+    <div class="title">추천 위치</div>
+    <div class="row">
+      <div class="wid-half">
+        <div id="map" style="height: 400px"></div>
       </div>
-      <div class="d-flex align-items-center gap-2">
-        <router-link to="/asset/assetreg"
-          ><button
-            type="button"
-            class="btn btn-sm btn-primary mb-5 mt-5 col-12 m-0"
-          >
-            자산 등록
-          </button></router-link
-        >
-      </div>
-    </div>
-
-    <div class="row g-3 g-xl-6">
-      <!-- 계좌 연결 정보 -->
-      <div class="col-xl-6 col-sm-6 d-flex">
-        <div class="card w-100 d-flex flex-column">
-          <div class="card-body p-0">
-            <Account title="계좌" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 카드 연결 정보 -->
-      <div class="col-xl-6 col-sm-6 d-flex">
-        <div class="card w-100 d-flex flex-column">
-          <div class="card-body p-0">
-            <Account title="카드" />
-          </div>
-        </div>
+      <div class="wid-half">
+        <MyGraph />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Account from './Account.vue';
-
 export default {
-  components: {
-    Account,
+  mounted() {
+    const script = document.createElement('script');
+    script.src =
+      '//dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false';
+    script.onload = () => {
+      kakao.maps.load(() => {
+        var container = document.getElementById('map');
+        var options = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667),
+          level: 3,
+        };
+
+        var map = new kakao.maps.Map(container, options);
+      });
+    };
+    document.head.appendChild(script);
   },
 };
 </script>
-<style lang=""></style>
+
+<script setup>
+import MyGraph from '@/components/asset/MyGraph.vue';
+</script>
+
+<style scoped>
+.container {
+  padding: 0px 80px 15px 80px;
+}
+
+.title {
+  margin: -14px 0px -14px 0px;
+  position: relative;
+  top: -18px;
+  font-size: 25px;
+  font-weight: bold;
+}
+.mainblue {
+  color: #6184c6;
+}
+.weight {
+  font-weight: 100;
+}
+.wid-half {
+  width: 50%;
+}
+</style>

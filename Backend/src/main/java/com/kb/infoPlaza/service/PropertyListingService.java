@@ -1,6 +1,7 @@
 package com.kb.infoPlaza.service;
 
 import com.kb.infoPlaza.dto.PropertyListingDTO;
+import com.kb.infoPlaza.dto.DistrictCodeDTO;
 import com.kb.infoPlaza.mapper.PropertyListingMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -37,4 +38,8 @@ public class PropertyListingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    // 중복 제거한 모든 구 이름 가져오기
+    public List<DistrictCodeDTO> getDistinctGuNames() {
+        return mapper.selectDistinctGuNames();
+    }
 }
