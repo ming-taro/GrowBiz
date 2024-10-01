@@ -25,17 +25,78 @@ except mysql.connector.Error as err:
 
 # Base URL
 base_url = "https://franchise.ftc.go.kr/mnu/00013/program/userRqst/list.do"
-params = {
-    'searchCondition': '',
-    'searchKeyword': '',
-    'column': 'brd',
-    'selUpjong': '21',
-    'selIndus': 'H1',
-    'pageUnit': '10',
-    'pageIndex': '1'  # Change this for each page
-}
+# params = {
+#     'searchCondition': '',
+#     'searchKeyword': '',
+#     'column': 'brd',
+#     'selUpjong': '21',
+#     'selIndus': 'H1',
+#     'pageUnit': '10',
+#     'pageIndex': '1'  # Change this for each page
+# } ->치킨
+# Updated parameters to match the given URL
+# params = {
+#     'column': 'firRegNo',  # Updated 'column' parameter to 'firRegNo'
+#     'searchKeyword': '',  # Search keyword left blank as in the given URL
+#     'selUpjong': '22',  # Updated 'selUpjong' to '22'
+#     'selIndus': 'A2',  # Updated 'selIndus' to 'A2'
+#     'pageUnit': '10',  # Page size (10 items per page)
+#     'pageIndex': '1',  # Start from the first page
+#     'x': '17',  # Added 'x' parameter from the URL
+#     'y': '20'   # Added 'y' parameter from the URL
+# } ->편의점
+# Updated parameters to match the given URL
+# params = {
+#     'column': 'firRegNo',  # Updated 'column' parameter to 'firRegNo'
+#     'searchKeyword': '',  # Search keyword left blank as in the given URL
+#     'selUpjong': '23',  # Updated 'selUpjong' to '23'
+#     'selIndus': 'G3',  # Updated 'selIndus' to 'G3'
+#     'pageUnit': '10',  # Page size (10 items per page)
+#     'pageIndex': '1',  # Start from the first page
+#     'x': '36',  # Added 'x' parameter from the URL
+#     'y': '12'   # Added 'y' parameter from the URL
+# }
+# ->숙박
+# Updated parameters to match the given URL
+# params = {
+#     'column': 'brd',  # Updated 'column' parameter to 'brd'
+#     'searchKeyword': '',  # Search keyword left blank as in the given URL
+#     'selUpjong': '21',  # Updated 'selUpjong' to '21'
+#     'selIndus': 'L1',  # Updated 'selIndus' to 'L1'
+#     'pageUnit': '10',  # Page size (10 items per page)
+#     'pageIndex': '1',  # Start from the first page
+#     'x': '33',  # Added 'x' parameter from the URL
+#     'y': '21'   # Added 'y' parameter from the URL
+# }
+# ->커피
 
+# Updated parameters to match the given URL
+# params = {
+#     'column': 'brd',  # Updated 'column' parameter to 'brd'
+#     'searchKeyword': '',  # Search keyword left blank as in the given URL
+#     'selUpjong': '21',  # Updated 'selUpjong' to '21'
+#     'selIndus': 'J1',  # Updated 'selIndus' to 'J1'
+#     'pageUnit': '10',  # Page size (10 items per page)
+#     'pageIndex': '1',  # Start from the first page
+#     'x': '25',  # Added 'x' parameter from the URL
+#     'y': '17'   # Added 'y' parameter from the URL
+# }
+# ->제과제빵
 # Function to insert data into the database
+
+# Updated parameters to match the given URL
+params = {
+    'column': 'brd',  # Updated 'column' parameter to 'brd'
+    'searchKeyword': '',  # Search keyword left blank as in the given URL
+    'selUpjong': '21',  # Updated 'selUpjong' to '21'
+    'selIndus': 'K1',  # Updated 'selIndus' to 'K1'
+    'pageUnit': '10',  # Page size (10 items per page)
+    'pageIndex': '1',  # Start from the first page
+    'x': '41',  # Added 'x' parameter from the URL
+    'y': '8'   # Added 'y' parameter from the URL
+}
+#아이스크림
+
 def insert_into_db(data):
     try:
         query = """
@@ -50,7 +111,7 @@ def insert_into_db(data):
             data['등록번호'],
             data['최초등록일'],
             '외식',  # 대분류 is fixed as '외식'
-            '치킨',  # 중분류 is fixed as '치킨'
+            '아이스크림',  # 중분류 is fixed as '치킨'
             data['일련번호']  # 일련번호 추가
         ))
         print(f"Data inserted for {data['번호']}")
@@ -97,7 +158,7 @@ def crawl_page(page_index):
         print(f"Failed to retrieve page {page_index}, Status code: {response.status_code}")
 
 # Loop through multiple pages (you can adjust the range)
-for i in range(1, 65):  # Example: page 1 to 65
+for i in range(1, 7):  # Example: page 1 to 65
     crawl_page(i)
 
 # Commit the changes and close the connection

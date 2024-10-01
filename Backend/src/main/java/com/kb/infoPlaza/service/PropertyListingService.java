@@ -38,8 +38,4 @@ public class PropertyListingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    // 중복 제거한 모든 구 이름 가져오기
-    public List<DistrictCodeDTO> getDistinctGuNames() {
-        return mapper.selectDistinctGuNames();
-    }
 }
