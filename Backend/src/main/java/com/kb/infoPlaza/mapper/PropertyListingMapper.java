@@ -12,5 +12,8 @@ public interface PropertyListingMapper {
     // 특정 매물 조회
     PropertyListingDTO selectPropertyListingById(int plno); // 메서드 이름 변경
 
+    //동 코드 매물 조회
+    String selectDongCodeByDongName(String dongName);
+
 
 }

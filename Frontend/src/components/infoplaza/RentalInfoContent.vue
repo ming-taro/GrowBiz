@@ -167,6 +167,7 @@ const fetchLocation = async () => {
         // Update map center to the new coordinates
         const position = new window.kakao.maps.LatLng(latitude, longitude);
         kakaoMap.setCenter(position); // Move the map center
+        fetchDongCode();
     } catch (error) {
         console.error('Error fetching location:', error);
     }
@@ -188,6 +189,31 @@ const currentLocation = computed(() => {
     }
     return location; // 최종 위치 반환
 });
+
+// 동 이름으로 동 코드 가져오기
+const fetchDongCode = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/property/dong-code?dongName=${selectedTown.value}`);
+        
+        if (response.status === 200) {
+            const dongCode = response.data; // 동 코드를 가져옵니다.
+            if (dongCode) {
+                console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
+            } else {
+                console.log('동 코드가 없습니다.'); // 동 코드가 없을 경우 메시지 출력
+            }
+        }
+    } catch (error) {
+        // 500 에러가 발생하지 않도록 처리
+        console.error('동 코드를 가져오는 중 오류 발생:', error.message);
+        // 이 부분은 이제 실행되지 않을 것입니다.
+    }
+};
+
+
+
+
+
 </script>
 
 <style>
