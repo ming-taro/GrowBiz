@@ -1,4 +1,5 @@
-package com.kb.storeMgmt.controller;
+
+        package com.kb.storeMgmt.controller;
 
 import com.kb.storeMgmt.service.NeighborhoodService;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+        import java.util.Map;
 
 @RestController
 @RequestMapping("/api/neighborhoods")
