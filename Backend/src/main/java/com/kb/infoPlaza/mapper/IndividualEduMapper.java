@@ -7,9 +7,9 @@ import java.util.List;
 
 @Mapper
 public class IndividualEduMapper {
-
-    List<IndividualEduDTO> selectAllIndividualEdu();
-
-    // 특정 매물 조회
-   IndividualEduDTO selectIndividualEduById(String videoId);
+//
+//    List<IndividualEduDTO> selectAllIndividualEdu();
+//
+//    // 특정 매물 조회
+//   IndividualEduDTO selectIndividualEduById(String videoId);
 }
