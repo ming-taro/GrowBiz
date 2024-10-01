@@ -12,8 +12,5 @@ public interface PropertyListingMapper {
     // 특정 매물 조회
     PropertyListingDTO selectPropertyListingById(int plno); // 메서드 이름 변경
 
-    //모든 구 이름 조회
-    List<DistrictCodeDTO> selectDistinctGuNames();
-
 
 }

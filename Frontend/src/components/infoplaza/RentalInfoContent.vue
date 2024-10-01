@@ -29,7 +29,7 @@
                             class="text-muted dropdown-item"
                             id="district"
                             v-model="selectedDistrict"
-                            @change="updateTowns"
+                            @change="updateTowns" 
                             :disabled="!districts.length"
                         >
                             <option v-for="district in districts" :key="district.guName" :value="district.guName">{{ district.guName }}</option>
@@ -41,7 +41,7 @@
                             v-model="selectedTown"
                             :disabled="!towns.length"
                         >
-                            <option v-for="town in towns" :key="town" :value="town">{{ town }}</option>
+                            <option v-for="town in towns" :key="town.dongName" :value="town.dongName">{{ town.dongName }}</option>
                         </select>
                     </div>
                 </div>
@@ -76,23 +76,20 @@ const props = defineProps({
 
 // 초기 데이터 설정
 const cities = [
-    { name: '서울특별시'}
+    { name: '서울특별시' }
     // 추가 도시 및 구 데이터...
 ];
 
 const selectedCity = ref('서울특별시');
-const selectedDistrict = ref('강남구');
-const selectedTown = ref('역삼동');
+const selectedDistrict = ref('');
+const selectedTown = ref('');
 const districts = ref([]);
 const towns = ref([]);
 
 onMounted(async () => {
     loadKakaoMap(mapContainer.value);
     await fetchDistinctDistricts(); // 중복 제거된 구 가져오기
-    
-    updateTowns(); // Initialize towns based on selected district
     await fetchPropertyListings(); // Fetch property listings after loading the map
-
 });
 
 // Load Kakao Map
@@ -125,25 +122,36 @@ const fetchPropertyListings = async () => {
     }
 };
 
-
 // 구 이름 중복 제거해서 가져오기
 const fetchDistinctDistricts = async () => {
     try {
         const response = await axios.get('http://localhost:8080/api/property/gu-names');
         districts.value = response.data; // 중복 제거된 구 이름을 districts에 저장
         if (districts.value.length) {
-            selectedDistrict.value = districts.value.guName; // 첫 번째 구 이름 선택
+            selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 이름 선택
+            await fetchTowns(selectedDistrict.value); // Fetch towns for the selected district
         }
     } catch (error) {
         console.error('Error fetching distinct district names:', error);
     }
 };
 
-// 동 업데이트 함수
-const updateTowns = () => {
-    const district = districts.value.find(district => district.name === selectedDistrict.value);
-    towns.value = district ? district.towns : [];
-    selectedTown.value = towns.value.length ? towns.value[0] : ''; // Set first town as selected
+// 동 이름 업데이트 함수
+const fetchTowns = async (guName) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/property/dong-names?guName=${guName}`);
+        towns.value = response.data; // 동 이름 리스트를 towns에 저장
+        if (towns.value.length) {
+            selectedTown.value = towns.value[0].dongName; // 첫 번째 동 이름 선택
+        }
+    } catch (error) {
+        console.error('Error fetching towns:', error);
+    }
+};
+
+// 구 업데이트 후 동 업데이트
+const updateTowns = async () => {
+    await fetchTowns(selectedDistrict.value); // Pass the selected district (guName) to fetch towns
 };
 
 // 현재 위치 텍스트 computed 속성
