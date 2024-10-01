@@ -8,4 +8,9 @@
     <select id="selectPropertyListingById" parameterType="int" resultType="PropertyListingDTO">
         SELECT * FROM property_listing WHERE plno = #{plno}
     </select>
+
+    <!-- 중복 제거한 구 이름 가져오기 -->
+    <select id="selectDistinctGuNames" resultType="DistrictCodeDTO">
+        SELECT DISTINCT gu_name FROM district_code
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.kb.infoPlaza.controller;
 
+import com.kb.infoPlaza.dto.DistrictCodeDTO;
 import com.kb.infoPlaza.dto.PropertyListingDTO;
 import com.kb.infoPlaza.service.PropertyListingService;
 import io.swagger.annotations.Api;
@@ -32,6 +33,14 @@ public class PropertyListingController {
     public ResponseEntity<PropertyListingDTO> getPropertyById(@PathVariable int plno) {
         PropertyListingDTO propertyListing = service.selectPropertyListingById(plno);
         return ResponseEntity.ok(propertyListing);
+    }
+
+
+    // 중복 제거한 모든 구 이름을 반환하는 API
+    @GetMapping("/gu-names")
+    public ResponseEntity<List<DistrictCodeDTO>> getDistinctGuNames() {
+        List<DistrictCodeDTO> guNames = service.getDistinctGuNames();
+        return ResponseEntity.ok(guNames);
     }
 
 }
