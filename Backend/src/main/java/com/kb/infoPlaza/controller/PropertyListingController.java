@@ -7,10 +7,12 @@ import com.kb.infoPlaza.service.PropertyListingService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/property")
@@ -50,4 +52,16 @@ public class PropertyListingController {
         List<DistrictCodeDTO> dongNames = districtService.getDistinctDongNames(guName);
         return ResponseEntity.ok(dongNames);
     }
+
+    // 동 이름으로 위도, 경도 조회
+    @GetMapping("/location")
+    public ResponseEntity<DistrictCodeDTO> getLocation(@RequestParam String dongName) {
+        DistrictCodeDTO location = districtService.getLocationByDongName(dongName);
+        if (location != null) {
+            return ResponseEntity.ok(location);
+        } else {
+            return ResponseEntity.notFound().build(); // Not found
+        }
+    }
+
 }

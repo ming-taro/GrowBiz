@@ -15,31 +15,28 @@
                 <div>
                     <h4 class="mb-3">지역 선택</h4>
                     <div class="card-body card_padding d-flex gap-3">
-                        <!-- 서울 선택 -->
                         <select
-                            class="d-inline text-muted dropdown-item w-100 city-select "
+                            class="d-inline text-muted dropdown-item w-100 city-select"
                             id="city"
-                            disabled
                             v-model="selectedCity"
                             @change="updateDistricts"
                         >
                             <option v-for="city in cities" :key="city.name" :value="city.name">{{ city.name }}</option>
                         </select>
-                        <!-- 구 선택 -->
                         <select
                             class="text-muted dropdown-item"
                             id="district"
                             v-model="selectedDistrict"
-                            @change="updateTowns" 
+                            @change="updateTowns"
                             :disabled="!districts.length"
                         >
                             <option v-for="district in districts" :key="district.guName" :value="district.guName">{{ district.guName }}</option>
                         </select>
-                        <!-- 동 선택 -->
                         <select
                             class="text-muted dropdown-item"
                             id="town"
                             v-model="selectedTown"
+                            @change="fetchLocation"
                             :disabled="!towns.length"
                         >
                             <option v-for="town in towns" :key="town.dongName" :value="town.dongName">{{ town.dongName }}</option>
@@ -66,6 +63,7 @@ import axios from 'axios';
 
 const mapContainer = ref(null);
 const propertys = ref([]);
+let kakaoMap; // Declare a variable to hold the map instance
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -102,12 +100,12 @@ const loadKakaoMap = (container) => {
     script.onload = () => {
         window.kakao.maps.load(() => {
             const options = {
-                center: new window.kakao.maps.LatLng(33.450701, 126.570667), // Center coordinates
-                level: 3, // Zoom level
-                maxLevel: 5, // Maximum zoom level
+                center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
+                level: 4, // Zoom level
+                maxLevel: 10, // Maximum zoom level
             };
 
-            new window.kakao.maps.Map(container, options); // Create map instance
+            kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
         });
     };
 };
@@ -153,9 +151,24 @@ const fetchTowns = async (guName) => {
         towns.value = response.data; // 동 이름 리스트를 towns에 저장
         if (towns.value.length) {
             selectedTown.value = towns.value[0].dongName; // 첫 번째 동 이름 선택
+            fetchLocation();
         }
     } catch (error) {
         console.error('Error fetching towns:', error);
+    }
+};
+
+// Fetch location data for the selected town and move the map
+const fetchLocation = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/property/location?dongName=${selectedTown.value}`);
+        const { latitude, longitude } = response.data; // Destructure the response to get latitude and longitude
+
+        // Update map center to the new coordinates
+        const position = new window.kakao.maps.LatLng(latitude, longitude);
+        kakaoMap.setCenter(position); // Move the map center
+    } catch (error) {
+        console.error('Error fetching location:', error);
     }
 };
 

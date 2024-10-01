@@ -1,7 +1,6 @@
-package com.kb.storeMgmt;
+package com.kb.storeMgmt.controller;
 
 import com.kb.board.dto.BoardPageResult;
-import com.kb.board.dto.BoardParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
