@@ -17,8 +17,9 @@
                     <div class="card-body card_padding d-flex gap-3">
                         <!-- 서울 선택 -->
                         <select
-                            class="d-inline text-muted dropdown-item w-100 city-select"
+                            class="d-inline text-muted dropdown-item w-100 city-select "
                             id="city"
+                            disabled
                             v-model="selectedCity"
                             @change="updateDistricts"
                         >
@@ -81,8 +82,8 @@ const cities = [
 ];
 
 const selectedCity = ref('서울특별시');
-const selectedDistrict = ref('');
-const selectedTown = ref('');
+const selectedDistrict = ref('강남구');
+const selectedTown = ref('개포1동');
 const districts = ref([]);
 const towns = ref([]);
 
@@ -125,11 +126,20 @@ const fetchPropertyListings = async () => {
 // 구 이름 중복 제거해서 가져오기
 const fetchDistinctDistricts = async () => {
     try {
+        // 1. 기본값 미리 설정
+        districts.value = [{ guName: '강남구' }];
+        selectedDistrict.value = '강남구';
+        towns.value = [{ dongName: '개포1동' }];
+        selectedTown.value = '개포1동';
+        
+        // 2. 비동기적으로 데이터 불러오기
         const response = await axios.get('http://localhost:8080/api/property/gu-names');
-        districts.value = response.data; // 중복 제거된 구 이름을 districts에 저장
+        districts.value = response.data;
+
+        // 3. 첫 번째 데이터를 선택 (데이터가 로드된 후에도 유지)
         if (districts.value.length) {
-            selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 이름 선택
-            await fetchTowns(selectedDistrict.value); // Fetch towns for the selected district
+            selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 선택
+            await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
         }
     } catch (error) {
         console.error('Error fetching distinct district names:', error);
