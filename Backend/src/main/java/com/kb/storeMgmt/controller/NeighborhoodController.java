@@ -19,11 +19,13 @@ public class NeighborhoodController {
 
     @GetMapping("/address/{address}")
     public String getDongName(@PathVariable String address) {
+        System.out.println(address+"###############");
         return neighborhoodService.getDongName(address);
     }
 
-    @GetMapping("/{dongName}")
-    public Map<String, Object> getNearbyInfo(@PathVariable String dongName) {
-        return neighborhoodService.getNearbyInfo(dongName);
+    @GetMapping("/nearby/{address}")
+    public Map<String, Object> getNearbyInfo(@PathVariable String address) {
+        System.out.println("Received address: " + address);
+        return neighborhoodService.getNearbyInfo(address);
     }
 }
