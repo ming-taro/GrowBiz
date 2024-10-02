@@ -287,18 +287,23 @@ const fetchPropertyDetails = async (dongCode) => {
 
             // 마커 클릭 시 매물 정보 표시
             window.kakao.maps.event.addListener(marker, 'click', () => {
-                // 커스텀 오버레이에 표시할 내용
-                var content = `<div class="customoverlay">
-                    <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
-                    <img src="${property.imageData}" alt="Property Image" style="width: 100%; border-radius: 5px;" />
-                    <p>${property.dealKindCdNm}</p>
-                    <p>${property.ctgryCd2Nm}</p>
-                </div>`;
-
-                // 기존 커스텀 오버레이가 열려있다면 닫기
                 if (infowindow) {
                     infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
+                    infowindow = null; // infowindow 초기화
                 }
+                
+                const imageContent = property.imageData 
+                ? `<img src="${property.imageData}" alt="Property Image" />` 
+                : `<p>이미지가 존재하지 않습니다.</p>`; // 이미지가 없을 경우 메시지
+
+            var content = `<div class="customoverlay">
+                                <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
+                                ${imageContent}
+                                <p>${property.dealKindCdNm}</p>
+                                <p>${property.ctgryCd2Nm}</p>
+                            </div>`;
+
+
 
                 // 새로운 커스텀 오버레이를 생성합니다
                 infowindow = new kakao.maps.CustomOverlay({
@@ -348,35 +353,35 @@ const fetchPropertyDetails = async (dongCode) => {
     font-size: 16px;
     color: #333;
 }
+
 .customoverlay {
-    position: relative;
-    border-radius: 8px; /* 둥근 모서리 */
+    width: 300px; /* 고정 너비 설정 */
+    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
+    max-height: 400px; /* 최대 높이 설정 (예: 400px) */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
     background-color: #fff; /* 배경색 */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+    border-radius: 8px; /* 둥근 모서리 */
     padding: 10px; /* 패딩 */
-    max-width: 300px; /* 적당한 최대 너비로 설정 */
-    text-align: left; /* 텍스트 정렬 */
-    word-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
-    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 (브라우저 호환성) */
-    white-space: normal; /* 기본 줄바꿈 처리 */
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 세로 방향 유지 */
 }
 
-.customoverlay h5 {
-    margin: 0; /* 기본 여백 제거 */
-    font-size: 16px; /* 제목 크기 */
-    color: #333; /* 제목 색상 */
-    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
-    white-space: normal; /* 기본 줄바꿈 처리 */
+.customoverlay img {
+    width: 100%; /* 너비를 100%로 설정하여 div에 맞춤 */
+    height: auto; /* 자동 높이 설정 */
+    max-height: 150px; /* 최대 높이 설정 (예: 150px) */
+    object-fit: cover; /* 이미지 비율 유지하며 잘리도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    margin-bottom: 10px; /* 이미지와 텍스트 간의 공간 유지 */
 }
 
+.customoverlay h5,
 .customoverlay p {
     margin: 0; /* 기본 여백 제거 */
-    font-size: 14px; /* 본문 크기 */
-    color: #666; /* 본문 색상 */
     overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
     white-space: normal; /* 기본 줄바꿈 처리 */
+    text-align: left; /* 텍스트 정렬 */
 }
-
-
 
 </style>
