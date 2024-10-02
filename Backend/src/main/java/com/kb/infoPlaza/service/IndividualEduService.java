@@ -29,11 +29,16 @@ public class IndividualEduService {
     }
 
 
-    public IndividualEduDTO selectIndividualEduById(String videoId)
-    {
+    public IndividualEduDTO selectIndividualEduById(int vno) {
         log.info("get------------------------------");
-        IndividualEduDTO dto = mapper.selectIndividualEduById(videoId);
-        return Optional.ofNullable(dto)
-                .orElseThrow(NoSuchElementException::new);
+        IndividualEduDTO individualEduDTO = mapper.selectIndividualEduById(vno);
+        return Optional.ofNullable(individualEduDTO)
+                .orElseThrow(() -> new NoSuchElementException("ID가 " + vno + "인 IndividualEduDTO를 찾을 수 없습니다."));
+    }
+
+
+    public List<IndividualEduDTO> searchIndividualEduByKeyword(String keyword) {
+        List<IndividualEduDTO> list = mapper.searchIndividualEduByKeyword(keyword);
+        return list;
     }
 }

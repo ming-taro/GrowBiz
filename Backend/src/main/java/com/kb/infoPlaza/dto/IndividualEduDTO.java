@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndividualEduDTO {
-        private String videoId;              // video_id -> videoId (camelCase)
+        private int vno;
+        private String videoUrl;              // video_id -> vno (camelCase)
         private String thumbnail;            // thumbnail -> thumbnail (camelCase)
         private String title;                // title -> title (camelCase)
         private String content;              // content -> content (camelCase)

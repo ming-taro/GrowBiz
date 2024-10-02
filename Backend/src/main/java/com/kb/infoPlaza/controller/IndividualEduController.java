@@ -26,12 +26,16 @@ public class IndividualEduController {
         return ResponseEntity.ok(list);  // 200 OK 응답으로 리스트 반환
     }
 
-
-
-    // 특정 videoId로 교육 정보를 조회하는 API 엔드포인트
-    @GetMapping("/{videoId}")
-    public ResponseEntity<IndividualEduDTO> getIndividualEduById(@PathVariable String videoId) {
-        IndividualEduDTO dto = individualEduService.selectIndividualEduById(videoId);
+    // 특정 vno로 교육 정보를 조회하는 API 엔드포인트
+    @GetMapping("/{vno}")
+    public ResponseEntity<IndividualEduDTO> getIndividualEduById(@PathVariable int vno) {
+        IndividualEduDTO dto = individualEduService.selectIndividualEduById(vno);
         return ResponseEntity.ok(dto);  // 200 OK 응답으로 개별 데이터 반환
+    }
+    // 검색 엔드포인트: 제목 또는 해시태그로 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(@RequestParam String keyword) {
+        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(keyword);
+        return ResponseEntity.ok(result);
     }
 }

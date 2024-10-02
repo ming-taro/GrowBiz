@@ -7,8 +7,14 @@
         <select id="selectAllIndividualEdu" resultType="IndividualEduDTO">
             SELECT * FROM individual_edu
         </select>
-        <select id="selectIndividualEduById" parameterType="string" resultType="IndividualEduDTO">
-            SELECT * FROM individual_edu WHERE videoId = #{videoId}
+        <select id="selectIndividualEduById" parameterType="int" resultType="IndividualEduDTO">
+            SELECT * FROM individual_edu WHERE vno = #{vno}
         </select>
+    <!-- 제목 또는 해시태그로 검색하는 SQL 쿼리 -->
+    <select id="searchIndividualEduByKeyword" resultType="IndividualEduDTO">
+        SELECT * FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{keyword}, '%')
+           OR hashtag LIKE CONCAT('%', #{keyword}, '%')
+    </select>
 
 </mapper>

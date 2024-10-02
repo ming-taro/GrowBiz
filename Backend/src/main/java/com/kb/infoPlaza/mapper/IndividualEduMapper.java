@@ -2,6 +2,7 @@ package com.kb.infoPlaza.mapper;
 
 import com.kb.infoPlaza.dto.IndividualEduDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,6 +10,8 @@ import java.util.List;
 public interface IndividualEduMapper {
     List<IndividualEduDTO> selectAllIndividualEdu();
 
-    // 특정 매물 조회
-   IndividualEduDTO selectIndividualEduById(String videoId);
+    // 특정 영상 조회
+   IndividualEduDTO selectIndividualEduById(int vno);
+
+   List<IndividualEduDTO> searchIndividualEduByKeyword(@Param("keyword") String keyword);
 }
