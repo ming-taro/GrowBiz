@@ -15,28 +15,31 @@
                 <div>
                     <h4 class="mb-3">지역 선택</h4>
                     <div class="card-body card_padding d-flex gap-3">
+                        <!-- 서울 선택 -->
                         <select
-                            class="d-inline text-muted dropdown-item w-100 city-select"
+                            class="d-inline text-muted dropdown-item w-100 city-select "
                             id="city"
+                            disabled
                             v-model="selectedCity"
                             @change="updateDistricts"
                         >
                             <option v-for="city in cities" :key="city.name" :value="city.name">{{ city.name }}</option>
                         </select>
+                        <!-- 구 선택 -->
                         <select
                             class="text-muted dropdown-item"
                             id="district"
                             v-model="selectedDistrict"
-                            @change="updateTowns"
+                            @change="updateTowns" 
                             :disabled="!districts.length"
                         >
                             <option v-for="district in districts" :key="district.guName" :value="district.guName">{{ district.guName }}</option>
                         </select>
+                        <!-- 동 선택 -->
                         <select
                             class="text-muted dropdown-item"
                             id="town"
                             v-model="selectedTown"
-                            @change="fetchLocation"
                             :disabled="!towns.length"
                         >
                             <option v-for="town in towns" :key="town.dongName" :value="town.dongName">{{ town.dongName }}</option>
@@ -63,7 +66,6 @@ import axios from 'axios';
 
 const mapContainer = ref(null);
 const propertys = ref([]);
-let kakaoMap; // Declare a variable to hold the map instance
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -100,12 +102,12 @@ const loadKakaoMap = (container) => {
     script.onload = () => {
         window.kakao.maps.load(() => {
             const options = {
-                center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
-                level: 4, // Zoom level
-                maxLevel: 10, // Maximum zoom level
+                center: new window.kakao.maps.LatLng(33.450701, 126.570667), // Center coordinates
+                level: 3, // Zoom level
+                maxLevel: 5, // Maximum zoom level
             };
 
-            kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
+            new window.kakao.maps.Map(container, options); // Create map instance
         });
     };
 };
@@ -151,25 +153,9 @@ const fetchTowns = async (guName) => {
         towns.value = response.data; // 동 이름 리스트를 towns에 저장
         if (towns.value.length) {
             selectedTown.value = towns.value[0].dongName; // 첫 번째 동 이름 선택
-            fetchLocation();
         }
     } catch (error) {
         console.error('Error fetching towns:', error);
-    }
-};
-
-// Fetch location data for the selected town and move the map
-const fetchLocation = async () => {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/property/location?dongName=${selectedTown.value}`);
-        const { latitude, longitude } = response.data; // Destructure the response to get latitude and longitude
-
-        // Update map center to the new coordinates
-        const position = new window.kakao.maps.LatLng(latitude, longitude);
-        kakaoMap.setCenter(position); // Move the map center
-        fetchDongCode();
-    } catch (error) {
-        console.error('Error fetching location:', error);
     }
 };
 
@@ -189,31 +175,6 @@ const currentLocation = computed(() => {
     }
     return location; // 최종 위치 반환
 });
-
-// 동 이름으로 동 코드 가져오기
-const fetchDongCode = async () => {
-    try {
-        const response = await axios.get(`http://localhost:8080/api/property/dong-code?dongName=${selectedTown.value}`);
-        
-        if (response.status === 200) {
-            const dongCode = response.data; // 동 코드를 가져옵니다.
-            if (dongCode) {
-                console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
-            } else {
-                console.log('동 코드가 없습니다.'); // 동 코드가 없을 경우 메시지 출력
-            }
-        }
-    } catch (error) {
-        // 500 에러가 발생하지 않도록 처리
-        console.error('동 코드를 가져오는 중 오류 발생:', error.message);
-        // 이 부분은 이제 실행되지 않을 것입니다.
-    }
-};
-
-
-
-
-
 </script>
 
 <style>

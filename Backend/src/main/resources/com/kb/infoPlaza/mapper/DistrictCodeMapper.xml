@@ -10,11 +10,4 @@
     <select id="selectDistinctDongNames" resultType="DistrictCodeDTO">
         SELECT DISTINCT dong_name FROM all_district where gu_name = #{guName} order by dong_name
     </select>
-
-    <!-- 동 이름으로 위도와 경도 가져오기 -->
-    <select id="selectLocationByDongName" resultType="DistrictCodeDTO">
-        SELECT DISTINCT latitude, longitude
-        FROM all_district
-        WHERE dong_name = #{dongName}
-    </select>
 </mapper>

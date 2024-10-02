@@ -50,35 +50,4 @@ public class PropertyListingController {
         List<DistrictCodeDTO> dongNames = districtService.getDistinctDongNames(guName);
         return ResponseEntity.ok(dongNames);
     }
-
-    // 동 이름으로 위도, 경도 조회
-    @GetMapping("/location")
-    public ResponseEntity<DistrictCodeDTO> getLocation(@RequestParam String dongName) {
-        DistrictCodeDTO location = districtService.getLocationByDongName(dongName);
-        if (location != null) {
-            return ResponseEntity.ok(location);
-        } else {
-            return ResponseEntity.notFound().build(); // Not found
-        }
-    }
-
-    // 동 이름으로 매물 동 코드 조회
-    @GetMapping("/dong-code")
-    public ResponseEntity<String> getDongCodeByDongName(@RequestParam String dongName) {
-        try {
-            String dongCode = propertyService.selectDongCodeByDongName(dongName);
-
-            // 동 코드가 있을 경우
-            if (dongCode != null) {
-                return ResponseEntity.ok(dongCode);
-            } else {
-                // 동 코드가 없을 경우 빈 문자열로 응답
-                return ResponseEntity.ok("");
-            }
-        } catch (Exception e) {
-            // 예외가 발생할 경우 빈 문자열로 응답
-            return ResponseEntity.ok(""); // 오류가 발생했을 때도 빈 문자열로 응답
-        }
-    }
-
 }

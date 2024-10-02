@@ -38,12 +38,4 @@ public class PropertyListingService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    // 특정 매물 조회
-    @Transactional
-    public String selectDongCodeByDongName(String dongName) {
-        String dongCode = mapper.selectDongCodeByDongName(dongName);
-        return Optional.ofNullable(dongCode)
-                .orElseThrow(NoSuchElementException::new);
-    }
-
 }

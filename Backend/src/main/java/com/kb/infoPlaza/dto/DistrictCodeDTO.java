@@ -13,6 +13,4 @@ public class DistrictCodeDTO {
     private String guCode;
     private String dongName;
     private String dongCode;
-    private Double latitude;
-    private Double longitude;
 }
