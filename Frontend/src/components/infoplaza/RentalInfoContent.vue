@@ -101,7 +101,7 @@ const loadKakaoMap = (container) => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
                 level: 4, // Zoom level
-                maxLevel: 10, // Maximum zoom level
+                maxLevel: 5, // Maximum zoom level
             };
 
             kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
@@ -209,7 +209,7 @@ const fetchDongCode = async () => {
                 console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
                 fetchPropertyDetails(dongCode); // 동 코드로 매물 세부 정보 가져오기 호출
             } else {
-                console.log('동 코드가 없습니다.'); // 동 코드가 없을 경우 메시지 출력
+                showInfoWindow('해당 지역의 매물 정보가 없습니다.');
             }
         }
     } catch (error) {
@@ -218,6 +218,43 @@ const fetchDongCode = async () => {
         // 이 부분은 이제 실행되지 않을 것입니다.
     }
 };
+
+// 인포윈도우를 띄우는 함수
+const showInfoWindow = (message) => {
+    if (infowindow) {
+        infowindow.close(); // 기존 인포윈도우 닫기
+    }
+    
+    // 인포윈도우 생성
+    infowindow = new window.kakao.maps.InfoWindow({
+        content: `<div class="info-window" id="info-window"><strong>${message}</strong></div>`, // 초기 opacity를 0으로 설정
+        position: kakaoMap.getCenter() // 현재 지도 중심에 표시
+    });
+    
+    infowindow.open(kakaoMap); // 인포윈도우 열기
+
+    // 인포윈도우가 자연스럽게 나타나도록 애니메이션 처리
+    setTimeout(() => {
+        const infoWindowElement = document.getElementById('info-window');
+        if (infoWindowElement) {
+            infoWindowElement.style.opacity = '1'; // 서서히 나타나기
+        }
+    }, 100); // 살짝 지연 후 서서히 나타남
+
+    // 3초 후 서서히 사라짐
+    setTimeout(() => {
+        const infoWindowElement = document.getElementById('info-window');
+        if (infoWindowElement) {
+            infoWindowElement.style.opacity = '0'; // 서서히 사라지기
+        }
+
+        // 1초 후 완전히 사라지고 인포윈도우 닫기
+        setTimeout(() => {
+            infowindow.close();
+        }, 1000); // 1000ms = 1초 동안 서서히 사라짐
+    }, 2000); // 3000ms = 3초 후에 사라지기 시작
+};
+
 
 // 이전에 생성된 마커 제거하는 함수
 const removeMarkers = () => {
@@ -234,6 +271,7 @@ const fetchPropertyDetails = async (dongCode) => {
         // 이전 마커 삭제
         removeMarkers();
         console.log(propertys.value);
+
         // 매물 정보로 마커 표시
         propertys.value.forEach(property => {
             const position = new window.kakao.maps.LatLng(property.laCrd, property.loCrd);
@@ -249,7 +287,7 @@ const fetchPropertyDetails = async (dongCode) => {
                 }
                 infowindow = new window.kakao.maps.InfoWindow({
                     content: `
-                        <div style="padding:10px;">
+                        <div class="info-window" id="info-window">
                             <h5>${property.atclSfeCn}</h5>
                             <p>${property.dealKindCdNm}</p>
                             <p>${property.ctgryCd2Nm}</p>
@@ -286,4 +324,17 @@ const fetchPropertyDetails = async (dongCode) => {
 .city-select {
     width: 200px; /* 원하는 너비로 조정 */
 }
+/* CSS 스타일 추가 */
+.info-window {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-window strong {
+    font-size: 16px;
+    color: #333;
+}
+
 </style>
