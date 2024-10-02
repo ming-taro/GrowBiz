@@ -221,38 +221,15 @@ const fetchDongCode = async () => {
 
 // 인포윈도우를 띄우는 함수
 const showInfoWindow = (message) => {
-    if (infowindow) {
-        infowindow.close(); // 기존 인포윈도우 닫기
-    }
-    
-    // 인포윈도우 생성
-    infowindow = new window.kakao.maps.InfoWindow({
-        content: `<div class="info-window" id="info-window"><strong>${message}</strong></div>`, // 초기 opacity를 0으로 설정
-        position: kakaoMap.getCenter() // 현재 지도 중심에 표시
+    let content = `<div class = "info-window label" id="info-window"><span class="left"></span><span class="center">${message}</span><span class="right"></span></div>`;
+    // 커스텀 오버레이를 생성합니다
+    var customOverlay = new kakao.maps.CustomOverlay({
+        position: kakaoMap.getCenter(),
+        content: content   
     });
-    
-    infowindow.open(kakaoMap); // 인포윈도우 열기
 
-    // 인포윈도우가 자연스럽게 나타나도록 애니메이션 처리
-    setTimeout(() => {
-        const infoWindowElement = document.getElementById('info-window');
-        if (infoWindowElement) {
-            infoWindowElement.style.opacity = '1'; // 서서히 나타나기
-        }
-    }, 100); // 살짝 지연 후 서서히 나타남
-
-    // 3초 후 서서히 사라짐
-    setTimeout(() => {
-        const infoWindowElement = document.getElementById('info-window');
-        if (infoWindowElement) {
-            infoWindowElement.style.opacity = '0'; // 서서히 사라지기
-        }
-
-        // 1초 후 완전히 사라지고 인포윈도우 닫기
-        setTimeout(() => {
-            infowindow.close();
-        }, 1000); // 1000ms = 1초 동안 서서히 사라짐
-    }, 2000); // 3000ms = 3초 후에 사라지기 시작
+    // 커스텀 오버레이를 지도에 표시합니다
+    customOverlay.setMap(kakaoMap);
 };
 
 
