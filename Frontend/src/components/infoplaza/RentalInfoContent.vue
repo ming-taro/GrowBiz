@@ -65,7 +65,6 @@ const districts = ref([]);
 const towns = ref([]);
 let markers = [];
 let infowindow;
-let customOverlay; // 커스텀 오버레이를 저장할 변수
 let clusterer;
 
 // Prop to control the visibility of location info
@@ -102,7 +101,7 @@ const loadKakaoMap = (container) => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
                 level: 4, // Zoom level
-                maxLevel: 8, // Maximum zoom level
+                maxLevel: 6, // Maximum zoom level
                 
             };
 
@@ -179,10 +178,11 @@ const fetchLocation = async () => {
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = currentLocation.value; // 현재 선택된 지역을 가져옵니다.
         
+        removeMarkers(); // 이전 마커 제거
+
         // 이전 마커 삭제
         if (infowindow) {
-            removeMarkers();
-            infowindow.close(); // 기존 인포윈도우 닫기
+            infowindow.setMap(null); // 기존 인포윈도우 닫기
         }
 
         geocoder.addressSearch(address, function(result, status) {
@@ -245,13 +245,13 @@ const fetchDongCode = async () => {
 const showInfoWindow = (message) => {
     let content = `<div class = "info-window label" id="info-window"><span class="left"></span><span class="center">${message}</span><span class="right"></span></div>`;
     // 커스텀 오버레이를 생성합니다
-    var customOverlay = new kakao.maps.CustomOverlay({
+    infowindow = new kakao.maps.CustomOverlay({
         position: kakaoMap.getCenter(),
         content: content   
     });
 
     // 커스텀 오버레이를 지도에 표시합니다
-    customOverlay.setMap(kakaoMap);
+    infowindow.setMap(kakaoMap);
 };
 
 
@@ -289,12 +289,12 @@ const fetchPropertyDetails = async (dongCode) => {
                             </div>`;
 
                 // 기존 커스텀 오버레이가 열려있다면 닫기
-                if (customOverlay) {
-                    customOverlay.setMap(null); // 현재 열려있는 오버레이 닫기
+                if (infowindow) {
+                    infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
                 }
 
                 // 새로운 커스텀 오버레이를 생성합니다
-                customOverlay = new kakao.maps.CustomOverlay({
+                infowindow = new kakao.maps.CustomOverlay({
                     map: kakaoMap,
                     position: position,
                     content: content,
