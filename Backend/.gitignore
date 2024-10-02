@@ -5,10 +5,9 @@ build/
 !**/src/test/**/build/
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+/application.properties
+/.idea/
+*.idea
 *.iws
 *.iml
 *.ipr
@@ -17,6 +16,7 @@ out/
 !**/src/test/**/out/
 
 ### Eclipse ###
+application.properties
 .apt_generated
 .classpath
 .factorypath

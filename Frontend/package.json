@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.7.5",
+    "@popperjs/core": "^2.11.8",
+    "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.4",
     "frontend": "file:",
     "mitt": "^3.0.1",
@@ -22,7 +24,8 @@
     "vue_front": "file:",
     "vue-awesome-paginate": "^1.2.0",
     "vue-chartjs": "^5.3.1",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-quill": "^0.3.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

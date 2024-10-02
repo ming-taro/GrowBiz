@@ -1,0 +1,92 @@
+<template>
+  <div>
+    <div style="height: 400px">
+      <div class="he-half">
+        <div>
+          <h4 class="mb-2">대출 상환 현황</h4>
+        </div>
+        <div>
+          <canvas id="doughnut-chart" height="150px"></canvas>
+        </div>
+      </div>
+      <div>
+        <div class="he-half">
+          <h4 class="">가게 자산 현황 (혼합 차트)</h4>
+        </div>
+        <div>
+          <canvas id="mixed-chart" height="100px"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import { Chart } from 'chart.js/auto';
+import {
+  asset_data_doughnut,
+  asset_doughnutoptions,
+  mixed_data,
+  mixed_options,
+} from '@/assets/js/assetChart.js';
+
+let doughnutChartInstance = ref(null); // 도넛 차트 인스턴스
+let mixedChartInstance = ref(null); // 혼합 차트 인스턴스
+
+onMounted(() => {
+  const doughnutCtx = document
+    .getElementById('doughnut-chart')
+    .getContext('2d');
+  const mixedCtx = document.getElementById('mixed-chart').getContext('2d');
+
+  // Chart.js를 사용하여 도넛 차트 생성
+  doughnutChartInstance.value = new Chart(doughnutCtx, {
+    type: 'pie',
+    data: asset_data_doughnut,
+    options: {
+      ...asset_doughnutoptions, // asset_doughnutoptions의 모든 속성을 가져옴
+      maintainAspectRatio: false, // 이 속성을 덮어쓰는 방식으로 추가
+    },
+  });
+  // Chart.js를 사용하여 혼합 차트 생성
+  mixedChartInstance.value = new Chart(mixedCtx, {
+    type: 'bar', // 기본 차트 유형은 'bar'입니다. 혼합 차트 데이터셋에 따라 조정됩니다.
+    data: mixed_data,
+    options: mixed_options,
+    maintainAspectRatio: false,
+  });
+});
+</script>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      data: null,
+    };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get('/api/store');
+        this.data = response.data;
+      } catch (error) {
+        console.error('Error fetching data from local server:', error);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.he-half {
+  width: 65%;
+  height: 50%;
+}
+</style>

@@ -1,0 +1,406 @@
+<template>
+  <div>
+    <InfoPlazaHeader />
+    <div class="container mw-screen-xl">
+      <form class="form-horizontal card">
+        <div class="col-12 d-flex justify-content-center mt-4">
+          <h4>검색 옵션</h4>
+        </div>
+        <div class="row m-3">
+          <!-- 사업주기별 -->
+          <label for="inputEmail3" class="col-2 col-form-label"
+            >사업주기별</label
+          >
+          <div class="col-9">
+            <div class="mt-2">
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="cycleCheck1"
+                />
+                <label class="form-check-label" for="cycleCheck1">전체</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="cycleCheck2"
+                />
+                <label class="form-check-label" for="cycleCheck2">창업</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="cycleCheck3"
+                />
+                <label class="form-check-label" for="cycleCheck3">성장</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="cycleCheck4"
+                />
+                <label class="form-check-label" for="cycleCheck4"
+                  >폐업, 재기</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 업종별 -->
+          <label for="inputEmail3" class="col-2 col-form-label">업종별</label>
+          <div class="col-9">
+            <div class="mt-2">
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck1"
+                />
+                <label class="form-check-label" for="industryCheck1"
+                  >전체</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck2"
+                />
+                <label class="form-check-label" for="industryCheck2"
+                  >업종무관</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck3"
+                />
+                <label class="form-check-label" for="industryCheck3"
+                  >제조업</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck4"
+                />
+                <label class="form-check-label" for="industryCheck4"
+                  >도소매업</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck5"
+                />
+                <label class="form-check-label" for="industryCheck5"
+                  >음식점업</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck6"
+                />
+                <label class="form-check-label" for="industryCheck6"
+                  >서비스업</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="industryCheck7"
+                />
+                <label class="form-check-label" for="industryCheck7"
+                  >숙박업</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 과목별 -->
+          <label for="inputEmail3" class="col-2 col-form-label">과목별</label>
+          <div class="col-9">
+            <div class="mt-2">
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck1"
+                />
+                <label class="form-check-label" for="subjectCheck1">전체</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck2"
+                />
+                <label class="form-check-label" for="subjectCheck2"
+                  >마케팅</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck3"
+                />
+                <label class="form-check-label" for="subjectCheck3"
+                  >사업장 운영</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck4"
+                />
+                <label class="form-check-label" for="subjectCheck4"
+                  >노무&세무&법</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck5"
+                />
+                <label class="form-check-label" for="subjectCheck5"
+                  >수출입</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck6"
+                />
+                <label class="form-check-label" for="subjectCheck6"
+                  >지원사업</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck7"
+                />
+                <label class="form-check-label" for="subjectCheck7"
+                  >기업가정신</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="subjectCheck8"
+                />
+                <label class="form-check-label" for="subjectCheck8">교양</label>
+              </div>
+            </div>
+          </div>
+          <label for="inputEmail3" class="col-2 col-form-label"
+            >키워드 검색</label
+          >
+
+          <div class="col-9">
+            <div class="mt-2">
+              <form class="form-group">
+                <div class="input-group input-group-sm">
+                  <div class="btn-group dropdown">
+                    <select
+                      class="form-select"
+                      aria-label="Default select example"
+                    >
+                      <option selected>전체</option>
+                      <option value="1">과정명</option>
+                      <option value="2">내용</option>
+                      <option value="3">해시태그</option>
+                      <option value="3">강사명</option>
+                    </select>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control ms-1 rounded"
+                    placeholder="검색어를 입력해 주세요."
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-12 d-flex justify-content-center mt-4">
+            <button type="submit" class="btn btn-primary mb-4">검색하기</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="cards">
+        <h3 class="mb-5" style="font-weight: 600">영상 목록</h3>
+        <!-- Row to contain 4 cards in a single row -->
+        <div class="row">
+          <div class="col-3">
+            <div class="card" style="cursor: pointer">
+              <img
+                src="@/assets/img/media/img-1.jpg"
+                class="card-img-top"
+                alt="Card image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">
+                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+                </h5>
+
+                <div class="d-flex align-items-center">
+                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
+                  <router-link
+                    to="/infoplaza/education/video"
+                    href="#"
+                    class="btn btn-sm btn-primary mt-2 ms-2"
+                    >상세보기</router-link
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="card" style="cursor: pointer">
+              <img
+                src="@/assets/img/media/img-1.jpg"
+                class="card-img-top"
+                alt="Card image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">
+                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+                </h5>
+
+                <div class="d-flex align-items-center">
+                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
+                  <router-link
+                    to="/infoplaza/education/video"
+                    href="#"
+                    class="btn btn-sm btn-primary mt-2 ms-2"
+                    >상세보기</router-link
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="card" style="cursor: pointer">
+              <img
+                src="@/assets/img/media/img-1.jpg"
+                class="card-img-top"
+                alt="Card image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">
+                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+                </h5>
+
+                <div class="d-flex align-items-center">
+                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
+                  <router-link
+                    to="/infoplaza/education/video"
+                    href="#"
+                    class="btn btn-sm btn-primary mt-2 ms-2"
+                    >상세보기</router-link
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3">
+            <div class="card" style="cursor: pointer">
+              <img
+                src="@/assets/img/media/img-1.jpg"
+                class="card-img-top"
+                alt="Card image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">
+                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+                </h5>
+
+                <div class="d-flex align-items-center">
+                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
+                  <router-link
+                    to="/infoplaza/education/video"
+                    href="#"
+                    class="btn btn-sm btn-primary mt-2 ms-2"
+                    >상세보기</router-link
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import axios from 'axios';
+import { ref, reactive } from 'vue';
+function toggleAll(source) {
+  const checkboxes = document.querySelectorAll(
+    '.form-check-input:not(#cycleCheckAll)'
+  );
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = source.checked;
+  });
+}
+
+const BASEURI = '/infoPlaza/education';
+const totalList = ref({});
+
+// 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
+const fetchTodoList = async () => {
+  try {
+    console.log('TRYING......');
+    // 전체 업종 데이터 불러오기
+    const response = await axios.get(BASEURI + '/list');
+    // const response = await axios.get(
+    //   'http://localhost:8080/api/infoPlaza/education/list'
+    // );
+    if (response.status === 200) {
+      console.log('데이터 조회 시작');
+      totalList.value = response.data;
+      console.log(totalList.value);
+    } else {
+      alert('데이터 조회 실패');
+    }
+  } catch (error) {
+    alert('에러발생 :' + error);
+  }
+};
+fetchTodoList();
+</script>
+
+<style scoped>
+.form-horizontal {
+  margin: 20px;
+}
+.cards {
+  margin: 60px 0px;
+}
+.container {
+  padding: 0px 80px 0px 80px;
+}
+.col-form-label {
+  font-weight: 500;
+}
+</style>
