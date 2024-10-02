@@ -1,4 +1,4 @@
-package com.kb.report;
+package com.kb.report.service;
 
 public class ReportServvice {
 }
