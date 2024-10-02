@@ -6,7 +6,7 @@
 <mapper namespace="com.kb.infoPlaza.mapper.BusinessItemMapper">
     <select id="getBest3List" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         SELECT SIGNGU_CD_NM, ADSTRD_CD_NM, TRDAR_SE_CD_NM, SVC_INDUTY_CD_NM
-        FROM commercial_sales
+        FROM commercial_sales3
         ORDER BY
         <if test="age == null or age == ''">
             THSMON_SELNG_AMT DESC
@@ -38,7 +38,7 @@
     </select>
 
     <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales
+        SELECT * FROM commercial_sales3
         WHERE ADSTRD_CD_NM =
         <if test="location != null">
             #{location}
@@ -50,7 +50,7 @@
     </select>
 
     <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales
+        SELECT * FROM commercial_sales3
         WHERE ADSTRD_CD_NM =
         <if test="location != null">
             #{location}
@@ -61,18 +61,18 @@
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures limit 5
+        select * from business_closures3 limit 5
     </select>
 
     <select id="getRate" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures
+        select * from business_closures3
     </select>
 
     <select id="getTotal5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        select * from commercial_sales limit 5
+        select * from commercial_sales3 limit 5
     </select>
 
     <select id="getTotal" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        select * from commercial_sales
+        select * from commercial_sales3
     </select>
 </mapper>

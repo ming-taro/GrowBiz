@@ -833,8 +833,6 @@ const fetchAgeData = async () => {
       params: { age: selectedAge.value }, // 선택된 연령대 값을 쿼리 파라미터로 전송
     });
     best3Data.value = response.data;
-    console.log(response.data);
-    console.log('!!!');
     console.log(best3Data.value);
 
     console.log(best3Data.value[0].svcIndutyCdNm);
