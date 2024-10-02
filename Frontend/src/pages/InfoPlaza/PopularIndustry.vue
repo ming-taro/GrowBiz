@@ -42,12 +42,17 @@
               >
                 <div class="col text-center">
                   <div class="h3 mt-5 mb-2 font-weight-bold text-purple">
-                    패션/뷰티
+                    {{ best3Data[0].svcIndutyCdNm }}
                   </div>
                   <div class="h4 mb-1 text-gray-300">
-                    <h4>강남구 압구정동</h4>
+                    <h4>
+                      {{ best3Data[0].signguCdNm }}
+                      {{ best3Data[0].adstrdCdNm }}
+                    </h4>
                   </div>
-                  <p>압구정로데오사거리</p>
+                  <p>
+                    {{ best3Data[0].trdarSeCdNm }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -70,9 +75,13 @@
                 />
               </div>
               <div class="ml-3">
-                <div class="h4 font-weight-bold text-purple mb-1">유통</div>
-                <div class="h6 text-gray-300">광진구 화양동</div>
-                <p class="text-gray-300">세종대학교</p>
+                <div class="h4 font-weight-bold text-purple mb-1">
+                  {{ best3Data[1].svcIndutyCdNm }}
+                </div>
+                <div class="h6 text-gray-300">
+                  {{ best3Data[1].signguCdNm }} {{ best3Data[1].adstrdCdNm }}
+                </div>
+                <p class="text-gray-300">{{ best3Data[1].trdarSeCdNm }}</p>
               </div>
             </div>
           </div>
@@ -88,9 +97,13 @@
                 />
               </div>
               <div class="ml-3">
-                <div class="h4 font-weight-bold text-purple mb-1">식음료</div>
-                <div class="h6 text-gray-300">종로구 세운동</div>
-                <p class="text-gray-300">세운상가</p>
+                <div class="h4 font-weight-bold text-purple mb-1">
+                  {{ best3Data[2].svcIndutyCdNm }}
+                </div>
+                <div class="h6 text-gray-300">
+                  {{ best3Data[2].signguCdNm }} {{ best3Data[2].adstrdCdNm }}
+                </div>
+                <p class="text-gray-300">{{ best3Data[1].trdarSeCdNm }}</p>
               </div>
             </div>
           </div>
@@ -102,79 +115,103 @@
             <div
               class="card-body d-flex flex-column justify-content-center align-items-center"
             >
-              <!-- 성별 필터링 -->
-              <label
-                for="genderFilter"
-                class="fw-bold"
-                style="font-size: 1.25rem"
-                >성별</label
-              >
-              <div class="d-flex justify-content-center mt-2">
-                <div class="form-check form-check-inline">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="genderAll"
-                  />
-                  <label class="form-check-label" for="genderAll">전체</label>
+              <form @submit.prevent="fetchAgeData">
+                <!-- 연령대 필터링 -->
+                <label
+                  for="ageFilter"
+                  class="fw-bold mt-5"
+                  style="font-size: 1.25rem"
+                  >연령대</label
+                >
+                <div class="d-flex flex-wrap justify-content-center mt-2">
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="ageAll"
+                      value="전체"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="ageAll">전체</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age10"
+                      value="10대"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age10">10대</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age20"
+                      value="20대"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age20">20대</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age30"
+                      value="30대"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age30">30대</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age40"
+                      value="40대"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age40">40대</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age50"
+                      value="50대"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age50">50대</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-2">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      id="age60"
+                      value="60대 이상"
+                      name="age"
+                      v-model="selectedAge"
+                    />
+                    <label class="form-check-label" for="age60"
+                      >60대 이상</label
+                    >
+                  </div>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="genderMale"
-                  />
-                  <label class="form-check-label" for="genderMale">남성</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="genderFemale"
-                  />
-                  <label class="form-check-label" for="genderFemale"
-                    >여성</label
-                  >
-                </div>
-              </div>
 
-              <!-- 연령대 필터링 -->
-              <label
-                for="ageFilter"
-                class="fw-bold mt-5"
-                style="font-size: 1.25rem"
-                >연령대</label
-              >
-              <div class="d-flex flex-wrap justify-content-center mt-2">
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="ageAll" />
-                  <label class="form-check-label" for="ageAll">전체</label>
+                <!-- 검색창 -->
+                <div class="col-12 d-flex justify-content-center mt-4">
+                  <button type="submit" class="btn btn-primary mb-4">
+                    검색하기
+                  </button>
                 </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age10" />
-                  <label class="form-check-label" for="age10">10대</label>
-                </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age20" />
-                  <label class="form-check-label" for="age20">20대</label>
-                </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age30" />
-                  <label class="form-check-label" for="age30">30대</label>
-                </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age40" />
-                  <label class="form-check-label" for="age40">40대</label>
-                </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age50" />
-                  <label class="form-check-label" for="age50">50대</label>
-                </div>
-                <div class="form-check form-check-inline mb-2">
-                  <input type="checkbox" class="form-check-input" id="age60" />
-                  <label class="form-check-label" for="age60">60대 이상</label>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -702,37 +739,110 @@ import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import axios from 'axios';
 import { ref, reactive } from 'vue';
 
-const BASEURI = '/api//infoPlaza/businessItem';
+const BASEURI = '/api/infoPlaza/businessItem';
 const best5 = ref([]);
 const worst5 = ref([]);
+const selectedAge = ref('전체');
+const best3Data = ref([
+  {
+    adstrdCdNm: '노량진1동',
+    agrde10SelngAmt: null,
+    agrde20SelngAmt: null,
+    agrde30SelngAmt: null,
+    agrde40SelngAmt: null,
+    agrde50SelngAmt: null,
+    agrde60AboveSelngAmt: null,
+    fmlSelngAmt: null,
+    img: null,
+    mdwkSelngAmt: null,
+    mlSelngAmt: null,
+    signguCdNm: '동작구',
+    stdrTrdarSvc: null,
+    stdrYyquCd: null,
+    svcIndutyCdNm: '수산물판매',
+    thsmonSelngAmt: null,
+    trdarSeCdNm: '노량진역(노량진)',
+    wkendSelngAmt: null,
+  },
+  {
+    stdrTrdarSvc: null,
+    stdrYyquCd: null,
+    trdarSeCdNm: '가산디지털단지',
+    svcIndutyCdNm: '일반의류',
+    thsmonSelngAmt: null,
+    agrde10SelngAmt: null,
+    agrde20SelngAmt: null,
+    agrde30SelngAmt: null,
+    agrde40SelngAmt: null,
+    agrde50SelngAmt: null,
+    agrde60AboveSelngAmt: null,
+    fmlSelngAmt: null,
+    img: null,
+    mdwkSelngAmt: null,
+    mlSelngAmt: null,
+  },
+  {
+    stdrTrdarSvc: null,
+    stdrYyquCd: null,
+    trdarSeCdNm: '용산전자상가(용산역)',
+    svcIndutyCdNm: '컴퓨터및주변장치판매',
+    thsmonSelngAmt: null,
+    agrde10SelngAmt: null,
+    agrde20SelngAmt: null,
+    agrde30SelngAmt: null,
+    agrde40SelngAmt: null,
+    agrde50SelngAmt: null,
+    agrde60AboveSelngAmt: null,
+    fmlSelngAmt: null,
+    img: null,
+    mdwkSelngAmt: null,
+    mlSelngAmt: null,
+  },
+]);
 
 // 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
 const fetchTodoList = async () => {
   try {
     // Best 인기 업종 - 전체
     const response = await axios.get(BASEURI + '/getTotal5');
+    console.log(response);
     if (response.status === 200) {
       best5.value = response.data;
-      console.log(best5.value);
     } else {
-      alert('데이터 조회 실패');
+      console.log('데이터 조회 실패');
     }
   } catch (error) {
-    alert('에러발생 :' + error);
+    console.log('에러발생 :' + error);
   }
   try {
     // 최근 폐업률 순위
     const response = await axios.get(BASEURI + '/getRate5');
     if (response.status === 200) {
       worst5.value = response.data;
-      console.log(worst5.value);
     } else {
-      alert('데이터 조회 실패');
+      console.log('데이터 조회 실패');
     }
   } catch (error) {
-    alert('에러발생 :' + error);
+    console.log('에러발생 :' + error);
   }
 };
+// 연령대 카테고리 데이터 최신화
+const fetchAgeData = async () => {
+  try {
+    const response = await axios.get(BASEURI + '/getBest3', {
+      params: { age: selectedAge.value }, // 선택된 연령대 값을 쿼리 파라미터로 전송
+    });
+    best3Data.value = response.data;
+    console.log(response.data);
+    console.log('!!!');
+    console.log(best3Data.value);
+
+    console.log(best3Data.value[0].svcIndutyCdNm);
+  } catch (error) {
+    console.error('Error fetching age data:', error);
+  }
+};
+
 fetchTodoList();
 </script>
 
