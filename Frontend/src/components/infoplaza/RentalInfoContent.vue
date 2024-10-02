@@ -124,6 +124,12 @@ const loadKakaoMap = (container) => {
                     clusterer.setMap(kakaoMap); // 클러스터러 활성화
                     clusterer.addMarkers(markers); // 마커들을 클러스터러에 추가
                 }
+
+                // 오버레이가 존재한다면 닫기
+                if (infowindow) {
+                    infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
+                    infowindow = null; // infowindow 초기화
+                }
             });
 
         });
@@ -283,10 +289,11 @@ const fetchPropertyDetails = async (dongCode) => {
             window.kakao.maps.event.addListener(marker, 'click', () => {
                 // 커스텀 오버레이에 표시할 내용
                 var content = `<div class="customoverlay">
-                                <h5>${property.atclSfeCn}</h5>
-                                <p>${property.dealKindCdNm}</p>
-                                <p>${property.ctgryCd2Nm}</p>
-                            </div>`;
+                    <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
+                    <img src="${property.imageData}" alt="Property Image" style="width: 100%; border-radius: 5px;" />
+                    <p>${property.dealKindCdNm}</p>
+                    <p>${property.ctgryCd2Nm}</p>
+                </div>`;
 
                 // 기존 커스텀 오버레이가 열려있다면 닫기
                 if (infowindow) {
@@ -341,28 +348,35 @@ const fetchPropertyDetails = async (dongCode) => {
     font-size: 16px;
     color: #333;
 }
-
 .customoverlay {
     position: relative;
     border-radius: 8px; /* 둥근 모서리 */
     background-color: #fff; /* 배경색 */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
     padding: 10px; /* 패딩 */
-    max-width: 200px; /* 최대 너비 설정 */
+    max-width: 300px; /* 적당한 최대 너비로 설정 */
     text-align: left; /* 텍스트 정렬 */
+    word-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
+    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 (브라우저 호환성) */
+    white-space: normal; /* 기본 줄바꿈 처리 */
 }
 
 .customoverlay h5 {
     margin: 0; /* 기본 여백 제거 */
     font-size: 16px; /* 제목 크기 */
     color: #333; /* 제목 색상 */
+    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
+    white-space: normal; /* 기본 줄바꿈 처리 */
 }
 
 .customoverlay p {
     margin: 0; /* 기본 여백 제거 */
     font-size: 14px; /* 본문 크기 */
     color: #666; /* 본문 색상 */
+    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
+    white-space: normal; /* 기본 줄바꿈 처리 */
 }
+
 
 
 </style>
