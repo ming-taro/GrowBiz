@@ -5,12 +5,14 @@
     <select id="selectAllPropertyListings" resultType="PropertyListingDTO">
         SELECT * FROM property_listing
     </select>
-    <select id="selectPropertyListingById" parameterType="int" resultType="PropertyListingDTO">
-        SELECT * FROM property_listing WHERE plno = #{plno}
-    </select>
 
     <!-- 매물동 코드 가져오기 -->
     <select id="selectDongCodeByDongName" resultType="String">
         SELECT dong_code FROM district_code WHERE dong_name = #{dongName}
+    </select>
+
+    <!-- 매물동 코드 기반 매물 가져오기 -->
+    <select id="selectPropertyListingByDongCode" resultType="PropertyListingDTO">
+        SELECT * FROM property_listing WHERE ldong_cd = #{dongCode}
     </select>
 </mapper>

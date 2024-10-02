@@ -11,6 +11,4 @@ public interface DistrictCodeMapper {
     //모든 동 이름 조회
     List<DistrictCodeDTO> selectDistinctDongNames(String guName);
 
-    // 동 이름으로 위도와 경도 가져오기
-    DistrictCodeDTO selectLocationByDongName(String dongName);
 }

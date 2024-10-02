@@ -29,21 +29,22 @@ public class PropertyListingService {
         return listings;
     }
 
-    // 특정 매물 조회
-    @Transactional
-    public PropertyListingDTO selectPropertyListingById(int plno) {
-        log.info("getPropertyListing......" + plno);
-        PropertyListingDTO propertyListing = mapper.selectPropertyListingById(plno);
-        return Optional.ofNullable(propertyListing)
-                .orElseThrow(NoSuchElementException::new);
-    }
 
-    // 특정 매물 조회
+    // 동 이름으로 매물동 코드 조회
     @Transactional
     public String selectDongCodeByDongName(String dongName) {
         String dongCode = mapper.selectDongCodeByDongName(dongName);
         return Optional.ofNullable(dongCode)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    // 동 코드로 매물 조회
+    public List<PropertyListingDTO> selectPropertyListingByDongCode(String dongCode) {
+        List<PropertyListingDTO> listings = mapper.selectPropertyListingByDongCode(dongCode);
+        if (listings == null || listings.isEmpty()) {
+            listings = new ArrayList<>();
+        }
+        return listings;
     }
 
 }

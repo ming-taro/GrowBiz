@@ -23,19 +23,11 @@ public class PropertyListingController {
     private final DistrictCodeService districtService;
 
     // 모든 매물 조회
-    @GetMapping("")
+    @GetMapping("/list-all")
     public ResponseEntity<List<PropertyListingDTO>> getAllProperties() {
         List<PropertyListingDTO> propertyListings = propertyService.selectAllPropertyListings();
         return ResponseEntity.ok(propertyListings);
     }
-
-    // 특정 매물 조회
-    @GetMapping("/{plno}")
-    public ResponseEntity<PropertyListingDTO> getPropertyById(@PathVariable int plno) {
-        PropertyListingDTO propertyListing = propertyService.selectPropertyListingById(plno);
-        return ResponseEntity.ok(propertyListing);
-    }
-
 
     // 중복 제거한 모든 구 이름을 반환하는 API
     @GetMapping("/gu-names")
@@ -51,16 +43,6 @@ public class PropertyListingController {
         return ResponseEntity.ok(dongNames);
     }
 
-    // 동 이름으로 위도, 경도 조회
-    @GetMapping("/location")
-    public ResponseEntity<DistrictCodeDTO> getLocation(@RequestParam String dongName) {
-        DistrictCodeDTO location = districtService.getLocationByDongName(dongName);
-        if (location != null) {
-            return ResponseEntity.ok(location);
-        } else {
-            return ResponseEntity.notFound().build(); // Not found
-        }
-    }
 
     // 동 이름으로 매물 동 코드 조회
     @GetMapping("/dong-code")
@@ -79,6 +61,12 @@ public class PropertyListingController {
             // 예외가 발생할 경우 빈 문자열로 응답
             return ResponseEntity.ok(""); // 오류가 발생했을 때도 빈 문자열로 응답
         }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<PropertyListingDTO>> selectPropertyListingByDongCode(@RequestParam String dongCode) {
+        List<PropertyListingDTO> propertyListings = propertyService.selectPropertyListingByDongCode(dongCode);
+        return ResponseEntity.ok(propertyListings);
     }
 
 }

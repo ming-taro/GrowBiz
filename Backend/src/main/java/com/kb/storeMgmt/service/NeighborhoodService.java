@@ -3,7 +3,12 @@ package com.kb.storeMgmt.service;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,10 +24,36 @@ public class NeighborhoodService {
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
-    public Map<String, Object> getNearbyInfo(String dongName) {
-        System.out.println("@@@@@@@@@@@@");
+    public String getDongName(String inputAddress) {
+        String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + inputAddress;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+        HttpEntity entity = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+
+        String responseBody = response.getBody();
+        if (responseBody != null) {
+            JSONObject jsonResponse = new JSONObject(responseBody);
+            JSONArray documents = jsonResponse.getJSONArray("documents");
+            if (documents.length() > 0) {
+                JSONObject firstDocument = documents.getJSONObject(0);
+                JSONObject addressObject = firstDocument.getJSONObject("address");
+                return addressObject.getString("region_3depth_name");
+            }
+        }
+        return null;
+    }
+
+    public Map<String, Object> getNearbyInfo(String address) {
+        System.out.println("Received address: " + address);
         Map<String, Object> result = new HashMap<>();
-        Coordinate centerCoord = getCoordinates(dongName);
+        Coordinate centerCoord = getCoordinates(address);
         if (centerCoord == null) {
             return result;
         }
@@ -34,15 +65,14 @@ public class NeighborhoodService {
         return result;
     }
 
-    private Coordinate getCoordinates(String dongName) {
+    private Coordinate getCoordinates(String address) {
         try {
-            String encodedDongName = URLEncoder.encode(dongName, StandardCharsets.UTF_8);
-            String urlStr = "https://dapi.kakao.com/v2/local/search/address.json?query=" + encodedDongName;
+            String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
+            String urlStr = "https://dapi.kakao.com/v2/local/search/address.json?query=" + encodedAddress;
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "KakaoAK " + kakaoApiKey);
-
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
@@ -50,10 +80,8 @@ public class NeighborhoodService {
                 response.append(line);
             }
             br.close();
-
             JSONObject jsonResponse = new JSONObject(response.toString());
             JSONArray documents = jsonResponse.getJSONArray("documents");
-
             if (documents.length() > 0) {
                 JSONObject firstResult = documents.getJSONObject(0);
                 double x = firstResult.getDouble("x");
@@ -69,7 +97,6 @@ public class NeighborhoodService {
     private List<String> getNearbyDongsByCoordinates(Coordinate center) {
         Set<String> nearbyDongs = new HashSet<>();
         List<Coordinate> points = generatePointsInRadius(center, 1);
-
         for (Coordinate point : points) {
             try {
                 String urlStr = String.format("https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=%.7f&y=%.7f", point.x, point.y);
@@ -77,7 +104,6 @@ public class NeighborhoodService {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Authorization", "KakaoAK " + kakaoApiKey);
-
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String line;
@@ -85,7 +111,6 @@ public class NeighborhoodService {
                     response.append(line);
                 }
                 br.close();
-
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 JSONArray documents = jsonResponse.getJSONArray("documents");
                 for (int i = 0; i < documents.length(); i++) {
@@ -97,7 +122,6 @@ public class NeighborhoodService {
                 e.printStackTrace();
             }
         }
-
         return new ArrayList<>(nearbyDongs);
     }
 
@@ -106,16 +130,13 @@ public class NeighborhoodService {
         double earthRadius = 6371; // 지구 반지름 (km)
         double latDelta = (radiusKm / earthRadius) * (180 / Math.PI);
         double lonDelta = latDelta / Math.cos(center.y * Math.PI / 180);
-
         // 중심점만 포함
         points.add(center);
-
         // 북, 동, 남, 서 방향의 점 추가
         points.add(new Coordinate(center.x, center.y + latDelta));
         points.add(new Coordinate(center.x + lonDelta, center.y));
         points.add(new Coordinate(center.x, center.y - latDelta));
         points.add(new Coordinate(center.x - lonDelta, center.y));
-
         return points;
     }
 
@@ -129,7 +150,6 @@ public class NeighborhoodService {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Authorization", "KakaoAK " + kakaoApiKey);
-
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String line;
@@ -137,7 +157,6 @@ public class NeighborhoodService {
                     response.append(line);
                 }
                 br.close();
-
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 JSONArray documents = jsonResponse.getJSONArray("documents");
                 for (int i = 0; i < documents.length(); i++) {
@@ -155,6 +174,7 @@ public class NeighborhoodService {
 
     public static class Coordinate {
         public double x, y;
+
         public Coordinate(double x, double y) {
             this.x = x;
             this.y = y;

@@ -24,9 +24,4 @@ public class DistrictCodeService {
     public List<DistrictCodeDTO> getDistinctDongNames(String guName) {
         return mapper.selectDistinctDongNames(guName);
     }
-
-    // 동 이름에 따른 위도와 경도 가져오기
-    public DistrictCodeDTO getLocationByDongName(String dongName) {
-        return mapper.selectLocationByDongName(dongName);
-    }
 }

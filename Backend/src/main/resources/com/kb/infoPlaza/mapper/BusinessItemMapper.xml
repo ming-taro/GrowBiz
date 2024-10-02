@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.kb.infoPlaza.mapper.BusinessItemMapper">
+    <select id="getBest3List" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT SIGNGU_CD_NM, ADSTRD_CD_NM, TRDAR_SE_CD_NM, SVC_INDUTY_CD_NM
+        FROM commercial_sales
+        ORDER BY
+        <if test="age == null or age == ''">
+            THSMON_SELNG_AMT DESC
+        </if>
+        <if test="age != null and age != ''">
+            <if test="age == '전체'">
+                THSMON_SELNG_AMT DESC
+            </if>
+            <if test="age == '10대'">
+                AGRDE_10_SELNG_AMT DESC
+            </if>
+            <if test="age == '20대'">
+                AGRDE_20_SELNG_AMT DESC
+            </if>
+            <if test="age == '30대'">
+                AGRDE_30_SELNG_AMT DESC
+            </if>
+            <if test="age == '40대'">
+                AGRDE_40_SELNG_AMT DESC
+            </if>
+            <if test="age == '50대'">
+                AGRDE_50_SELNG_AMT DESC
+            </if>
+            <if test="age == '60대 이상'">
+                AGRDE_60_ABOVE_SELNG_AMT DESC
+            </if>
+        </if>
+        LIMIT 3
+    </select>
+
+    <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales
+        WHERE ADSTRD_CD_NM =
+        <if test="location != null">
+            #{location}
+        </if>
+        <if test="location == null">
+            '군자동'
+        </if>
+        LIMIT 5
+    </select>
+
+    <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales
+        WHERE ADSTRD_CD_NM =
+        <if test="location != null">
+            #{location}
+        </if>
+        <if test="location == null">
+            '군자동'
+        </if>
+    </select>
+
+    <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
+        select * from business_closures limit 5
+    </select>
+
+    <select id="getRate" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
+        select * from business_closures
+    </select>
+
+    <select id="getTotal5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        select * from commercial_sales limit 5
+    </select>
+
+    <select id="getTotal" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        select * from commercial_sales
+    </select>
+</mapper>

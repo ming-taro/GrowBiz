@@ -1,5 +1,4 @@
-
-        package com.kb.storeMgmt.controller;
+package com.kb.storeMgmt.controller;
 
 import com.kb.storeMgmt.service.NeighborhoodService;
 import lombok.RequiredArgsConstructor;
@@ -7,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.Map;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/neighborhoods")
+@RequestMapping("/kmap")
 @RequiredArgsConstructor
 @Slf4j
 public class NeighborhoodController {
@@ -18,9 +17,15 @@ public class NeighborhoodController {
     @Autowired
     private NeighborhoodService neighborhoodService;
 
-    @GetMapping("/{dongName}")
-    public Map<String, Object> getNearbyInfo(@PathVariable String dongName) {
-        System.out.println("!!!!!!!!!!");
-        return neighborhoodService.getNearbyInfo(dongName);
+    @GetMapping("/address/{address}")
+    public String getDongName(@PathVariable String address) {
+        System.out.println(address+"###############");
+        return neighborhoodService.getDongName(address);
+    }
+
+    @GetMapping("/nearby/{address}")
+    public Map<String, Object> getNearbyInfo(@PathVariable String address) {
+        System.out.println("Received address: " + address);
+        return neighborhoodService.getNearbyInfo(address);
     }
 }
