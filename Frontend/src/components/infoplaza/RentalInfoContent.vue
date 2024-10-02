@@ -66,7 +66,7 @@ const towns = ref([]);
 let markers = [];
 let infowindow;
 let customOverlay; // 커스텀 오버레이를 저장할 변수
-
+let clusterer;
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -94,7 +94,7 @@ onMounted(async () => {
 // Load Kakao Map
 const loadKakaoMap = (container) => {
     const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false&libraries=services`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false&libraries=services,clusterer`;
     document.head.appendChild(script);
 
     script.onload = () => {
@@ -102,10 +102,31 @@ const loadKakaoMap = (container) => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
                 level: 4, // Zoom level
-                maxLevel: 5, // Maximum zoom level
+                maxLevel: 8, // Maximum zoom level
+                
             };
 
             kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
+            
+            // Marker Clusterer 설정
+            clusterer = new kakao.maps.MarkerClusterer({
+                map: kakaoMap,
+                averageCenter: true,
+                minLevel: 5,
+            });
+
+            // 줌 변경 이벤트 리스너 등록
+            kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
+                const level = kakaoMap.getLevel();
+                if (level < 5) {
+                    clusterer.setMap(null); // 클러스터러 비활성화
+                    markers.forEach(marker => marker.setMap(kakaoMap)); // 개별 마커 표시
+                } else {
+                    clusterer.setMap(kakaoMap); // 클러스터러 활성화
+                    clusterer.addMarkers(markers); // 마커들을 클러스터러에 추가
+                }
+            });
+
         });
     };
 };
