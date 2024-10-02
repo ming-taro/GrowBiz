@@ -84,6 +84,10 @@ const selectedDistrict = ref('강남구');
 const selectedTown = ref('개포1동');
 const districts = ref([]);
 const towns = ref([]);
+let markers = [];
+let infowindow;
+
+
 
 onMounted(async () => {
     loadKakaoMap(mapContainer.value);
@@ -157,7 +161,10 @@ const fetchLocation = async () => {
         // 주소로 좌표 검색
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = currentLocation.value; // 현재 선택된 지역을 가져옵니다.
-        console.log('Fetching location for address:', address); // 디버그 로그
+        
+        // 이전 마커 삭제
+        removeMarkers();
+
         geocoder.addressSearch(address, function(result, status) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
@@ -168,8 +175,17 @@ const fetchLocation = async () => {
                     position: coords
                 });
 
+
+                // 새로운 마커를 배열에 추가
+                markers.push(marker); // <-- 이 줄 추가
+
+                // 이전 인포윈도우 닫기
+                if (infowindow) {
+                    infowindow.close(); // 이전 인포윈도우 닫기
+                }
+
                 // 인포윈도우에 현재 위치 정보 표시
-                const infowindow = new window.kakao.maps.InfoWindow({
+                infowindow = new window.kakao.maps.InfoWindow({
                     content: `<div style="width:150px;text-align:center;padding:6px 0;">${address}</div>`
                 });
                 infowindow.open(kakaoMap, marker);
@@ -226,6 +242,11 @@ const fetchDongCode = async () => {
     }
 };
 
+// 이전에 생성된 마커 제거하는 함수
+const removeMarkers = () => {
+    markers.forEach(marker => marker.setMap(null)); // 마커 제거
+    markers = []; // 마커 배열 초기화
+};
 
 
 
