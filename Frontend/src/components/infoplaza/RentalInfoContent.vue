@@ -47,12 +47,6 @@
             <div class="col-6 ms-10" ref="mapContainer" style="height: 70vh;"></div>
         </div>
 
-        <h4>매물 목록</h4>
-        <ul>
-            <li v-for="property in propertys" :key="property.plno">
-                {{ property.atclSfeCn }} - {{ property.bscTnthWuntAmt }} 원
-            </li>
-        </ul>
     </div>
 </template>
 
@@ -64,6 +58,14 @@ import axios from 'axios';
 const mapContainer = ref(null);
 const propertys = ref([]);
 let kakaoMap; // Declare a variable to hold the map instance
+const selectedCity = ref('서울특별시');
+const selectedDistrict = ref('강남구');
+const selectedTown = ref('개포1동');
+const districts = ref([]);
+const towns = ref([]);
+let markers = [];
+let infowindow;
+
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -79,13 +81,6 @@ const cities = [
     // 추가 도시 및 구 데이터...
 ];
 
-const selectedCity = ref('서울특별시');
-const selectedDistrict = ref('강남구');
-const selectedTown = ref('개포1동');
-const districts = ref([]);
-const towns = ref([]);
-let markers = [];
-let infowindow;
 
 
 
@@ -163,33 +158,14 @@ const fetchLocation = async () => {
         const address = currentLocation.value; // 현재 선택된 지역을 가져옵니다.
         
         // 이전 마커 삭제
-        removeMarkers();
+        if (infowindow) {
+            removeMarkers();
+            infowindow.close(); // 기존 인포윈도우 닫기
+        }
 
         geocoder.addressSearch(address, function(result, status) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-
-                // 마커 표시
-                const marker = new window.kakao.maps.Marker({
-                    map: kakaoMap,
-                    position: coords
-                });
-
-
-                // 새로운 마커를 배열에 추가
-                markers.push(marker); // <-- 이 줄 추가
-
-                // 이전 인포윈도우 닫기
-                if (infowindow) {
-                    infowindow.close(); // 이전 인포윈도우 닫기
-                }
-
-                // 인포윈도우에 현재 위치 정보 표시
-                infowindow = new window.kakao.maps.InfoWindow({
-                    content: `<div style="width:150px;text-align:center;padding:6px 0;">${address}</div>`
-                });
-                infowindow.open(kakaoMap, marker);
-
                 // 지도의 중심을 결과값으로 받은 위치로 이동
                 kakaoMap.setCenter(coords);
             }
@@ -222,7 +198,7 @@ const currentLocation = computed(() => {
     return location.trim(); // 최종 위치 반환
 });
 
-// 동 이름으로 동 코드 가져오기
+// 동 이름으로 동 코드 가져오기 -> 매물 정보 가져오기
 const fetchDongCode = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/property/dong-code?dongName=${selectedTown.value}`);
@@ -231,6 +207,7 @@ const fetchDongCode = async () => {
             const dongCode = response.data; // 동 코드를 가져옵니다.
             if (dongCode) {
                 console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
+                fetchPropertyDetails(dongCode); // 동 코드로 매물 세부 정보 가져오기 호출
             } else {
                 console.log('동 코드가 없습니다.'); // 동 코드가 없을 경우 메시지 출력
             }
@@ -248,8 +225,46 @@ const removeMarkers = () => {
     markers = []; // 마커 배열 초기화
 };
 
+// 매물 정보 가져오기 및 마커 표시
+const fetchPropertyDetails = async (dongCode) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/property/list?dongCode=${dongCode}`);
+        propertys.value = response.data; // 매물 정보를 저장
 
+        // 이전 마커 삭제
+        removeMarkers();
+        console.log(propertys.value);
+        // 매물 정보로 마커 표시
+        propertys.value.forEach(property => {
+            const position = new window.kakao.maps.LatLng(property.laCrd, property.loCrd);
+            const marker = new window.kakao.maps.Marker({
+                map: kakaoMap,
+                position
+            });
 
+            // 마커 클릭 시 매물 정보 표시
+            window.kakao.maps.event.addListener(marker, 'click', () => {
+                if (infowindow) {
+                    infowindow.close(); // 기존 인포윈도우 닫기
+                }
+                infowindow = new window.kakao.maps.InfoWindow({
+                    content: `
+                        <div style="padding:10px;">
+                            <h5>${property.atclSfeCn}</h5>
+                            <p>${property.dealKindCdNm}</p>
+                            <p>${property.ctgryCd2Nm}</p>
+                        </div>
+                    `
+                });
+                infowindow.open(kakaoMap, marker); // 마커 위에 인포윈도우 열기
+            });
+
+            markers.push(marker); // 마커 배열에 저장
+        });
+    } catch (error) {
+        console.error('매물 정보를 가져오는 중 오류 발생:', error);
+    }
+};
 
 </script>
 
