@@ -65,6 +65,7 @@ const districts = ref([]);
 const towns = ref([]);
 let markers = [];
 let infowindow;
+let customOverlay; // 커스텀 오버레이를 저장할 변수
 
 
 // Prop to control the visibility of location info
@@ -259,19 +260,25 @@ const fetchPropertyDetails = async (dongCode) => {
 
             // 마커 클릭 시 매물 정보 표시
             window.kakao.maps.event.addListener(marker, 'click', () => {
-                if (infowindow) {
-                    infowindow.close(); // 기존 인포윈도우 닫기
+                // 커스텀 오버레이에 표시할 내용
+                var content = `<div class="customoverlay">
+                                <h5>${property.atclSfeCn}</h5>
+                                <p>${property.dealKindCdNm}</p>
+                                <p>${property.ctgryCd2Nm}</p>
+                            </div>`;
+
+                // 기존 커스텀 오버레이가 열려있다면 닫기
+                if (customOverlay) {
+                    customOverlay.setMap(null); // 현재 열려있는 오버레이 닫기
                 }
-                infowindow = new window.kakao.maps.InfoWindow({
-                    content: `
-                        <div class="info-window" id="info-window">
-                            <h5>${property.atclSfeCn}</h5>
-                            <p>${property.dealKindCdNm}</p>
-                            <p>${property.ctgryCd2Nm}</p>
-                        </div>
-                    `
+
+                // 새로운 커스텀 오버레이를 생성합니다
+                customOverlay = new kakao.maps.CustomOverlay({
+                    map: kakaoMap,
+                    position: position,
+                    content: content,
+                    yAnchor: 1 // 오버레이의 위치 조정
                 });
-                infowindow.open(kakaoMap, marker); // 마커 위에 인포윈도우 열기
             });
 
             markers.push(marker); // 마커 배열에 저장
@@ -313,5 +320,28 @@ const fetchPropertyDetails = async (dongCode) => {
     font-size: 16px;
     color: #333;
 }
+
+.customoverlay {
+    position: relative;
+    border-radius: 8px; /* 둥근 모서리 */
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+    padding: 10px; /* 패딩 */
+    max-width: 200px; /* 최대 너비 설정 */
+    text-align: left; /* 텍스트 정렬 */
+}
+
+.customoverlay h5 {
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 16px; /* 제목 크기 */
+    color: #333; /* 제목 색상 */
+}
+
+.customoverlay p {
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 14px; /* 본문 크기 */
+    color: #666; /* 본문 색상 */
+}
+
 
 </style>
