@@ -33,7 +33,7 @@ public class IndividualEduService {
         log.info("get------------------------------");
         IndividualEduDTO individualEduDTO = mapper.selectIndividualEduById(vno);
         return Optional.ofNullable(individualEduDTO)
-                .orElseThrow(() -> new NoSuchElementException("ID가 " + vno + "인 IndividualEduDTO를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException("Can't find video number" + vno ));
     }
 
 
