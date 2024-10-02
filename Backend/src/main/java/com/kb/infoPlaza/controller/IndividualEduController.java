@@ -1,7 +1,10 @@
 package com.kb.infoPlaza.controller;
 
 
+import com.kb.board.dto.BoardPageResult;
+import com.kb.board.dto.BoardParam;
 import com.kb.infoPlaza.dto.IndividualEduDTO;
+import com.kb.infoPlaza.dto.IndividualEduParam;
 import com.kb.infoPlaza.service.IndividualEduService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +35,21 @@ public class IndividualEduController {
         IndividualEduDTO dto = individualEduService.selectIndividualEduById(vno);
         return ResponseEntity.ok(dto);  // 200 OK 응답으로 개별 데이터 반환
     }
-    // 검색 엔드포인트: 제목 또는 해시태그로 검색
-    @GetMapping("/search")
-    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(@RequestParam String keyword) {
-        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(keyword);
-        return ResponseEntity.ok(result);
-    }
+//    // 검색 엔드포인트: 옵션으로 검색
+//    @GetMapping("/search")
+//    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(IndividualEduParam individualEduParam) {
+//        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(individualEduParam);
+//        return ResponseEntity.ok(result);
+//    }
+        @GetMapping("/search")
+        public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(IndividualEduParam individualEduParam) {
+            List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(individualEduParam);
+            return ResponseEntity.ok(result);
+        }
+
+//    @GetMapping("")
+//    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByOption(IndividualEduParam individualEduParam) {
+//        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByOption(individualEduParam);
+//        return ResponseEntity.ok(result);
+//    }
 }

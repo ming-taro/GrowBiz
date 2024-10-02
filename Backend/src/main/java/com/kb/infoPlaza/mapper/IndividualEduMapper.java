@@ -1,6 +1,7 @@
 package com.kb.infoPlaza.mapper;
 
 import com.kb.infoPlaza.dto.IndividualEduDTO;
+import com.kb.infoPlaza.dto.IndividualEduParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,5 +14,6 @@ public interface IndividualEduMapper {
     // 특정 영상 조회
    IndividualEduDTO selectIndividualEduById(int vno);
 
-   List<IndividualEduDTO> searchIndividualEduByKeyword(@Param("keyword") String keyword);
+   List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam individualEduParam);
+//   List<IndividualEduDTO> searchIndividualEduByOption(IndividualEduParam param);
 }
