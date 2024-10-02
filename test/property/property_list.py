@@ -1,6 +1,5 @@
 import requests
 from haversine import haversine
-import pymysql
 import json
 import os
 
@@ -19,13 +18,13 @@ deal_types = {
 }
 
 # DB 정보
-connection = pymysql.connect(
-    host=os.environ.get('HOST'),
-    user=os.environ.get('USER'),
-    password=os.environ.get('PASSWORD'), 
-    charset='utf8'
-)
-cursor = connection.cursor()
+# connection = pymysql.connect(
+#     host=os.environ.get('HOST'),
+#     user=os.environ.get('USER'),
+#     password=os.environ.get('PASSWORD'), 
+#     charset='utf8'
+# )
+# cursor = connection.cursor()
 
 # 선택한 거래 종류에 맞는 코드를 생성하는 함수
 def get_deal_kind_codes(selected_deal_types):
@@ -105,12 +104,12 @@ def find_property_within_radius(result_list, current_location, radius, report_id
         property_list.append(property)
         
         try:
-            cursor.execute(query, value)
+            # cursor.execute(query, value)
             print("recommand property inserted successfully.")
         except Exception as e:
             print(f"Error occurred: {e}")
-            connection.rollback()
-    connection.commit()
+            # connection.rollback()
+    # connection.commit()
     return property_list
 
 
@@ -118,18 +117,19 @@ def main():
     pageNum = 0
     offset = 10000
 
-    gu_code = 1117013600 # 용산구
-    current_location = (37.52687181000000, 127.00093640000000) # 기준 위치
-    property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset) # 구의 모든 매물 정보 가져오기    
-    property_by_radius = find_property_within_radius(property_by_dong, current_location, 600, 2) # 서울 용구 보광동, 600m 내 매물
-    print("[서울 용구 보광동 600m 내 매물 목록] ->", len(property_by_radius))
-    print(property_by_radius)
+    # gu_code = 1117013600 # 용산구
+    # current_location = (37.52687181000000, 127.00093640000000) # 기준 위치
+    # property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset) # 구의 모든 매물 정보 가져오기    
+    # property_by_radius = find_property_within_radius(property_by_dong, current_location, 600, 2) # 서울 용구 보광동, 600m 내 매물
+    # print("[서울 용구 보광동 600m 내 매물 목록] ->", len(property_by_radius))
+    # print(property_by_radius)
 
-    # gu_code = 1168010500 # 강남구
-    # current_location = (37.51396894000000, 127.05612160000000)
-    # property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset)
-    # property_by_radius =find_property_within_radius(property_by_dong, current_location, 600, 1) # 서울 강남구 삼성동, 600m 내 매물
-    # print("[서울 강남구 삼성동 600m 내 매물 목록] ->", len(property_by_radius))
+    gu_code = 1168010500 # 강남구
+    current_location = (37.51396894000000, 127.05612160000000)
+    property_by_dong = find_property_info_by_dong(gu_code, pageNum, offset)
+    property_by_radius =find_property_within_radius(property_by_dong, current_location, 600, 1) # 서울 강남구 삼성동, 600m 내 매물
+    print("[서울 강남구 삼성동 600m 내 매물 목록] ->", len(property_by_radius))
+    print
 
 if __name__ == "__main__":
     main()
