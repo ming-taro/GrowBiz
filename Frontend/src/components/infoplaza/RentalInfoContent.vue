@@ -101,7 +101,7 @@ const loadKakaoMap = (container) => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
                 level: 4, // Zoom level
-                maxLevel: 10, // Maximum zoom level
+                maxLevel: 5, // Maximum zoom level
             };
 
             kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
@@ -209,7 +209,7 @@ const fetchDongCode = async () => {
                 console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
                 fetchPropertyDetails(dongCode); // 동 코드로 매물 세부 정보 가져오기 호출
             } else {
-                console.log('동 코드가 없습니다.'); // 동 코드가 없을 경우 메시지 출력
+                showInfoWindow('해당 지역의 매물 정보가 없습니다.');
             }
         }
     } catch (error) {
@@ -218,6 +218,20 @@ const fetchDongCode = async () => {
         // 이 부분은 이제 실행되지 않을 것입니다.
     }
 };
+
+// 인포윈도우를 띄우는 함수
+const showInfoWindow = (message) => {
+    let content = `<div class = "info-window label" id="info-window"><span class="left"></span><span class="center">${message}</span><span class="right"></span></div>`;
+    // 커스텀 오버레이를 생성합니다
+    var customOverlay = new kakao.maps.CustomOverlay({
+        position: kakaoMap.getCenter(),
+        content: content   
+    });
+
+    // 커스텀 오버레이를 지도에 표시합니다
+    customOverlay.setMap(kakaoMap);
+};
+
 
 // 이전에 생성된 마커 제거하는 함수
 const removeMarkers = () => {
@@ -234,6 +248,7 @@ const fetchPropertyDetails = async (dongCode) => {
         // 이전 마커 삭제
         removeMarkers();
         console.log(propertys.value);
+
         // 매물 정보로 마커 표시
         propertys.value.forEach(property => {
             const position = new window.kakao.maps.LatLng(property.laCrd, property.loCrd);
@@ -249,7 +264,7 @@ const fetchPropertyDetails = async (dongCode) => {
                 }
                 infowindow = new window.kakao.maps.InfoWindow({
                     content: `
-                        <div style="padding:10px;">
+                        <div class="info-window" id="info-window">
                             <h5>${property.atclSfeCn}</h5>
                             <p>${property.dealKindCdNm}</p>
                             <p>${property.ctgryCd2Nm}</p>
@@ -286,4 +301,17 @@ const fetchPropertyDetails = async (dongCode) => {
 .city-select {
     width: 200px; /* 원하는 너비로 조정 */
 }
+/* CSS 스타일 추가 */
+.info-window {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-window strong {
+    font-size: 16px;
+    color: #333;
+}
+
 </style>
