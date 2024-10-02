@@ -117,6 +117,11 @@ const loadKakaoMap = (container) => {
             // 줌 변경 이벤트 리스너 등록
             kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
                 const level = kakaoMap.getLevel();
+                // 오버레이가 존재한다면 닫기
+                if (infowindow) {
+                    infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
+                    infowindow = null; // infowindow 초기화
+                }
                 if (level < 5) {
                     clusterer.setMap(null); // 클러스터러 비활성화
                     markers.forEach(marker => marker.setMap(kakaoMap)); // 개별 마커 표시
@@ -125,11 +130,6 @@ const loadKakaoMap = (container) => {
                     clusterer.addMarkers(markers); // 마커들을 클러스터러에 추가
                 }
 
-                // 오버레이가 존재한다면 닫기
-                if (infowindow) {
-                    infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
-                    infowindow = null; // infowindow 초기화
-                }
             });
 
         });
