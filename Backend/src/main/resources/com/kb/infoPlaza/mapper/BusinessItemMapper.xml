@@ -89,4 +89,9 @@
             AND SVC_INDUTY_CD_NM = #{service}
         </if>
     </select>
+
+    <select id="getDong" resultType="java.lang.String">
+        SELECT DISTINCT ADSTRD_CD_NM FROM commercial_sales3
+        WHERE SIGNGU_CD_NM = #{gu}
+    </select>
 </mapper>

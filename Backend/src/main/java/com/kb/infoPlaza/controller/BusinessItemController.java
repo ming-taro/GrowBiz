@@ -40,6 +40,9 @@ public class BusinessItemController {
     @GetMapping("/getFilteredList")
     public ResponseEntity<List<BusinessItemDTO>> getFilteredList(BusinessFilterDTO businessFilter) { return ResponseEntity.ok(service.getFilteredList(businessFilter)); }
 
+    @GetMapping("/getDong")
+    public ResponseEntity<List<String>> getDong(String gu) { return ResponseEntity.ok(service.getDong(gu)); }
+
     @GetMapping("/getPortion5")
     public ResponseEntity<List<BusinessItemDTO>> getPortion5(@RequestParam(required = false) String location) {
         return ResponseEntity.ok(service.getPortion5(location));

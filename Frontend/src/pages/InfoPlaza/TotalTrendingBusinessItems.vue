@@ -33,6 +33,7 @@
               @change="onSignguChange"
               ref="signguSelect"
             >
+              <option value="전체" disabled>구 선택</option>
               <option value="전체" hidden>구 선택</option>
               <option value="전체">전체</option>
               <option value="동작구">동작구</option>
@@ -70,21 +71,15 @@
               aria-label="Default select example"
               id="adstrd-select"
               :disabled="selectedSigngu === '전체'"
-              @change="
-                onDongChange;
-                bringDataList;
-              "
+              @change="onDongChange"
               ref="adstrdSelect"
             >
               <option selected disabled hidden>동 선택</option>
+              <option value="전체" disabled>동 선택</option>
               <option value="전체">전체</option>
-              <!-- <option
-                v-for="dong in filteredDongs"
-                :key="dong.value"
-                :value="dong.value"
-              >
-                {{ dong.label }}
-              </option> -->
+              <option v-for="dong in filteredDongs" :key="dong" :value="dong">
+                {{ dong }}
+              </option>
             </select>
           </div>
 
@@ -93,12 +88,10 @@
             <select
               class="form-select round-corner"
               aria-label="Default select example"
-              @change="
-                onServiceChange;
-                bringDataList;
-              "
+              @change="onServiceChange"
             >
-              <option selected hidden>서비스 업종</option>
+              <option selected disabled>서비스 업종</option>
+              <option selected disabled hidden>서비스 업종</option>
               <option value="전체">전체</option>
               <option value="수산물판매">수산물판매</option>
               <option value="일반의류">일반의류</option>
@@ -406,6 +399,7 @@ const visiblePages = computed(() => {
 const selectedSigngu = ref('전체');
 const selectedDong = ref('전체');
 const selectedService = ref('전체');
+const filteredDongs = ref('전체');
 
 const BASEURI = '/api/infoPlaza/businessItem';
 
@@ -433,33 +427,67 @@ const bringDataList = async () => {
     console.log('에러발생 :' + error);
   }
 };
-// // Computed property to filter '동' based on selected '구'
-const filteredDongs = computed(() => {
-  return selectedSigngu.value === 'all'
-    ? []
-    : dongs.filter((dong) => dong.signguId === selectedSigngu.value);
-});
 
-// '구' 필터링 시, '구' 값 저장
+// '구'에 해당하는 '동' 리스트 호출 함수
+const bringDongList = async () => {
+  if (selectedSigngu.value != '전체') {
+    try {
+      // Best 인기 업종 - 전체
+      const response = await axios.get(BASEURI + '/getDong', {
+        params: {
+          gu: selectedSigngu.value,
+        },
+      });
+      if (response.status === 200) {
+        filteredDongs.value = response.data;
+        console.log(filteredDongs.value);
+      } else {
+        console.log('데이터 조회 실패');
+      }
+    } catch (error) {
+      console.log('에러발생 :' + error);
+    }
+  }
+};
+
+// '구' 필터링 함수
 const onSignguChange = (event) => {
   selectedSigngu.value = event.target.value;
   bringDataList();
+  bringDongList();
 };
 
-// '동' 필터링 시, '동' 값 저장
+// '동' 필터링 함수
 const onDongChange = (event) => {
   selectedDong.value = event.target.value;
+  bringDataList();
 };
 
-// '동' 필터링 시, '동' 값 저장
+// '서비스업종' 필터링 함수
 const onServiceChange = (event) => {
   selectedService.value = event.target.value;
+  bringDataList();
 };
 
 // 페이지 변경 메소드
 const changePage = (page) => {
   if (page < 1 || page > totalPages.value) return;
   currentPage.value = page;
+};
+
+// 리셋 버튼 함수
+const resetFunction = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    const response = await axios.get(BASEURI + '/getTotal');
+    if (response.status === 200) {
+      dataList.value = response.data;
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
 };
 
 bringDataList();
