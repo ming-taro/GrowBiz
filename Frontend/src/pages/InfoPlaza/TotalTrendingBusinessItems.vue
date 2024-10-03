@@ -30,10 +30,7 @@
               class="form-select round-corner"
               aria-label="Default select example"
               id="signgu-select"
-              @change="
-                onSignguChange;
-                bringDataList;
-              "
+              @change="onSignguChange"
               ref="signguSelect"
             >
               <option value="전체" hidden>구 선택</option>
@@ -428,7 +425,7 @@ const bringDataList = async () => {
     });
     if (response.status === 200) {
       dataList.value = response.data;
-      console.log(dataList.value);
+      // console.log(dataList.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -446,6 +443,7 @@ const filteredDongs = computed(() => {
 // '구' 필터링 시, '구' 값 저장
 const onSignguChange = (event) => {
   selectedSigngu.value = event.target.value;
+  bringDataList();
 };
 
 // '동' 필터링 시, '동' 값 저장
