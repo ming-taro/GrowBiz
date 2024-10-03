@@ -307,6 +307,10 @@
                       <i class="bi bi-chevron-left"></i>
                     </a>
                   </li>
+                  <!-- Ellipsis -->
+                  <li v-if="currentPage >= 7" class="page-item disabled">
+                    <span class="page-link">...</span>
+                  </li>
                   <!-- Page Numbers -->
                   <li
                     v-for="page in visiblePages"
@@ -391,7 +395,8 @@ const paginatedData = computed(() => {
 const visiblePages = computed(() => {
   const pages = [];
   const maxVisiblePages = 10; // 한 번에 보여줄 최대 페이지 수
-  const startPage = Math.max(1, currentPage.value);
+  const startPage = Math.max(1, currentPage.value - 5);
+
   const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages.value);
 
   for (let i = startPage; i <= endPage; i++) {
@@ -432,11 +437,11 @@ const bringDataList = async () => {
   }
 };
 // // Computed property to filter '동' based on selected '구'
-// const filteredDongs = computed(() => {
-//   return selectedSigngu.value === 'all'
-//     ? []
-//     : dongs.filter((dong) => dong.signguId === selectedSigngu.value);
-// });
+const filteredDongs = computed(() => {
+  return selectedSigngu.value === 'all'
+    ? []
+    : dongs.filter((dong) => dong.signguId === selectedSigngu.value);
+});
 
 // '구' 필터링 시, '구' 값 저장
 const onSignguChange = (event) => {
