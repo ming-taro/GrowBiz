@@ -648,7 +648,7 @@
                     </span>
                     <!--end::Title-->
                     <router-link
-                      to="/infoPlaza/industry/totalTrendingBusinessItems"
+                      to="/infoPlaza/industry/closeRatio"
                       class="ms-auto"
                       style="font-size: 13px"
                     >
