@@ -201,503 +201,123 @@
           <table class="table table-hover table-sm table-nowrap">
             <thead>
               <tr>
-                <th scope="col">
-                  <div class="d-flex align-items-center gap-2 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <span>Handler</span>
-                  </div>
+                <th scope="col" class="text-center">순위</th>
+                <th scope="col" class="text-center">구</th>
+                <th scope="col" class="text-center">동</th>
+                <th scope="col" class="text-center">상권</th>
+                <th scope="col" class="text-center">서비스 업종</th>
+                <th scope="col" class="text-center d-none d-xl-table-cell">
+                  총 매출액
                 </th>
-                <th scope="col">Currency</th>
-                <th scope="col">Rate</th>
-                <th scope="col">Amount</th>
-                <th scope="col" class="d-none d-xl-table-cell">Date</th>
-                <th scope="col" class="d-none d-xl-table-cell">Status</th>
-                <th scope="col" class="d-none d-xl-table-cell">
-                  Required Action
+                <th scope="col" class="text-center d-none d-xl-table-cell">
+                  순위 변동
                 </th>
-                <th></th>
+                <th scope="col" class="text-center d-none d-xl-table-cell">
+                  개업 점포 수
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
+              <tr v-for="(item, index) in paginatedData" :key="index">
+                <td class="text-center">
                   <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
                     <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Bought BTC</span
-                      >
+                      <span class="d-block text-heading fw-bold">{{
+                        item.rank
+                      }}</span>
                     </div>
                   </div>
                 </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
+                <td class="text-center">{{ item.signguCdNm }}</td>
+                <td class="text-center">{{ item.adstrdCdNm }}</td>
+                <td class="text-center">{{ item.trdarSeCdNm }}</td>
+                <td class="text-left d-none d-xl-table-cell">
+                  <img
+                    :src="'/images/businessItem/' + item.svcIndutyCdNm + '.png'"
+                    alt=""
+                    style="width: 30px"
+                  />
+                  {{ item.svcIndutyCdNm }}
                 </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
+                <td class="text-center d-none d-xl-table-cell">
+                  ₩ {{ item.thsmonSelngAmt.toLocaleString() }}
+                </td>
+                <td class="text-center d-none d-xl-table-cell">
+                  <span
+                    class="text-gray-800 fw-bold fs-6 me-3 col-4 text-center"
+                    :class="{
+                      'text-success': item.rankChange.startsWith('+'),
+                      'text-danger':
+                        item.rankChange.startsWith('-') &&
+                        !/^-\s*$/.test(item.rankChange),
+                    }"
+                  >
+                    {{ item.rankChange }}
                   </span>
                 </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
+                <td class="text-center d-none d-xl-table-cell">
+                  <span v-if="item.opbizStorCo > 0">
+                    <span class="badge badge-light-success fs-base text-center">
+                      <i class="fa-solid fa-angle-up"></i>
+                      {{ item.opbizStorCo }} 점포</span
                     >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold">Sold ADA</span>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  ADA <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
                   </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
+                  <span v-else>
+                    <span class="badge badge-light-middle fs-base text-center">
+                      {{ item.opbizStorCo }} 점포</span
                     >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Bought XRP</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  XRP <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
                   </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center gap-3 ps-1">
-                    <div class="text-base">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" />
-                      </div>
-                    </div>
-                    <div
-                      class="d-none d-xl-inline-flex icon icon-shape w-rem-8 h-rem-8 rounded-circle text-sm bg-secondary bg-opacity-25 text-secondary"
-                    >
-                      <i class="bi bi-file-fill"></i>
-                    </div>
-                    <div>
-                      <span class="d-block text-heading fw-bold"
-                        >Robert Fox</span
-                      >
-                    </div>
-                  </div>
-                </td>
-                <td class="text-xs">
-                  BTC <i class="bi bi-arrow-right mx-2"></i> USDT
-                </td>
-                <td>1.23</td>
-                <td>$1,300,000.00</td>
-                <td class="d-none d-xl-table-cell">3 min ago</td>
-                <td class="d-none d-xl-table-cell">
-                  <span class="badge badge-lg badge-dot">
-                    <i class="bg-success"></i>Active
-                  </span>
-                </td>
-                <td class="d-none d-xl-table-cell">Needs your attention</td>
-                <td class="text-end">
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-square btn-neutral w-rem-6 h-rem-6"
-                  >
-                    <i class="bi bi-three-dots"></i>
-                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <!-- 페이지네이션 -->
         <div class="py-4 px-6">
           <div class="row align-items-center justify-content-between">
             <div class="col-md-6 d-none d-md-block">
-              <span class="text-muted text-sm"
-                >Showing 10 items out of 250 results found</span
-              >
+              <span class="text-muted text-sm">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
+                of {{ totalItems }} results found
+              </span>
             </div>
             <div class="col-md-auto">
               <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-spaced gap-1">
-                  <li class="page-item">
-                    <a class="page-link" href="#">
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage - 1)"
+                    >
                       <i class="bi bi-chevron-left"></i>
                     </a>
                   </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">4</a></li>
-                  <li class="page-item"><a class="page-link" href="#">5</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
+                  <li
+                    v-for="page in totalPages"
+                    :key="page"
+                    class="page-item"
+                    :class="{ active: currentPage === page }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(page)"
+                      >{{ page }}</a
+                    >
+                  </li>
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage + 1)"
+                    >
                       <i class="bi bi-chevron-right"></i>
                     </a>
                   </li>
@@ -715,6 +335,19 @@
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import { ref, computed } from 'vue';
 import axios from 'axios';
+
+// 페이지네이션 관련 변수
+const currentPage = ref(1); // 현재 페이지
+const itemsPerPage = ref(20); // 한 페이지당 아이템 수
+
+const totalItems = computed(() => dataList.value.length); // 전체 아이템 수
+const totalPages = computed(() =>
+  Math.ceil(totalItems.value / itemsPerPage.value)
+); // 전체 페이지 수
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  return dataList.value.slice(start, start + itemsPerPage.value); // 현재 페이지에 표시할 데이터
+});
 
 // '구' 필터링 변수
 const selectedSigngu = ref('전체');
@@ -769,11 +402,30 @@ const onServiceChange = (event) => {
   selectedService.value = event.target.value;
 };
 
+// 페이지 변경 메소드
+const changePage = (page) => {
+  if (page < 1 || page > totalPages.value) return; // 페이지 범위 체크
+  currentPage.value = page; // 현재 페이지 설정
+};
+
 bringDataList();
 </script>
 
 <style scoped>
 .round-corner {
   border-radius: 20px;
+}
+
+.badge-light-success {
+  background-color: #d4edda !important; /* 밝은 녹색 배경색 */
+  color: #155724 !important; /* 진한 녹색 텍스트 */
+}
+.badge-light-danger {
+  background-color: rgba(220, 53, 69, 0.1); /* 연한 빨간색 배경 */
+  color: #dc3545; /* 빨간색 텍스트 */
+}
+.badge-light-middle {
+  background-color: rgba(255, 165, 0, 0.1); /* 연한 오렌지색 배경 */
+  color: #ff8c00; /* 짙은 오렌지색 텍스트 */
 }
 </style>
