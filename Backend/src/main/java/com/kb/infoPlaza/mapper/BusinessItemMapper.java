@@ -2,6 +2,7 @@ package com.kb.infoPlaza.mapper;
 
 import com.kb.infoPlaza.dto.Best3DTO;
 import com.kb.infoPlaza.dto.BusinessClosureDTO;
+import com.kb.infoPlaza.dto.BusinessFilterDTO;
 import com.kb.infoPlaza.dto.BusinessItemDTO;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface BusinessItemMapper {
     List<BusinessItemDTO> getTotal5();
 
     List<BusinessItemDTO> getTotal();
+
+    List<BusinessItemDTO> getFilteredList(BusinessFilterDTO businessFilter);
 
     List<BusinessItemDTO> getPortion5(String location);
 

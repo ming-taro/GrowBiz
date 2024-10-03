@@ -299,15 +299,26 @@
                       <!--begin::Wrapper-->
                       <div class="d-flex align-items-center col-5">
                         <!--begin::Number-->
-                        <span class="text-gray-800 fw-bold fs-6 me-3">{{
-                          item.signguCdNm
-                        }}</span>
+                        <span
+                          class="text-gray-800 fw-bold fs-6 me-3 col-4 text-center"
+                          :class="{
+                            'text-success': item.rankChange.startsWith('+'),
+                            'text-danger':
+                              item.rankChange.startsWith('-') &&
+                              !/^-\s*$/.test(item.rankChange),
+                          }"
+                        >
+                          {{ item.rankChange }}
+                        </span>
                         <!--end::Number-->
                         <!--begin::Info-->
                         <div class="d-flex flex-center">
                           <!--begin::label-->
-                          <span class="badge badge-light-success fs-base">
-                            <i class="fa-solid fa-angle-up"></i> 4 점포
+                          <span
+                            class="badge badge-light-success fs-base text-center"
+                          >
+                            <i class="fa-solid fa-angle-up"></i>
+                            {{ item.opbizStorCo }} 점포
                           </span>
                           <!--end::label-->
                         </div>
@@ -698,15 +709,16 @@
                       <!--begin::Wrapper-->
                       <div class="d-flex align-items-center col-5">
                         <!--begin::Number-->
-                        <span class="text-gray-800 fw-bold fs-6 me-3">{{
-                          item.clsbizRt
-                        }}</span>
+                        <span class="text-gray-800 fw-bold fs-6 me-3"
+                          >{{ item.clsbizRt }}%</span
+                        >
                         <!--end::Number-->
                         <!--begin::Info-->
                         <div class="d-flex flex-center">
                           <!--begin::label-->
                           <span class="badge badge-light-danger fs-base">
-                            <i class="fa-solid fa-angle-down"></i> 4 점포
+                            <i class="fa-solid fa-angle-down"></i>
+                            {{ item.clsbizStorCo }} 점포
                           </span>
                           <!--end::label-->
                         </div>
@@ -805,9 +817,9 @@ const fetchTodoList = async () => {
   try {
     // Best 인기 업종 - 전체
     const response = await axios.get(BASEURI + '/getTotal5');
-    console.log(response);
     if (response.status === 200) {
       best5.value = response.data;
+      console.log(best5.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -819,6 +831,7 @@ const fetchTodoList = async () => {
     const response = await axios.get(BASEURI + '/getRate5');
     if (response.status === 200) {
       worst5.value = response.data;
+      console.log(worst5.value);
     } else {
       console.log('데이터 조회 실패');
     }

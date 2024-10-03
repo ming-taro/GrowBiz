@@ -75,4 +75,18 @@
     <select id="getTotal" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         select * from commercial_sales3
     </select>
+
+    <select id="getFilteredList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales3
+        WHERE 1=1
+        <if test="gu != '전체'">
+            SIGNGU_CD_NM = #{gu}
+        </if>
+        <if test="dong != '전체'">
+            AND ADSTRD_CD_NM = #{dong}
+        </if>
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+    </select>
 </mapper>
