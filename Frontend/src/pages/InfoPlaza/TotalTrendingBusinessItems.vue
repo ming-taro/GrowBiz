@@ -272,18 +272,29 @@
             </tbody>
           </table>
         </div>
-        <div class="py-4 px-6">
-          <div class="row align-items-center justify-content-between">
-            <div class="col-md-6 d-none d-md-block">
-              <span class="text-muted text-sm">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
-                of {{ totalItems }} results found
-              </span>
-            </div>
-            <div class="col-md-auto">
+        <!-- 페이지네이션 -->
+        <div class="py-4 px-6 mt-3">
+          <div
+            class="row align-items-center justify-content-center text-center"
+          >
+            <div class="col-md-12 d-flex flex-column align-items-center">
+              <!-- Pagination -->
               <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-spaced gap-1">
+                  <!-- First Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(1)"
+                    >
+                      <<
+                    </a>
+                  </li>
+                  <!-- Previous Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === 1 }"
@@ -296,8 +307,9 @@
                       <i class="bi bi-chevron-left"></i>
                     </a>
                   </li>
+                  <!-- Page Numbers -->
                   <li
-                    v-for="page in totalPages"
+                    v-for="page in visiblePages"
                     :key="page"
                     class="page-item"
                     :class="{ active: currentPage === page }"
@@ -306,9 +318,18 @@
                       class="page-link"
                       href="#"
                       @click.prevent="changePage(page)"
-                      >{{ page }}</a
                     >
+                      {{ page }}
+                    </a>
                   </li>
+                  <!-- Ellipsis -->
+                  <li
+                    v-if="currentPage <= totalPages - 10"
+                    class="page-item disabled"
+                  >
+                    <span class="page-link">...</span>
+                  </li>
+                  <!-- Next Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === totalPages }"
@@ -321,8 +342,27 @@
                       <i class="bi bi-chevron-right"></i>
                     </a>
                   </li>
+                  <!-- Last Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(totalPages)"
+                    >
+                      >>
+                    </a>
+                  </li>
                 </ul>
               </nav>
+              <!-- Showing Items Text -->
+              <span class="text-muted text-sm mt-3">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
+                of {{ totalItems }} results found
+              </span>
             </div>
           </div>
         </div>
@@ -347,6 +387,17 @@ const totalPages = computed(() =>
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   return dataList.value.slice(start, start + itemsPerPage.value); // 현재 페이지에 표시할 데이터
+});
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisiblePages = 10; // 한 번에 보여줄 최대 페이지 수
+  const startPage = Math.max(1, currentPage.value);
+  const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages.value);
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
+  return pages;
 });
 
 // '구' 필터링 변수
@@ -404,8 +455,8 @@ const onServiceChange = (event) => {
 
 // 페이지 변경 메소드
 const changePage = (page) => {
-  if (page < 1 || page > totalPages.value) return; // 페이지 범위 체크
-  currentPage.value = page; // 현재 페이지 설정
+  if (page < 1 || page > totalPages.value) return;
+  currentPage.value = page;
 };
 
 bringDataList();
