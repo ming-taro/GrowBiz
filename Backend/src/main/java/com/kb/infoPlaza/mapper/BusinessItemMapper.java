@@ -16,7 +16,11 @@ public interface BusinessItemMapper {
 
     List<BusinessItemDTO> getFilteredList(BusinessFilterDTO businessFilter);
 
+    List<BusinessClosureDTO> getFilteredCloseList(BusinessFilterDTO businessFilter);
+
     List<String> getDong(String gu);
+
+    List<String> getDongClose(String gu);
 
     List<BusinessItemDTO> getPortion5(String location);
 

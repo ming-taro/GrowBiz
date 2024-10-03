@@ -31,7 +31,11 @@ public class BusinessItemService {
 
     public List<BusinessItemDTO> getFilteredList(BusinessFilterDTO businessFilter) { return mapper.getFilteredList(businessFilter); }
 
+    public List<BusinessClosureDTO> getFilteredCloseList(BusinessFilterDTO businessFilter) { return mapper.getFilteredCloseList(businessFilter); }
+
     public List<String> getDong(String gu) { return mapper.getDong(gu); }
+
+    public List<String> getDongClose(String gu) { return mapper.getDongClose(gu); }
 
     public List<BusinessItemDTO> getPortion5(String location) {
         return mapper.getPortion5(location);
