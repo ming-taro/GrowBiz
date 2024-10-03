@@ -18,6 +18,7 @@
                   type="checkbox"
                   class="form-check-input"
                   id="cycleCheck1"
+                  onclick="toggleAll(this)"
                 />
                 <label class="form-check-label" for="cycleCheck1">전체</label>
               </div>
@@ -248,96 +249,24 @@
         <h3 class="mb-5" style="font-weight: 600">영상 목록</h3>
         <!-- Row to contain 4 cards in a single row -->
         <div class="row">
-          <div class="col-3">
+          <div
+            class="col-3"
+            v-for="(item, index) in paginatedList"
+            :key="item.vno"
+          >
             <div class="card" style="cursor: pointer">
               <img
-                src="@/assets/img/media/img-1.jpg"
+                :src="item.thumbnail"
                 class="card-img-top"
                 alt="Card image"
               />
               <div class="card-body">
-                <h5 class="card-title">
-                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
-                </h5>
+                <h5 class="card-title">{{ item.title }}</h5>
 
                 <div class="d-flex align-items-center">
-                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
+                  <button @click="openVideoPopup(item.videoUrl)" class="btn btn-sm btn-primary mt-2">시청하기</button>
                   <router-link
-                    to="/infoplaza/education/video"
-                    href="#"
-                    class="btn btn-sm btn-primary mt-2 ms-2"
-                    >상세보기</router-link
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card" style="cursor: pointer">
-              <img
-                src="@/assets/img/media/img-1.jpg"
-                class="card-img-top"
-                alt="Card image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">
-                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
-                </h5>
-
-                <div class="d-flex align-items-center">
-                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
-                  <router-link
-                    to="/infoplaza/education/video"
-                    href="#"
-                    class="btn btn-sm btn-primary mt-2 ms-2"
-                    >상세보기</router-link
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="card" style="cursor: pointer">
-              <img
-                src="@/assets/img/media/img-1.jpg"
-                class="card-img-top"
-                alt="Card image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">
-                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
-                </h5>
-
-                <div class="d-flex align-items-center">
-                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
-                  <router-link
-                    to="/infoplaza/education/video"
-                    href="#"
-                    class="btn btn-sm btn-primary mt-2 ms-2"
-                    >상세보기</router-link
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-3">
-            <div class="card" style="cursor: pointer">
-              <img
-                src="@/assets/img/media/img-1.jpg"
-                class="card-img-top"
-                alt="Card image"
-              />
-              <div class="card-body">
-                <h5 class="card-title">
-                  [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
-                </h5>
-
-                <div class="d-flex align-items-center">
-                  <a href="#" class="btn btn-sm btn-primary mt-2">시청하기</a>
-                  <router-link
-                    to="/infoplaza/education/video"
-                    href="#"
+                    :to="`/infoplaza/education/video/${item.vno}`"
                     class="btn btn-sm btn-primary mt-2 ms-2"
                     >상세보기</router-link
                   >
@@ -346,48 +275,116 @@
             </div>
           </div>
         </div>
+        <div class="d-flex justify-content-center mt-4">
+          <button
+            class="btn btn-secondary"
+            @click="prevPage"
+            :disabled="currentPage === 1"
+          >
+            이전
+          </button>
+          <span class="mx-2">Page {{ currentPage }}</span>
+          <button
+            class="btn btn-secondary"
+            @click="nextPage"
+            :disabled="currentPage === totalPages"
+          >
+            다음
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
-import axios from 'axios';
-import { ref, reactive } from 'vue';
-function toggleAll(source) {
-  const checkboxes = document.querySelectorAll(
-    '.form-check-input:not(#cycleCheckAll)'
-  );
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = source.checked;
-  });
-}
+import InfoPlazaHeader from "@/components/infoplaza/InfoPlazaHeader.vue";
+import axios from "axios";
+import { ref, computed, onMounted } from "vue";
 
-const BASEURI = '/infoPlaza/education';
-const totalList = ref({});
+// // 개별 체크박스 상태 관리
+// const checkAll = ref(false);
+// const checkboxes = ref({
+//   창업: false,
+//   성장: false,
+//   "폐업, 재기": false,
+// });
+
+// // 체크박스 토글 함수
+// function toggleAll(source) {
+//   checkAll.value = source.checked;
+//   Object.keys(checkboxes.value).forEach((key) => {
+//     checkboxes.value[key] = checkAll.value;
+//   });
+// }
+
+// // 개별 체크박스가 변경될 때 '전체' 체크박스 상태도 업데이트
+// function toggleIndividual() {
+//   checkAll.value = Object.values(checkboxes.value).every((value) => value);
+// }
+
+const BASEURI = "/infoPlaza/education";
+const totalList = ref([]); // 전체 데이터를 저장할 리스트
+const currentPage = ref(1); // 현재 페이지 번호
+const itemsPerPage = ref(12); // 한 페이지에 보여줄 데이터 개수
+
+// 페이지에 맞는 데이터를 계산하는 computed
+const paginatedList = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return totalList.value.slice(start, end);
+});
 
 // 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
-const fetchTodoList = async () => {
+const fetchList = async () => {
   try {
-    console.log('TRYING......');
-    // 전체 업종 데이터 불러오기
-    const response = await axios.get(BASEURI + '/list');
-    // const response = await axios.get(
-    //   'http://localhost:8080/api/infoPlaza/education/list'
-    // );
+    console.log("TRYING......");
+    // 전체 데이터 불러오기
+    const response = await axios.get(
+      "http://localhost:8080/api/infoPlaza/education/list"
+    );
     if (response.status === 200) {
-      console.log('데이터 조회 시작');
-      totalList.value = response.data;
+      console.log("데이터 조회 시작");
+      totalList.value = response.data; // 조회된 데이터를 totalList에 저장
       console.log(totalList.value);
     } else {
-      alert('데이터 조회 실패');
+      alert("데이터 조회 실패");
     }
   } catch (error) {
-    alert('에러발생 :' + error);
+    alert("에러발생 :" + error);
   }
 };
-fetchTodoList();
+function openVideoPopup(videoUrl) {
+  if (videoUrl) {
+    window.open(videoUrl, "_blank", "width=800,height=600");
+  } else {
+    alert("비디오 URL이 없습니다.");
+  }
+}
+
+// 총 페이지 수 계산
+const totalPages = computed(() => {
+  return Math.ceil(totalList.value.length / itemsPerPage.value);
+});
+
+// 다음 페이지로 이동
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+// 이전 페이지로 이동
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+// 페이지 로딩 시 데이터 호출
+onMounted(() => {
+  fetchList();
+});
 </script>
 
 <style scoped>

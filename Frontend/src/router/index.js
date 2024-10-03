@@ -84,8 +84,14 @@ const router = createRouter({
     },
     { path: '/infoPlaza/rentalinfo', name: 'RentalInfo', component: RentalInfo },
     { path: '/infoPlaza/education', name: 'education', component: Education },
+    {
+      path: '/infoplaza/education/video/:vno',
+      name: 'video',
+      component: Video, // 비디오 상세보기 컴포넌트 연결
+      props: true, // route param을 컴포넌트에 props로 전달
+    },
     { path: '/infoPlaza/news', name: 'news', component: news },
-    { path: '/infoPlaza/education/video', name: 'video', component: Video },
+    // { path: '/infoPlaza/education/video', name: 'video', component: Video },
     { path: '/simul/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },
     { path: '/asset/infoagree', name: 'InfoAgree', component: InfoAgree },

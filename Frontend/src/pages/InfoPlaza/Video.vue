@@ -6,7 +6,7 @@
       <div class="row g-0">
         <div class="col-md-4">
           <img
-            src="@/assets/img/media/img-1.jpg"
+            :src="video.thumbnail"
             class="img-fluid rounded-start m-3"
             alt="..."
           />
@@ -15,7 +15,7 @@
           <div class="card-body m-3">
             <h6 class="card-title mb-2">카테고리 > 클릭 가능하도록??</h6>
             <h3 class="card-title mb-0">
-              [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+              {{ video.title }}
             </h3>
 
             <p class="card-text mt-2 me-5" style="max-width: 90%">
@@ -70,21 +70,36 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router"; // Import the router
+import { useRoute, useRouter } from "vue-router"; // Import the router
+import { ref, onMounted } from "vue";
 import InfoPlazaHeader from "@/components/infoplaza/InfoPlazaHeader.vue";
+import axios from "axios";
 
-// Function to toggle checkboxes
-function toggleAll(source) {
-  const checkboxes = document.querySelectorAll(
-    ".form-check-input:not(#cycleCheckAll)"
-  );
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = source.checked;
-  });
-}
+const route = useRoute();
+const router = useRouter();
+const video = ref({});
+
+const fetchVideo = async (vno) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/infoPlaza/education/video/${vno}`
+    );
+    if (response.status === 200) {
+      video.value = response.data; // 받아온 데이터를 video에 저장
+    } else {
+      alert("비디오 정보를 불러오지 못했습니다.");
+    }
+  } catch (error) {
+    alert("에러 발생: " + error);
+  }
+};
+onMounted(() => {
+  const vno = route.params.vno; // URL에서 vno 가져오기
+  fetchVideo(vno);
+});
 
 // Function for navigating back
-const router = useRouter();
+
 function goBack() {
   router.go(-1); // Navigate to the previous page
 }
