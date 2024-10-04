@@ -99,8 +99,8 @@ const loadKakaoMap = (container) => {
         window.kakao.maps.load(() => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
-                level: 6, // Zoom level
-                maxLevel: 10, // Maximum zoom level
+                level: 5, // Zoom level
+                maxLevel: 6, // Maximum zoom level
                 
             };
 
@@ -261,7 +261,7 @@ const displayMarkers = (populationData) => {
                 } else if (totFlpopCo > 3000000) {
                     markerColor = 'green'; // 중간
                 } else {
-                    markerColor = 'black'; // 적을 때
+                    markerColor = 'gray'; // 적을 때
                 }
 
                 const marker = new window.kakao.maps.Marker({
@@ -270,7 +270,7 @@ const displayMarkers = (populationData) => {
                     title: adstrdCdNm,
                     image: new window.kakao.maps.MarkerImage(
                         `/src/assets/img/infoplaza/marker_${markerColor}.png`, 
-                        new window.kakao.maps.Size(24, 35))
+                        new window.kakao.maps.Size(35, 35))
                 });
 
                 // 마커 배열에 저장 (나중에 제거하기 위함)
