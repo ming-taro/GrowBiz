@@ -8,9 +8,7 @@
         </div>
         <div class="row m-3">
           <!-- 사업주기별 -->
-          <label for="inputEmail3" class="col-2 col-form-label"
-            >사업주기별</label
-          >
+          <label for="cycle" class="col-2 col-form-label">사업주기별</label>
           <div class="col-9">
             <div class="mt-2">
               <div
@@ -35,7 +33,7 @@
           </div>
 
           <!-- 업종별 -->
-          <label for="inputEmail3" class="col-2 col-form-label">업종별</label>
+          <label for="industry" class="col-2 col-form-label">업종별</label>
           <div class="col-9">
             <div class="mt-2">
               <div
@@ -60,7 +58,7 @@
           </div>
 
           <!-- 과목별 -->
-          <label for="inputEmail3" class="col-2 col-form-label">과목별</label>
+          <label for="subject" class="col-2 col-form-label">과목별</label>
           <div class="col-9">
             <div class="mt-2">
               <div
@@ -85,9 +83,7 @@
           </div>
 
           <!-- 키워드 검색 -->
-          <label for="inputEmail3" class="col-2 col-form-label"
-            >키워드 검색</label
-          >
+          <label for="keyword" class="col-2 col-form-label">키워드 검색</label>
           <div class="col-9">
             <div class="mt-2">
               <div class="input-group input-group-sm">
@@ -95,18 +91,20 @@
                   <select
                     class="form-select"
                     aria-label="Default select example"
+                    v-model="searchType"
                   >
-                    <option selected>전체</option>
-                    <option value="1">과정명</option>
-                    <option value="2">내용</option>
-                    <option value="3">해시태그</option>
-                    <option value="4">강사명</option>
+                    <option selected value="">전체</option>
+                    <option value="title">과정명</option>
+                    <option value="content">내용</option>
+                    <option value="hashtag">해시태그</option>
+                    <option value="teacher">강사명</option>
                   </select>
                 </div>
                 <input
                   type="text"
                   class="form-control ms-1 rounded"
                   placeholder="검색어를 입력해 주세요."
+                  v-model="searchValue"
                 />
               </div>
             </div>
@@ -136,7 +134,6 @@
               <div class="card-body">
                 <h5 class="card-title">{{ item.title }}</h5>
                 <div class="d-flex justify-content-center align-items-center">
-                  <!-- 수정된 부분 -->
                   <button
                     @click="openVideoPopup(item.videoUrl)"
                     class="btn btn-sm btn-primary mt-2"
@@ -181,9 +178,26 @@ import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 
 const BASEURI = '/api/infoPlaza/education';
+
+const selectedOptions = ref({
+  사업주기: [],
+  업종: [],
+  과목: [],
+});
+const searchType = ref(''); // 검색 타입 (과정명, 내용 등)
+const searchValue = ref(''); // 검색어
+
 const totalList = ref([]); // 전체 데이터를 저장할 리스트
 const currentPage = ref(1); // 현재 페이지 번호
 const itemsPerPage = ref(12); // 한 페이지에 보여줄 데이터 개수
+
+// const pageRequest = {
+//   page: 1,
+//   amount: 12,
+// };// 필요한가?
+// const totalPages = computed(() => {
+//   return Math.ceil(totalList.value.length / itemsPerPage.value);
+// }); // 이것도 뭐지
 
 // 페이지에 맞는 데이터를 계산하는 computed
 const paginatedList = computed(() => {
@@ -211,6 +225,69 @@ const fetchList = async () => {
     alert('에러발생 :' + error);
   }
 };
+
+const submitOptions = async () => {
+  console.log('submitOptions 호출됨'); // 로그 추가
+  const selectedQuery = {};
+
+  if (selectedOptions.value['사업주기'].length > 0) {
+    selectedQuery['사업주기'] = selectedOptions.value['사업주기'].join(',');
+  }
+  if (selectedOptions.value['업종'].length > 0) {
+    selectedQuery['업종'] = selectedOptions.value['업종'].join(',');
+  }
+  if (selectedOptions.value['과목'].length > 0) {
+    selectedQuery['과목'] = selectedOptions.value['과목'].join(',');
+  }
+  // 선택된 옵션이 없으면 아무 것도 하지 않음
+  if (Object.keys(selectedQuery).length === 0) {
+    console.log('선택된 옵션이 없습니다. 검색을 진행하지 않습니다.');
+    return; // 아무 일도 하지 않음
+  }
+  const options = [];
+  if (selectedQuery['사업주기']) {
+    options.push(...selectedQuery['사업주기'].split(','));
+  }
+  if (selectedQuery['업종']) {
+    options.push(...selectedQuery['업종'].split(','));
+  }
+  if (selectedQuery['과목']) {
+    options.push(...selectedQuery['과목'].split(','));
+  }
+
+  console.log('전송 할 쿼리', { option: options }); // 전송할 쿼리 로그
+
+  // load 함수 호출 시 options 배열을 전달
+  await load(options);
+};
+
+const load = async (options) => {
+  try {
+    // URL 객체 생성
+    const url = new URL('http://localhost:8080/api/infoPlaza/education/search');
+
+    // 각 옵션을 URL의 쿼리 파라미터로 추가
+    options.forEach((option) => {
+      url.searchParams.append('option', option);
+    });
+
+    console.log('요청 URL:', url.toString()); // 디버깅용 URL 출력
+
+    const response = await axios.get(url.toString());
+    console.log('응답 데이터 확인', response);
+
+    if (response.status === 200) {
+      totalList.value = response.data.content;
+      console.log('데이터:', totalList.value);
+    } else {
+      console.error('데이터 조회 실패:', response.status);
+    }
+  } catch (error) {
+    console.error('데이터 불러오기 실패:', error);
+    totalList.value = [];
+  }
+};
+
 function openVideoPopup(videoUrl) {
   if (videoUrl) {
     window.open(videoUrl, '_blank', 'width=800,height=600');
@@ -254,28 +331,6 @@ const options = [
     ],
   },
 ];
-
-const selectedOptions = ref({
-  사업주기: [],
-  업종: [],
-  과목: [],
-});
-
-// const submitOptions = async () => {
-//   try {
-//     const response = await axios.post(
-//       'http://localhost:8080/api/infoPlaza/education/search',
-//       {
-//         selectedOptions: selectedOptions.value,
-//       }
-//     );
-//     console.log('Response:', response.data);
-//     // 추가적인 로직 (예: 성공 메시지 표시 등)
-//   } catch (error) {
-//     console.error('Error submitting options:', error);
-//     // 에러 처리 로직
-//   }
-// };
 
 // 총 페이지 수 계산
 const totalPages = computed(() => {
