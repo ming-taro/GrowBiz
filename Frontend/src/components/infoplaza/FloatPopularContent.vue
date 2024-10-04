@@ -163,9 +163,6 @@ const fetchTowns = async (guName) => {
 
 const fetchLocation = async () => {
     try {
-        console.log("Selected City:", selectedCity.value);
-console.log("Selected District:", selectedDistrict.value);
-console.log("Selected Town:", selectedTown.value);
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = `${selectedCity.value} ${selectedDistrict.value} ${selectedTown.value}`; // 주소를 직접 설정
 
@@ -208,10 +205,7 @@ console.log("Selected Town:", selectedTown.value);
                 dongNames = [...new Set(dongNames)];
                 
                 const cleanedDongNames = dongNames.map(name => name.slice(0, -1)); // 마지막 글자 제거
-                console.log("Sending cleaned dong names to server:", cleanedDongNames);
-                console.log("Selected City:", selectedCity.value);
-            console.log("Selected District:", selectedDistrict.value);
-            console.log(cleanedDongNames);
+
                 // 동 이름 배열을 서버로 전송하는 함수 호출
                 sendDongNamesToServer(cleanedDongNames);
             }
