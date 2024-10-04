@@ -241,44 +241,65 @@ const sendDongNamesToServer = async (dongNames) => {
     }
 };
 
-// 인구 데이터에 따른 마커 생성 및 표시 함수
 const displayMarkers = (populationData) => {
-    populationData.forEach(data => {
-        const { totFlpopCo, mlFlpopCo, fmlFlpopCo, adstrdCdNm } = data;
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    const markerMap = new Map(); // 동 이름을 키로 하여 인구 수를 값으로 저장
 
-        // 동의 좌표를 가져오기 위해 지오코더 사용
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.addressSearch(adstrdCdNm, function(result, status) {
+    // 각 동에 대한 인구 수를 정리
+    populationData.forEach(data => {
+        const { totFlpopCo, adstrdCdNm } = data;
+
+        // 기존에 마커가 있다면 인구 수 비교 후 갱신
+        if (markerMap.has(adstrdCdNm)) {
+            const existingData = markerMap.get(adstrdCdNm);
+            if (existingData.totFlpopCo < totFlpopCo) {
+                markerMap.set(adstrdCdNm, data); // 인구수가 많은 데이터로 갱신
+            }
+        } else {
+            markerMap.set(adstrdCdNm, data); // 새로운 동 데이터 추가
+        }
+    });
+
+    // 저장된 동 이름에 대해 마커 표시
+    markerMap.forEach((data) => {
+        const { adstrdCdNm } = data;
+
+        geocoder.addressSearch(adstrdCdNm, (result, status) => {
             if (status === window.kakao.maps.services.Status.OK) {
                 const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-                
-                // 인구 수에 따른 마커 색상 설정
-                let markerColor;
-                if (totFlpopCo > 7000000) {
-                    markerColor = 'red'; // 인구수 많을 때
-                } else if (totFlpopCo > 5000000) {
-                    markerColor = 'blue'; // 중간
-                } else if (totFlpopCo > 3000000) {
-                    markerColor = 'green'; // 중간
-                } else {
-                    markerColor = 'gray'; // 적을 때
-                }
+                const markerColor = getMarkerColor(data.totFlpopCo); // 인구수에 따른 마커 색상 결정
 
                 const marker = new window.kakao.maps.Marker({
                     map: kakaoMap,
                     position: coords,
                     title: adstrdCdNm,
                     image: new window.kakao.maps.MarkerImage(
-                        `/src/assets/img/infoplaza/marker_${markerColor}.png`, 
+                        `/src/assets/img/infoplaza/marker_${markerColor}.png`,
                         new window.kakao.maps.Size(35, 35))
                 });
 
-                // 마커 배열에 저장 (나중에 제거하기 위함)
+                // 마커 배열에 저장
                 markers.push(marker);
+            } else {
+                console.log(`주소 검색 실패: ${adstrdCdNm}`);
             }
         });
     });
 };
+
+// 인구수에 따라 마커 색상 결정하는 함수
+const getMarkerColor = (totFlpopCo) => {
+    if (totFlpopCo > 7000000) {
+        return 'red'; // 인구수 많을 때
+    } else if (totFlpopCo > 5000000) {
+        return 'blue'; // 중간
+    } else if (totFlpopCo > 3000000) {
+        return 'green'; // 중간
+    } else {
+        return 'gray'; // 적을 때
+    }
+};
+
 
 
 // 구 업데이트 후 동 업데이트
