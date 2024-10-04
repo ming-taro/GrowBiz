@@ -1,7 +1,10 @@
 package com.kb.storeMgmt.service;
 
+import com.kb.storeMgmt.dto.NeighborhoodDTO;
+import com.kb.storeMgmt.mapper.NeighborhoodMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +26,13 @@ public class NeighborhoodService {
 
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
+
+    @Autowired
+    private NeighborhoodMapper neighborhoodMapper;
+
+    public NeighborhoodDTO getAddressById(NeighborhoodDTO neighborhoodDTO) {
+        return neighborhoodMapper.findAddressById(neighborhoodDTO.getId());
+    }
 
     public String getDongName(String inputAddress) {
         String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + inputAddress;
@@ -142,7 +152,11 @@ public class NeighborhoodService {
 
     private List<Coordinate> getConvenienceStores(List<String> dongs) {
         List<Coordinate> stores = new ArrayList<>();
+
         for (String dong : dongs) {
+
+            System.out.println(dong);
+
             try {
                 String encodedDong = URLEncoder.encode(dong + " 편의점", StandardCharsets.UTF_8);
                 String urlStr = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + encodedDong;
