@@ -185,8 +185,8 @@
               aria-label="Default select example"
             >
               <option selected disabled hidden>구분</option>
-              <option value="1">직접대출</option>
-              <option value="2">대리대출</option>
+              <option value="직접대출">직접대출</option>
+              <option value="대리대출">대리대출</option>
             </select>
           </div>
           <!-- 검색창 -->

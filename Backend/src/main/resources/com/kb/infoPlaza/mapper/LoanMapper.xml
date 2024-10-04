@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.kb.infoPlaza.mapper.LoanMapper">
+
+    <select id="getBest4List" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        SELECT *
+        FROM business_loan_products
+        ORDER BY CAST(REPLACE(total_interest_rate, '%', '') AS DECIMAL(5, 2)) ASC
+        LIMIT 4;
+    </select>
+
+    <select id="getFilteredList" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        SELECT *
+        FROM business_loan_products
+        WHERE 1=1
+        <if test="category != '전체'">
+            <if test="category == '대리대출'">
+                AND category LIKE '%대리대출'
+            </if>
+            <if test="category == '직접대출'">
+                AND category LIKE '%직접대출'
+            </if>
+        </if>
+    </select>
+
+
+</mapper>
