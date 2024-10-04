@@ -274,11 +274,15 @@ const load = async (options) => {
     console.log('요청 URL:', url.toString()); // 디버깅용 URL 출력
 
     const response = await axios.get(url.toString());
-    console.log('응답 데이터 확인', response);
+    console.log('전체 응답 데이터:', response.data);
 
     if (response.status === 200) {
-      totalList.value = response.data.content;
-      console.log('데이터:', totalList.value);
+      if (response.data.content) {
+        totalList.value = response.data.content;
+      } else {
+        totalList.value = response.data; // content가 없는 경우 전체 데이터 사용
+      }
+      console.log('설정된 totalList:', totalList.value);
     } else {
       console.error('데이터 조회 실패:', response.status);
     }
