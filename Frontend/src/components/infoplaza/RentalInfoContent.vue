@@ -222,7 +222,6 @@ const currentLocation = computed(() => {
     if (selectedTown.value) {
         location += ` ${selectedTown.value}`; // 동 이름 추가
     }
-    console.log('Current Location:', location); // 디버그 로그
     return location.trim(); // 최종 위치 반환
 });
 
@@ -234,7 +233,6 @@ const fetchDongCode = async () => {
         if (response.status === 200) {
             const dongCode = response.data; // 동 코드를 가져옵니다.
             if (dongCode) {
-                console.log('동 코드:', dongCode); // 동 코드가 있을 경우 출력
                 fetchPropertyDetails(dongCode); // 동 코드로 매물 세부 정보 가져오기 호출
             } else {
                 showInfoWindow('해당 지역의 매물 정보가 없습니다.');
@@ -272,18 +270,18 @@ const fetchPropertyDetails = async (dongCode) => {
     try {
         const response = await axios.get(`http://localhost:8080/api/property/list?dongCode=${dongCode}`);
         propertys.value = response.data; // 매물 정보를 저장
-
         // 이전 마커 삭제
         removeMarkers();
-        console.log(propertys.value);
 
         // 매물 정보로 마커 표시
         propertys.value.forEach(property => {
-            const position = new window.kakao.maps.LatLng(property.laCrd, property.loCrd);
-            const marker = new window.kakao.maps.Marker({
-                map: kakaoMap,
-                position
-            });
+            // atclSfeCn가 있는 경우에만 마커 추가
+            if (property.atclSfeCn) {
+                const position = new window.kakao.maps.LatLng(property.laCrd, property.loCrd);
+                const marker = new window.kakao.maps.Marker({
+                    map: kakaoMap,
+                    position
+                });
 
             // 마커 클릭 시 매물 정보 표시
             window.kakao.maps.event.addListener(marker, 'click', () => {
@@ -296,7 +294,7 @@ const fetchPropertyDetails = async (dongCode) => {
                 ? `<img src="${property.imageData}" alt="Property Image" />` 
                 : `<img src="/src/assets/img/infoplaza/house.png" alt="Property Image" class="none-img" />`; // 이미지가 없을 경우 기본 이미지
 
-            var content = `<div class="customoverlay">
+                var content = `<div class="customoverlay">
                                 ${imageContent}
                                 <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
                                 <p>${property.dealKindCdNm} | ${property.ctgryCd2Nm}</p>
@@ -314,6 +312,7 @@ const fetchPropertyDetails = async (dongCode) => {
             });
 
             markers.push(marker); // 마커 배열에 저장
+        }
         });
     } catch (error) {
         console.error('매물 정보를 가져오는 중 오류 발생:', error);

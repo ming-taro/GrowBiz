@@ -23,6 +23,7 @@ export default {
       map: null,
       address: '', // 초기 주소를 설정할 수 있습니다.
       geocoder: null, // Geocoder 추가
+      markerImage: 'null', // 커스텀 마커 이미지
     };
   },
   mounted() {
@@ -48,13 +49,16 @@ export default {
         level: 5,
       };
       this.map = new kakao.maps.Map(container, options);
+
+      // 여기서 마커 이미지를 생성
+      const imageSrc = 'src/assets/img/mystore/marker.jpg';
+      const imageSize = new kakao.maps.Size(100, 90); // 마커 이미지의 크기
+      this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     },
     async fetchAddress() {
       try {
         const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
         this.address = response.data.address; // 응답 데이터에서 주소를 가져와서 설정
-
-        console.log(response.data.address);
 
         this.searchAddress(); // 주소를 사용하여 검색 실행
       } catch (error) {
@@ -82,10 +86,11 @@ export default {
             new kakao.maps.Marker({
               map: this.map,
               position: coords,
+              image: this.markerImage, // 커스텀 마커 이미지 적용
             });
 
             // 동 이름을 서버에서 가져옴
-            this.fetchDongName(address);
+            this.getNearbyInfo(address);
           } else {
             alert('주소를 찾을 수 없습니다.');
           }
@@ -93,21 +98,6 @@ export default {
       } catch (error) {
         console.error('Error:', error);
         alert('주소 검색 중 오류가 발생했습니다.');
-      }
-    },
-    async fetchDongName(address) {
-      try {
-        const response = await axios.get(`/api/kmap/address/${address}`);
-        const dongName = response.data;
-        if (dongName) {
-          console.log(dongName);
-          this.getNearbyInfo(address);
-        } else {
-          alert('동 이름을 찾을 수 없습니다.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('동 이름을 가져오는 중 오류가 발생했습니다.');
       }
     },
     async getNearbyInfo(address) {
@@ -119,6 +109,7 @@ export default {
         new kakao.maps.Marker({
           position: new kakao.maps.LatLng(center.y, center.x),
           map: this.map,
+          image: this.markerImage, // 커스텀 마커 이미지 적용
         });
 
         // 편의점 마커 표시

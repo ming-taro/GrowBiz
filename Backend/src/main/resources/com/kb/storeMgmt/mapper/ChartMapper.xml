@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kb.storeMgmt.mapper.ChartMapper">
+    <select id="getFlpopCobyDongname" resultType="com.kb.storeMgmt.dto.FlowPopulationDTO">
+        select
+            TOT_FLPOP_CO ,
+            ML_FLPOP_CO ,
+            FML_FLPOP_CO
+        from flow_population
+                 where STDR_YYQU_CD = '20242'
+                 and ADSTRD_CD_NM = #{adstrdCdNm}
+    </select>
+</mapper>
