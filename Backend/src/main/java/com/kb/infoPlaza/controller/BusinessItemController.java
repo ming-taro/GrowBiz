@@ -2,6 +2,7 @@ package com.kb.infoPlaza.controller;
 
 import com.kb.infoPlaza.dto.Best3DTO;
 import com.kb.infoPlaza.dto.BusinessClosureDTO;
+import com.kb.infoPlaza.dto.BusinessFilterDTO;
 import com.kb.infoPlaza.dto.BusinessItemDTO;
 import com.kb.infoPlaza.service.BusinessItemService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,18 @@ public class BusinessItemController {
     public ResponseEntity<List<BusinessItemDTO>> getTotal() {
         return ResponseEntity.ok(service.getTotal());
     }
+
+    @GetMapping("/getFilteredList")
+    public ResponseEntity<List<BusinessItemDTO>> getFilteredList(BusinessFilterDTO businessFilter) { return ResponseEntity.ok(service.getFilteredList(businessFilter)); }
+
+    @GetMapping("/getFilteredCloseList")
+    public ResponseEntity<List<BusinessClosureDTO>> getFilteredCloseList(BusinessFilterDTO businessFilter) { return ResponseEntity.ok(service.getFilteredCloseList(businessFilter)); }
+
+    @GetMapping("/getDong")
+    public ResponseEntity<List<String>> getDong(String gu) { return ResponseEntity.ok(service.getDong(gu)); }
+
+    @GetMapping("/getDongClose")
+    public ResponseEntity<List<String>> getDongClose(String gu) { return ResponseEntity.ok(service.getDongClose(gu)); }
 
     @GetMapping("/getPortion5")
     public ResponseEntity<List<BusinessItemDTO>> getPortion5(@RequestParam(required = false) String location) {

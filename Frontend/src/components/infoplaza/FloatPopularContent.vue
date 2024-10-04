@@ -2,45 +2,70 @@
     <div>
         <div class="row">
             <CommercialHeader class="ms-10 me-5 col-1" />
-            <div v-if="showLocationInfo" class="col-3 me-5 mt-3">
+            <div v-if="showLocationInfo" class="col-3 me-5 mt-3 p-0">
                 <div class="mb-10">
                     <h4 class="mb-3">현위치</h4>
-                    <div class=" mb-5">
+                    <div class="mb-5">
                         <div class="card-body card_padding d-flex gap-3">
                             <i class="bi bi-geo-alt h-rem-7"></i>
-                            <span class="d-inline text-muted">서울특별시 광진구 화양동</span>
+                            <span class="d-inline text-muted">{{ currentLocation }}</span>
                         </div>
                     </div>
                 </div>
                 <div>
                     <h4 class="mb-3">지역 선택</h4>
                     <div class="card-body card_padding d-flex gap-3">
-                        <div
-                            class="text-muted text-primary-hover dropdown-toggle"
-                            id="locationDropdown"
-                            data-bs-toggle="dropdown"
-                            role="button"
+                        <select
+                            class="d-inline text-muted dropdown-item w-100 city-select"
+                            id="city"
+                            v-model="selectedCity"
+                            @change="updateDistricts"
                         >
-                            <span class="text-muted pe-100">서울특별시 광진구 화양동</span>
-                            <ul class="dropdown-menu dropdown-menu-end w-80" aria-labelledby="locationDropdown">
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                                <li><a class="dropdown-item" href="#">서울특별시 광진구 화양동</a></li>
-                            </ul>
-                        </div>
+                            <option v-for="city in cities" :key="city.name" :value="city.name">{{ city.name }}</option>
+                        </select>
+                        <select
+                            class="text-muted dropdown-item"
+                            id="district"
+                            v-model="selectedDistrict"
+                            @change="updateTowns"
+                            :disabled="!districts.length"
+                        >
+                            <option v-for="district in districts" :key="district.guName" :value="district.guName">{{ district.guName }}</option>
+                        </select>
+                        <select
+                            class="text-muted dropdown-item"
+                            id="town"
+                            v-model="selectedTown"
+                            @change="fetchLocation"
+                            :disabled="!towns.length"
+                        >
+                            <option v-for="town in towns" :key="town.dongName" :value="town.dongName">{{ town.dongName }}</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-6 ms-10" ref="mapContainer" style="height: 70vh;"></div>
         </div>
+
     </div>
 </template>
 
 <script setup>
 import CommercialHeader from '@/components/infoplaza/CommercialHeader.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
+import axios from 'axios';
 
 const mapContainer = ref(null);
+const propertys = ref([]);
+let kakaoMap; // Declare a variable to hold the map instance
+const selectedCity = ref('서울특별시');
+const selectedDistrict = ref('강남구');
+const selectedTown = ref('개포1동');
+const districts = ref([]);
+const towns = ref([]);
+let markers = [];
+let infowindow;
+let clusterer;
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -50,28 +75,210 @@ const props = defineProps({
     },
 });
 
-onMounted(() => {
+// 초기 데이터 설정
+const cities = [
+    { name: '서울특별시' }
+    // 추가 도시 및 구 데이터...
+];
+
+
+
+
+onMounted(async () => {
     loadKakaoMap(mapContainer.value);
+    await fetchDistinctDistricts(); // 중복 제거된 구 가져오기
+    
 });
 
 // Load Kakao Map
 const loadKakaoMap = (container) => {
     const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false&libraries=services,clusterer`;
     document.head.appendChild(script);
 
     script.onload = () => {
         window.kakao.maps.load(() => {
             const options = {
-                center: new window.kakao.maps.LatLng(33.450701, 126.570667), // Center coordinates
-                level: 3, // Zoom level
-                maxLevel: 5, // Maximum zoom level
+                center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
+                level: 4, // Zoom level
+                maxLevel: 6, // Maximum zoom level
+                
             };
 
-            const mapInstance = new window.kakao.maps.Map(container, options); // Create map instance
+            kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
+            
+            // Marker Clusterer 설정
+            clusterer = new kakao.maps.MarkerClusterer({
+                map: kakaoMap,
+                averageCenter: true,
+                minLevel: 5,
+            });
+
+            // 줌 변경 이벤트 리스너 등록
+            kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
+                const level = kakaoMap.getLevel();
+                // 오버레이가 존재한다면 닫기
+                if (infowindow) {
+                    infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
+                    infowindow = null; // infowindow 초기화
+                }
+                if (level < 5) {
+                    clusterer.setMap(null); // 클러스터러 비활성화
+                    markers.forEach(marker => marker.setMap(kakaoMap)); // 개별 마커 표시
+                } else {
+                    clusterer.setMap(kakaoMap); // 클러스터러 활성화
+                    clusterer.addMarkers(markers); // 마커들을 클러스터러에 추가
+                }
+
+            });
+
         });
     };
 };
+
+
+// 구 이름 중복 제거해서 가져오기
+const fetchDistinctDistricts = async () => {
+    try {
+        // 1. 기본값 미리 설정
+        districts.value = [{ guName: '강남구' }];
+        selectedDistrict.value = '강남구';
+        towns.value = [{ dongName: '개포1동' }];
+        selectedTown.value = '개포1동';
+        
+        // 2. 비동기적으로 데이터 불러오기
+        const response = await axios.get('http://localhost:8080/api/property/gu-names');
+        districts.value = response.data;
+
+        // 3. 첫 번째 데이터를 선택 (데이터가 로드된 후에도 유지)
+        if (districts.value.length) {
+            selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 선택
+            await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
+        }
+    } catch (error) {
+        console.error('Error fetching distinct district names:', error);
+    }
+};
+
+// 동 이름 업데이트 함수
+const fetchTowns = async (guName) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/property/dong-names?guName=${guName}`);
+        towns.value = response.data; // 동 이름 리스트를 towns에 저장
+        if (towns.value.length) {
+            selectedTown.value = towns.value[0].dongName; // 첫 번째 동 이름 선택
+            fetchLocation();
+        }
+    } catch (error) {
+        console.error('Error fetching towns:', error);
+    }
+};
+
+// 선택된 동 기반으로 주변 1km 반경 좌표 및 동 이름 획득
+const fetchLocation = async () => {
+    try {
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        const address = currentLocation.value; // 현재 선택된 지역
+        
+        removeMarkers(); // 기존 마커 제거
+        let dongNames = []; // 동 이름을 저장할 배열
+
+        // 중심 좌표 가져오기
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === window.kakao.maps.services.Status.OK) {
+                const centerCoords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+                
+                // 지도 중심 이동
+                kakaoMap.setCenter(centerCoords);
+                
+                // 반경 1km 범위 내 좌표들 계산
+                const radius = 0.009009; // 1km 대략적인 위도/경도 변환 값
+                
+                const positions = [
+                    { lat: centerCoords.getLat() + radius, lng: centerCoords.getLng() },     // 북쪽 1km
+                    { lat: centerCoords.getLat() - radius, lng: centerCoords.getLng() },     // 남쪽 1km
+                    { lat: centerCoords.getLat(), lng: centerCoords.getLng() + radius },     // 동쪽 1km
+                    { lat: centerCoords.getLat(), lng: centerCoords.getLng() - radius },     // 서쪽 1km
+                ];
+
+                // 각 좌표에 대한 동 이름을 가져오기
+                positions.forEach(pos => {
+                    const coords = new window.kakao.maps.LatLng(pos.lat, pos.lng);
+                    geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
+                        if (status === window.kakao.maps.services.Status.OK) {
+                            const dongName = result[0].address.region_3depth_name; // 동 이름 추출
+                            dongNames.push(dongName); // 동 이름 배열에 저장
+                        }
+                    });
+                });
+
+                // 동 이름 배열을 서버로 전송하는 함수 호출
+                sendDongNamesToServer(dongNames);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching location:', error);
+    }
+};
+
+// 동 이름 배열을 서버로 전송하는 함수
+const sendDongNamesToServer = async (dongNames) => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/property/float-popular', {
+            dongNames: dongNames, // 동 이름 배열 전송
+            yearQuarter: '20242' // 추가로 필요한 필터 정보
+        });
+
+        console.log('서버 응답:', response.data); // 서버로부터 받은 결과 출력
+    } catch (error) {
+        console.error('Error sending dong names to server:', error);
+    }
+};
+
+
+
+
+// 구 업데이트 후 동 업데이트
+const updateTowns = async () => {
+    await fetchTowns(selectedDistrict.value); // Pass the selected district (guName) to fetch towns
+    fetchLocation(); // 동 업데이트 후에 위치를 가져옴
+};
+
+
+// 현재 위치 텍스트 computed 속성
+const currentLocation = computed(() => {
+    let location = selectedCity.value || ''; // 기본적으로 도시 이름
+    if (selectedDistrict.value) {
+        location += ` ${selectedDistrict.value}`; // 구 이름 추가
+    }
+    if (selectedTown.value) {
+        location += ` ${selectedTown.value}`; // 동 이름 추가
+    }
+    console.log('Current Location:', location); // 디버그 로그
+    return location.trim(); // 최종 위치 반환
+});
+
+// 인포윈도우를 띄우는 함수
+const showInfoWindow = (message) => {
+    let content = `<div class = "info-window label" id="info-window"><span class="left"></span><span class="center">${message}</span><span class="right"></span></div>`;
+    // 커스텀 오버레이를 생성합니다
+    infowindow = new kakao.maps.CustomOverlay({
+        position: kakaoMap.getCenter(),
+        content: content   
+    });
+
+    // 커스텀 오버레이를 지도에 표시합니다
+    infowindow.setMap(kakaoMap);
+};
+
+
+// 이전에 생성된 마커 제거하는 함수
+const removeMarkers = () => {
+    markers.forEach(marker => marker.setMap(null)); // 마커 제거
+    markers = []; // 마커 배열 초기화
+};
+
 </script>
 
 <style>
@@ -80,12 +287,67 @@ const loadKakaoMap = (container) => {
     padding-bottom: 5px;
     padding-left: 0px;
     border: none;
-    box-shadow: none; /* 그림자 제거 */
-    border-bottom: 0.7px solid #D9D9D9; /* 밑에 라인 추가 */
-    border-radius: 0; /* 둥근 테두리 제거 */
+    box-shadow: none; /* Remove shadow */
+    border-bottom: 0.7px solid #D9D9D9; /* Add bottom line */
+    border-radius: 0; /* Remove rounded corners */
 }
 
 .pe-100 {
     padding-right: 100px;
 }
+
+.city-select {
+    width: 200px; /* 원하는 너비로 조정 */
+}
+/* CSS 스타일 추가 */
+.info-window {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-window strong {
+    font-size: 16px;
+    color: #333;
+}
+
+.customoverlay {
+    width: 300px; /* 고정 너비 설정 */
+    height: auto; /* 높이를 자동으로 설정하여 내용에 맞게 조정 */
+    max-height: 400px; /* 최대 높이 설정 (예: 400px) */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* 그림자 */
+    border-radius: 8px; /* 둥근 모서리 */
+    padding: 10px; /* 패딩 */
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 세로 방향 유지 */
+}
+
+.customoverlay img {
+    width: 100%; /* 너비를 100%로 설정하여 div에 맞춤 */
+    height: auto; /* 자동 높이 설정 */
+    max-height: 150px; /* 최대 높이 설정 (예: 150px) */
+    object-fit: fill; /* 이미지 비율 유지하며 잘리도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    margin-bottom: 10px; /* 이미지와 텍스트 간의 공간 유지 */
+}
+
+.customoverlay .none-img {
+    width: 100%; /* 너비를 100%로 설정하여 div에 맞춤 */
+    height: auto; /* 자동 높이 설정 */
+    max-height: 150px; /* 최대 높이 설정 (예: 150px) */
+    object-fit: contain; /* 이미지 비율 유지하며 잘리도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    margin-bottom: 10px; /* 이미지와 텍스트 간의 공간 유지 */
+}
+
+.customoverlay h5, p {
+    margin: 0; /* 기본 여백 제거 */
+    overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
+    white-space: normal; /* 기본 줄바꿈 처리 */
+    text-align: left; /* 텍스트 정렬 */
+}
+
 </style>

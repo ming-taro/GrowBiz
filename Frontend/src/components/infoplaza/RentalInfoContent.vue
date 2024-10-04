@@ -294,13 +294,12 @@ const fetchPropertyDetails = async (dongCode) => {
                 
                 const imageContent = property.imageData 
                 ? `<img src="${property.imageData}" alt="Property Image" />` 
-                : `<p>이미지가 존재하지 않습니다.</p>`; // 이미지가 없을 경우 메시지
+                : `<img src="/src/assets/img/infoplaza/house.png" alt="Property Image" class="none-img" />`; // 이미지가 없을 경우 기본 이미지
 
             var content = `<div class="customoverlay">
-                                <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
                                 ${imageContent}
-                                <p>${property.dealKindCdNm}</p>
-                                <p>${property.ctgryCd2Nm}</p>
+                                <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
+                                <p>${property.dealKindCdNm} | ${property.ctgryCd2Nm}</p>
                             </div>`;
 
 
@@ -371,13 +370,21 @@ const fetchPropertyDetails = async (dongCode) => {
     width: 100%; /* 너비를 100%로 설정하여 div에 맞춤 */
     height: auto; /* 자동 높이 설정 */
     max-height: 150px; /* 최대 높이 설정 (예: 150px) */
-    object-fit: cover; /* 이미지 비율 유지하며 잘리도록 설정 */
+    object-fit: fill; /* 이미지 비율 유지하며 잘리도록 설정 */
     border-radius: 5px; /* 둥근 모서리 */
     margin-bottom: 10px; /* 이미지와 텍스트 간의 공간 유지 */
 }
 
-.customoverlay h5,
-.customoverlay p {
+.customoverlay .none-img {
+    width: 100%; /* 너비를 100%로 설정하여 div에 맞춤 */
+    height: auto; /* 자동 높이 설정 */
+    max-height: 150px; /* 최대 높이 설정 (예: 150px) */
+    object-fit: contain; /* 이미지 비율 유지하며 잘리도록 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    margin-bottom: 10px; /* 이미지와 텍스트 간의 공간 유지 */
+}
+
+.customoverlay h5, p {
     margin: 0; /* 기본 여백 제거 */
     overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
     white-space: normal; /* 기본 줄바꿈 처리 */

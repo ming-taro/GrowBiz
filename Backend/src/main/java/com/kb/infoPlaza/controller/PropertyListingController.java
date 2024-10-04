@@ -1,8 +1,11 @@
 package com.kb.infoPlaza.controller;
 
 import com.kb.infoPlaza.dto.DistrictCodeDTO;
+import com.kb.infoPlaza.dto.FloatPopularDTO;
+import com.kb.infoPlaza.dto.FloatPopularReqDTO;
 import com.kb.infoPlaza.dto.PropertyListingDTO;
 import com.kb.infoPlaza.service.DistrictCodeService;
+import com.kb.infoPlaza.service.FloatPopularService;
 import com.kb.infoPlaza.service.PropertyListingService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class PropertyListingController {
 
     private final PropertyListingService propertyService;
     private final DistrictCodeService districtService;
+    private final FloatPopularService floatPopularService;
 
     // 모든 매물 조회
     @GetMapping("/list-all")
@@ -67,6 +71,12 @@ public class PropertyListingController {
     public ResponseEntity<List<PropertyListingDTO>> selectPropertyListingByDongCode(@RequestParam String dongCode) {
         List<PropertyListingDTO> propertyListings = propertyService.selectPropertyListingByDongCode(dongCode);
         return ResponseEntity.ok(propertyListings);
+    }
+
+    @PostMapping("/float-popular")
+    public ResponseEntity<List<FloatPopularDTO>> getPopularByDongName(@RequestBody FloatPopularReqDTO request) {
+        List<FloatPopularDTO> populationData = floatPopularService.getPopularData(request);
+        return ResponseEntity.ok(populationData);
     }
 
 }
