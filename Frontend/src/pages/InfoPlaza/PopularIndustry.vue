@@ -696,7 +696,7 @@
                         <div class="me-auto col-7">
                           <!--begin::Title-->
                           <p style="color: gray; font-size: 0.6rem">
-                            {{ item.trdarSeCdNm }}
+                            {{ item.trdarCdNm }}
                           </p>
                           <span style="color: black; font-size: 1rem">{{
                             item.svcIndutyCdNm
