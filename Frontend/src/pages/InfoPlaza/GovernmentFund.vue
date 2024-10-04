@@ -18,7 +18,6 @@
       <div class="card mb-10 p-4" style="background-color: #f6f4f9">
         <!-- Best 금리상품 내용-->
         <div class="row">
-  
           <!-- 카드 1개 -->
           <div class="col-xl-3">
             <a href="#">
@@ -174,12 +173,17 @@
         </div>
       </div>
 
-      <div class="row mb-4 d-flex justify-content-end"> <!-- d-flex 및 justify-content-end 추가 -->
+      <div class="row mb-4 d-flex justify-content-end">
+        <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
-        <div class="col-auto d-flex"> <!-- col-auto 사용 -->
+        <div class="col-auto d-flex">
+          <!-- col-auto 사용 -->
           <!-- 지역 검색(구) -->
           <div class="col-3">
-            <select class="form-select round-corner" aria-label="Default select example">
+            <select
+              class="form-select round-corner"
+              aria-label="Default select example"
+            >
               <option selected disabled hidden>구분</option>
               <option value="1">직접대출</option>
               <option value="2">대리대출</option>
@@ -190,7 +194,11 @@
             <div class="h-100">
               <form class="h-100 form-group">
                 <div class="h-100 input-group input-group-sm">
-                  <input type="text" class="rounded form-control ms-1" placeholder="검색어를 입력해 주세요." />
+                  <input
+                    type="text"
+                    class="rounded form-control ms-1"
+                    placeholder="검색어를 입력해 주세요."
+                  />
                   <span class="ms-1 rounded input-group-text">
                     <i class="bi bi-search"></i>
                   </span>
@@ -200,12 +208,11 @@
           </div>
         </div>
       </div>
-      
-      
+
       <div class="row">
         <div class="col-1">
-        <PersonalLoanHeader class="" />
-      </div>
+          <PersonalLoanHeader class="" />
+        </div>
         <!-- 대출 상품 내용 -->
         <div class="col-xl-11 ps-7">
           <!-- 대출 상품 카드 내용 -->
@@ -263,10 +270,10 @@
 
                           <!-- Info (상세 보기 버튼) -->
                           <div class="d-flex justify-content-end pt-4">
-                            <a
-                              href="#"
+                            <RouterLink
+                              to="/infoPlaza/personalLoan/loanDetail"
                               class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
-                              >상세 보기</a
+                              >상세 보기</RouterLink
                             >
                           </div>
                         </div>

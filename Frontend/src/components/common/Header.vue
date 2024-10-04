@@ -75,7 +75,7 @@
                     <RouterLink to="/infoPlaza/education"
                       ><span>교육정보</span></RouterLink
                     >
-                    <RouterLink to="/infoPlaza/personalLoan"
+                    <RouterLink to="/infoPlaza/governmentFund"
                       ><span>대출정보</span></RouterLink
                     >
                     <RouterLink to="/infoPlaza/news"
