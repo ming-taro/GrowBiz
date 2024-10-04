@@ -20,4 +20,5 @@ public class LoanService {
 
     public List<GovernmentFundDTO> getFilteredList(GovernmentFilterDTO governmentFilter) { return mapper.getFilteredList(governmentFilter); }
 
+    public GovernmentFundDTO getDetailItem(String productName) { return mapper.getDetailItem(productName); }
 }

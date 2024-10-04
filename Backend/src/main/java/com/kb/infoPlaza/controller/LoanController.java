@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class LoanController {
 
     @GetMapping("/getBest4")
     public ResponseEntity<List<GovernmentFundDTO>> getBest4List() {
-        return ResponseEntity.ok(service.getBest4List());
+        return ResponseEntity.ok(service.getBest4List() );
     }
 
     @GetMapping("/getFilteredList")
@@ -29,5 +30,8 @@ public class LoanController {
         return ResponseEntity.ok(service.getFilteredList(governmentFilter));
     }
 
-
+    @GetMapping("/getDetailItem")
+    public ResponseEntity<GovernmentFundDTO> getDetailItem(String productName) {
+        return ResponseEntity.ok(service.getDetailItem(productName));
+    }
 }

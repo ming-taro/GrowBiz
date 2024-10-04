@@ -15,7 +15,8 @@ const MylocationTrending = () =>
 const CloseRatio = () => import('@/pages/InfoPlaza/CloseRatio.vue');
 const StoreInfo = () => import('@/pages/InfoPlaza/StoreInfo.vue');
 const GovernmentFund = () => import('@/pages/Infoplaza/GovernmentFund.vue');
-const LoanDetail = () => import('@/pages/InfoPlaza/LoanDetail.vue');
+const GovernmentFundDetail = () =>
+  import('@/pages/InfoPlaza/GovernmentFundDetail.vue');
 const EnterpriseLoan = () => import('@/pages/Infoplaza/EnterpriseLoan.vue');
 const Education = () => import('@/pages/InfoPlaza/Education.vue');
 const Video = () => import('@/pages/InfoPlaza/Video.vue');
@@ -73,9 +74,9 @@ const router = createRouter({
       component: EnterpriseLoan,
     },
     {
-      path: '/infoPlaza/personalLoan/loanDetail',
-      name: 'loanDetail',
-      component: LoanDetail,
+      path: '/infoPlaza/governmentFund/governmentFundDetail/:productName',
+      name: 'governmentFundDetail',
+      component: GovernmentFundDetail,
     },
 
     { path: '/infoPlaza/storeInfo', name: 'storeInfo', component: StoreInfo },

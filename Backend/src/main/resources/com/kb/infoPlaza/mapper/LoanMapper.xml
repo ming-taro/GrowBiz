@@ -26,5 +26,9 @@
         </if>
     </select>
 
+    <select id="getDetailItem" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        select * from business_loan_products where loan_product_name = #{productName}
+    </select>
+
 
 </mapper>

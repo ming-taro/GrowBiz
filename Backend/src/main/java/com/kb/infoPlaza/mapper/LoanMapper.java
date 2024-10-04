@@ -8,4 +8,6 @@ public interface LoanMapper {
     List<GovernmentFundDTO> getBest4List();
 
     List<GovernmentFundDTO> getFilteredList(GovernmentFilterDTO governmentFilter);
+
+    GovernmentFundDTO getDetailItem(String productName);
 }
