@@ -65,7 +65,6 @@ const districts = ref([]);
 const towns = ref([]);
 let markers = [];
 let infowindow;
-let clusterer;
 
 // Prop to control the visibility of location info
 const props = defineProps({
@@ -87,32 +86,26 @@ const cities = [
 onMounted(async () => {
     loadKakaoMap(mapContainer.value);
     await fetchDistinctDistricts(); // 중복 제거된 구 가져오기
-    
+    fetchLocation(); // 지도 로드 시 개포1동의 주변 동 가져오기
 });
 
 // Load Kakao Map
 const loadKakaoMap = (container) => {
     const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false&libraries=services,clusterer`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false&libraries=services`;
     document.head.appendChild(script);
 
     script.onload = () => {
         window.kakao.maps.load(() => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
-                level: 5, // Zoom level
-                maxLevel: 6, // Maximum zoom level
+                level: 6, // Zoom level
+                maxLevel: 10, // Maximum zoom level
                 
             };
 
             kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
             
-            // Marker Clusterer 설정
-            clusterer = new kakao.maps.MarkerClusterer({
-                map: kakaoMap,
-                averageCenter: true,
-                minLevel: 5,
-            });
 
             // 줌 변경 이벤트 리스너 등록
             kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
@@ -122,13 +115,7 @@ const loadKakaoMap = (container) => {
                     infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
                     infowindow = null; // infowindow 초기화
                 }
-                if (level < 5) {
-                    clusterer.setMap(null); // 클러스터러 비활성화
-                    markers.forEach(marker => marker.setMap(kakaoMap)); // 개별 마커 표시
-                } else {
-                    clusterer.setMap(kakaoMap); // 클러스터러 활성화
-                    clusterer.addMarkers(markers); // 마커들을 클러스터러에 추가
-                }
+                
 
             });
 
@@ -137,20 +124,19 @@ const loadKakaoMap = (container) => {
 };
 
 
-// 구 이름 중복 제거해서 가져오기
 const fetchDistinctDistricts = async () => {
     try {
         // 1. 기본값 미리 설정
         districts.value = [{ guName: '강남구' }];
         selectedDistrict.value = '강남구';
-        towns.value = [{ dongName: '개포1동' }];
-        selectedTown.value = '개포1동';
-        
+        towns.value = []; // 초기화
+        selectedTown.value = ''; // 초기화
+
         // 2. 비동기적으로 데이터 불러오기
         const response = await axios.get('http://localhost:8080/api/property/gu-names');
         districts.value = response.data;
 
-        // 3. 첫 번째 데이터를 선택 (데이터가 로드된 후에도 유지)
+        // 3. 첫 번째 데이터를 선택
         if (districts.value.length) {
             selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 선택
             await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
@@ -167,18 +153,21 @@ const fetchTowns = async (guName) => {
         towns.value = response.data; // 동 이름 리스트를 towns에 저장
         if (towns.value.length) {
             selectedTown.value = towns.value[0].dongName; // 첫 번째 동 이름 선택
-            fetchLocation();
+            // fetchLocation 호출을 여기로 이동
+            fetchLocation(); // 동 업데이트 후에 위치를 가져옴
         }
     } catch (error) {
         console.error('Error fetching towns:', error);
     }
 };
 
-// 선택된 동 기반으로 주변 1km 반경 좌표 및 동 이름 획득
 const fetchLocation = async () => {
     try {
+        console.log("Selected City:", selectedCity.value);
+console.log("Selected District:", selectedDistrict.value);
+console.log("Selected Town:", selectedTown.value);
         const geocoder = new window.kakao.maps.services.Geocoder();
-        const address = currentLocation.value; // 현재 선택된 지역
+        const address = `${selectedCity.value} ${selectedDistrict.value} ${selectedTown.value}`; // 주소를 직접 설정
 
         removeMarkers(); // 기존 마커 제거
         let dongNames = []; // 동 이름을 저장할 배열
@@ -187,7 +176,6 @@ const fetchLocation = async () => {
         geocoder.addressSearch(address, async function(result, status) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const centerCoords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-                
                 // 지도 중심 이동
                 kakaoMap.setCenter(centerCoords);
                 
@@ -218,9 +206,14 @@ const fetchLocation = async () => {
 
                 // 중복된 동 이름 제거
                 dongNames = [...new Set(dongNames)];
-
+                
+                const cleanedDongNames = dongNames.map(name => name.slice(0, -1)); // 마지막 글자 제거
+                console.log("Sending cleaned dong names to server:", cleanedDongNames);
+                console.log("Selected City:", selectedCity.value);
+            console.log("Selected District:", selectedDistrict.value);
+            console.log(cleanedDongNames);
                 // 동 이름 배열을 서버로 전송하는 함수 호출
-                sendDongNamesToServer(dongNames);
+                sendDongNamesToServer(cleanedDongNames);
             }
         });
 
@@ -228,6 +221,7 @@ const fetchLocation = async () => {
         console.error('Error fetching location:', error);
     }
 };
+
 
 // 동 이름 배열을 서버로 전송하는 함수
 const sendDongNamesToServer = async (dongNames) => {
@@ -262,10 +256,12 @@ const displayMarkers = (populationData) => {
                 let markerColor;
                 if (totFlpopCo > 7000000) {
                     markerColor = 'red'; // 인구수 많을 때
-                } else if (totFlpopCo > 6000000) {
-                    markerColor = 'orange'; // 중간
+                } else if (totFlpopCo > 5000000) {
+                    markerColor = 'blue'; // 중간
+                } else if (totFlpopCo > 3000000) {
+                    markerColor = 'green'; // 중간
                 } else {
-                    markerColor = 'green'; // 적을 때
+                    markerColor = 'black'; // 적을 때
                 }
 
                 const marker = new window.kakao.maps.Marker({
@@ -273,7 +269,7 @@ const displayMarkers = (populationData) => {
                     position: coords,
                     title: adstrdCdNm,
                     image: new window.kakao.maps.MarkerImage(
-                        `http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_${markerColor}.png`, 
+                        `/src/assets/img/infoplaza/marker_${markerColor}.png`, 
                         new window.kakao.maps.Size(24, 35))
                 });
 
@@ -291,7 +287,6 @@ const updateTowns = async () => {
     fetchLocation(); // 동 업데이트 후에 위치를 가져옴
 };
 
-
 // 현재 위치 텍스트 computed 속성
 const currentLocation = computed(() => {
     let location = selectedCity.value || ''; // 기본적으로 도시 이름
@@ -301,7 +296,6 @@ const currentLocation = computed(() => {
     if (selectedTown.value) {
         location += ` ${selectedTown.value}`; // 동 이름 추가
     }
-    console.log('Current Location:', location); // 디버그 로그
     return location.trim(); // 최종 위치 반환
 });
 
