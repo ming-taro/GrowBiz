@@ -18,153 +18,40 @@
       <div class="card mb-10 p-4" style="background-color: #f6f4f9">
         <!-- Best 금리상품 내용-->
         <div class="row">
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
+          <!-- 카드 여러 개 -->
+          <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
             <a href="#">
-              <div class="card card-xl-stretch">
-                <div class="card-body pt-5">
-                  <div
-                    id="kt_stats_widget_8_carousel"
-                    class="carousel carousel-custom carousel-stretch slide"
-                    data-bs-ride="carousel"
-                    data-bs-interval="8000"
-                  >
+              <div class="card card-xl-stretch h-100">
+                <div
+                  class="card-body pt-5 d-flex flex-column justify-content-between"
+                >
+                  <div>
                     <div class="d-flex flex-stack flex-wrap">
                       <span
                         class="fs-3 text-gray-500 pe-2"
                         style="font-weight: 500"
-                        >혁신성장촉진자금</span
                       >
+                        {{ item.loanProductName }}
+                      </span>
                     </div>
                     <div class="carousel-inner pt-6">
                       <div class="carousel-item active">
                         <div class="carousel-wrapper">
                           <div class="d-flex flex-column flex-grow-1">
-                            <!-- 세 번째 행: 금리 -->
-                            <div
-                              class="d-flex justify-content-end align-items-end ms-auto"
-                            >
-                              <p class="fs-6 text-gray-600 mb-1">금리</p>
-                              <p class="h2 fw-bold mb-0 ms-2">3.83%</p>
-                            </div>
+                            <!-- 콘텐츠 추가 가능 -->
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
-            <a href="#">
-              <div class="card card-xl-stretch">
-                <div class="card-body pt-5">
+                  <!-- 금리 -->
                   <div
-                    id="kt_stats_widget_8_carousel"
-                    class="carousel carousel-custom carousel-stretch slide"
-                    data-bs-ride="carousel"
-                    data-bs-interval="8000"
+                    class="d-flex justify-content-end align-items-end ms-auto"
                   >
-                    <div class="d-flex flex-stack flex-wrap">
-                      <span
-                        class="fs-3 text-gray-500 pe-2"
-                        style="font-weight: 500"
-                        >혁신성장촉진자금</span
-                      >
-                    </div>
-                    <div class="carousel-inner pt-6">
-                      <div class="carousel-item active">
-                        <div class="carousel-wrapper">
-                          <div class="d-flex flex-column flex-grow-1">
-                            <!-- 세 번째 행: 금리 -->
-                            <div
-                              class="d-flex justify-content-end align-items-end ms-auto"
-                            >
-                              <p class="fs-6 text-gray-600 mb-1">금리</p>
-                              <p class="h2 fw-bold mb-0 ms-2">3.83%</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
-            <a href="#">
-              <div class="card card-xl-stretch">
-                <div class="card-body pt-5">
-                  <div
-                    id="kt_stats_widget_8_carousel"
-                    class="carousel carousel-custom carousel-stretch slide"
-                    data-bs-ride="carousel"
-                    data-bs-interval="8000"
-                  >
-                    <div class="d-flex flex-stack flex-wrap">
-                      <span
-                        class="fs-3 text-gray-500 pe-2"
-                        style="font-weight: 500"
-                        >혁신성장촉진자금</span
-                      >
-                    </div>
-                    <div class="carousel-inner pt-6">
-                      <div class="carousel-item active">
-                        <div class="carousel-wrapper">
-                          <div class="d-flex flex-column flex-grow-1">
-                            <!-- 세 번째 행: 금리 -->
-                            <div
-                              class="d-flex justify-content-end align-items-end ms-auto"
-                            >
-                              <p class="fs-6 text-gray-600 mb-1">금리</p>
-                              <p class="h2 fw-bold mb-0 ms-2">3.83%</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </div>
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
-            <a href="#">
-              <div class="card card-xl-stretch">
-                <div class="card-body pt-5">
-                  <div
-                    id="kt_stats_widget_8_carousel"
-                    class="carousel carousel-custom carousel-stretch slide"
-                    data-bs-ride="carousel"
-                    data-bs-interval="8000"
-                  >
-                    <div class="d-flex flex-stack flex-wrap">
-                      <span
-                        class="fs-3 text-gray-500 pe-2"
-                        style="font-weight: 500"
-                        >혁신성장촉진자금</span
-                      >
-                    </div>
-                    <div class="carousel-inner pt-6">
-                      <div class="carousel-item active">
-                        <div class="carousel-wrapper">
-                          <div class="d-flex flex-column flex-grow-1">
-                            <!-- 세 번째 행: 금리 -->
-                            <div
-                              class="d-flex justify-content-end align-items-end ms-auto"
-                            >
-                              <p class="fs-6 text-gray-600 mb-1">금리</p>
-                              <p class="h2 fw-bold mb-0 ms-2">3.83%</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <p class="fs-6 text-gray-600 mb-1">금리</p>
+                    <p class="h2 fw-bold mb-0 ms-2">
+                      {{ item.totalInterestRate }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -176,21 +63,23 @@
       <div class="row mb-4 d-flex justify-content-end">
         <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
-        <div class="col-auto d-flex">
+        <div class="col-5 d-flex">
           <!-- col-auto 사용 -->
-          <!-- 지역 검색(구) -->
-          <div class="col-3">
+          <!-- 대출 구분 -->
+          <div class="col-4">
             <select
               class="form-select round-corner"
               aria-label="Default select example"
+              @change="onCategoryChange"
             >
               <option selected disabled hidden>구분</option>
+              <option value="전체">전체</option>
               <option value="직접대출">직접대출</option>
               <option value="대리대출">대리대출</option>
             </select>
           </div>
           <!-- 검색창 -->
-          <div class="col-9">
+          <div class="col-8">
             <div class="h-100">
               <form class="h-100 form-group">
                 <div class="h-100 input-group input-group-sm">
@@ -228,12 +117,16 @@
                     data-bs-interval="8000"
                   >
                     <div style="width: 25%">
-                      <img src="@/assets/img/banklogo/국민은행.png" alt="" />
+                      <img
+                        :src="'/images/banklogo/' + '㈜우리카드' + '.png'"
+                        alt=""
+                        style="width: 100px"
+                      />
                     </div>
                     <div class="d-flex flex-stack flex-wrap">
-                      <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
-                        >혁신성장촉진자금</span
-                      >
+                      <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4">{{
+                        dataList[0].loanProductName
+                      }}</span>
                     </div>
                     <div class="carousel-inner pt-6">
                       <div class="carousel-item active">
@@ -246,7 +139,9 @@
                               class="d-flex justify-content-between align-items-center"
                             >
                               <p class="fs-5">신청기간</p>
-                              <p class="fs-5 fw-bolder">마감됨</p>
+                              <p class="fs-5 fw-bolder">
+                                {{ dataList[0].applicationPeriod }}
+                              </p>
                             </div>
 
                             <!-- 두 번째 행: 구분 -->
@@ -255,7 +150,7 @@
                             >
                               <p class="fs-5">구분</p>
                               <p class="fs-5 fw-bolder">
-                                성장기반자금/직접대출
+                                {{ dataList[0].category }}
                               </p>
                             </div>
 
@@ -264,7 +159,9 @@
                               class="d-flex justify-content-between align-items-center"
                             >
                               <p class="fs-5 0">금리</p>
-                              <p class="fs-5 fw-bolder">3.83%</p>
+                              <p class="fs-5 fw-bolder">
+                                {{ dataList[0].totalInterestRate }}
+                              </p>
                             </div>
                           </div>
 
@@ -829,6 +726,77 @@
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
+import { ref } from 'vue';
+import axios from 'axios';
+
+const selectedCategory = ref('전체');
+const dataList = ref([]);
+const best4List = ref([]);
+
+const BASEURI = '/api/infoPlaza/loan';
+
+// 데이터 리스트 가져오는 함수
+const bringLoanList = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    const response = await axios.get(BASEURI + '/getFilteredList', {
+      params: {
+        category: selectedCategory.value,
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
+    if (response.status === 200) {
+      dataList.value = response.data;
+      console.log(dataList.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+};
+
+// 데이터 리스트 가져오는 함수
+const bringBest4List = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    const response = await axios.get(BASEURI + '/getBest4', {
+      params: {
+        category: selectedCategory.value,
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
+    if (response.status === 200) {
+      best4List.value = response.data;
+      console.log(best4List.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+};
+
+const onCategoryChange = (event) => {
+  selectedCategory.value = event.target.value;
+  bringLoanList();
+};
+
+bringBest4List();
+bringLoanList();
 </script>
 
-<style></style>
+<style scoped>
+.row.d-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-link {
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+</style>
