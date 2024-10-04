@@ -8,11 +8,13 @@ const RentalInfo = () => import('@/pages/InfoPlaza/RentalInfo.vue');
 const BoardCreate = () => import('@/pages/community/BoardCreate.vue');
 const BoardView = () => import('@/pages/community/BoardView.vue');
 const PopularIndustry = () => import('@/pages/InfoPlaza/PopularIndustry.vue');
-const TotalTrendingBusinessItems = () => import('@/pages/InfoPlaza/TotalTrendingBusinessItems.vue');
-const MylocationTrending = () => import('@/pages/InfoPlaza/MyLocatinTrending.vue');
+const TotalTrendingBusinessItems = () =>
+  import('@/pages/InfoPlaza/TotalTrendingBusinessItems.vue');
+const MylocationTrending = () =>
+  import('@/pages/InfoPlaza/MyLocatinTrending.vue');
 const CloseRatio = () => import('@/pages/InfoPlaza/CloseRatio.vue');
 const StoreInfo = () => import('@/pages/InfoPlaza/StoreInfo.vue');
-const PersonalLoan = () => import('@/pages/Infoplaza/PersonalLoan.vue');
+const GovernmentFund = () => import('@/pages/Infoplaza/GovernmentFund.vue');
 const LoanDetail = () => import('@/pages/InfoPlaza/LoanDetail.vue');
 const EnterpriseLoan = () => import('@/pages/Infoplaza/EnterpriseLoan.vue');
 const Education = () => import('@/pages/InfoPlaza/Education.vue');
@@ -61,9 +63,9 @@ const router = createRouter({
       component: CloseRatio,
     },
     {
-      path: '/infoPlaza/personalLoan',
-      name: 'ersonalLoan',
-      component: PersonalLoan,
+      path: '/infoPlaza/governmentFund',
+      name: 'governmentFund',
+      component: GovernmentFund,
     },
     {
       path: '/infoPlaza/enterpriseLoan',
@@ -82,7 +84,11 @@ const router = createRouter({
       name: 'FloatPopular',
       component: FloatPopular,
     },
-    { path: '/infoPlaza/rentalinfo', name: 'RentalInfo', component: RentalInfo },
+    {
+      path: '/infoPlaza/rentalinfo',
+      name: 'RentalInfo',
+      component: RentalInfo,
+    },
     { path: '/infoPlaza/education', name: 'education', component: Education },
     {
       path: '/infoplaza/education/video/:vno',

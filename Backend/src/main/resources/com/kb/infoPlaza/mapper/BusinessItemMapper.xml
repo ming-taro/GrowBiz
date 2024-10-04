@@ -61,11 +61,11 @@
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures3 limit 5
+        select * from business_closures4 limit 5
     </select>
 
     <select id="getRate" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures3
+        select * from business_closures4
     </select>
 
     <select id="getTotal5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
@@ -91,7 +91,7 @@
     </select>
 
     <select id="getFilteredCloseList" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        SELECT * FROM business_closures3
+        SELECT * FROM business_closures4
         WHERE 1=1
         <if test="gu != '전체'">
             AND SIGNGU_CD_NM = #{gu}
@@ -110,7 +110,7 @@
     </select>
 
     <select id="getDongClose" resultType="java.lang.String">
-        SELECT DISTINCT ADSTRD_CD_NM FROM business_closures3
+        SELECT DISTINCT ADSTRD_CD_NM FROM business_closures4
         WHERE SIGNGU_CD_NM = #{gu}
     </select>
 </mapper>

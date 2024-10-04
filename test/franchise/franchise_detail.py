@@ -43,13 +43,13 @@ def find_franchise_detail(fir_mst_sn):
             columns = row.find_all('td')  # tr 안의 모든 td 요소 찾기
             column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
             financial.append({
-                "year": column_data[0],
-                "asset": column_data[1],
-                "liability": column_data[2],
-                "equity": column_data[3],
-                "revenue": column_data[4],
-                "operating_income": column_data[5],
-                "net_income": column_data[6]
+                "year": int(column_data[0]),
+                "asset": int(column_data[1].replace(",", "")),
+                "liability": int(column_data[2].replace(",", "")),
+                "equity": int(column_data[3].replace(",", "")),
+                "revenue": int(column_data[4].replace(",", "")),
+                "operating_income": int(column_data[5].replace(",", "")),
+                "net_income": int(column_data[6].replace(",", ""))
             })
 
         # 가맹점 및 직영점 현황
@@ -64,14 +64,16 @@ def find_franchise_detail(fir_mst_sn):
         for row in rows[1:2]:
             columns = row.find_all('td')  # tr 안의 모든 td 요소 찾기
             column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
-            for i in range(1, 4, 3):
+            year = 2023
+            for i in range(1, 10, 3):
                 store.append({
                     "region": column_data[0],
-                    "year": "2023",
-                    "total": column_data[i],
-                    "franchise_count": column_data[i + 1],
-                    "company_store_count": column_data[i + 2]
+                    "year": year,
+                    "total": int(column_data[i].replace(",", "")),
+                    "franchise_count": int(column_data[i + 1].replace(",", "")),
+                    "company_store_count": int(column_data[i + 2].replace(",", ""))
                 })
+                year -= 1
 
         # 가맹점 변동 현황
         franchise_change = []
@@ -80,11 +82,11 @@ def find_franchise_detail(fir_mst_sn):
         for row in rows:
             data = [td.get_text(strip=True) for td in row.find_all('td')]
             franchise_change.append({
-                "year": data[0],
-                "new_open": data[1],
-                "contract_termination": data[2],
-                "contract_cancellation": data[3],
-                "name_changes": data[4]
+                "year": int(data[0]),
+                "new_open": int(data[1].replace(",", "")),
+                "contract_termination": int(data[2].replace(",", "")),
+                "contract_cancellation": int(data[3].replace(",", "")),
+                "name_changes": int(data[4].replace(",", ""))
             })
 
         # 가맹점사업자 매출
@@ -94,9 +96,9 @@ def find_franchise_detail(fir_mst_sn):
         grouped_data = [data[i:i+3] for i in range(0, len(data), 3)] # 데이터 3 그룹씩 묶기
         franchise_revenue = {
             "region": "서울",
-            "franchise_count": grouped_data[1][0],
-            "average_sales": grouped_data[1][1],
-            "average_sales_per_area": grouped_data[1][2]
+            "franchise_count": int(grouped_data[1][0].replace(",", "")),
+            "average_sales": int(grouped_data[1][1].replace(",", "")),
+            "average_sales_per_area": int(grouped_data[1][2].replace(",", ""))
         }
 
         # 광고·판촉비 내역
@@ -105,17 +107,17 @@ def find_franchise_detail(fir_mst_sn):
         columns = row[0].find_all('td')  # tr 안의 모든 td 요소 찾기
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         advertising_cost = {
-            "year": column_data[0],
-            "advertising_expense": column_data[1],
-            "promotion_expenses": column_data[2]
+            "year": int(column_data[0]),
+            "advertising_expense": int(column_data[1].replace(",", "")),
+            "promotion_expenses": int(column_data[2].replace(",", ""))
         }
 
         # 가맹금사업자의 부담금
         td_elements = soup.find_all('td', class_='al')
         data = [td.get_text(strip=True) for td in td_elements]
         business_fee = {
-            "fee_type": data[0],
-            "deposit_fee": data[1]
+            "fee_type": data[0].replace(",", ""),
+            "deposit_fee": int(data[1].replace(",", ""))
         }
 
         # 가맹점사업자의 부담 - 가맹점사업자의 부담금 (형태, 예치 가맹금)
@@ -124,22 +126,22 @@ def find_franchise_detail(fir_mst_sn):
         columns = rows[0].find_all('td')  # tr 안의 모든 td 요소 찾기
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         initial_cost = {
-            "franchise_fee": column_data[0],
-            "education_fee": column_data[1],
-            "deposit": column_data[2],
-            "other_cost": column_data[3],
-            "total": column_data[4]
+            "franchise_fee": int(column_data[0].replace(",", "")),
+            "education_fee": int(column_data[1].replace(",", "")),
+            "deposit": int(column_data[2].replace(",", "")),
+            "other_cost": int(column_data[3].replace(",", "")),
+            "total": int(column_data[4].replace(",", ""))
         }
 
         # 가맹점사업자의 부담 - 인테리어 비용
         headers = ['단위면적(3.3㎡)당 인테리어 비용', '기준점포면적(㎡)', '인테리어 비용']
         rows = tbodys[14].find_all('tr')  # tbody 안의 모든 tr 요소 찾기
-        columns = row[0].find_all('td')  # tr 안의 모든 td 요소 찾기
+        columns = rows[0].find_all('td')  # tr 안의 모든 td 요소 찾기
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         interior_cost = {
-            "cost_per_area": column_data[0],
-            "standard_store_area": column_data[1],
-            "total": column_data[2]
+            "cost_per_area": int(column_data[0].replace(",", "")),
+            "standard_store_area": int(column_data[1].replace(",", "")),
+            "total": int(column_data[2].replace(",", ""))
         }
 
         # 가맹계약 기간
@@ -148,8 +150,8 @@ def find_franchise_detail(fir_mst_sn):
         headers = [th.get_text(strip=True) for th in rows[1].find_all('th')]  # "최초"와 "연장" 헤더 추출
         values = [td.get_text(strip=True) for td in rows[2].find_all('td')]   # 값 추출
         contract_period = {
-            "initial": values[0],
-            "renewal": values[1]
+            "initial": int(values[0].replace(",", "")),
+            "renewal": int(values[1].replace(",", ""))
         }
 
         return {

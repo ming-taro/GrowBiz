@@ -1,7 +1,10 @@
 package com.kb.storeMgmt.service;
 
+import com.kb.storeMgmt.dto.NeighborhoodDTO;
+import com.kb.storeMgmt.mapper.NeighborhoodMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,34 +27,14 @@ public class NeighborhoodService {
     @Value("${kakao.api.key}")
     private String kakaoApiKey;
 
-    public String getDongName(String inputAddress) {
-        String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + inputAddress;
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
-        HttpEntity entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class
-        );
+    @Autowired
+    private NeighborhoodMapper neighborhoodMapper;
 
-        String responseBody = response.getBody();
-        if (responseBody != null) {
-            JSONObject jsonResponse = new JSONObject(responseBody);
-            JSONArray documents = jsonResponse.getJSONArray("documents");
-            if (documents.length() > 0) {
-                JSONObject firstDocument = documents.getJSONObject(0);
-                JSONObject addressObject = firstDocument.getJSONObject("address");
-                return addressObject.getString("region_3depth_name");
-            }
-        }
-        return null;
+    public NeighborhoodDTO getAddressById(NeighborhoodDTO neighborhoodDTO) {
+        return neighborhoodMapper.findAddressById(neighborhoodDTO.getId());
     }
 
     public Map<String, Object> getNearbyInfo(String address) {
-        System.out.println("Received address: " + address);
         Map<String, Object> result = new HashMap<>();
         Coordinate centerCoord = getCoordinates(address);
         if (centerCoord == null) {
@@ -142,7 +125,11 @@ public class NeighborhoodService {
 
     private List<Coordinate> getConvenienceStores(List<String> dongs) {
         List<Coordinate> stores = new ArrayList<>();
+
         for (String dong : dongs) {
+
+            System.out.println(dong);
+
             try {
                 String encodedDong = URLEncoder.encode(dong + " 편의점", StandardCharsets.UTF_8);
                 String urlStr = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + encodedDong;

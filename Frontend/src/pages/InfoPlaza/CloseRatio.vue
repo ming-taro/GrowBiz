@@ -36,31 +36,31 @@
               <option value="전체" disabled>구 선택</option>
               <option value="전체" hidden>구 선택</option>
               <option value="전체">전체</option>
-              <option value="동작구">동작구</option>
-              <option value="금천구">금천구</option>
               <option value="용산구">용산구</option>
+              <option value="광진구">광진구</option>
+              <option value="성북구">성북구</option>
+              <option value="노원구">노원구</option>
+              <option value="은평구">은평구</option>
+              <option value="강북구">강북구</option>
+              <option value="영등포구">영등포구</option>
+              <option value="중구">중구</option>
+              <option value="강동구">강동구</option>
+              <option value="관악구">관악구</option>
+              <option value="마포구">마포구</option>
+              <option value="강서구">강서구</option>
               <option value="송파구">송파구</option>
+              <option value="도봉구">도봉구</option>
+              <option value="강남구">강남구</option>
+              <option value="양천구">양천구</option>
+              <option value="서초구">서초구</option>
+              <option value="성동구">성동구</option>
+              <option value="구로구">구로구</option>
+              <option value="금천구">금천구</option>
+              <option value="중랑구">중랑구</option>
               <option value="종로구">종로구</option>
               <option value="동대문구">동대문구</option>
-              <option value="서초구">서초구</option>
-              <option value="구로구">구로구</option>
-              <option value="영등포구">영등포구</option>
-              <option value="노원구">노원구</option>
-              <option value="중구">중구</option>
-              <option value="강남구">강남구</option>
-              <option value="강서구">강서구</option>
-              <option value="마포구">마포구</option>
-              <option value="성동구">성동구</option>
-              <option value="양천구">양천구</option>
-              <option value="광진구">광진구</option>
-              <option value="강동구">강동구</option>
+              <option value="동작구">동작구</option>
               <option value="서대문구">서대문구</option>
-              <option value="강북구">강북구</option>
-              <option value="중랑구">중랑구</option>
-              <option value="관악구">관악구</option>
-              <option value="은평구">은평구</option>
-              <option value="도봉구">도봉구</option>
-              <option value="성북구">성북구</option>
             </select>
           </div>
 
@@ -213,19 +213,19 @@
                   <div class="d-flex align-items-center gap-3 ps-1">
                     <div>
                       <span class="d-block text-heading fw-bold">
-                        <!-- {{ item.rank }} -->
+                        {{ item.ranking }}
                       </span>
                     </div>
                   </div>
                 </td>
                 <td class="text-center">
-                  <!-- {{ item.signguCdNm }} -->
+                  {{ item.signGuCdNm }}
                 </td>
                 <td class="text-center">
-                  <!-- {{ item.adstrdCdNm }} -->
+                  {{ item.adstrdCdNm }}
                 </td>
                 <td class="text-center">
-                  <!-- {{ item.trdarSeCdNm }} -->
+                  {{ item.trdarCdNm }}
                 </td>
                 <td class="text-left d-none d-xl-table-cell">
                   <img
@@ -233,38 +233,21 @@
                     alt=""
                     style="width: 30px"
                   />
-                  <!-- {{ item.svcIndutyCdNm }} -->
+                  {{ item.svcIndutyCdNm }}
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  <!-- ₩ {{ item.thsmonSelngAmt.toLocaleString() }} -->
+                  {{ item.clsbizRt }} %
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  <!-- <span
-                    class="text-gray-800 fw-bold fs-6 me-3 col-4 text-center"
-                    :class="{
-                      'text-success': item.rankChange.startsWith('+'),
-                      'text-danger':
-                        item.rankChange.startsWith('-') &&
-                        !/^-\s*$/.test(item.rankChange),
-                    }"
+                  <span class="badge badge-light-danger fs-base text-center">
+                    <i class="fa-solid fa-angle-down"></i>
+                    {{ item.clsbizStorCo }}
+                    점포</span
                   >
-                    {{ item.rankChange }} 
-                  </span> -->
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  <span v-if="item.opbizStorCo > 0">
-                    <span class="badge badge-light-success fs-base text-center">
-                      <i class="fa-solid fa-angle-up"></i>
-                      <!-- {{ item.opbizStorCo }}  -->
-                      점포</span
-                    >
-                  </span>
-                  <span v-else>
-                    <span class="badge badge-light-middle fs-base text-center">
-                      <!-- {{ item.opbizStorCo }}  -->
-                      점포</span
-                    >
-                  </span>
+                  {{ item.opbizStorCo }}
+                  점포
                 </td>
               </tr>
             </tbody>
@@ -427,7 +410,7 @@ const bringDataList = async () => {
     });
     if (response.status === 200) {
       dataList.value = response.data;
-      // console.log(dataList.value);
+      console.log(dataList.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -448,7 +431,6 @@ const bringDongList = async () => {
       });
       if (response.status === 200) {
         filteredDongs.value = response.data;
-        console.log(filteredDongs.value);
       } else {
         console.log('데이터 조회 실패');
       }

@@ -11,7 +11,20 @@
         alt="유동인구">
     </div>
     <div class="align-items-center flex-fill">
-        <div><a href="/infoPlaza/floatpopular" class="stretched-link text-heading text-sm fw-bold">유동인구</a></div>
+        <div>
+            <a 
+            v-if="currentRoute !== '/infoPlaza/floatpopular' && currentRoute !== '/'" 
+            href="/infoPlaza/floatpopular" 
+            class="stretched-link text-heading text-sm fw-bold">
+            유동인구
+            </a>
+            <span 
+            v-else 
+            class="text-heading text-sm fw-bold text-muted" 
+            style="pointer-events: none;"> <!-- 비활성화된 상태로 보이도록 스타일 추가 -->
+            유동인구
+            </span>
+        </div>
     </div>
     </div>
 
@@ -27,7 +40,20 @@
         
     </div>
     <div class="align-items-center flex-fill">
-        <div><a href="/infoPlaza/rentalinfo" class="stretched-link text-heading text-sm fw-bold">임대정보</a></div>
+        <div>
+            <a 
+            v-if="currentRoute !== '/infoPlaza/rentalinfo'" 
+            href="/infoPlaza/rentalinfo" 
+            class="stretched-link text-heading text-sm fw-bold">
+            임대정보
+            </a>
+            <span 
+            v-else 
+            class="text-heading text-sm fw-bold text-muted" 
+            style="pointer-events: none;"> <!-- 비활성화된 상태로 보이도록 스타일 추가 -->
+            임대정보
+            </span>
+        </div>
     </div>
     </div>
 </div>

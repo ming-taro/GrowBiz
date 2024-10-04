@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <input v-model="address" placeholder="주소를 입력하세요" />
-    <button @click="searchAddress">검색</button>
+  <!-- <div>
     <div id="map" style="width: 400px; height: 400px"></div>
-  </div>
+  </div> -->
 </template>
 
-<script>
+<!-- <script>
 import axios from 'axios';
+
+const id = '1234';
 
 export default {
   data() {
     return {
       map: null,
-      address: '',
+      address: '', // 초기 주소를 설정할 수 있습니다.
       geocoder: null, // Geocoder 추가
     };
   },
@@ -28,6 +28,7 @@ export default {
         kakao.maps.load(() => {
           this.initMap();
           this.geocoder = new kakao.maps.services.Geocoder(); // Geocoder 초기화
+          this.fetchAddress(); // 초기 주소를 가져오는 함수 호출
         });
       };
       document.head.appendChild(script);
@@ -39,6 +40,19 @@ export default {
         level: 5,
       };
       this.map = new kakao.maps.Map(container, options);
+    },
+    async fetchAddress() {
+      try {
+        const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+        this.address = response.data; // 응답 데이터에서 주소를 가져와서 설정
+
+        console.log(response.data);
+
+        this.searchAddress(); // 주소를 사용하여 검색 실행
+      } catch (error) {
+        console.error('Error fetching address:', error);
+        alert('주소를 가져오는 중 오류가 발생했습니다.');
+      }
     },
     async searchAddress() {
       try {
@@ -123,4 +137,4 @@ export default {
     },
   },
 };
-</script>
+</script> -->
