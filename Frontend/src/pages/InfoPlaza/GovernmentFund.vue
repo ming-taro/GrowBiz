@@ -108,7 +108,7 @@
           <div class="row">
             <!-- 대출 상품 카드 여러개 -->
             <div
-              class="col-xl-4"
+              class="col-xl-4 mb-5"
               v-for="(item, index) in dataList"
               :key="index"
             >
@@ -127,22 +127,24 @@
                       data-bs-ride="carousel"
                       data-bs-interval="8000"
                     >
-                      <div style="width: 25%; margin-bottom: 1rem">
-                        <img
-                          :src="'/images/banklogo/' + 'government' + '.png'"
-                          alt=""
-                          style="width: 100px"
-                        />
+                      <div class="row mb-3" style="height: 70px">
+                        <div class="col-3 d-flex align-items-center">
+                          <img
+                            :src="'/images/banklogo/' + 'government' + '.png'"
+                            alt=""
+                            style="width: 100px"
+                          />
+                        </div>
+                        <div class="col-9 d-flex align-items-center">
+                          <!-- Change align-items to center -->
+                          <span
+                            class="fs-3 text-gray-500 fw-bolder pe-2 text-left"
+                          >
+                            {{ item.loanProductName }}
+                          </span>
+                        </div>
                       </div>
-                      <div class="d-flex flex-stack flex-wrap">
-                        <span
-                          class="fs-3 text-gray-500 fw-bolder pe-2 pt-4 text-center"
-                          style="min-height: 3rem; display: block"
-                        >
-                          {{ item.loanProductName }}
-                        </span>
-                      </div>
-                      <div class="carousel-inner pt-6">
+                      <div class="carousel-inner pt-0">
                         <div class="carousel-item active">
                           <div class="carousel-wrapper">
                             <div class="d-flex flex-column flex-grow-1">
@@ -153,7 +155,12 @@
                               >
                                 <p class="fs-5">신청기간</p>
                                 <p class="fs-5 fw-bolder">
-                                  {{ item.applicationPeriod }}
+                                  {{
+                                    item.applicationPeriod
+                                      ? item.applicationPeriod.replace(/>/g, '')
+                                      : ''
+                                  }}
+                                  <!-- Ensured that '>' is not present -->
                                 </p>
                               </div>
 
@@ -186,7 +193,7 @@
                   </div>
 
                   <!-- Info (상세 보기 버튼) -->
-                  <div class="d-flex justify-content-end pt-4 mt-auto">
+                  <div class="d-flex justify-content-end pt-0 mt-auto">
                     <RouterLink
                       to="/infoPlaza/personalLoan/loanDetail"
                       class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
@@ -277,5 +284,10 @@ bringLoanList();
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.custom-card {
+  padding: 1rem; /* 기본 패딩을 줄입니다 */
+  font-size: 0.875rem; /* 폰트 크기를 줄입니다 */
 }
 </style>
