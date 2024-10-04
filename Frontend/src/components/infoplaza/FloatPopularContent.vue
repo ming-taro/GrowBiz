@@ -100,7 +100,7 @@ const loadKakaoMap = (container) => {
         window.kakao.maps.load(() => {
             const options = {
                 center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
-                level: 4, // Zoom level
+                level: 5, // Zoom level
                 maxLevel: 6, // Maximum zoom level
                 
             };
@@ -179,12 +179,12 @@ const fetchLocation = async () => {
     try {
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = currentLocation.value; // 현재 선택된 지역
-        
+
         removeMarkers(); // 기존 마커 제거
         let dongNames = []; // 동 이름을 저장할 배열
 
         // 중심 좌표 가져오기
-        geocoder.addressSearch(address, function(result, status) {
+        geocoder.addressSearch(address, async function(result, status) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const centerCoords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
                 
@@ -202,15 +202,22 @@ const fetchLocation = async () => {
                 ];
 
                 // 각 좌표에 대한 동 이름을 가져오기
-                positions.forEach(pos => {
-                    const coords = new window.kakao.maps.LatLng(pos.lat, pos.lng);
-                    geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
-                        if (status === window.kakao.maps.services.Status.OK) {
-                            const dongName = result[0].address.region_3depth_name; // 동 이름 추출
-                            dongNames.push(dongName); // 동 이름 배열에 저장
-                        }
+                dongNames = await Promise.all(positions.map(async (pos) => {
+                    return new Promise((resolve, reject) => {
+                        const coords = new window.kakao.maps.LatLng(pos.lat, pos.lng);
+                        geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
+                            if (status === window.kakao.maps.services.Status.OK) {
+                                const dongName = result[0].address.region_3depth_name; // 동 이름 추출
+                                resolve(dongName); // 동 이름 반환
+                            } else {
+                                reject('Error fetching dong name'); // 실패 시 reject 호출
+                            }
+                        });
                     });
-                });
+                }));
+
+                // 중복된 동 이름 제거
+                dongNames = [...new Set(dongNames)];
 
                 // 동 이름 배열을 서버로 전송하는 함수 호출
                 sendDongNamesToServer(dongNames);
@@ -226,17 +233,56 @@ const fetchLocation = async () => {
 const sendDongNamesToServer = async (dongNames) => {
     try {
         const response = await axios.post('http://localhost:8080/api/property/float-popular', {
-            dongNames: dongNames, // 동 이름 배열 전송
-            yearQuarter: '20242' // 추가로 필요한 필터 정보
+            dongNames: dongNames, 
+            yearQuarter: '20242' 
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-
-        console.log('서버 응답:', response.data); // 서버로부터 받은 결과 출력
+        const populationData = response.data; // 서버로부터 받은 인구 데이터
+        displayMarkers(populationData); // 마커 표시 함수 호출
     } catch (error) {
         console.error('Error sending dong names to server:', error);
     }
 };
 
+// 인구 데이터에 따른 마커 생성 및 표시 함수
+const displayMarkers = (populationData) => {
+    populationData.forEach(data => {
+        const { totFlpopCo, mlFlpopCo, fmlFlpopCo, adstrdCdNm } = data;
 
+        // 동의 좌표를 가져오기 위해 지오코더 사용
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        geocoder.addressSearch(adstrdCdNm, function(result, status) {
+            if (status === window.kakao.maps.services.Status.OK) {
+                const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+                
+                // 인구 수에 따른 마커 색상 설정
+                let markerColor;
+                if (totFlpopCo > 7000000) {
+                    markerColor = 'red'; // 인구수 많을 때
+                } else if (totFlpopCo > 6000000) {
+                    markerColor = 'orange'; // 중간
+                } else {
+                    markerColor = 'green'; // 적을 때
+                }
+
+                const marker = new window.kakao.maps.Marker({
+                    map: kakaoMap,
+                    position: coords,
+                    title: adstrdCdNm,
+                    image: new window.kakao.maps.MarkerImage(
+                        `http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_${markerColor}.png`, 
+                        new window.kakao.maps.Size(24, 35))
+                });
+
+                // 마커 배열에 저장 (나중에 제거하기 위함)
+                markers.push(marker);
+            }
+        });
+    });
+};
 
 
 // 구 업데이트 후 동 업데이트
