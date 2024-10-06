@@ -44,19 +44,25 @@
       />
       <div class="answer-box">
         <!-- 각 버튼을 감싸는 div에 v-for 추가 -->
-        <div v-if="showChoices" class="choices_2">
-          <div v-for="(choice, index) in choices" :key="index">
-            <button
-              @mouseover="isHovered = choice.text"
-              @mouseleave="isHovered = ''"
-              @click="selectAnswer(choice.value)"
-            >
-              <span class="arrow">{{
-                isHovered === choice.text ? '▶' : ''
-              }}</span>
-              <span class="text">{{ choice.text }}</span>
-            </button>
+        <div v-if="questionNumber === 0" class="district_choices_2">
+          <div v-if="showChoices" class="choices_2">
+            <div v-for="(choice, index) in district" :key="index">
+              <button
+                @mouseover="isHovered = choice.text"
+                @mouseleave="isHovered = ''"
+                @click="selectAnswer(choice.value)"
+              >
+                <span class="arrow">{{
+                  isHovered === choice.text ? '▶' : ''
+                }}</span>
+                <span class="text">{{ choice.text }}</span>
+              </button>
+            </div>
           </div>
+        </div>
+
+        <div v-else>
+          {{ console.log(">>", questions.value) }}
         </div>
       </div>
     </div>
@@ -81,23 +87,28 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { getQuestions } from '@/services/QuestionAPI';
 
-const fullTexts = [
-  {
-    line1: '이 도시에서 가장 성공적인',
-    line2: '자영업자가 될 준비가 되셨나요?',
-  },
-  {
-    line1: '다음 단계로 나아가고 싶으신가요?',
-    line2: '더 많은 정보를 원하십니까?',
-  },
-];
+// const fullTexts = [
+//   {
+//     line1: '이 도시에서 가장 성공적인',
+//     line2: '자영업자가 될 준비가 되셨나요?',
+//   },
+//   {
+//     line1: '다음 단계로 나아가고 싶으신가요?',
+//     line2: '더 많은 정보를 원하십니까?',
+//   },
+// ];
 
-const choices = [
-  { text: '네', value: 'yes' },
-  { text: '아니요', value: 'no' },
-  { text: '더 알아보기', value: 'more_info' },
-];
+const questions = ref([]);
+const questionNumber = ref(0);
+const district = ref([]);
+
+// const choices = [
+//   { text: '네', value: 'yes' },
+//   { text: '아니요', value: 'no' },
+//   { text: '더 알아보기', value: 'more_info' },
+// ];
 
 const typedTextLine1 = ref('');
 const typedTextLine2 = ref('');
@@ -151,9 +162,25 @@ const selectAnswer = (answer) => {
   // 선택한 응답에 따른 추가 로직 구현
 };
 
-onMounted(() => {
-  typeText(fullTexts[0].line1, typedTextLine1, fullTexts[0].line2);
-  updateProgress(5); // 진행도를 5/20으로 설정
+const fetchQuestions = async () => {
+  try {
+    questions.value = await getQuestions();
+    if (questions.value.length > 0 ) {
+      typeText(questions.value[0].fullTexts, typedTextLine1, "");
+      updateProgress(5); // 진행도를 5/20으로 설정  
+
+      for (let i = 0; i < questions.value[0].choices.length; i++) {
+        district.value.push({ text: questions.value[0].choices[i].district, value: i });
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch questions:', error);
+  }
+};
+
+onMounted(async () => {
+  // typeText(fullTexts[0].line1, typedTextLine1, fullTexts[0].line2);
+  await fetchQuestions(); // 질문 가져오기
 });
 </script>
 
@@ -273,6 +300,39 @@ onMounted(() => {
   overflow: hidden;
   opacity: 0;
   transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.district_choices_2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 위에서 아래로 정렬 */
+  height: 200px; /* 원하는 높이 설정 */
+  overflow-y: auto; /* 세로 방향으로 스크롤 */
+  margin: 20px 0px; /* 상하 간격 설정 */
+}
+
+/* 스크롤바 스타일링 */
+.district_choices_2::-webkit-scrollbar {
+  width: 10px; /* 스크롤바 너비 */
+}
+
+.district_choices_2::-webkit-scrollbar-track {
+  background: #f0f0f0; /* 스크롤바 배경 색상 */
+  border-radius: 10px; /* 모서리 둥글게 */
+}
+
+.district_choices_2::-webkit-scrollbar-thumb {
+  background: #c0c0c0; /* 스크롤바 색상 */
+  border-radius: 10px; /* 모서리 둥글게 */
+}
+
+.district_choices_2::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0; /* 호버 시 색상 */
+}
+
+/* 스크롤박스가 호버할 때 스크롤바 보이기 */
+.district_choices_2:hover::-webkit-scrollbar {
+  opacity: 1; /* 스크롤바가 보이도록 설정 */
 }
 
 .choices_2 {
