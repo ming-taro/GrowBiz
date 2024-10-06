@@ -14,7 +14,7 @@
         <div class="col-md-8">
           <div class="card-body m-3">
             <h6 class="card-title mb-2" style="color: #6184c6">
-              {{ video.category }}
+              <span v-html="formattedCategories"></span>
             </h6>
             <h3 class="card-title mb-0">
               {{ video.title }}
@@ -64,10 +64,31 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router'; // Import the router
-import { ref, onMounted } from 'vue';
-import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
-import axios from 'axios';
+import { useRoute, useRouter } from "vue-router"; // Import the router
+import { ref, onMounted, computed } from "vue";
+import InfoPlazaHeader from "@/components/infoplaza/InfoPlazaHeader.vue";
+import axios from "axios";
+
+const formattedCategories = computed(() => {
+  if (!video.value.category) return "";
+  return video.value.category
+    .split(/\s+/)
+    .map(
+      (word) =>
+        `<span class="category-link" onclick="window.goToCategory('${word.replace(
+          /[,.]$/,
+          ""
+        )}')">${word}</span>`
+    )
+    .join(" ");
+});
+
+window.goToCategory = (category) => {
+  router.push({
+    name: "CategoryList",
+    params: { category: category },
+  });
+};
 
 const props = defineProps({
   vno: {
@@ -87,10 +108,10 @@ const fetchVideo = async (vno) => {
     if (response.status === 200) {
       video.value = response.data; // 받아온 데이터를 video에 저장
     } else {
-      alert('비디오 정보를 불러오지 못했습니다.');
+      alert("비디오 정보를 불러오지 못했습니다.");
     }
   } catch (error) {
-    alert('에러 발생: ' + error);
+    alert("에러 발생: " + error);
   }
 };
 onMounted(() => {

@@ -19,6 +19,7 @@ const LoanDetail = () => import('@/pages/InfoPlaza/LoanDetail.vue');
 const EnterpriseLoan = () => import('@/pages/Infoplaza/EnterpriseLoan.vue');
 const Education = () => import('@/pages/InfoPlaza/Education.vue');
 const Video = () => import('@/pages/InfoPlaza/Video.vue');
+const CategoryList = () => import('@/pages/InfoPlaza/CategoryList.vue');
 const news = () => import('@/pages/InfoPlaza/news.vue');
 const Report = () => import('@/pages/simul/Report.vue');
 const MyStore = () => import('@/pages/asset/MyStore.vue');
@@ -95,6 +96,10 @@ const router = createRouter({
       name: 'video',
       component: Video, // 비디오 상세보기 컴포넌트 연결
       props: true, // route param을 컴포넌트에 props로 전달
+    },{
+      path: '/infoPlaza/education/categoryList/:category',
+      name: 'CategoryList',
+      component: CategoryList,
     },
     { path: '/infoPlaza/news', name: 'news', component: news },
     // { path: '/infoPlaza/education/video', name: 'video', component: Video },

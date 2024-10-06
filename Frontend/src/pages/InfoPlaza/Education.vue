@@ -191,14 +191,6 @@ const totalList = ref([]); // 전체 데이터를 저장할 리스트
 const currentPage = ref(1); // 현재 페이지 번호
 const itemsPerPage = ref(12); // 한 페이지에 보여줄 데이터 개수
 
-// const pageRequest = {
-//   page: 1,
-//   amount: 12,
-// };// 필요한가?
-// const totalPages = computed(() => {
-//   return Math.ceil(totalList.value.length / itemsPerPage.value);
-// }); // 이것도 뭐지
-
 // 페이지에 맞는 데이터를 계산하는 computed
 const paginatedList = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
