@@ -46,17 +46,34 @@
         <!-- 각 버튼을 감싸는 div에 v-for 추가 -->
         <div v-if="questionNumber === 0" class="district_choices_2">
           <div v-if="showChoices" class="choices_2">
-            <div v-for="(choice, index) in district" :key="index">
-              <button
-                @mouseover="isHovered = choice.text"
-                @mouseleave="isHovered = ''"
-                @click="selectAnswer(choice.value)"
-              >
-                <span class="arrow">{{
-                  isHovered === choice.text ? '▶' : ''
-                }}</span>
-                <span class="text">{{ choice.text }}</span>
-              </button>
+            <div v-if="!isDistrictSelected">
+              <div v-for="(choice, index) in district" :key="index">
+                <button
+                  @mouseover="isHovered = choice.text"
+                  @mouseleave="isHovered = ''"
+                  @click="selectDistrict(choice.value)"
+                >
+                  <span class="arrow">{{
+                    isHovered === choice.text ? '▶' : ''
+                  }}</span>
+                  <span class="text">{{ choice.text }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div v-else>
+              <div v-for="(choice, index) in neighborhoods" :key="index">
+                <button
+                  @mouseover="isHovered = choice.text"
+                  @mouseleave="isHovered = ''"
+                  @click="selectAnswer(choice.value)"
+                >
+                  <span class="arrow">{{
+                    isHovered === choice.text ? '▶' : ''
+                  }}</span>
+                  <span class="text">{{ choice.text }}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -86,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { getQuestions } from '@/services/QuestionAPI';
 
 // const fullTexts = [
@@ -103,12 +120,10 @@ import { getQuestions } from '@/services/QuestionAPI';
 const questions = ref([]);
 const questionNumber = ref(0);
 const district = ref([]);
+const neighborhoods = ref([]);
 
-// const choices = [
-//   { text: '네', value: 'yes' },
-//   { text: '아니요', value: 'no' },
-//   { text: '더 알아보기', value: 'more_info' },
-// ];
+const isDistrictSelected = ref(false);
+const isNeighborhoodSelected = ref(false);
 
 const typedTextLine1 = ref('');
 const typedTextLine2 = ref('');
@@ -178,8 +193,17 @@ const fetchQuestions = async () => {
   }
 };
 
+const selectDistrict = (selection) => {
+  isDistrictSelected.value = !isDistrictSelected.value;
+  console.log(selection)
+  let data = questions.value[0].choices[selection].neighborhoods;
+  console.log(data);
+  for (let i = 0; i < data.length; i++) {
+    neighborhoods.value.push({ text: data[i], value: i });
+  }
+}
+
 onMounted(async () => {
-  // typeText(fullTexts[0].line1, typedTextLine1, fullTexts[0].line2);
   await fetchQuestions(); // 질문 가져오기
 });
 </script>
@@ -384,7 +408,7 @@ onMounted(async () => {
   bottom: 185px; /* Adjust position as needed */
   left: 74%; /* Center horizontally */
   transform: translateX(-50%); /* Centering adjustment */
-  width: 200px;
+  width: 230px;
   border-radius: 80px;
   padding: 15px 15px 15px 25px;
 }
