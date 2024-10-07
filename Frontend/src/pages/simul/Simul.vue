@@ -5,76 +5,36 @@
       <div class="progress-bar" :style="{ width: progressBarWidth }"></div>
     </div>
 
-    <img
-      src="@/assets/img/simul/sumul_cut.jpg"
-      alt="Background Image"
-      class="background-image"
-    />
-    <img
-      src="@/assets/img/simul/leaf1.png"
-      alt="Leaf"
-      class="leaf-animation1"
-    />
-    <img
-      src="@/assets/img/simul/leaf2.png"
-      alt="Leaf"
-      class="leaf-animation2"
-    />
-    <img
-      src="@/assets/img/simul/leaf3.png"
-      alt="Leaf"
-      class="leaf-animation3"
-    />
-    <img
-      src="@/assets/img/simul/leaf4.png"
-      alt="Leaf"
-      class="leaf-animation4"
-    />
-    <img
-      src="@/assets/img/simul/leaf1.png"
-      alt="Leaf"
-      class="leaf-animation5"
-    />
+    <img src="@/assets/img/simul/sumul_cut.jpg" alt="Background Image" class="background-image" />
+    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation1" />
+    <img src="@/assets/img/simul/leaf2.png" alt="Leaf" class="leaf-animation2" />
+    <img src="@/assets/img/simul/leaf3.png" alt="Leaf" class="leaf-animation3" />
+    <img src="@/assets/img/simul/leaf4.png" alt="Leaf" class="leaf-animation4" />
+    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation5" />
 
     <div v-if="showSpeechBubble">
-      <img
-        src="@/assets/img/simul/speech_bubble_no.png"
-        alt="Speech Bubble"
-        class="speech-bubble"
-      />
+      <img src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble" class="speech-bubble" />
       <div class="answer-box">
         <!-- 각 버튼을 감싸는 div에 v-for 추가 -->
         <div v-if="showChoices" class="choices_2">
           <div v-for="(choice, index) in choices" :key="index">
-            <button
-              @mouseover="isHovered = choice.text"
-              @mouseleave="isHovered = ''"
-              @click="selectAnswer(choice.value)"
-            >
+            <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
+              @click="selectAnswer(choice.value)">
               <span class="arrow">{{
                 isHovered === choice.text ? '▶' : ''
-              }}</span>
+                }}</span>
               <span class="text">{{ choice.text }}</span>
             </button>
           </div>
         </div>
       </div>
     </div>
-    <img
-      v-else
-      src="@/assets/img/simul/speech_bubble_no.png"
-      alt="Speech Bubble No"
-      class="speech-bubble"
-    />
+    <img v-else src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble No" class="speech-bubble" />
 
     <!-- 텍스트 고정 -->
     <div class="main_text_animation">
       <p class="text-line" v-html="typedTextLine1"></p>
-      <p
-        class="text-line"
-        v-html="typedTextLine2"
-        v-show="typedTextLine2.length > 0"
-      ></p>
+      <p class="text-line" v-html="typedTextLine2" v-show="typedTextLine2.length > 0"></p>
     </div>
   </div>
 </template>
@@ -161,26 +121,36 @@ onMounted(() => {
 /* 타자 애니메이션 스타일 */
 .main_text_animation {
   position: absolute;
-  bottom: 85px; /* Adjust position as needed */
-  left: 31%; /* 왼쪽에서 시작하도록 변경 */
-  color: #000; /* 텍스트 색상 */
-  text-align: left; /* 왼쪽 정렬 */
+  bottom: 85px;
+  /* Adjust position as needed */
+  left: 31%;
+  /* 왼쪽에서 시작하도록 변경 */
+  color: #000;
+  /* 텍스트 색상 */
+  text-align: left;
+  /* 왼쪽 정렬 */
 }
 
 .text-line {
-  font-size: 35px; /* 텍스트 크기 */
+  font-size: 35px;
+  /* 텍스트 크기 */
   font-weight: bold;
-  margin: 0; /* 기본 마진 제거 */
-  position: absolute; /* 절대 위치 지정 */
-  white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+  margin: 0;
+  /* 기본 마진 제거 */
+  position: absolute;
+  /* 절대 위치 지정 */
+  white-space: nowrap;
+  /* 텍스트가 줄바꿈되지 않도록 설정 */
 }
 
 .text-line:nth-child(1) {
-  bottom: 60px; /* 첫 번째 줄의 위치 */
+  bottom: 60px;
+  /* 첫 번째 줄의 위치 */
 }
 
 .text-line:nth-child(2) {
-  bottom: 0px; /* 두 번째 줄의 위치 (필요에 따라 조정) */
+  bottom: 0px;
+  /* 두 번째 줄의 위치 (필요에 따라 조정) */
 }
 
 .animation-container {
@@ -198,12 +168,17 @@ onMounted(() => {
 
 .speech-bubble {
   position: absolute;
-  bottom: 5px; /* Adjust the distance from the bottom */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-48%); /* Centering adjustment */
-  width: 77%; /* Set the width to 70% */
+  bottom: 5px;
+  /* Adjust the distance from the bottom */
+  left: 50%;
+  /* Center horizontally */
+  transform: translateX(-48%);
+  /* Centering adjustment */
+  width: 77%;
+  /* Set the width to 70% */
   opacity: 1;
-  transition: opacity 0.5s ease; /* 자연스러운 등장 효과 */
+  transition: opacity 0.5s ease;
+  /* 자연스러운 등장 효과 */
 }
 
 .leaf-animation1,
@@ -213,7 +188,8 @@ onMounted(() => {
 .leaf-animation5 {
   position: absolute;
   top: -100px;
-  width: 50px; /* Adjust the size of the leaf */
+  width: 50px;
+  /* Adjust the size of the leaf */
   animation: leaf-fall linear infinite;
 }
 
@@ -253,6 +229,7 @@ onMounted(() => {
     transform: translate(-50%, 0) rotate(0deg);
     opacity: 1;
   }
+
   100% {
     transform: translate(-50%, 800px) rotate(360deg);
     opacity: 1;
@@ -284,46 +261,64 @@ onMounted(() => {
 }
 
 .choices_2 div {
-  margin-bottom: -5px; /* 버튼 간 간격을 줄이기 */
+  margin-bottom: -5px;
+  /* 버튼 간 간격을 줄이기 */
 }
 
 .choices_2 button {
-  padding: 10px 15px; /* 수직 패딩과 수평 패딩 설정 */
+  padding: 10px 15px;
+  /* 수직 패딩과 수평 패딩 설정 */
   cursor: pointer;
-  display: flex; /* 플렉스 박스를 사용하여 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  font-size: 20px; /* 폰트 크기 */
-  background-color: transparent; /* 기본 배경 색상 */
-  border-radius: 25px; /* 둥근 모서리 */
-  color: black; /* 텍스트 색상 */
-  border: none; /* 테두리 없음 */
-  text-align: left; /* 텍스트 왼쪽 정렬 */
-  transition: background-color 0.3s ease; /* 배경 색상 전환 효과 */
+  display: flex;
+  /* 플렉스 박스를 사용하여 정렬 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+  font-size: 20px;
+  /* 폰트 크기 */
+  background-color: transparent;
+  /* 기본 배경 색상 */
+  border-radius: 25px;
+  /* 둥근 모서리 */
+  color: black;
+  /* 텍스트 색상 */
+  border: none;
+  /* 테두리 없음 */
+  text-align: left;
+  /* 텍스트 왼쪽 정렬 */
+  transition: background-color 0.3s ease;
+  /* 배경 색상 전환 효과 */
 }
 
 .choices_2 button span.arrow {
-  width: 20px; /* 화살표 크기 고정 */
+  width: 20px;
+  /* 화살표 크기 고정 */
   font-size: 14px;
 }
 
 .choices_2 button:hover {
-  background-color: #fcd752; /* 호버 시 배경 색상 */
+  background-color: #fcd752;
+  /* 호버 시 배경 색상 */
   border-radius: 25px;
   font-weight: bold;
-  padding: 10px 20px; /* 여백을 다시 설정하여 안정성 확보 */
+  padding: 10px 20px;
+  /* 여백을 다시 설정하여 안정성 확보 */
 }
 
 /* 선택지 텍스트가 밀리지 않도록 고정 */
 .choices_2 button span.text {
-  padding-left: 5px; /* 화살표를 위한 여백 추가 */
+  padding-left: 5px;
+  /* 화살표를 위한 여백 추가 */
 }
 
 .answer-box {
   background-color: #fee9b4;
   position: absolute;
-  bottom: 185px; /* Adjust position as needed */
-  left: 74%; /* Center horizontally */
-  transform: translateX(-50%); /* Centering adjustment */
+  bottom: 185px;
+  /* Adjust position as needed */
+  left: 74%;
+  /* Center horizontally */
+  transform: translateX(-50%);
+  /* Centering adjustment */
   width: 200px;
   border-radius: 80px;
   padding: 15px 15px 15px 25px;
@@ -332,20 +327,29 @@ onMounted(() => {
 .progress-container {
   position: absolute;
   top: 9%;
-  bottom: 150px; /* Adjust as needed */
+  bottom: 150px;
+  /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
-  width: 58%; /* 바의 전체 너비 */
-  height: 20px; /* 바의 높이 */
-  background-color: #e0e0e0; /* 배경 색상 */
-  border-radius: 10px; /* 둥근 모서리 */
-  overflow: hidden; /* 내부 바가 넘치지 않도록 설정 */
+  width: 58%;
+  /* 바의 전체 너비 */
+  height: 20px;
+  /* 바의 높이 */
+  background-color: #e0e0e0;
+  /* 배경 색상 */
+  border-radius: 10px;
+  /* 둥근 모서리 */
+  overflow: hidden;
+  /* 내부 바가 넘치지 않도록 설정 */
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #76c7c0; /* 진행도 색상 */
-  border-radius: 10px; /* 둥근 모서리 */
-  transition: width 0.3s ease; /* 자연스러운 전환 효과 */
+  background-color: #76c7c0;
+  /* 진행도 색상 */
+  border-radius: 10px;
+  /* 둥근 모서리 */
+  transition: width 0.3s ease;
+  /* 자연스러운 전환 효과 */
 }
 </style>
