@@ -79,9 +79,8 @@ import axios from 'axios';
 
 const route = useRoute();
 
-const productName = ref('');
-productName.value = route.params.productName;
-console.log(productName.value);
+const id = ref('');
+id.value = route.params.id;
 const BASEURI = '/api/infoPlaza/loan';
 
 const data = ref();
@@ -92,7 +91,7 @@ const bringDataList = async () => {
     // Best 인기 업종 - 전체
     const response = await axios.get(BASEURI + '/getDetailItem', {
       params: {
-        productName: productName.value,
+        id: id.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {

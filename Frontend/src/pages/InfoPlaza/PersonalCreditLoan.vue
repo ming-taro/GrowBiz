@@ -322,7 +322,7 @@
                   <!-- Info (상세 보기 버튼) -->
                   <div class="d-flex justify-content-end pt-0 mt-auto">
                     <RouterLink
-                      :to="`/infoPlaza/personalCreditLoan/personalCreditLoanDetail/${item.loanProductName}`"
+                      :to="`/infoPlaza/personalCreditLoan/personalCreditLoanDetail/${item.id}`"
                       class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                       >상세 보기</RouterLink
                     >
