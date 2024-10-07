@@ -31,7 +31,31 @@
                         class="fs-3 text-gray-500 pe-2"
                         style="font-weight: 500"
                       >
-                        {{ item.loanProductName }}
+                        <div class="row mb-3" style="height: 70px">
+                          <div class="col-4 d-flex align-items-center">
+                            <img
+                              :src="'/images/banklogo/' + item.korCoNm + '.png'"
+                              alt=""
+                              style="width: 100px"
+                            />
+                          </div>
+                          <div class="col-8 d-flex align-items-center">
+                            <!-- Change align-items to center -->
+                            <span
+                              class="fs-3 text-gray-500 fw-bolder pe-2 text-left"
+                            >
+                              {{ item.korCoNm }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-stack flex-wrap">
+                          <span
+                            class="fs-3 text-gray-500 pe-2"
+                            style="font-weight: 500"
+                          >
+                            {{ item.finPrdtNm }}
+                          </span>
+                        </div>
                       </span>
                     </div>
                     <div class="carousel-inner pt-6">
@@ -50,7 +74,7 @@
                   >
                     <p class="fs-6 text-gray-600 mb-1">금리</p>
                     <p class="h2 fw-bold mb-0 ms-2">
-                      {{ item.totalInterestRate }}
+                      {{ item.crdtGradAvg }}
                     </p>
                   </div>
                 </div>
@@ -63,23 +87,120 @@
       <div class="row mb-4 d-flex justify-content-end">
         <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
-        <div class="col-5 d-flex">
-          <!-- col-auto 사용 -->
-          <!-- 대출 구분 -->
-          <div class="col-4">
+        <div class="col-7 d-flex">
+          <div class="col-3">
             <select
               class="form-select round-corner"
               aria-label="Default select example"
-              @change="onCategoryChange"
+              @change="onTypeChange"
             >
-              <option selected disabled hidden>구분</option>
+              <option selected disabled hidden>유형</option>
               <option value="전체">전체</option>
-              <option value="직접대출">직접대출</option>
-              <option value="대리대출">대리대출</option>
+              <option value="일반신용대출">일반신용대출</option>
+              <option value="마이너스한도대출">마이너스한도대출</option>
+              <option value="장기카드대출(카드론)">장기카드대출(카드론)</option>
+            </select>
+          </div>
+          <!-- 은행명 구분 -->
+          <div class="col-3">
+            <select
+              class="form-select round-corner"
+              aria-label="Default select example"
+              @change="onBankChange"
+            >
+              <option selected disabled hidden>은행명</option>
+              <option value="전체">전체</option>
+              <option value="우리은행">우리은행</option>
+              <option value="한국스탠다드차타드은행">
+                한국스탠다드차타드은행
+              </option>
+              <option value="한국씨티은행">한국씨티은행</option>
+              <option value="아이엠뱅크">아이엠뱅크</option>
+              <option value="부산은행">부산은행</option>
+              <option value="광주은행">광주은행</option>
+              <option value="제주은행">제주은행</option>
+              <option value="전북은행">전북은행</option>
+              <option value="경남은행">경남은행</option>
+              <option value="중소기업은행">중소기업은행</option>
+              <option value="한국산업은행">한국산업은행</option>
+              <option value="국민은행">국민은행</option>
+              <option value="신한은행">신한은행</option>
+              <option value="농협은행주식회사">농협은행주식회사</option>
+              <option value="하나은행">하나은행</option>
+              <option value="주식회사 케이뱅크">주식회사 케이뱅크</option>
+              <option value="수협은행">수협은행</option>
+              <option value="주식회사 카카오뱅크">주식회사 카카오뱅크</option>
+              <option value="토스뱅크 주식회사">토스뱅크 주식회사</option>
+              <option value="한화생명보험주식회사">한화생명보험주식회사</option>
+              <option value="삼성생명보험주식회사">삼성생명보험주식회사</option>
+              <option value="흥국생명보험주식회사">흥국생명보험주식회사</option>
+              <option value="교보생명보험주식회사">교보생명보험주식회사</option>
+              <option value="신한라이프생명보험주식회사">
+                신한라이프생명보험주식회사
+              </option>
+              <option value="미래에셋생명보험주식회사">
+                미래에셋생명보험주식회사
+              </option>
+              <option value="농협생명보험주식회사">농협생명보험주식회사</option>
+              <option value="애큐온저축은행">애큐온저축은행</option>
+              <option value="오에스비저축은행">오에스비저축은행</option>
+              <option value="디비저축은행">디비저축은행</option>
+              <option value="키움예스저축은행">키움예스저축은행</option>
+              <option value="에스비아이저축은행">에스비아이저축은행</option>
+              <option value="다올저축은행">다올저축은행</option>
+              <option value="고려저축은행">고려저축은행</option>
+              <option value="모아저축은행">모아저축은행</option>
+              <option value="키움저축은행">키움저축은행</option>
+              <option value="세람상호저축은행">세람상호저축은행</option>
+              <option value="페퍼저축은행">페퍼저축은행</option>
+              <option value="한화저축은행">한화저축은행</option>
+              <option value="우리금융저축은행">우리금융저축은행</option>
+              <option value="한성저축은행">한성저축은행</option>
+              <option value="상상인플러스저축은행">상상인플러스저축은행</option>
+              <option value="스타저축은행">스타저축은행</option>
+              <option value="동양저축은행">동양저축은행</option>
+              <option value="스마트저축은행">스마트저축은행</option>
+              <option value="한국투자저축은행">한국투자저축은행</option>
+              <option value="예가람저축은행">예가람저축은행</option>
+              <option value="제이티저축은행">제이티저축은행</option>
+              <option value="삼호저축은행">삼호저축은행</option>
+              <option value="엔에이치저축은행">엔에이치저축은행</option>
+              <option value="아이비케이저축은행">아이비케이저축은행</option>
+              <option value="비엔케이저축은행">비엔케이저축은행</option>
+              <option value="케이비저축은행">케이비저축은행</option>
+              <option value="하나저축은행">하나저축은행</option>
+              <option value="제이티친애저축은행">제이티친애저축은행</option>
+              <option value="신한저축은행">신한저축은행</option>
+              <option value="웰컴저축은행">웰컴저축은행</option>
+              <option value="오케이저축은행">오케이저축은행</option>
+              <option value="현대카드㈜">현대카드㈜</option>
+              <option value="롯데카드㈜">롯데카드㈜</option>
+              <option value="비씨카드㈜">비씨카드㈜</option>
+              <option value="삼성카드㈜">삼성카드㈜</option>
+              <option value="신한카드㈜">신한카드㈜</option>
+              <option value="케이비캐피탈㈜">케이비캐피탈㈜</option>
+              <option value="우리금융캐피탈㈜">우리금융캐피탈㈜</option>
+              <option value="롯데캐피탈㈜">롯데캐피탈㈜</option>
+              <option value="제이비우리캐피탈㈜">제이비우리캐피탈㈜</option>
+              <option value="하나캐피탈㈜">하나캐피탈㈜</option>
+              <option value="현대캐피탈㈜">현대캐피탈㈜</option>
+              <option value="미래에셋캐피탈㈜">미래에셋캐피탈㈜</option>
+              <option value="알씨아이파이낸셜서비스코리아㈜">
+                알씨아이파이낸셜서비스코리아㈜
+              </option>
+              <option value="현대커머셜㈜">현대커머셜㈜</option>
+              <option value="엔에이치농협캐피탈㈜">엔에이치농협캐피탈㈜</option>
+              <option value="㈜아이엠캐피탈">㈜아이엠캐피탈</option>
+              <option value="비엔케이캐피탈㈜">비엔케이캐피탈㈜</option>
+              <option value="㈜케이비국민카드">㈜케이비국민카드</option>
+              <option value="메리츠캐피탈㈜">메리츠캐피탈㈜</option>
+              <option value="㈜우리카드">㈜우리카드</option>
+              <option value="하나카드㈜">하나카드㈜</option>
+              <option value="한국투자캐피탈㈜">한국투자캐피탈㈜</option>
             </select>
           </div>
           <!-- 검색창 -->
-          <div class="col-8">
+          <div class="col-6">
             <div class="h-100">
               <form class="h-100 form-group">
                 <div class="h-100 input-group input-group-sm">
@@ -130,59 +251,65 @@
                       <div class="row mb-3" style="height: 70px">
                         <div class="col-3 d-flex align-items-center">
                           <img
-                            :src="'/images/banklogo/' + 'government' + '.png'"
+                            :src="'/images/banklogo/' + item.korCoNm + '.png'"
                             alt=""
                             style="width: 100px"
                           />
                         </div>
                         <div class="col-9 d-flex align-items-center">
-                          <!-- Change align-items to center -->
-                          <span
-                            class="fs-3 text-gray-500 fw-bolder pe-2 text-left"
-                          >
-                            {{ item.loanProductName }}
-                          </span>
+                          <div class="text-left">
+                            <span class="fs-4 text-gray-500 fw-bolder d-block">
+                              {{ item.korCoNm }}
+                            </span>
+                            <span class="fs-4 text-gray-400">
+                              {{ item.finPrdtNm }}
+                            </span>
+                          </div>
                         </div>
                       </div>
+
                       <div class="carousel-inner pt-0">
                         <div class="carousel-item active">
                           <div class="carousel-wrapper">
                             <div class="d-flex flex-column flex-grow-1">
                               <!-- 첫 번째 행: 신청기간 마감 -->
                               <div
-                                class="d-flex justify-content-between align-items-center"
+                                class="d-flex align-items-center"
                                 style="min-height: 2.5rem"
                               >
-                                <p class="fs-5">신청기간</p>
-                                <p class="fs-5 fw-bolder">
-                                  {{
-                                    item.applicationPeriod
-                                      ? item.applicationPeriod.replace(/>/g, '')
-                                      : ''
-                                  }}
-                                  <!-- Ensured that '>' is not present -->
+                                <p class="fs-5 justify-content-start">
+                                  신청기간
+                                </p>
+                                <p
+                                  class="fs-5 fw-bolder justify-content-start text-start ms-6"
+                                >
+                                  <!-- text-start 추가 -->
+                                  {{ formatDate(item.dclsStrtDay) }} ~
+                                  {{ formatEndDate(item.dclsEndDay) }}
                                 </p>
                               </div>
 
                               <!-- 두 번째 행: 구분 -->
                               <div
-                                class="d-flex justify-content-between align-items-center"
+                                class="d-flex justify-content-start align-items-left"
                                 style="min-height: 2.5rem"
                               >
-                                <p class="fs-5">구분</p>
-                                <p class="fs-5 fw-bolder">
-                                  {{ item.category }}
+                                <p class="fs-5 me-1">구분</p>
+                                <p class="fs-5 fw-bolder text-start ms-12">
+                                  <!-- text-start 추가 -->
+                                  {{ item.crdtPrdtTypeNm }}
                                 </p>
                               </div>
 
                               <!-- 세 번째 행: 금리 -->
                               <div
-                                class="d-flex justify-content-between align-items-center"
+                                class="d-flex justify-content-start align-items-left"
                                 style="min-height: 2.5rem"
                               >
-                                <p class="fs-5">금리</p>
-                                <p class="fs-5 fw-bolder">
-                                  {{ item.totalInterestRate }}
+                                <p class="fs-5 me-1">금리</p>
+                                <p class="fs-5 fw-bolder text-start ms-12">
+                                  <!-- text-start 추가 -->
+                                  {{ item.crdtGradAvg }}
                                 </p>
                               </div>
                             </div>
@@ -302,7 +429,8 @@ import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
 import { ref, computed } from 'vue';
 import axios from 'axios';
 
-const selectedCategory = ref('전체');
+const selectedBank = ref('전체');
+const selectedType = ref('전체');
 const dataList = ref([]);
 const best4List = ref([]);
 
@@ -317,14 +445,16 @@ const BASEURI = '/api/infoPlaza/loan';
 const bringLoanList = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getFilteredList', {
+    const response = await axios.get(BASEURI + '/getFilteredCreditLoanList', {
       params: {
-        category: selectedCategory.value,
+        companyName: selectedBank.value,
+        type: selectedType.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {
       dataList.value = response.data;
       totalItems.value = dataList.value.length;
+      console.log(dataList.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -337,7 +467,7 @@ const bringLoanList = async () => {
 const bringBest4List = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4');
+    const response = await axios.get(BASEURI + '/getBestCreditLoan4List');
     if (response.status === 200) {
       best4List.value = response.data;
     } else {
@@ -348,9 +478,15 @@ const bringBest4List = async () => {
   }
 };
 
-// 직접대출/대리대출
-const onCategoryChange = (event) => {
-  selectedCategory.value = event.target.value;
+// 은행명 바꾸기
+const onBankChange = (event) => {
+  selectedBank.value = event.target.value;
+  bringLoanList();
+};
+
+// 상품 유형 바꾸기
+const onTypeChange = (event) => {
+  selectedType.value = event.target.value;
   bringLoanList();
 };
 
@@ -375,6 +511,28 @@ const visiblePages = computed(() => {
   }
   return pages;
 });
+
+// 날짜 형식 변환
+const formatDate = (date) => {
+  const dateString = String(date);
+  if (dateString.length !== 8) {
+    return dateString;
+  }
+
+  const year = dateString.substring(0, 4);
+  const month = dateString.substring(4, 6);
+  const day = dateString.substring(6, 8);
+
+  return `${year.substring(2)}/${month}/${day}`;
+};
+
+// dclsEndDay가 null일 경우를 처리하는 함수
+const formatEndDate = (date) => {
+  if (date === null) {
+    return '';
+  }
+  return formatDate(date);
+};
 
 bringBest4List();
 bringLoanList();
