@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- 검색 기능 -->
-    <div v-if="showSearch" class="row justify-content-center mb-10">
+    <div v-if="showSearch" class="row mb-10 justify-content-center  ">
       <div class="col-8">
         <div class="d-flex justify-content-between align-items-center mt-2">
           <form class="form-group flex-grow-1 me-2">
@@ -24,11 +24,15 @@
               </span>
             </div>
           </form>
+          </div>
+
           <!-- 작성 버튼 추가 -->
-          <div v-if="showCreateButton">
+          <div v-if="showCreateButton" class="ms-auto">
+            <div>
             <RouterLink :to="`/community/${category}/create`" class="btn btn-sm btn-neutral mb-5 mt-1">
                 글쓰기
             </RouterLink>
+          </div>
           </div>
         </div>
       </div>
@@ -83,7 +87,6 @@
         </nav>
       </div>
     </div>
-  </div>
 </div>
 </template>
 
@@ -94,6 +97,10 @@ import { defineProps } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
+  posts: {
+    type: Array,
+    required: true
+  },
   category: {
     type: String,
     required: true
@@ -118,7 +125,6 @@ const fetchPostsByCategory = async (category) => {
   try {
     const response = await axios.get(`http://localhost:8080/api/community/${category}`);
     posts.value = response.data; // 받아온 게시글 목록 설정
-    console.log(posts.value);
   } catch (error) {
     console.error("Error fetching posts:", error);
   }
