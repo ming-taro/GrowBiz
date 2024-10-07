@@ -337,11 +337,7 @@ const bringLoanList = async () => {
 const bringBest4List = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4', {
-      params: {
-        category: selectedCategory.value,
-      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
-    });
+    const response = await axios.get(BASEURI + '/getBest4');
     if (response.status === 200) {
       best4List.value = response.data;
     } else {
