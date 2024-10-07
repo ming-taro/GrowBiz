@@ -73,9 +73,7 @@
                     class="d-flex justify-content-end align-items-end ms-auto"
                   >
                     <p class="fs-6 text-gray-600 mb-1">금리</p>
-                    <p class="h2 fw-bold mb-0 ms-2">
-                      {{ item.crdtGradAvg }}
-                    </p>
+                    <p class="h2 fw-bold mb-0 ms-2">{{ item.crdtGradAvg }} %</p>
                   </div>
                 </div>
               </div>
