@@ -35,6 +35,11 @@ public class LoanController {
         return ResponseEntity.ok(service.getBestJeonse4List() );
     }
 
+    @GetMapping("/getBestMortgage4List")
+    public ResponseEntity<List<MortgageDTO>> getBestMortgage4List() {
+        return ResponseEntity.ok(service.getBestMortgage4List() );
+    }
+
     @GetMapping("/getFilteredList")
     public ResponseEntity<List<GovernmentFundDTO>> getFilteredList(GovernmentFilterDTO governmentFilter) {
         return ResponseEntity.ok(service.getFilteredList(governmentFilter));
@@ -50,6 +55,11 @@ public class LoanController {
         return ResponseEntity.ok(service.getFilteredJeonseList(jeonseFilter));
     }
 
+    @GetMapping("/getFilteredMortgageList")
+    public ResponseEntity<List<MortgageDTO>> getFilteredMortgageList(JeonseFilterDTO jeonseFilter) {
+        return ResponseEntity.ok(service.getFilteredMortgageList(jeonseFilter));
+    }
+
     @GetMapping("/getDetailItem")
     public ResponseEntity<GovernmentFundDTO> getDetailItem(String productName) {
         return ResponseEntity.ok(service.getDetailItem(productName));
@@ -63,6 +73,11 @@ public class LoanController {
     @GetMapping("/getDetailItemJeonse")
     public ResponseEntity<JeonseDTO> getDetailItemJeonse(Long id) {
         return ResponseEntity.ok(service.getDetailItemJeonse(id));
+    }
+
+    @GetMapping("/getDetailItemMortgage")
+    public ResponseEntity<MortgageDTO> getDetailItemMortgage(Long id) {
+        return ResponseEntity.ok(service.getDetailItemMortgage(id));
     }
 
 

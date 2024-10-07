@@ -81,5 +81,33 @@
         select * from jeonse_loan_product where id = #{id}
     </select>
 
+    <select id="getBestMortgage4List" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE lend_rate_avg IS NOT NULL
+        order by lend_rate_avg limit 4;
+    </select>
+
+    <select id="getFilteredMortgageList" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE 1=1
+        <if test="bankName != '전체'">
+            AND kor_co_nm = #{bankName}
+
+        </if>
+        <if test="repayMethod != '전체'">
+            AND rpay_type_nm = #{repayMethod}
+        </if>
+        <if test="type != '전체'">
+            AND lend_rate_type_nm = #{type}
+        </if>
+        AND lend_rate_avg IS NOT NULL
+    </select>
+
+    <select id="getDetailItemMortgage" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        select * from mortgage_loan_product where id = #{id}
+    </select>
+
 
 </mapper>

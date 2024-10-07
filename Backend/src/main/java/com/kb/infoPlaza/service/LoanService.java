@@ -22,6 +22,8 @@ public class LoanService {
 
     public List<JeonseDTO> getBestJeonse4List() { return mapper.getBestJeonse4List(); }
 
+    public List<MortgageDTO> getBestMortgage4List() { return mapper.getBestMortgage4List(); }
+
     public List<GovernmentFundDTO> getFilteredList(GovernmentFilterDTO governmentFilter) { return mapper.getFilteredList(governmentFilter); }
 
     public List<PersonalCreditLoanDTO> getFilteredCreditLoanList(PersonalFilterDTO personalFilter) {
@@ -32,6 +34,10 @@ public class LoanService {
         return mapper.getFilteredJeonseList(jeonse);
     }
 
+    public List<MortgageDTO> getFilteredMortgageList(JeonseFilterDTO jeonse) {
+        return mapper.getFilteredMortgageList(jeonse);
+    }
+
     public GovernmentFundDTO getDetailItem(String productName) { return mapper.getDetailItem(productName); }
 
     public PersonalCreditLoanDTO getDetailItemCreditLoan(Long id) {
@@ -40,6 +46,10 @@ public class LoanService {
 
     public JeonseDTO getDetailItemJeonse(Long id) {
         return mapper.getDetailItemJeonse(id);
+    }
+
+    public MortgageDTO getDetailItemMortgage(Long id) {
+        return mapper.getDetailItemMortgage(id);
     }
 }
 
