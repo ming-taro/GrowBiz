@@ -41,7 +41,9 @@ public class CommunityService {
     }
 
 
-
+    public PostDTO getPostById(long postId) {
+        return communityMapper.selectPostById(postId);
+    }
 
     // 게시글 생성
     @Transactional

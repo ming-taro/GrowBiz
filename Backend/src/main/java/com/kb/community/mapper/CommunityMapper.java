@@ -12,6 +12,8 @@ public interface CommunityMapper {
     // 카테고리별 게시글 조회
     List<PostDTO> getPostsByCategory(@Param("category") String category);
 
+    PostDTO selectPostById(@Param("postId") long id);
+
     // 게시글 생성
     void createPost(PostDTO post);
 

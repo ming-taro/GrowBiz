@@ -9,6 +9,10 @@
         ORDER BY post_id DESC
     </select>
 
+    <select id="selectPostById" parameterType="long" resultType="com.kb.community.dto.PostDTO">
+        SELECT * FROM community_post WHERE post_id = #{postId}
+    </select>
+
     <insert id="createPost" parameterType="com.kb.community.dto.PostDTO">
         INSERT INTO community_post (user_id, title, content, category)
         VALUES (#{userId}, #{title}, #{content}, #{category})

@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="posts.length === 0">게시글이 없습니다.</div>
-    <div v-else>
+    <div>
       <div class="table-responsive">
         <table class="table table-nowrap text-center">
           <thead>

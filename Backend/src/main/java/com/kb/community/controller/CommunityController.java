@@ -55,4 +55,9 @@ public class CommunityController {
         communityService.updatePost(post);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/view/{postId}")
+    public PostDTO getPostById(@PathVariable long postId) {
+        return communityService.getPostById(postId);
+    }
 }

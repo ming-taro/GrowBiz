@@ -58,7 +58,12 @@ const router = createRouter({
       component: Community,
     },
     { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
-    { path: '/community/view', name: 'BoardView', component: BoardView },
+    //{ path: '/community/view', name: 'BoardView', component: BoardView },
+    {
+      path: '/community/:category/view/:postId',
+      name: 'BoardView',
+      component: BoardView,
+    },
     {
       path: '/infoPlaza/industry',
       name: 'Industry',
