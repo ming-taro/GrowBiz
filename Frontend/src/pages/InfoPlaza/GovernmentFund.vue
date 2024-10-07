@@ -20,7 +20,9 @@
         <div class="row">
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
-            <a href="#">
+            <RouterLink
+              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
+            >
               <div class="card card-xl-stretch h-100">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
@@ -55,7 +57,7 @@
                   </div>
                 </div>
               </div>
-            </a>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -109,7 +111,7 @@
             <!-- 대출 상품 카드 여러개 -->
             <div
               class="col-xl-4 mb-5"
-              v-for="(item, index) in dataList"
+              v-for="(item, index) in paginatedDataList"
               :key="index"
             >
               <div
@@ -195,13 +197,100 @@
                   <!-- Info (상세 보기 버튼) -->
                   <div class="d-flex justify-content-end pt-0 mt-auto">
                     <RouterLink
-                      to="/infoPlaza/personalLoan/loanDetail"
+                      :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
                       class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                       >상세 보기</RouterLink
                     >
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <!-- 페이지네이션 -->
+        <div class="py-4 px-6 mt-3">
+          <div
+            class="row align-items-center justify-content-center text-center"
+          >
+            <div class="col-md-12 d-flex flex-column align-items-center">
+              <!-- Pagination -->
+              <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-spaced gap-1">
+                  <!-- First Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(1)"
+                    >
+                      <<
+                    </a>
+                  </li>
+                  <!-- Previous Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage - 1)"
+                    >
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  </li>
+                  <!-- Page Numbers -->
+                  <li
+                    v-for="page in visiblePages"
+                    :key="page"
+                    class="page-item"
+                    :class="{ active: currentPage === page }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(page)"
+                    >
+                      {{ page }}
+                    </a>
+                  </li>
+                  <!-- Next Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage + 1)"
+                    >
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                  <!-- Last Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(totalPages)"
+                    >
+                      >>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              <!-- Showing Items Text -->
+              <span class="text-muted text-sm mt-3">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
+                of {{ totalItems }} results found
+              </span>
             </div>
           </div>
         </div>
@@ -212,12 +301,17 @@
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 
 const selectedCategory = ref('전체');
 const dataList = ref([]);
 const best4List = ref([]);
+
+const currentPage = ref(1);
+const itemsPerPage = 6;
+const totalItems = ref(16);
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
 
 const BASEURI = '/api/infoPlaza/loan';
 
@@ -232,7 +326,7 @@ const bringLoanList = async () => {
     });
     if (response.status === 200) {
       dataList.value = response.data;
-      console.log(dataList.value);
+      totalItems.value = dataList.value.length;
     } else {
       console.log('데이터 조회 실패');
     }
@@ -245,14 +339,9 @@ const bringLoanList = async () => {
 const bringBest4List = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4', {
-      params: {
-        category: selectedCategory.value,
-      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
-    });
+    const response = await axios.get(BASEURI + '/getBest4');
     if (response.status === 200) {
       best4List.value = response.data;
-      console.log(best4List.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -261,10 +350,33 @@ const bringBest4List = async () => {
   }
 };
 
+// 직접대출/대리대출
 const onCategoryChange = (event) => {
   selectedCategory.value = event.target.value;
   bringLoanList();
 };
+
+// 현재 페이지에 해당하는 데이터만 반환하는 계산된 속성
+const paginatedDataList = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return dataList.value.slice(startIndex, endIndex);
+});
+
+// 페이지 전환 함수
+function changePage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+}
+
+const visiblePages = computed(() => {
+  const pages = [];
+  for (let i = 1; i <= totalPages.value; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
 
 bringBest4List();
 bringLoanList();

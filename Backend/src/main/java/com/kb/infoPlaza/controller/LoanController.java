@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +22,62 @@ public class LoanController {
 
     @GetMapping("/getBest4")
     public ResponseEntity<List<GovernmentFundDTO>> getBest4List() {
-        return ResponseEntity.ok(service.getBest4List());
+        return ResponseEntity.ok(service.getBest4List() );
+    }
+
+    @GetMapping("/getBestCreditLoan4List")
+    public ResponseEntity<List<PersonalCreditLoanDTO>> getBestCreditLoan4List() {
+        return ResponseEntity.ok(service.getBestCreditLoan4List() );
+    }
+
+    @GetMapping("/getBestJeonse4List")
+    public ResponseEntity<List<JeonseDTO>> getBestJeonse4List() {
+        return ResponseEntity.ok(service.getBestJeonse4List() );
+    }
+
+    @GetMapping("/getBestMortgage4List")
+    public ResponseEntity<List<MortgageDTO>> getBestMortgage4List() {
+        return ResponseEntity.ok(service.getBestMortgage4List() );
     }
 
     @GetMapping("/getFilteredList")
     public ResponseEntity<List<GovernmentFundDTO>> getFilteredList(GovernmentFilterDTO governmentFilter) {
         return ResponseEntity.ok(service.getFilteredList(governmentFilter));
+    }
+
+    @GetMapping("/getFilteredCreditLoanList")
+    public ResponseEntity<List<PersonalCreditLoanDTO>> getFilteredCreditLoanList(PersonalFilterDTO personalFilter) {
+        return ResponseEntity.ok(service.getFilteredCreditLoanList(personalFilter));
+    }
+
+    @GetMapping("/getFilteredJeonseList")
+    public ResponseEntity<List<JeonseDTO>> getFilteredJeonseList(JeonseFilterDTO jeonseFilter) {
+        return ResponseEntity.ok(service.getFilteredJeonseList(jeonseFilter));
+    }
+
+    @GetMapping("/getFilteredMortgageList")
+    public ResponseEntity<List<MortgageDTO>> getFilteredMortgageList(JeonseFilterDTO jeonseFilter) {
+        return ResponseEntity.ok(service.getFilteredMortgageList(jeonseFilter));
+    }
+
+    @GetMapping("/getDetailItem")
+    public ResponseEntity<GovernmentFundDTO> getDetailItem(String productName) {
+        return ResponseEntity.ok(service.getDetailItem(productName));
+    }
+
+    @GetMapping("/getDetailItemCreditLoan")
+    public ResponseEntity<PersonalCreditLoanDTO> getDetailItemCreditLoan(Long id) {
+        return ResponseEntity.ok(service.getDetailItemCreditLoan(id));
+    }
+
+    @GetMapping("/getDetailItemJeonse")
+    public ResponseEntity<JeonseDTO> getDetailItemJeonse(Long id) {
+        return ResponseEntity.ok(service.getDetailItemJeonse(id));
+    }
+
+    @GetMapping("/getDetailItemMortgage")
+    public ResponseEntity<MortgageDTO> getDetailItemMortgage(Long id) {
+        return ResponseEntity.ok(service.getDetailItemMortgage(id));
     }
 
 

@@ -44,12 +44,12 @@ def find_franchise_detail(fir_mst_sn):
             column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
             financial.append({
                 "year": int(column_data[0]),
-                "asset": int(column_data[1].replace(",", "")),
-                "liability": int(column_data[2].replace(",", "")),
-                "equity": int(column_data[3].replace(",", "")),
-                "revenue": int(column_data[4].replace(",", "")),
-                "operating_income": int(column_data[5].replace(",", "")),
-                "net_income": int(column_data[6].replace(",", ""))
+                "asset": int(column_data[1].replace(",", "")) if column_data[1] else 0,
+                "liability": int(column_data[2].replace(",", "")) if column_data[2] else 0,
+                "equity": int(column_data[3].replace(",", "")) if column_data[3] else 0,
+                "revenue": int(column_data[4].replace(",", "")) if column_data[4] else 0,
+                "operating_income": int(column_data[5].replace(",", "")) if column_data[5] else 0,
+                "net_income": int(column_data[6].replace(",", "")) if column_data[6] else 0
             })
 
         # 가맹점 및 직영점 현황
@@ -69,9 +69,9 @@ def find_franchise_detail(fir_mst_sn):
                 store.append({
                     "region": column_data[0],
                     "year": year,
-                    "total": int(column_data[i].replace(",", "")),
-                    "franchise_count": int(column_data[i + 1].replace(",", "")),
-                    "company_store_count": int(column_data[i + 2].replace(",", ""))
+                    "total": int(column_data[i].replace(",", "")) if column_data[i] else 0,
+                    "franchise_count": int(column_data[i + 1].replace(",", "")) if column_data[i + 1] else 0,
+                    "company_store_count": int(column_data[i + 2].replace(",", "")) if column_data[i + 2] else 0
                 })
                 year -= 1
 
@@ -83,10 +83,10 @@ def find_franchise_detail(fir_mst_sn):
             data = [td.get_text(strip=True) for td in row.find_all('td')]
             franchise_change.append({
                 "year": int(data[0]),
-                "new_open": int(data[1].replace(",", "")),
-                "contract_termination": int(data[2].replace(",", "")),
-                "contract_cancellation": int(data[3].replace(",", "")),
-                "name_changes": int(data[4].replace(",", ""))
+                "new_open": int(data[1].replace(",", "")) if data[1] else 0,
+                "contract_termination": int(data[2].replace(",", "")) if data[2] else 0,
+                "contract_cancellation": int(data[3].replace(",", "")) if data[3] else 0,
+                "name_changes": int(data[4].replace(",", "")) if data[4] else 0
             })
 
         # 가맹점사업자 매출
@@ -96,9 +96,9 @@ def find_franchise_detail(fir_mst_sn):
         grouped_data = [data[i:i+3] for i in range(0, len(data), 3)] # 데이터 3 그룹씩 묶기
         franchise_revenue = {
             "region": "서울",
-            "franchise_count": int(grouped_data[1][0].replace(",", "")),
-            "average_sales": int(grouped_data[1][1].replace(",", "")),
-            "average_sales_per_area": int(grouped_data[1][2].replace(",", ""))
+            "franchise_count": int(grouped_data[1][0].replace(",", "")) if grouped_data[1][0] else 0,
+            "average_sales": int(grouped_data[1][1].replace(",", "")) if grouped_data[1][1] else 0,
+            "average_sales_per_area": int(grouped_data[1][2].replace(",", "")) if grouped_data[1][2] else 0
         }
 
         # 광고·판촉비 내역
@@ -108,16 +108,16 @@ def find_franchise_detail(fir_mst_sn):
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         advertising_cost = {
             "year": int(column_data[0]),
-            "advertising_expense": int(column_data[1].replace(",", "")),
-            "promotion_expenses": int(column_data[2].replace(",", ""))
+            "advertising_expense": int(column_data[1].replace(",", "")) if column_data[1] else 0,
+            "promotion_expenses": int(column_data[2].replace(",", "")) if column_data[2] else 0
         }
 
         # 가맹금사업자의 부담금
         td_elements = soup.find_all('td', class_='al')
         data = [td.get_text(strip=True) for td in td_elements]
         business_fee = {
-            "fee_type": data[0].replace(",", ""),
-            "deposit_fee": int(data[1].replace(",", ""))
+            "fee_type": data[0],
+            "deposit_fee": int(data[1].replace(",", "")) if data[1] else 0
         }
 
         # 가맹점사업자의 부담 - 가맹점사업자의 부담금 (형태, 예치 가맹금)
@@ -126,11 +126,11 @@ def find_franchise_detail(fir_mst_sn):
         columns = rows[0].find_all('td')  # tr 안의 모든 td 요소 찾기
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         initial_cost = {
-            "franchise_fee": int(column_data[0].replace(",", "")),
-            "education_fee": int(column_data[1].replace(",", "")),
-            "deposit": int(column_data[2].replace(",", "")),
-            "other_cost": int(column_data[3].replace(",", "")),
-            "total": int(column_data[4].replace(",", ""))
+            "franchise_fee": int(column_data[0].replace(",", "")) if column_data[0] else 0,
+            "education_fee": int(column_data[1].replace(",", "")) if column_data[1] else 0,
+            "deposit": int(column_data[2].replace(",", "")) if column_data[2] else 0,
+            "other_cost": int(column_data[3].replace(",", "")) if column_data[3] else 0,
+            "total": int(column_data[4].replace(",", "")) if column_data[4] else 0
         }
 
         # 가맹점사업자의 부담 - 인테리어 비용
@@ -139,9 +139,9 @@ def find_franchise_detail(fir_mst_sn):
         columns = rows[0].find_all('td')  # tr 안의 모든 td 요소 찾기
         column_data = [col.get_text(strip=True) for col in columns]  # 텍스트 추출
         interior_cost = {
-            "cost_per_area": int(column_data[0].replace(",", "")),
-            "standard_store_area": int(column_data[1].replace(",", "")),
-            "total": int(column_data[2].replace(",", ""))
+            "cost_per_area": int(column_data[0].replace(",", "")) if column_data[0] else 0,
+            "standard_store_area": int(column_data[1].replace(",", "")) if column_data[1] else 0,
+            "total": int(column_data[2].replace(",", "")) if column_data[2] else 0
         }
 
         # 가맹계약 기간
@@ -150,8 +150,8 @@ def find_franchise_detail(fir_mst_sn):
         headers = [th.get_text(strip=True) for th in rows[1].find_all('th')]  # "최초"와 "연장" 헤더 추출
         values = [td.get_text(strip=True) for td in rows[2].find_all('td')]   # 값 추출
         contract_period = {
-            "initial": int(values[0].replace(",", "")),
-            "renewal": int(values[1].replace(",", ""))
+            "initial": int(values[0].replace(",", "")) if values[0] else 0,
+            "renewal": int(values[1].replace(",", "")) if values[1] else 0
         }
 
         return {
@@ -187,7 +187,7 @@ mysql_connection = pymysql.connect(
 )
 
 try:
-    mongo_client = MongoClient(host=os.environ.get('DB_HOST'), port=os.environ.get('MONGO_DB_PORT'))
+    mongo_client = MongoClient(host=os.environ.get('DB_HOST'), port=int(os.environ.get('MONGO_DB_PORT')))
     mongo_db = mongo_client['franchise']
     mongo_db_collection = mongo_db['franchise_detail']
 

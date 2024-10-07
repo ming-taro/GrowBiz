@@ -3,16 +3,14 @@
 </template>
 
 <script>
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
-import Quill from 'quill'
-import { onMounted, ref, watch, onUnmounted, onBeforeUnmount } from 'vue'
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
+import Quill from 'quill';
+import { onMounted, ref, watch, onUnmounted } from 'vue';
 
 const defaultOptions = {
   theme: 'snow',
-  boundary: document.body,
   modules: {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -33,12 +31,15 @@ const defaultOptions = {
   },
   placeholder: '내용을 입력하세요',
   readOnly: false
-}
+};
+
 export default {
   name: 'quill-editor',
   props: {
-    content: String,
-    value: String,
+    modelValue: { // v-model을 위한 prop
+      type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -49,123 +50,68 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['ready', 'change', 'input', 'blur', 'focus', 'update:value'],
+  emits: ['update:modelValue', 'blur', 'focus'],
   setup(props, context) {
-    const state = {
-      editorOption: {},
-      quill: null
-    }
-
-    let _content = ''
-
-    watch(
-      () => props.value,
-      val => {
-        if (state.quill) {
-          if (val && val !== _content) {
-            _content = val
-            state.quill.pasteHTML(val)
-          } else if (!val) {
-            state.quill.setText('')
-          }
-        }
-      }
-    )
-
-    watch(
-      () => props.content,
-      val => {
-        if (state.quill) {
-          if (val && val !== _content) {
-            _content = val
-            state.quill.pasteHTML(val)
-          } else if (!val) {
-            state.quill.setText('')
-          }
-        }
-      }
-    )
-
-    watch(
-      () => props.disabled,
-      val => {
-        if (state.quill) {
-          state.quill.enable(!val)
-        }
-      }
-    )
-
-    const editor = ref(null)
-
-    const mergeOptions = (def, custom) => {
-      for (const key in custom) {
-        if (!def[key] || key !== 'modules') {
-          def[key] = custom[key]
-        } else {
-          mergeOptions(def[key], custom[key])
-        }
-      }
-      return def
-    }
+    const editor = ref(null);
+    const quill = ref(null);
 
     const initialize = () => {
       if (editor.value) {
-        // Options
-        state.editorOption = mergeOptions(defaultOptions, props.options)
-        state.editorOption.readOnly = props.disabled ? true : false
-        // Instance
-        state.quill = new Quill(editor.value, state.editorOption)
-        // console.log('intilized')
+        const editorOption = { ...defaultOptions, ...props.options };
+        editorOption.readOnly = props.disabled;
+        quill.value = new Quill(editor.value, editorOption);
 
-        // Set editor content
-        if (props.value) {
-          state.quill.pasteHTML(props.value)
-        }
+        // 초기 값 설정
+        quill.value.root.innerHTML = props.modelValue;
 
-        // Mark model as touched if editor lost focus
-        state.quill.on('selection-change', range => {
-          if (!range) {
-            context.emit('blur', state.quill)
+        // 포커스/블러 이벤트
+        quill.value.on('selection-change', range => {
+          if (range) {
+            context.emit('focus');
           } else {
-            context.emit('focus', state.quill)
+            context.emit('blur');
           }
-        })
-        // Update model if text changes
-        state.quill.on('text-change', () => {
-          // diabled editor after content initialized
-          if (props.disabled) {
-            state.quill.enable(false)
-          }
-          let html = editor.value.children[0].innerHTML
-          const quill = state.quill
-          const text = state.quill.getText()
-          if (html === '<p><br></p>') html = ''
-          _content = html
-          context.emit('update:value', _content)
-          context.emit('change', { html, text, quill })
-        })
+        });
 
-        // Emit ready event
-        context.emit('ready', state.quill)
-      }
-    }
+        // 내용 변경 이벤트
+        quill.value.on('text-change', () => {
+          const html = quill.value.root.innerHTML;
+          context.emit('update:modelValue', html); // 변경된 내용을 부모에게 전달
+        });
 
-    onBeforeUnmount(() => {
-      const editorToolbar = editor.value.previousSibling
-      if (editorToolbar && editorToolbar.nodeType === 1 && editorToolbar.className.indexOf('ql-toolbar') > -1) {
-        editorToolbar.parentNode.removeChild(editorToolbar)
+        // 비활성화 상태 반영
+        if (props.disabled) {
+          quill.value.enable(false);
+        }
       }
-    })
+    };
+
+    // 부모에서 disabled prop이 변경될 때 에디터 상태 업데이트
+    watch(() => props.disabled, (newVal) => {
+      if (quill.value) {
+        quill.value.enable(!newVal);
+      }
+    });
+
+    // 부모에서 modelValue prop이 변경될 때 에디터 내용 업데이트
+    watch(() => props.modelValue, (newVal) => {
+      if (quill.value && newVal !== quill.value.root.innerHTML) {
+        quill.value.root.innerHTML = newVal; // 외부에서 modelValue가 변경될 때 에디터 내용도 변경
+      }
+    });
 
     onMounted(() => {
-      initialize()
-    })
+      initialize();
+    });
 
     onUnmounted(() => {
-      state.quill = null
-    })
+      quill.value = null;
+    });
 
-    return { editor }
+    return { editor };
   }
-}
+};
 </script>
+
+<style scoped>
+</style>

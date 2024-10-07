@@ -8,9 +8,9 @@
             <div class="col-md-12 col-xl-12">
               <input 
                 type="text" 
-                class="form-control" 
-                placeholder="제목을 입력하세요." 
                 v-model="postTitle" 
+                class="form-control"
+                placeholder="제목을 입력하세요." 
               />
             </div>
           </div>
@@ -23,7 +23,7 @@
           </div>
           <hr class="my-6" />
           <div class="d-flex justify-content-end gap-2">
-            <RouterLink to="/community" class="btn btn-sm btn-neutral">취소</RouterLink>            
+            <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral">취소</RouterLink>            
             <button type="button" class="btn btn-sm btn-primary" @click="submitPost">등록</button>
           </div>
         </main>
@@ -34,20 +34,37 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router'; // Router 가져오기
 import Editor from '@/components/editor/Editor.vue';
+import axios from 'axios';
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
 
 // Reactive properties for title and content
 const postTitle = ref('');
 const postContent = ref('');
-// Method to handle post submission
-const submitPost = () => {
+const route = useRoute(); // 라우트 객체를 사용하여 URL에서 카테고리 값을 가져옴
+const router = useRouter(); // 라우터 인스턴스 가져오기
+const category = route.params.category; // 카테고리 매개변수 가져오기
+
+const submitPost = async () => {
   if (postTitle.value.trim() && postContent.value.trim()) {
-    console.log('제목:', postTitle.value);
-    console.log('내용:', postContent.value);
-    // Here you can add functionality to send this data to a server if needed
-    // For now, just reset the fields after submission
-    resetFields();
+
+    try {
+      const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
+        title: postTitle.value,
+        content: postContent.value,
+        category: category,
+        userId: '이유리'
+      });
+
+      alert('글이 성공적으로 작성되었습니다.');
+      resetFields();
+
+      router.push(`/community/${category}`); // 글 작성 후 해당 카테고리로 이동
+    } catch (error) {
+      console.error('글 작성 중 오류 발생:', error);
+      alert('글 작성 중 오류가 발생했습니다.');
+    }
   } else {
     alert('제목과 내용을 입력해주세요.');
   }

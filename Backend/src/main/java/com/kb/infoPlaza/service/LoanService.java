@@ -18,6 +18,38 @@ public class LoanService {
         return mapper.getBest4List();
     }
 
+    public List<PersonalCreditLoanDTO> getBestCreditLoan4List() { return mapper.getBestCreditLoan4List(); }
+
+    public List<JeonseDTO> getBestJeonse4List() { return mapper.getBestJeonse4List(); }
+
+    public List<MortgageDTO> getBestMortgage4List() { return mapper.getBestMortgage4List(); }
+
     public List<GovernmentFundDTO> getFilteredList(GovernmentFilterDTO governmentFilter) { return mapper.getFilteredList(governmentFilter); }
 
+    public List<PersonalCreditLoanDTO> getFilteredCreditLoanList(PersonalFilterDTO personalFilter) {
+        return mapper.getFilteredCreditLoanList(personalFilter);
+    }
+
+    public List<JeonseDTO> getFilteredJeonseList(JeonseFilterDTO jeonse) {
+        return mapper.getFilteredJeonseList(jeonse);
+    }
+
+    public List<MortgageDTO> getFilteredMortgageList(JeonseFilterDTO jeonse) {
+        return mapper.getFilteredMortgageList(jeonse);
+    }
+
+    public GovernmentFundDTO getDetailItem(String productName) { return mapper.getDetailItem(productName); }
+
+    public PersonalCreditLoanDTO getDetailItemCreditLoan(Long id) {
+        return mapper.getDetailItemCreditLoan(id);
+    }
+
+    public JeonseDTO getDetailItemJeonse(Long id) {
+        return mapper.getDetailItemJeonse(id);
+    }
+
+    public MortgageDTO getDetailItemMortgage(Long id) {
+        return mapper.getDetailItemMortgage(id);
+    }
 }
+

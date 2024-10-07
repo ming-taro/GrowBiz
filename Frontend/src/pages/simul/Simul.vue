@@ -5,99 +5,74 @@
       <div class="progress-bar" :style="{ width: progressBarWidth }"></div>
     </div>
 
-    <img
-      src="@/assets/img/simul/sumul_cut.jpg"
-      alt="Background Image"
-      class="background-image"
-    />
-    <img
-      src="@/assets/img/simul/leaf1.png"
-      alt="Leaf"
-      class="leaf-animation1"
-    />
-    <img
-      src="@/assets/img/simul/leaf2.png"
-      alt="Leaf"
-      class="leaf-animation2"
-    />
-    <img
-      src="@/assets/img/simul/leaf3.png"
-      alt="Leaf"
-      class="leaf-animation3"
-    />
-    <img
-      src="@/assets/img/simul/leaf4.png"
-      alt="Leaf"
-      class="leaf-animation4"
-    />
-    <img
-      src="@/assets/img/simul/leaf1.png"
-      alt="Leaf"
-      class="leaf-animation5"
-    />
+    <img src="@/assets/img/simul/sumul_cut.jpg" alt="Background Image" class="background-image" />
+    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation1" />
+    <img src="@/assets/img/simul/leaf2.png" alt="Leaf" class="leaf-animation2" />
+    <img src="@/assets/img/simul/leaf3.png" alt="Leaf" class="leaf-animation3" />
+    <img src="@/assets/img/simul/leaf4.png" alt="Leaf" class="leaf-animation4" />
+    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation5" />
 
     <div v-if="showSpeechBubble">
-      <img
-        src="@/assets/img/simul/speech_bubble_no.png"
-        alt="Speech Bubble"
-        class="speech-bubble"
-      />
+      <img src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble" class="speech-bubble" />
       <div class="answer-box">
-        <!-- 각 버튼을 감싸는 div에 v-for 추가 -->
-        <div v-if="showChoices" class="choices_2">
-          <div v-for="(choice, index) in choices" :key="index">
-            <button
-              @mouseover="isHovered = choice.text"
-              @mouseleave="isHovered = ''"
-              @click="selectAnswer(choice.value)"
-            >
-              <span class="arrow">{{
-                isHovered === choice.text ? '▶' : ''
-              }}</span>
-              <span class="text">{{ choice.text }}</span>
-            </button>
+        <div v-if="questionNumber === 0" class="district_choices_2">
+          <div v-if="showChoices" class="choices_2">
+            <div v-if="!isDistrictSelected">
+              <div v-for="(choice, index) in district" :key="index">
+                <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
+                  @click="selectDistrict(choice.value)">
+                  <span class="arrow">{{
+                    isHovered === choice.text ? '▶' : ''
+                  }}</span>
+                  <span class="text">{{ choice.text }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div v-else>
+              <div v-for="(choice, index) in neighborhoods" :key="index">
+                <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
+                  @click="selectNeighborhoods(choice.value)">
+                  <span class="arrow">{{
+                    isHovered === choice.text ? '▶' : ''
+                  }}</span>
+                  <span class="text">{{ choice.text }}</span>
+                </button>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div v-else>
+          {{ console.log(">>", questions.value) }}
+        </div>
+
+        <div class="button-container">
+          <button class="retry-button" @click="retry()">다시 선택하기</button>
         </div>
       </div>
     </div>
-    <img
-      v-else
-      src="@/assets/img/simul/speech_bubble_no.png"
-      alt="Speech Bubble No"
-      class="speech-bubble"
-    />
+    <img v-else src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble No" class="speech-bubble" />
 
     <!-- 텍스트 고정 -->
     <div class="main_text_animation">
       <p class="text-line" v-html="typedTextLine1"></p>
-      <p
-        class="text-line"
-        v-html="typedTextLine2"
-        v-show="typedTextLine2.length > 0"
-      ></p>
+      <p class="text-line" v-html="typedTextLine2" v-show="typedTextLine2.length > 0"></p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { getQuestions } from '@/services/QuestionAPI';
 
-const fullTexts = [
-  {
-    line1: '이 도시에서 가장 성공적인',
-    line2: '자영업자가 될 준비가 되셨나요?',
-  },
-  {
-    line1: '다음 단계로 나아가고 싶으신가요?',
-    line2: '더 많은 정보를 원하십니까?',
-  },
-];
+const questions = ref([]);
+const questionNumber = ref(0);
+const district = ref([]);
+const neighborhoods = ref([]);
+const districtSelection = ref([]);
 
-const choices = [
-  { text: '네', value: 'yes' },
-  { text: '아니요', value: 'no' },
-  { text: '더 알아보기', value: 'more_info' },
-];
+const isDistrictSelected = ref(false);
 
 const typedTextLine1 = ref('');
 const typedTextLine2 = ref('');
@@ -146,14 +121,43 @@ const typeText = (text, typedText, nextText, delay = 0) => {
   }, 100);
 };
 
-const selectAnswer = (answer) => {
-  console.log(`선택한 응답: ${answer}`);
-  // 선택한 응답에 따른 추가 로직 구현
+const fetchQuestions = async () => {
+  try {
+    questions.value = await getQuestions();
+    if (questions.value.length > 0) {
+      typeText(questions.value[0].fullTexts, typedTextLine1, "");
+      updateProgress(5); // 진행도를 5/20으로 설정  
+
+      for (let i = 0; i < questions.value[0].choices.length; i++) {
+        district.value.push({ text: questions.value[0].choices[i].district, value: i });
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch questions:', error);
+  }
 };
 
-onMounted(() => {
-  typeText(fullTexts[0].line1, typedTextLine1, fullTexts[0].line2);
-  updateProgress(5); // 진행도를 5/20으로 설정
+const selectDistrict = (selection) => {
+  districtSelection.value = selection;
+  isDistrictSelected.value = !isDistrictSelected.value;
+  let data = questions.value[0].choices[selection].neighborhoods;
+
+  for (let i = 0; i < data.length; i++) {
+    neighborhoods.value.push({ text: data[i], value: i });
+  }
+}
+
+const selectNeighborhoods = (selection) => {
+  console.log(district.value[districtSelection.value], ", ", neighborhoods.value[selection]);
+}
+
+const retry = () => {
+  isDistrictSelected.value = false;
+  neighborhoods.value = [];
+}
+
+onMounted(async () => {
+  await fetchQuestions(); // 질문 가져오기
 });
 </script>
 
@@ -161,26 +165,36 @@ onMounted(() => {
 /* 타자 애니메이션 스타일 */
 .main_text_animation {
   position: absolute;
-  bottom: 85px; /* Adjust position as needed */
-  left: 31%; /* 왼쪽에서 시작하도록 변경 */
-  color: #000; /* 텍스트 색상 */
-  text-align: left; /* 왼쪽 정렬 */
+  bottom: 85px;
+  /* Adjust position as needed */
+  left: 31%;
+  /* 왼쪽에서 시작하도록 변경 */
+  color: #000;
+  /* 텍스트 색상 */
+  text-align: left;
+  /* 왼쪽 정렬 */
 }
 
 .text-line {
-  font-size: 35px; /* 텍스트 크기 */
+  font-size: 35px;
+  /* 텍스트 크기 */
   font-weight: bold;
-  margin: 0; /* 기본 마진 제거 */
-  position: absolute; /* 절대 위치 지정 */
-  white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 설정 */
+  margin: 0;
+  /* 기본 마진 제거 */
+  position: absolute;
+  /* 절대 위치 지정 */
+  white-space: nowrap;
+  /* 텍스트가 줄바꿈되지 않도록 설정 */
 }
 
 .text-line:nth-child(1) {
-  bottom: 60px; /* 첫 번째 줄의 위치 */
+  bottom: 60px;
+  /* 첫 번째 줄의 위치 */
 }
 
 .text-line:nth-child(2) {
-  bottom: 0px; /* 두 번째 줄의 위치 (필요에 따라 조정) */
+  bottom: 0px;
+  /* 두 번째 줄의 위치 (필요에 따라 조정) */
 }
 
 .animation-container {
@@ -198,12 +212,17 @@ onMounted(() => {
 
 .speech-bubble {
   position: absolute;
-  bottom: 5px; /* Adjust the distance from the bottom */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-48%); /* Centering adjustment */
-  width: 77%; /* Set the width to 70% */
+  bottom: 5px;
+  /* Adjust the distance from the bottom */
+  left: 50%;
+  /* Center horizontally */
+  transform: translateX(-48%);
+  /* Centering adjustment */
+  width: 77%;
+  /* Set the width to 70% */
   opacity: 1;
-  transition: opacity 0.5s ease; /* 자연스러운 등장 효과 */
+  transition: opacity 0.5s ease;
+  /* 자연스러운 등장 효과 */
 }
 
 .leaf-animation1,
@@ -213,7 +232,8 @@ onMounted(() => {
 .leaf-animation5 {
   position: absolute;
   top: -100px;
-  width: 50px; /* Adjust the size of the leaf */
+  width: 50px;
+  /* Adjust the size of the leaf */
   animation: leaf-fall linear infinite;
 }
 
@@ -253,6 +273,7 @@ onMounted(() => {
     transform: translate(-50%, 0) rotate(0deg);
     opacity: 1;
   }
+
   100% {
     transform: translate(-50%, 800px) rotate(360deg);
     opacity: 1;
@@ -275,6 +296,88 @@ onMounted(() => {
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
+.district_choices_2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* 위에서 아래로 정렬 */
+  height: 200px;
+  /* 원하는 높이 설정 */
+  overflow-y: auto;
+  /* 세로 방향으로 스크롤 */
+  margin: 20px 0px;
+  /* 상하 간격 설정 */
+}
+
+/* 스크롤바 스타일링 */
+.district_choices_2::-webkit-scrollbar {
+  width: 10px;
+  /* 스크롤바 너비 */
+}
+
+.district_choices_2::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  /* 스크롤바 배경 색상 */
+  border-radius: 10px;
+  /* 모서리 둥글게 */
+}
+
+.district_choices_2::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  /* 스크롤바 색상 */
+  border-radius: 10px;
+  /* 모서리 둥글게 */
+}
+
+.district_choices_2::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+  /* 호버 시 색상 */
+}
+
+/* 스크롤박스가 호버할 때 스크롤바 보이기 */
+.district_choices_2:hover::-webkit-scrollbar {
+  opacity: 1;
+  /* 스크롤바가 보이도록 설정 */
+}
+
+.button-container {
+  display: flex;
+  /* Flexbox 활성화 */
+  justify-content: center;
+  /* 가운데 정렬 */
+  width: 100%;
+  /* 전체 너비 차지 */
+  margin-bottom: 10px;
+  /* 버튼 간격 조정 */
+}
+
+.retry-button {
+  background-color: #f39c12;
+  /* 어울리는 배경색으로 수정 */
+  color: white;
+  /* 글자 색상 */
+  border: none;
+  /* 테두리 없음 */
+  border-radius: 25px;
+  /* 모서리 둥글게 */
+  padding: 10px 15px;
+  /* 패딩 */
+  cursor: pointer;
+  /* 커서 포인터로 변경 */
+  transition: background-color 0.3s;
+  /* 배경색 변화 효과 */
+}
+
+.retry-button:hover {
+  background-color: #e67e22;
+  /* 호버 시 배경색 */
+}
+
+.retry-button:active {
+  background-color: #d35400;
+  /* 클릭 시 배경색 */
+}
+
 .choices_2 {
   display: flex;
   flex-direction: column;
@@ -284,47 +387,65 @@ onMounted(() => {
 }
 
 .choices_2 div {
-  margin-bottom: -5px; /* 버튼 간 간격을 줄이기 */
+  margin-bottom: -5px;
+  /* 버튼 간 간격을 줄이기 */
 }
 
 .choices_2 button {
-  padding: 10px 15px; /* 수직 패딩과 수평 패딩 설정 */
+  padding: 10px 15px;
+  /* 수직 패딩과 수평 패딩 설정 */
   cursor: pointer;
-  display: flex; /* 플렉스 박스를 사용하여 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  font-size: 20px; /* 폰트 크기 */
-  background-color: transparent; /* 기본 배경 색상 */
-  border-radius: 25px; /* 둥근 모서리 */
-  color: black; /* 텍스트 색상 */
-  border: none; /* 테두리 없음 */
-  text-align: left; /* 텍스트 왼쪽 정렬 */
-  transition: background-color 0.3s ease; /* 배경 색상 전환 효과 */
+  display: flex;
+  /* 플렉스 박스를 사용하여 정렬 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+  font-size: 20px;
+  /* 폰트 크기 */
+  background-color: transparent;
+  /* 기본 배경 색상 */
+  border-radius: 25px;
+  /* 둥근 모서리 */
+  color: black;
+  /* 텍스트 색상 */
+  border: none;
+  /* 테두리 없음 */
+  text-align: left;
+  /* 텍스트 왼쪽 정렬 */
+  transition: background-color 0.3s ease;
+  /* 배경 색상 전환 효과 */
 }
 
 .choices_2 button span.arrow {
-  width: 20px; /* 화살표 크기 고정 */
+  width: 20px;
+  /* 화살표 크기 고정 */
   font-size: 14px;
 }
 
 .choices_2 button:hover {
-  background-color: #fcd752; /* 호버 시 배경 색상 */
+  background-color: #fcd752;
+  /* 호버 시 배경 색상 */
   border-radius: 25px;
   font-weight: bold;
-  padding: 10px 20px; /* 여백을 다시 설정하여 안정성 확보 */
+  padding: 10px 20px;
+  /* 여백을 다시 설정하여 안정성 확보 */
 }
 
 /* 선택지 텍스트가 밀리지 않도록 고정 */
 .choices_2 button span.text {
-  padding-left: 5px; /* 화살표를 위한 여백 추가 */
+  padding-left: 5px;
+  /* 화살표를 위한 여백 추가 */
 }
 
 .answer-box {
   background-color: #fee9b4;
   position: absolute;
-  bottom: 185px; /* Adjust position as needed */
-  left: 74%; /* Center horizontally */
-  transform: translateX(-50%); /* Centering adjustment */
-  width: 200px;
+  bottom: 185px;
+  /* Adjust position as needed */
+  left: 74%;
+  /* Center horizontally */
+  transform: translateX(-50%);
+  /* Centering adjustment */
+  width: 230px;
   border-radius: 80px;
   padding: 15px 15px 15px 25px;
 }
@@ -332,20 +453,29 @@ onMounted(() => {
 .progress-container {
   position: absolute;
   top: 9%;
-  bottom: 150px; /* Adjust as needed */
+  bottom: 150px;
+  /* Adjust as needed */
   left: 50%;
   transform: translateX(-50%);
-  width: 58%; /* 바의 전체 너비 */
-  height: 20px; /* 바의 높이 */
-  background-color: #e0e0e0; /* 배경 색상 */
-  border-radius: 10px; /* 둥근 모서리 */
-  overflow: hidden; /* 내부 바가 넘치지 않도록 설정 */
+  width: 58%;
+  /* 바의 전체 너비 */
+  height: 20px;
+  /* 바의 높이 */
+  background-color: #e0e0e0;
+  /* 배경 색상 */
+  border-radius: 10px;
+  /* 둥근 모서리 */
+  overflow: hidden;
+  /* 내부 바가 넘치지 않도록 설정 */
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #76c7c0; /* 진행도 색상 */
-  border-radius: 10px; /* 둥근 모서리 */
-  transition: width 0.3s ease; /* 자연스러운 전환 효과 */
+  background-color: #76c7c0;
+  /* 진행도 색상 */
+  border-radius: 10px;
+  /* 둥근 모서리 */
+  transition: width 0.3s ease;
+  /* 자연스러운 전환 효과 */
 }
 </style>
