@@ -19,16 +19,16 @@
       <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="deletePost">삭제</button> <!-- 삭제 버튼 추가 -->
     </div>
       
-      <div class="list-group mt-5 mb-5">
-        <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
-        <div class="list-group-item py-3" v-for="comment in comments" :key="comment.author">
-          <div class="d-flex flex-wrap w-100 justify-content-between py-2">
-            <h6>{{ comment.author }}</h6>
-          </div>
-          <p class="fs-sm font-weight-normal text-body py-2">{{ comment.content }}</p>
-          <small class="text-muted">{{ comment.date }}</small>
+    <div class="list-group mt-5 mb-5">
+      <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
+      <div class="list-group-item py-3" v-for="comment in comments" :key="comment.commentId">
+        <div class="d-flex flex-wrap w-100 justify-content-between py-2">
+          <h6>{{ comment.userId }}</h6>
         </div>
+        <p class="fs-sm font-weight-normal text-body py-2">{{ comment.content }}</p>
+        <small class="text-muted">{{ comment.createdAt }}</small>
       </div>
+    </div>
 
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center pagination-spaced gap-1">
@@ -64,6 +64,7 @@ const router = useRouter(); // useRouter 추가
 
 onMounted(() => {
   fetchPost();
+  fetchComments(); // 댓글 가져오기
   category.value = route.params.category;  // URL의 category 값을 가져옵니다.
 });
 const fetchPost = async () => {
@@ -73,6 +74,18 @@ const fetchPost = async () => {
     post.value = response.data;
   } catch (error) {
     console.error('게시글을 가져오는 데 실패했습니다:', error);
+  }
+};
+
+
+const fetchComments = async () => {
+  const postId = route.params.postId;
+  try {
+    const response = await axios.get(`http://localhost:8080/api/community/comment/${postId}`);
+    comments.value = response.data; // 댓글 데이터를 comments 배열에 저장
+    console.log(comments);
+  } catch (error) {
+    console.error('댓글을 가져오는 데 실패했습니다:', error);
   }
 };
 
