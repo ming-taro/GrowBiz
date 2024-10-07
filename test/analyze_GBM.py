@@ -1,35 +1,45 @@
-from xgboost import XGBRegressor
-from sklearn.metrics import mean_squared_error
 import pandas as pd
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-def analyze_data_xgboost():
-    # 데이터 로드 및 전처리는 기존과 동일하게 유지
-    df = pd.read_csv('chicken_franchise_data_consolidated_with_success_rate.csv')
+def gbm_analysis():
+    # CSV 파일에서 데이터 불러오기
+    print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
+    df = pd.read_csv('chicken_franchise_data_with_trend.csv')
 
-    X = df[['closure_rate', 'asset', 'liability', 'equity', 'revenue', 
+    # 성공 여부를 이진 값으로 변환 (개업률 50% 이상이면 성공으로 간주)
+    df['success'] = (df['opening_rate'] >= 50).astype(int)
+
+    # '개업률'을 제외한 사용할 특성에서 'closure_rate' 제거
+    X = df[['asset', 'liability', 'equity', 'revenue', 
             'operating_income', 'net_income', 'advertising_expense', 'average_sales', 
             'franchise_count', 'initial_cost', 'interior_cost', 
             'business_fee', 'contract_initial', 'contract_renewal']]
-    y = df['success_rate']  # 연속 값 (비율)
 
+    # 목표 변수 설정 (성공 여부)
+    y = df['success']
+
+    # 데이터 분리 (훈련 세트와 테스트 세트)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # XGBoost 회귀 모델 학습
-    model = XGBRegressor(n_estimators=100, random_state=42)
+    # Gradient Boosting Classifier 모델 학습
+    model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, random_state=42)
     model.fit(X_train, y_train)
 
-    # 예측 및 평가
+    # 모델 예측 및 정확도 평가
     y_pred = model.predict(X_test)
-    mse = mean_squared_error(y_test, y_pred)
-    print(f"Model Mean Squared Error (XGBoost Regression): {mse:.4f}")
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Model accuracy: {accuracy:.4f}")
 
-    # 특성 중요도
+    # 특성 중요도 계산
     importances = model.feature_importances_
+
+    # 특성 중요도 출력
     feature_importances = sorted(zip(X.columns, importances), key=lambda x: x[1], reverse=True)
-    print("\nFeature Importances (XGBoost Regression):")
+    print("\nFeature Importances (sorted, GBM):")
     for feature, importance in feature_importances:
         print(f"{feature}: {importance:.4f}")
 
 if __name__ == "__main__":
-    analyze_data_xgboost()  # 함수 호출
+    gbm_analysis()
