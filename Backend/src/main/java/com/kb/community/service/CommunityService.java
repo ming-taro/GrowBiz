@@ -47,8 +47,8 @@ public class CommunityService {
 
     // 게시글 생성
     @Transactional
-    public void createPost(PostDTO post) {
-        communityMapper.createPost(post);
+    public void createPost(String category, PostDTO post) {
+        communityMapper.createPost(category, post);
     }
 
     // 게시글 삭제

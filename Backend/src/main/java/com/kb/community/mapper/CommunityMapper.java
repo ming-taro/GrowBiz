@@ -15,7 +15,7 @@ public interface CommunityMapper {
     PostDTO selectPostById(@Param("postId") long id);
 
     // 게시글 생성
-    void createPost(PostDTO post);
+    void createPost(@Param("category") String category, @Param("post") PostDTO post);
 
     // 게시글 삭제
     void deletePost(@Param("postId") Long postId);

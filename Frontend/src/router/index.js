@@ -57,12 +57,17 @@ const router = createRouter({
       name: 'Community',
       component: Community,
     },
-    { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
+    //{ path: '/community/create', name: 'BoardCreate', component: BoardCreate },
     //{ path: '/community/view', name: 'BoardView', component: BoardView },
     {
       path: '/community/:category/view/:postId',
       name: 'BoardView',
       component: BoardView,
+    },
+    {
+      path: '/community/:category/create',
+      name: 'BoardCreate',
+      component: BoardCreate,
     },
     {
       path: '/infoPlaza/industry',

@@ -36,9 +36,9 @@ public class CommunityController {
     }
 
     // 게시글 생성
-    @PostMapping
-    public ResponseEntity<Void> createPost(@RequestBody PostDTO post) {
-        communityService.createPost(post);
+    @PostMapping("/{category}/create")
+    public ResponseEntity<Void> createPost(@PathVariable String category, @RequestBody PostDTO post) {
+        communityService.createPost(category, post);
         return ResponseEntity.ok().build();
     }
 
