@@ -28,15 +28,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-const categories = ref([
-  { name: '음식/음료', link: '#' },
-  { name: '유통', link: '#' },
-  { name: '패션/뷰티', link: '#' },
-  { name: '의료', link: '#' },
-  { name: '여가/오락', link: '#' },
-]);
+const categories = ref([]);
+
+onMounted(() => {
+  axios.get('http://localhost:8080/api/category')
+    .then(response => {
+      categories.value = response.data;
+    })
+    .catch(error => {
+      console.error("카테고리 데이터를 가져오는 중 오류 발생:", error);
+    });
+});
+
 </script>
 
 <style scoped>

@@ -18,6 +18,18 @@ public class LoanService {
         return mapper.getBest4List();
     }
 
+    public List<PersonalCreditLoanDTO> getBestCreditLoan4List() { return mapper.getBestCreditLoan4List(); }
+
     public List<GovernmentFundDTO> getFilteredList(GovernmentFilterDTO governmentFilter) { return mapper.getFilteredList(governmentFilter); }
 
+    public List<PersonalCreditLoanDTO> getFilteredCreditLoanList(PersonalFilterDTO personalFilter) {
+        return mapper.getFilteredCreditLoanList(personalFilter);
+    }
+
+    public GovernmentFundDTO getDetailItem(String productName) { return mapper.getDetailItem(productName); }
+
+    public PersonalCreditLoanDTO getDetailItemCreditLoan(Long id) {
+        return mapper.getDetailItemCreditLoan(id);
+    }
 }
+

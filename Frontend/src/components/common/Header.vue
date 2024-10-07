@@ -45,15 +45,15 @@
                     커뮤니티
                   </a>
                   <div class="header-info-dropdown">
-                    <RouterLink to="/community"
+                    <RouterLink to="/community/food"
                       ><span>음식/음료</span></RouterLink
                     >
-                    <RouterLink to="/community"><span>유통</span></RouterLink>
-                    <RouterLink to="/community"
+                    <RouterLink to="/community/distribution"><span>유통</span></RouterLink>
+                    <RouterLink to="/community/fashion"
                       ><span>패션/뷰티</span></RouterLink
                     >
-                    <RouterLink to="/community"><span>의료</span></RouterLink>
-                    <RouterLink to="/community"
+                    <RouterLink to="/community/medical"><span>의료</span></RouterLink>
+                    <RouterLink to="/community/leisure"
                       ><span>여가/오락</span></RouterLink
                     >
                   </div>
