@@ -25,13 +25,30 @@ public class LoanController {
         return ResponseEntity.ok(service.getBest4List() );
     }
 
+    @GetMapping("/getBestCreditLoan4List")
+    public ResponseEntity<List<PersonalCreditLoanDTO>> getBestCreditLoan4List() {
+        return ResponseEntity.ok(service.getBestCreditLoan4List() );
+    }
+
     @GetMapping("/getFilteredList")
     public ResponseEntity<List<GovernmentFundDTO>> getFilteredList(GovernmentFilterDTO governmentFilter) {
         return ResponseEntity.ok(service.getFilteredList(governmentFilter));
+    }
+
+    @GetMapping("/getFilteredCreditLoanList")
+    public ResponseEntity<List<PersonalCreditLoanDTO>> getFilteredCreditLoanList(PersonalFilterDTO personalFilter) {
+        return ResponseEntity.ok(service.getFilteredCreditLoanList(personalFilter));
     }
 
     @GetMapping("/getDetailItem")
     public ResponseEntity<GovernmentFundDTO> getDetailItem(String productName) {
         return ResponseEntity.ok(service.getDetailItem(productName));
     }
+
+    @GetMapping("/getDetailItemCreditLoan")
+    public ResponseEntity<PersonalCreditLoanDTO> getDetailItemCreditLoan(Long id) {
+        return ResponseEntity.ok(service.getDetailItemCreditLoan(id));
+    }
+
+
 }

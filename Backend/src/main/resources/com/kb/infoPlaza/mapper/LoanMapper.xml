@@ -30,5 +30,26 @@
         select * from business_loan_products where loan_product_name = #{productName}
     </select>
 
+    <select id="getBestCreditLoan4List" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        SELECT * FROM credit_loan_product
+        ORDER BY crdt_grad_avg ASC LIMIT 4;
+    </select>
+
+    <select id="getFilteredCreditLoanList" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        SELECT *
+        FROM credit_loan_product
+        WHERE 1=1
+        <if test="companyName != '전체'">
+            AND kor_co_nm = #{companyName}
+        </if>
+        <if test="type != '전체'">
+            AND crdt_prdt_type_nm = #{type}
+        </if>
+    </select>
+
+    <select id="getDetailItemCreditLoan" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        select * from credit_loan_product where id = #{id}
+    </select>
+
 
 </mapper>
