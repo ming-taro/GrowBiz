@@ -3,54 +3,6 @@
   <div class="">
     <div class="list-group list-group-flush gap-2">
       <div class="text-center">
-        <h4>기업</h4>
-      </div>
-      <div
-        class="list-group-item gap-3 text-center p-2 bg-body-secondary-hover"
-      >
-        <div class="icon flex-none">
-          <div class="icon flex-none">
-            <img
-              src="@/assets/img/infoplaza/popular.png"
-              class="w-rem-8 h-rem-8"
-              alt="..."
-            />
-          </div>
-        </div>
-        <div class="align-items-center flex-fill">
-          <div>
-            <RouterLink
-              to="/infoPlaza/governmentFund"
-              class="stretched-link text-heading text-sm fw-bold"
-              >정책자금</RouterLink
-            >
-          </div>
-        </div>
-      </div>
-      <div
-        class="list-group-item gap-3 text-center p-2 bg-body-secondary-hover"
-      >
-        <div class="icon flex-none">
-          <div class="icon flex-none">
-            <img
-              src="@/assets/img/infoplaza/popular.png"
-              class="w-rem-8 h-rem-8"
-              alt="..."
-            />
-          </div>
-        </div>
-        <div class="align-items-center flex-fill">
-          <div>
-            <RouterLink
-              to="/infoPlaza/KBLoan"
-              class="stretched-link text-heading text-sm fw-bold"
-              >국민은행</RouterLink
-            >
-          </div>
-        </div>
-      </div>
-      <br />
-      <div class="text-center">
         <h4>개인</h4>
       </div>
       <div
@@ -115,6 +67,55 @@
           </div>
         </div>
       </div>
+
+      <div class="text-center">
+        <h4>기업</h4>
+      </div>
+      <div
+        class="list-group-item gap-3 text-center p-2 bg-body-secondary-hover"
+      >
+        <div class="icon flex-none">
+          <div class="icon flex-none">
+            <img
+              src="@/assets/img/infoplaza/popular.png"
+              class="w-rem-8 h-rem-8"
+              alt="..."
+            />
+          </div>
+        </div>
+        <div class="align-items-center flex-fill">
+          <div>
+            <RouterLink
+              to="/infoPlaza/governmentFund"
+              class="stretched-link text-heading text-sm fw-bold"
+              >정책자금</RouterLink
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        class="list-group-item gap-3 text-center p-2 bg-body-secondary-hover"
+      >
+        <div class="icon flex-none">
+          <div class="icon flex-none">
+            <img
+              src="@/assets/img/infoplaza/popular.png"
+              class="w-rem-8 h-rem-8"
+              alt="..."
+            />
+          </div>
+        </div>
+        <div class="align-items-center flex-fill">
+          <div>
+            <RouterLink
+              to="/infoPlaza/KBLoan"
+              class="stretched-link text-heading text-sm fw-bold"
+              >국민은행</RouterLink
+            >
+          </div>
+        </div>
+      </div>
+      <br />
     </div>
   </div>
   <!-- <ul class="nav nav-underline nav-fill">
