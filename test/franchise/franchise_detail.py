@@ -187,7 +187,17 @@ mysql_connection = pymysql.connect(
 )
 
 try:
-    mongo_client = MongoClient(host=os.environ.get('DB_HOST'), port=int(os.environ.get('MONGO_DB_PORT')))
+    # 환경 변수에서 사용자 인증 정보 가져오기
+
+    # MongoDB 연결
+    mongo_client = MongoClient(
+        host=os.environ.get('DB_HOST'),
+        port=int(os.environ.get('MONGO_DB_PORT')),
+        username=os.environ.get('MONGO_DB_USER'),
+        password=os.environ.get('MONGO_DB_PASSWORD'),
+        authSource=os.environ.get('AUTH_DB')
+    )
+
     mongo_db = mongo_client['franchise']
     mongo_db_collection = mongo_db['franchise_detail']
 
