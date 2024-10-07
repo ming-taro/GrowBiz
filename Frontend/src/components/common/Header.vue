@@ -41,7 +41,7 @@
                   >
                 </li>
                 <li class="nav-item flex-item header-info-container">
-                  <a class="fw-bold nav-link rounded-pill" href="/community">
+                  <a class="fw-bold nav-link rounded-pill" href="/community/food">
                     커뮤니티
                   </a>
                   <div class="header-info-dropdown">
