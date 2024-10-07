@@ -49,18 +49,12 @@ const category = route.params.category; // 카테고리 매개변수 가져오�
 const submitPost = async () => {
   if (postTitle.value.trim() && postContent.value.trim()) {
 
-      // HTML 태그 처리
-      const cleanContent = postContent.value
-      .replace(/<\/?p[^>]*>/g, '\n')  // <p> 태그를 줄바꿈으로 대체
-      .replace(/<\/?div[^>]*>/g, '\n') // <div> 태그를 줄바꿈으로 대체 (필요시)
-      .replace(/<br\s*\/?>/g, '\n');   // <br> 태그를 줄바꿈으로 대체
-
     try {
       const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
         title: postTitle.value,
-        content: cleanText,
+        content: postContent.value,
         category: category,
-        userId: '김수현'
+        userId: '이유리'
       });
 
       alert('글이 성공적으로 작성되었습니다.');

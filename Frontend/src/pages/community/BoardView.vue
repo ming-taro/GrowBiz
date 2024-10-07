@@ -2,14 +2,21 @@
   <div>
     <CommunityHeader />
     <div class="container"> 
-      <h3 class="fw-semibold mb-5">{{ post.title }}</h3>
-      <p class="text-m text-muted mb-5">{{ post.content }}</p>
+      <h2 class="fw-semibold mb-5">{{ post.title }}</h2>
+      <h4 class="fw-semibold mb-5 d-flex justify-content-between">
+        <span>{{ post.userId }}</span>
+        <span class="fw-light ms-auto">{{ post.createdAt }}</span> <!-- 오른쪽으로 밀기 -->
+      </h4>
+      <hr/>
+      <p class="text-m text-muted mb-5 fs-4" v-html="post.content"></p>
+      <hr/>
       <div class="text-center gap-2 mb-5">
         <button type="button" class="btn btn-sm btn-neutral mx-1">👍 추천</button>
         <button type="button" class="btn btn-sm btn-neutral mx-1">👎 비추천</button>
       </div>
+      <div class="text-center">
       <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
-
+    </div>
       
       <div class="list-group mt-5 mb-5">
         <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
