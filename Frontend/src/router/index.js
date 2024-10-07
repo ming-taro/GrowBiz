@@ -51,7 +51,12 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/shop', name: 'Shop', component: Shop },
-    { path: '/community', name: 'Community', component: Community },
+//    { path: '/community', name: 'Community', component: Community },
+    {
+      path: '/community/:category',
+      name: 'Community',
+      component: Community,
+    },
     { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
     { path: '/community/view', name: 'BoardView', component: BoardView },
     {

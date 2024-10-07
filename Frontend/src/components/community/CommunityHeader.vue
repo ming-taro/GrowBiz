@@ -34,7 +34,7 @@ import axios from 'axios';
 const categories = ref([]);
 
 onMounted(() => {
-  axios.get('http://localhost:8080/api/category')
+  axios.get('http://localhost:8080/api/community/all-category')
     .then(response => {
       categories.value = response.data;
     })

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.community.mapper.CommunityMapper">
+    <select id="getPostsByCategory" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category}
+        ORDER BY post_id DESC
+    </select>
+
+    <insert id="createPost" parameterType="com.kb.community.dto.PostDTO">
+        INSERT INTO community_post (user_id, title, content, category)
+        VALUES (#{userId}, #{title}, #{content}, #{category})
+    </insert>
+
+    <delete id="deletePost" parameterType="Long">
+        DELETE FROM community_post WHERE post_id = #{postId}
+    </delete>
+
+    <update id="updatePost" parameterType="com.kb.community.dto.PostDTO">
+        UPDATE community_post
+        SET title = #{title}, content = #{content}, category = #{category}
+        WHERE post_id = #{postId}
+    </update>
+</mapper>
