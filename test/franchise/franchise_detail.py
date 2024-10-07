@@ -11,9 +11,9 @@ load_dotenv()
 
 FRANCHISE_DETAIL_URL = "https://franchise.ftc.go.kr/mnu/00013/program/userRqst/view.do"
 
-def find_franchise_detail(fir_mst_sn):
+def find_franchise_detail(info):
     params = {
-        'firMstSn': fir_mst_sn
+        'firMstSn': info[-1]
     }
     response = requests.get(FRANCHISE_DETAIL_URL, params)
 
@@ -155,7 +155,10 @@ def find_franchise_detail(fir_mst_sn):
         }
 
         return {
-            "serial_number": fir_mst_sn,
+            "serial_number": info[3],
+            "store_name": info[2],
+            "main_category": info[0],
+            "sub_category": info[1],
             "contact": contact,
             "financial": financial,
             "store": store,
@@ -186,18 +189,15 @@ mysql_connection = pymysql.connect(
     charset='utf8'
 )
 
+mongo_client = MongoClient(
+    host=os.environ.get('DB_HOST'),
+    port=int(os.environ.get('MONGO_DB_PORT')),
+    username=os.environ.get('MONGO_DB_USER'),
+    password=os.environ.get('MONGO_DB_PASSWORD'),
+    authSource=os.environ.get('AUTH_DB')
+)
+
 try:
-    # 환경 변수에서 사용자 인증 정보 가져오기
-
-    # MongoDB 연결
-    mongo_client = MongoClient(
-        host=os.environ.get('DB_HOST'),
-        port=int(os.environ.get('MONGO_DB_PORT')),
-        username=os.environ.get('MONGO_DB_USER'),
-        password=os.environ.get('MONGO_DB_PASSWORD'),
-        authSource=os.environ.get('AUTH_DB')
-    )
-
     mongo_db = mongo_client['franchise']
     mongo_db_collection = mongo_db['franchise_detail']
 
@@ -205,16 +205,16 @@ try:
         print("Successfully connected to the database")
 
         # 쿼리 실행
-        query = "SELECT serial_number FROM BusinessInfo"
+        query = "SELECT main_category, sub_category, store_name, serial_number FROM BusinessInfo"
         mysql_cursor = mysql_connection.cursor()
         mysql_cursor.execute(query)
 
         # 결과 가져오기
         result = mysql_cursor.fetchall()
-
-        for fir_mst_sn in result:
-            mongo_db_collection.insert_one(find_franchise_detail(fir_mst_sn[0]))
-
+        last = 0
+        for i in range(0, len(result)):
+            mongo_db_collection.insert_one(find_franchise_detail(result[i]))
+            # print(i, "->", result[i])
 except Error as e:
     print("Error while connecting to MySQL", e)
 finally:
