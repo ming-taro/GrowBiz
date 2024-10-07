@@ -115,17 +115,17 @@ const router = createRouter({
       component: GovernmentFundDetail,
     },
     {
-      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:productName',
+      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:id',
       name: 'personalCreditLoanDetail',
       component: PersonalCreditLoanDetail,
     },
     {
-      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:productName',
+      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:id',
       name: 'jeonseLoanDetail',
       component: JeonseLoanDetail,
     },
     {
-      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:productName',
+      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:id',
       name: 'mortgageLoanDetail',
       component: MortgageLoanDetail,
     },

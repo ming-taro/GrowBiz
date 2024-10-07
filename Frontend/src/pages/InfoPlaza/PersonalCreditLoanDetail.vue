@@ -10,7 +10,7 @@
             <div class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0">
               <div class="d-none d-md-block" style="padding-top: 90px"></div>
               <h1 class="d-none d-md-inline-block pb-1 mb-2">
-                {{ data.loanProductName }}
+                <!-- {{ data.loanProductName }} -->
               </h1>
               <hr />
               <div class="row">
@@ -25,7 +25,10 @@
                   </span>
                   <span class="text ms-3">
                     <span style="color: gray">신청기간</span> <br />
-                    <strong>{{ data.applicationPeriod }}</strong>
+                    <strong
+                      >{{ formatDate(data.dclsStrtDay) }} ~
+                      {{ formatEndDate(data.dclsEndDay) }}</strong
+                    >
                   </span>
                 </div>
                 <div
@@ -35,10 +38,8 @@
                     <i class="fa-solid fa-coins" style="font-size: 50px"></i>
                   </span>
                   <span class="text ms-3">
-                    <span style="color: gray">금리</span> <br />
-                    <strong style="color: brown">{{
-                      data.totalInterestRate
-                    }}</strong>
+                    <span style="color: gray">대출유형</span> <br />
+                    <strong>{{ data.crdtPrdtTypeNm }}</strong>
                   </span>
                 </div>
                 <div
@@ -48,10 +49,10 @@
                     <i class="fa-solid fa-won-sign" style="font-size: 50px"></i>
                   </span>
                   <span class="text ms-3">
-                    <span style="color: gray">가산금리</span> <br />
-                    <strong style="color: brown">{{
-                      data.additionalInterestRate
-                    }}</strong>
+                    <span style="color: gray">금리</span> <br />
+                    <strong style="color: brown"
+                      >{{ data.crdtGradAvg }}%</strong
+                    >
                   </span>
                 </div>
               </div>
@@ -59,7 +60,6 @@
               <hr />
               <h3>상품 안내</h3>
 
-              <div v-html="formattedDescription"></div>
               <hr />
             </div>
           </div>
@@ -89,13 +89,14 @@ const data = ref();
 const bringDataList = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getDetailItem', {
+    const response = await axios.get(BASEURI + '/getDetailItemCreditLoan', {
       params: {
         id: id.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {
       data.value = response.data;
+      console.log(data.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -104,24 +105,27 @@ const bringDataList = async () => {
   }
 };
 
-// Computed property to modify the description
-const formattedDescription = computed(() => {
-  // <h2>를 <h3>로 변경하고 <hr> 추가
-  console.log(
-    data.value.description
-      .replace(/<h2>/g, '<hr><h3>')
-      .replace(/<\/h2>/g, '</h3><br>')
-      .replace(/<h3>/g, '<br><h4>')
-  );
-
-  if (data.value) {
-    return data.value.description
-      .replace(/<h3>/g, '<br><h4>')
-      .replace(/<h2>/g, '<hr><h3>')
-      .replace(/<\/h2>/g, '</h3><br>');
+// 날짜 형식 변환
+const formatDate = (date) => {
+  const dateString = String(date);
+  if (dateString.length !== 8) {
+    return dateString;
   }
-  return '';
-});
+
+  const year = dateString.substring(0, 4);
+  const month = dateString.substring(4, 6);
+  const day = dateString.substring(6, 8);
+
+  return `${year.substring(2)}/${month}/${day}`;
+};
+
+// dclsEndDay가 null일 경우를 처리하는 함수
+const formatEndDate = (date) => {
+  if (date === null) {
+    return '';
+  }
+  return formatDate(date);
+};
 
 bringDataList();
 </script>
