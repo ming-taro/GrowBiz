@@ -1,7 +1,17 @@
 <template>
   <InfoPlazaHeader />
   <div class="container mw-screen-xl">
-    <button @click="goBack" class="btn ms-3">뒤로가기</button>
+    <div
+      class="position-relative mb-8 d-flex align-items-end justify-content-center"
+    >
+      <h2 class="fw-bold m-0">영상 정보</h2>
+      <button
+        @click="goBack"
+        class="btn btn-sm btn-link position-absolute end-0 mt-6"
+      >
+        뒤로가기
+      </button>
+    </div>
     <div class="card m-3">
       <div class="row g-0">
         <div class="col-md-4">
@@ -26,6 +36,12 @@
             <p class="card-text">
               <small class="text-body-secondary">{{ video.eduTime }}</small>
             </p>
+            <button
+              @click="openVideoPopup(video.videoUrl)"
+              class="btn btn-primary mt-2"
+            >
+              시청하기
+            </button>
           </div>
         </div>
       </div>
@@ -43,49 +59,59 @@
       </p>
     </div>
     <hr />
-    <!-- Nav pills -->
-    <ul class="nav nav-pills ms-5">
-      <li class="nav-item">
-        <a href="#" class="nav-link active">Active</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">Link</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">Link</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link disabled" tabindex="-1" aria-disabled="true"
-          >Disabled</a
-        >
-      </li>
-    </ul>
+    <div class="d-flex flex-wrap ms-5 gap-2">
+      <button
+        v-for="hashtag in formattedHashtags"
+        :key="hashtag"
+        class="btn btn-secondary btn-sm"
+        @click="goToCategory(hashtag.slice(1))"
+        style="border-radius: 20px"
+      >
+        {{ hashtag }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router"; // Import the router
-import { ref, onMounted, computed } from "vue";
-import InfoPlazaHeader from "@/components/infoplaza/InfoPlazaHeader.vue";
-import axios from "axios";
+import { useRoute, useRouter } from 'vue-router'; // Import the router
+import { ref, onMounted, computed } from 'vue';
+import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import axios from 'axios';
 
 const formattedCategories = computed(() => {
-  if (!video.value.category) return "";
+  if (!video.value.category) return '';
   return video.value.category
     .split(/\s+/)
     .map(
       (word) =>
         `<span class="category-link" onclick="window.goToCategory('${word.replace(
           /[,.]$/,
-          ""
+          ''
         )}')">${word}</span>`
     )
-    .join(" ");
+    .join(' ');
 });
+
+const formattedHashtags = computed(() => {
+  if (!video.value.category) return [];
+  return video.value.category
+    .split(/\s+/)
+    .map((word) => '#' + word.replace(/[,.]$/, '').trim())
+    .filter((tag) => tag.length > 1);
+});
+
+// goToCategory 함수를 script 내부로 이동
+const goToCategory = (category) => {
+  router.push({
+    name: 'CategoryList',
+    params: { category: category },
+  });
+};
 
 window.goToCategory = (category) => {
   router.push({
-    name: "CategoryList",
+    name: 'CategoryList',
     params: { category: category },
   });
 };
@@ -100,6 +126,14 @@ const props = defineProps({
 const router = useRouter();
 const video = ref({});
 
+function openVideoPopup(videoUrl) {
+  if (videoUrl) {
+    window.open(videoUrl, '_blank', 'width=800,height=600');
+  } else {
+    alert('비디오 URL이 없습니다.');
+  }
+}
+
 const fetchVideo = async (vno) => {
   try {
     const response = await axios.get(
@@ -108,10 +142,10 @@ const fetchVideo = async (vno) => {
     if (response.status === 200) {
       video.value = response.data; // 받아온 데이터를 video에 저장
     } else {
-      alert("비디오 정보를 불러오지 못했습니다.");
+      alert('비디오 정보를 불러오지 못했습니다.');
     }
   } catch (error) {
-    alert("에러 발생: " + error);
+    alert('에러 발생: ' + error);
   }
 };
 onMounted(() => {

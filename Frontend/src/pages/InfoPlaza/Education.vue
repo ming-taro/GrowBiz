@@ -150,21 +150,21 @@
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center align-items-center mt-4">
           <button
-            class="btn btn-secondary"
+            class="btn btn-link"
             @click="prevPage"
             :disabled="currentPage === 1"
           >
-            이전
+            < 이전
           </button>
-          <span class="mx-2">Page {{ currentPage }}</span>
+          <span class="mx-3">{{ currentPage }} / {{ totalPages }}</span>
           <button
-            class="btn btn-secondary"
+            class="btn btn-link"
             @click="nextPage"
             :disabled="currentPage === totalPages"
           >
-            다음
+            다음 >
           </button>
         </div>
       </div>
