@@ -1,6 +1,38 @@
 <template>
   <div class="container">
-    <div>
+    <!-- 검색 기능 -->
+    <div v-if="showSearch" class="row justify-content-center mb-10">
+      <div class="col-8">
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <form class="form-group flex-grow-1 me-2">
+            <div class="input-group input-group-sm">
+              <div class="btn-group dropdown">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>전체</option>
+                  <option value="1">작성자</option>
+                  <option value="2">제목</option>
+                  <option value="3">내용</option>
+                </select>
+              </div>
+              <input
+                type="text"
+                class="rounded form-control ms-1"
+                placeholder="검색어를 입력해 주세요."
+              />
+              <span class="ms-1 rounded input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
+            </div>
+          </form>
+          <!-- 작성 버튼 추가 -->
+          <div v-if="showCreateButton">
+            <RouterLink :to="`/community/${category}/create`" class="btn btn-sm btn-neutral mb-5 mt-1">
+                글쓰기
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+      <div class="border-top">
       <div class="table-responsive">
         <table class="table table-nowrap text-center">
           <thead>
@@ -27,8 +59,32 @@
           </tbody>
         </table>
       </div>
+      
+      <!-- 페이지네이션 기능 -->
+      <div v-if="showPagination" class="py-4 px-6 d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-spaced gap-1">
+            <li class="page-item">
+              <a class="page-link" href="#">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item">
+              <a class="page-link me-3" href="#">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -41,6 +97,18 @@ const props = defineProps({
   category: {
     type: String,
     required: true
+  },
+  showPagination: {
+    type: Boolean,
+    default: true
+  },
+  showSearch: {
+    type: Boolean,
+    default: true
+  },
+  showCreateButton: {
+    type: Boolean,
+    default: true
   }
 });
 
