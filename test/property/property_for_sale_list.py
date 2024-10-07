@@ -87,10 +87,10 @@ def extract_columns(ldongCd, result_list):
 
         sql = "INSERT INTO property_listing (ldong_cd, atcl_no, atcl_reg_dttm, ctgry_cd1, ctgry_cd1_nm, ctgry_cd2, ctgry_cd2_nm, atcl_sfe_cn, deal_kind_cd_nm, bsc_tnth_wunt_amt, add_tnth_wunt_amt, area1, area2, image_data, la_crd, lo_crd, mdiat_bzest_nm) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (ldongCd, atcl_no, atcl_reg_dttm, ctgry_cd1, ctgry_cd1_nm, ctgry_cd2, ctgry_cd2_nm, atcl_sfe_cn, deal_kind_cd_nm, bsc_tnth_wunt_amt, add_tnth_wunt_amt, area1, area2, image_data, la_crd, lo_crd, mdiat_bzest_nm)
-        try:
-            cursor.execute(sql, val)
-        except Exception as e:
-            print(f"Error occurred: {e}")
+        # try:
+        #     cursor.execute(sql, val)
+        # except Exception as e:
+        #     print(f"Error occurred: {e}")
 
         # extracted_data.append({
         #     'ldong_cd': ldongCd,
@@ -111,7 +111,7 @@ def extract_columns(ldongCd, result_list):
         #     'lo_crd': lo_crd,    # 경도 (126.9939121)
         #     'mdiat_bzest_nm': mdiat_bzest_nm,  # 중개업체명 (이수자이멘토부동산공인중개사사무소)
         # })
-    conn.commit()
+    # conn.commit()
     print("결과: ", len(result_list))
     total_length += len(result_list)
 
@@ -145,5 +145,5 @@ print('total_time')
 print(end_time - start_time) # 73 s
 
 print('총: ', total_length)
-cursor.close()  # 커서 닫기
-conn.close()    # 연결 종료
+# cursor.close()  # 커서 닫기
+# conn.close()    # 연결 종료
