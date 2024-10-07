@@ -17,7 +17,18 @@ const StoreInfo = () => import('@/pages/InfoPlaza/StoreInfo.vue');
 const GovernmentFund = () => import('@/pages/Infoplaza/GovernmentFund.vue');
 const GovernmentFundDetail = () =>
   import('@/pages/InfoPlaza/GovernmentFundDetail.vue');
+const PersonalCreditLoan = () =>
+  import('@/pages/Infoplaza/PersonalCreditLoan.vue');
+const PersonalCreditLoanDetail = () =>
+  import('@/pages/Infoplaza/PersonalCreditLoanDetail.vue');
 const EnterpriseLoan = () => import('@/pages/Infoplaza/EnterpriseLoan.vue');
+const KBLoan = () => import('@/pages/Infoplaza/KBLoan.vue');
+const KBLoanDetail = () => import('@/pages/Infoplaza/KBLoanDetail.vue');
+const JeonseLoan = () => import('@/pages/Infoplaza/JeonseLoan.vue');
+const JeonseLoanDetail = () => import('@/pages/Infoplaza/JeonseLoanDetail.vue');
+const MortgageLoan = () => import('@/pages/Infoplaza/MortgageLoan.vue');
+const MortgageLoanDetail = () =>
+  import('@/pages/Infoplaza/MortgageLoanDetail.vue');
 const Education = () => import('@/pages/InfoPlaza/Education.vue');
 const Video = () => import('@/pages/InfoPlaza/Video.vue');
 const news = () => import('@/pages/InfoPlaza/news.vue');
@@ -40,9 +51,24 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/shop', name: 'Shop', component: Shop },
-    { path: '/community', name: 'Community', component: Community },
-    { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
-    { path: '/community/view', name: 'BoardView', component: BoardView },
+//    { path: '/community', name: 'Community', component: Community },
+    {
+      path: '/community/:category',
+      name: 'Community',
+      component: Community,
+    },
+    //{ path: '/community/create', name: 'BoardCreate', component: BoardCreate },
+    //{ path: '/community/view', name: 'BoardView', component: BoardView },
+    {
+      path: '/community/:category/view/:postId',
+      name: 'BoardView',
+      component: BoardView,
+    },
+    {
+      path: '/community/:category/create',
+      name: 'BoardCreate',
+      component: BoardCreate,
+    },
     {
       path: '/infoPlaza/industry',
       name: 'Industry',
@@ -69,6 +95,26 @@ const router = createRouter({
       component: GovernmentFund,
     },
     {
+      path: '/infoPlaza/personalCreditLoan',
+      name: 'personalCreditLoan',
+      component: PersonalCreditLoan,
+    },
+    {
+      path: '/infoPlaza/jeonseLoan',
+      name: 'jeonseLoan',
+      component: JeonseLoan,
+    },
+    {
+      path: '/infoPlaza/mortgageLoan',
+      name: 'mortgageLoan',
+      component: MortgageLoan,
+    },
+    {
+      path: '/infoPlaza/KBLoan',
+      name: 'KBLoan',
+      component: KBLoan,
+    },
+    {
       path: '/infoPlaza/enterpriseLoan',
       name: 'enterpriseLoan',
       component: EnterpriseLoan,
@@ -77,6 +123,26 @@ const router = createRouter({
       path: '/infoPlaza/governmentFund/governmentFundDetail/:productName',
       name: 'governmentFundDetail',
       component: GovernmentFundDetail,
+    },
+    {
+      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:id',
+      name: 'personalCreditLoanDetail',
+      component: PersonalCreditLoanDetail,
+    },
+    {
+      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:id',
+      name: 'jeonseLoanDetail',
+      component: JeonseLoanDetail,
+    },
+    {
+      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:id',
+      name: 'mortgageLoanDetail',
+      component: MortgageLoanDetail,
+    },
+    {
+      path: '/infoPlaza/KBLoan/KBLoanDetail/:productName',
+      name: 'KBLoanDetail',
+      component: KBLoanDetail,
     },
 
     { path: '/infoPlaza/storeInfo', name: 'storeInfo', component: StoreInfo },

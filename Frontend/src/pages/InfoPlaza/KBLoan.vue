@@ -20,9 +20,7 @@
         <div class="row">
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
-            <RouterLink
-              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
-            >
+            <a href="#">
               <div class="card card-xl-stretch h-100">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
@@ -57,7 +55,7 @@
                   </div>
                 </div>
               </div>
-            </RouterLink>
+            </a>
           </div>
         </div>
       </div>
@@ -197,7 +195,7 @@
                   <!-- Info (상세 보기 버튼) -->
                   <div class="d-flex justify-content-end pt-0 mt-auto">
                     <RouterLink
-                      :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
+                      :to="`/infoPlaza/KBLoan/KBLoanDetail/${item.loanProductName}`"
                       class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                       >상세 보기</RouterLink
                     >
@@ -339,7 +337,11 @@ const bringLoanList = async () => {
 const bringBest4List = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4');
+    const response = await axios.get(BASEURI + '/getBest4', {
+      params: {
+        category: selectedCategory.value,
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
     if (response.status === 200) {
       best4List.value = response.data;
     } else {

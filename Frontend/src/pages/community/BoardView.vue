@@ -2,23 +2,22 @@
   <div>
     <CommunityHeader />
     <div class="container"> 
-      <div class="d-flex align-items-end justify-content-between">
-        <div>
-          <h3 class="fw-semibold mb-5">{{ post.title }}</h3>
-          <p class="text-m text-muted mb-5">
-            {{ post.content }}
-          </p>
-        </div>
-      </div>
+      <h2 class="fw-semibold mb-5">{{ post.title }}</h2>
+      <h4 class="fw-semibold mb-5 d-flex justify-content-between">
+        <span>{{ post.userId }}</span>
+        <span class="fw-light ms-auto">{{ post.createdAt }}</span> <!-- 오른쪽으로 밀기 -->
+      </h4>
+      <hr/>
+      <p class="text-m text-muted mb-5 fs-4" v-html="post.content"></p>
+      <hr/>
       <div class="text-center gap-2 mb-5">
         <button type="button" class="btn btn-sm btn-neutral mx-1">👍 추천</button>
         <button type="button" class="btn btn-sm btn-neutral mx-1">👎 비추천</button>
       </div>
-
-      <div class="text-center gap-2">
-        <RouterLink to="/community" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>            
-      </div>
-
+      <div class="text-center">
+      <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
+    </div>
+      
       <div class="list-group mt-5 mb-5">
         <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
         <div class="list-group-item py-3" v-for="comment in comments" :key="comment.author">
@@ -52,19 +51,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
 
-const post = ref({
-  title: '제목제목제목제목제목',
-  content: `내용내용내용내용내용내용
-            내용내용
-            내용내용내용내용
-            내용내용내용내용내용내용내용내용내용내용
-            내용내용내용내용내용내용내용내용내용내용
-            내용내용내용내용내용내용내용내용내용내용`
-});
+const route = useRoute();
+const post = ref({});
+const category = ref('');
 
+onMounted(() => {
+  fetchPost();
+  category.value = route.params.category;  // URL의 category 값을 가져옵니다.
+});
+const fetchPost = async () => {
+  const postId = route.params.postId;
+  try {
+    const response = await axios.get(`http://localhost:8080/api/community/view/${postId}`);
+    post.value = response.data;
+  } catch (error) {
+    console.error('게시글을 가져오는 데 실패했습니다:', error);
+  }
+};
 const comments = ref([
   { author: '작성자1', content: '댓글댓글댓글댓글댓글...', date: '2014-01-23' },
   { author: '작성자2', content: '댓글댓글댓글댓글...', date: '2015-01-25' },
@@ -73,6 +81,7 @@ const comments = ref([
 
 const totalPages = ref(5); // 페이지네이션
 </script>
-<style scoped>
 
+<style scoped>
+/* 스타일 추가 */
 </style>

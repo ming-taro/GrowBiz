@@ -19,8 +19,10 @@
         </div>
         <div class="align-items-center flex-fill">
           <div>
-            <a href="#" class="stretched-link text-heading text-sm fw-bold"
-              >개인신용</a
+            <RouterLink
+              to="/infoPlaza/personalCreditLoan"
+              class="stretched-link text-heading text-sm fw-bold"
+              >개인신용</RouterLink
             >
           </div>
         </div>
@@ -37,8 +39,10 @@
         </div>
         <div class="align-items-center flex-fill">
           <div>
-            <a href="#" class="stretched-link text-heading text-sm fw-bold"
-              >전세자금</a
+            <RouterLink
+              to="/infoPlaza/jeonseLoan"
+              class="stretched-link text-heading text-sm fw-bold"
+              >전세자금</RouterLink
             >
           </div>
         </div>
@@ -55,12 +59,15 @@
         </div>
         <div class="align-items-center flex-fill">
           <div>
-            <a href="#" class="stretched-link text-heading text-sm fw-bold"
-              >주택담보</a
+            <RouterLink
+              to="/infoPlaza/mortgageLoan"
+              class="stretched-link text-heading text-sm fw-bold"
+              >주택담보</RouterLink
             >
           </div>
         </div>
       </div>
+
       <div class="text-center">
         <h4>기업</h4>
       </div>
@@ -100,12 +107,15 @@
         </div>
         <div class="align-items-center flex-fill">
           <div>
-            <a href="#" class="stretched-link text-heading text-sm fw-bold"
-              >국민은행</a
+            <RouterLink
+              to="/infoPlaza/KBLoan"
+              class="stretched-link text-heading text-sm fw-bold"
+              >국민은행</RouterLink
             >
           </div>
         </div>
       </div>
+      <br />
     </div>
   </div>
   <!-- <ul class="nav nav-underline nav-fill">
