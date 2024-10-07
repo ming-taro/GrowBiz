@@ -32,6 +32,7 @@
 
     <select id="getBestCreditLoan4List" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
         SELECT * FROM credit_loan_product
+                 where crdt_lend_rate_type_nm = '대출금리'
         ORDER BY crdt_grad_avg ASC LIMIT 4;
     </select>
 
@@ -45,10 +46,67 @@
         <if test="type != '전체'">
             AND crdt_prdt_type_nm = #{type}
         </if>
+        AND crdt_lend_rate_type_nm = '대출금리'
     </select>
 
     <select id="getDetailItemCreditLoan" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
         select * from credit_loan_product where id = #{id}
+    </select>
+
+    <select id="getBestJeonse4List" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        SELECT *
+        FROM jeonse_loan_product
+        WHERE lend_rate_avg IS NOT NULL
+        order by lend_rate_avg limit 4;
+    </select>
+
+    <select id="getFilteredJeonseList" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        SELECT *
+        FROM jeonse_loan_product
+        WHERE 1=1
+        <if test="bankName != '전체'">
+            AND kor_co_nm = #{bankName}
+
+        </if>
+        <if test="repayMethod != '전체'">
+            AND rpay_type_nm = #{repayMethod}
+        </if>
+        <if test="type != '전체'">
+            AND lend_rate_type_nm = #{type}
+        </if>
+        AND lend_rate_avg IS NOT NULL
+    </select>
+
+    <select id="getDetailItemJeonse" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        select * from jeonse_loan_product where id = #{id}
+    </select>
+
+    <select id="getBestMortgage4List" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE lend_rate_avg IS NOT NULL
+        order by lend_rate_avg limit 4;
+    </select>
+
+    <select id="getFilteredMortgageList" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE 1=1
+        <if test="bankName != '전체'">
+            AND kor_co_nm = #{bankName}
+
+        </if>
+        <if test="repayMethod != '전체'">
+            AND rpay_type_nm = #{repayMethod}
+        </if>
+        <if test="type != '전체'">
+            AND lend_rate_type_nm = #{type}
+        </if>
+        AND lend_rate_avg IS NOT NULL
+    </select>
+
+    <select id="getDetailItemMortgage" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        select * from mortgage_loan_product where id = #{id}
     </select>
 
 

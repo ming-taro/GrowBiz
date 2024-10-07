@@ -41,18 +41,25 @@
                   >
                 </li>
                 <li class="nav-item flex-item header-info-container">
-                  <a class="fw-bold nav-link rounded-pill" href="/community">
+                  <a
+                    class="fw-bold nav-link rounded-pill"
+                    href="/community/food"
+                  >
                     커뮤니티
                   </a>
                   <div class="header-info-dropdown">
                     <RouterLink to="/community/food"
                       ><span>음식/음료</span></RouterLink
                     >
-                    <RouterLink to="/community/distribution"><span>유통</span></RouterLink>
+                    <RouterLink to="/community/distribution"
+                      ><span>유통</span></RouterLink
+                    >
                     <RouterLink to="/community/fashion"
                       ><span>패션/뷰티</span></RouterLink
                     >
-                    <RouterLink to="/community/medical"><span>의료</span></RouterLink>
+                    <RouterLink to="/community/medical"
+                      ><span>의료</span></RouterLink
+                    >
                     <RouterLink to="/community/leisure"
                       ><span>여가/오락</span></RouterLink
                     >
@@ -75,7 +82,7 @@
                     <RouterLink to="/infoPlaza/education"
                       ><span>교육정보</span></RouterLink
                     >
-                    <RouterLink to="/infoPlaza/governmentFund"
+                    <RouterLink to="/infoPlaza/personalCreditLoan"
                       ><span>대출정보</span></RouterLink
                     >
                     <RouterLink to="/infoPlaza/news"

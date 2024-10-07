@@ -6,23 +6,6 @@
     />
     <div class="container">
       <div class="result-text">커뮤니티</div>
-      <!-- <div class="overlay">
-        <div class="overlay-text">
-          <div class="text-center d-flex justify-content-center">
-            <div class="d-flex w-100" style="max-width: 1000px">
-              <div
-                class="flex-item"
-                v-for="category in categories"
-                :key="category.name"
-              >
-                <a :href="category.link"
-                  ><h4>{{ category.name }}</h4></a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -34,7 +17,7 @@ import axios from 'axios';
 const categories = ref([]);
 
 onMounted(() => {
-  axios.get('http://localhost:8080/api/category')
+  axios.get('http://localhost:8080/api/community/all-category')
     .then(response => {
       categories.value = response.data;
     })

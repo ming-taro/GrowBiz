@@ -51,9 +51,24 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/shop', name: 'Shop', component: Shop },
-    { path: '/community', name: 'Community', component: Community },
-    { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
-    { path: '/community/view', name: 'BoardView', component: BoardView },
+//    { path: '/community', name: 'Community', component: Community },
+    {
+      path: '/community/:category',
+      name: 'Community',
+      component: Community,
+    },
+    //{ path: '/community/create', name: 'BoardCreate', component: BoardCreate },
+    //{ path: '/community/view', name: 'BoardView', component: BoardView },
+    {
+      path: '/community/:category/view/:postId',
+      name: 'BoardView',
+      component: BoardView,
+    },
+    {
+      path: '/community/:category/create',
+      name: 'BoardCreate',
+      component: BoardCreate,
+    },
     {
       path: '/infoPlaza/industry',
       name: 'Industry',
@@ -110,17 +125,17 @@ const router = createRouter({
       component: GovernmentFundDetail,
     },
     {
-      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:productName',
+      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:id',
       name: 'personalCreditLoanDetail',
       component: PersonalCreditLoanDetail,
     },
     {
-      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:productName',
+      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:id',
       name: 'jeonseLoanDetail',
       component: JeonseLoanDetail,
     },
     {
-      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:productName',
+      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:id',
       name: 'mortgageLoanDetail',
       component: MortgageLoanDetail,
     },

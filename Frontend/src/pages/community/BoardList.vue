@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- 검색 기능 -->
-    <div v-if="showSearch" class="row justify-content-center mb-10">
+    <div v-if="showSearch" class="row mb-10 justify-content-center  ">
       <div class="col-8">
         <div class="d-flex justify-content-between align-items-center mt-2">
           <form class="form-group flex-grow-1 me-2">
@@ -24,18 +24,19 @@
               </span>
             </div>
           </form>
+          </div>
+
           <!-- 작성 버튼 추가 -->
-          <div v-if="showCreateButton">
-            <a href="community/create">
-              <button type="button" class="btn btn-sm btn-neutral">
+          <div v-if="showCreateButton" class="ms-auto">
+            <div>
+            <RouterLink :to="`/community/${category}/create`" class="btn btn-sm btn-neutral mb-5 mt-1">
                 글쓰기
-              </button>
-            </a>
+            </RouterLink>
+          </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="border-top">
+      <div class="border-top">
       <div class="table-responsive">
         <table class="table table-nowrap text-center">
           <thead>
@@ -49,20 +50,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="post in posts" :key="post.id">
-              <td>{{ post.id }}</td>
+            <tr v-for="post in posts" :key="post.originalPostId">
+              <td>{{ post.postId }}</td>
               <td>
-                <a :href="'community/view/' + post.id">{{ post.title }}</a>
+                <a :href="`/community/${category}/view/` + post.originalPostId">{{ post.title }}</a>
               </td>
-              <td>{{ post.author }}</td>
-              <td>{{ post.views }}</td>
-              <td>{{ post.likes }}</td>
-              <td>{{ post.date }}</td>
+              <td>{{ post.userId }}</td>
+              <td>{{ post.view }}</td>
+              <td>{{ post.recommend }}</td>
+              <td>{{ post.createdAt }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-
+      
       <!-- 페이지네이션 기능 -->
       <div v-if="showPagination" class="py-4 px-6 d-flex justify-content-center">
         <nav aria-label="Page navigation example">
@@ -86,13 +87,24 @@
         </nav>
       </div>
     </div>
-  </div>
+</div>
 </template>
 
+
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, watch } from 'vue';
+import { defineProps } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
+  posts: {
+    type: Array,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
   showPagination: {
     type: Boolean,
     default: true
@@ -103,38 +115,29 @@ const props = defineProps({
   },
   showCreateButton: {
     type: Boolean,
-    default: true // 기본값은 true로 설정, 필요시 변경 가능
+    default: true
   }
 });
 
-const posts = ref([
-  {
-    id: 3,
-    title: '제목공간제목공간',
-    author: '누구1',
-    views: 1234,
-    likes: 3,
-    date: '2024-07-28',
-  },
-  {
-    id: 2,
-    title: '제목공간제목공간',
-    author: '누구2',
-    views: 1234,
-    likes: 2,
-    date: '2024-07-29',
-  },
-  {
-    id: 1,
-    title: '제목공간제목공간제목',
-    author: '누구3',
-    views: 1234,
-    likes: 5,
-    date: '2024-08-29',
-  },
-]);
+const posts = ref([]);
+
+const fetchPostsByCategory = async (category) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/community/${category}`);
+    posts.value = response.data; // 받아온 게시글 목록 설정
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+};
+
+// 카테고리 prop이 변경될 때마다 게시글 목록을 다시 가져옴
+watch(() => props.category, (newCategory) => {
+  fetchPostsByCategory(newCategory);
+});
+
+// 페이지 로드 시 기본 카테고리 게시글을 가져옴
+fetchPostsByCategory(props.category);
 </script>
 
 <style scoped>
-
 </style>
