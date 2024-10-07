@@ -43,7 +43,6 @@
         class="speech-bubble"
       />
       <div class="answer-box">
-        <!-- 각 버튼을 감싸는 div에 v-for 추가 -->
         <div v-if="questionNumber === 0" class="district_choices_2">
           <div v-if="showChoices" class="choices_2">
             <div v-if="!isDistrictSelected">
@@ -66,7 +65,7 @@
                 <button
                   @mouseover="isHovered = choice.text"
                   @mouseleave="isHovered = ''"
-                  @click="selectAnswer(choice.value)"
+                  @click="selectNeighborhoods(choice.value)"
                 >
                   <span class="arrow">{{
                     isHovered === choice.text ? '▶' : ''
@@ -80,6 +79,10 @@
 
         <div v-else>
           {{ console.log(">>", questions.value) }}
+        </div>
+
+        <div class="button-container">
+          <button class="retry-button" @click="retry()">다시 선택하기</button>
         </div>
       </div>
     </div>
@@ -106,24 +109,13 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { getQuestions } from '@/services/QuestionAPI';
 
-// const fullTexts = [
-//   {
-//     line1: '이 도시에서 가장 성공적인',
-//     line2: '자영업자가 될 준비가 되셨나요?',
-//   },
-//   {
-//     line1: '다음 단계로 나아가고 싶으신가요?',
-//     line2: '더 많은 정보를 원하십니까?',
-//   },
-// ];
-
 const questions = ref([]);
 const questionNumber = ref(0);
 const district = ref([]);
 const neighborhoods = ref([]);
+const districtSelection = ref([]);
 
 const isDistrictSelected = ref(false);
-const isNeighborhoodSelected = ref(false);
 
 const typedTextLine1 = ref('');
 const typedTextLine2 = ref('');
@@ -172,11 +164,6 @@ const typeText = (text, typedText, nextText, delay = 0) => {
   }, 100);
 };
 
-const selectAnswer = (answer) => {
-  console.log(`선택한 응답: ${answer}`);
-  // 선택한 응답에 따른 추가 로직 구현
-};
-
 const fetchQuestions = async () => {
   try {
     questions.value = await getQuestions();
@@ -194,13 +181,22 @@ const fetchQuestions = async () => {
 };
 
 const selectDistrict = (selection) => {
+  districtSelection.value = selection;
   isDistrictSelected.value = !isDistrictSelected.value;
-  console.log(selection)
   let data = questions.value[0].choices[selection].neighborhoods;
-  console.log(data);
+  
   for (let i = 0; i < data.length; i++) {
     neighborhoods.value.push({ text: data[i], value: i });
   }
+}
+
+const selectNeighborhoods = (selection) => {
+  console.log(district.value[districtSelection.value], ", ", neighborhoods.value[selection]);
+}
+
+const retry = () => {
+  isDistrictSelected.value = false;
+  neighborhoods.value = [];
 }
 
 onMounted(async () => {
@@ -357,6 +353,31 @@ onMounted(async () => {
 /* 스크롤박스가 호버할 때 스크롤바 보이기 */
 .district_choices_2:hover::-webkit-scrollbar {
   opacity: 1; /* 스크롤바가 보이도록 설정 */
+}
+
+.button-container {
+  display: flex; /* Flexbox 활성화 */
+  justify-content: center; /* 가운데 정렬 */
+  width: 100%; /* 전체 너비 차지 */
+  margin-bottom: 10px; /* 버튼 간격 조정 */
+}
+
+.retry-button {
+  background-color: #f39c12; /* 어울리는 배경색으로 수정 */
+  color: white; /* 글자 색상 */
+  border: none; /* 테두리 없음 */
+  border-radius: 25px; /* 모서리 둥글게 */
+  padding: 10px 15px; /* 패딩 */
+  cursor: pointer; /* 커서 포인터로 변경 */
+  transition: background-color 0.3s; /* 배경색 변화 효과 */
+}
+
+.retry-button:hover {
+  background-color: #e67e22; /* 호버 시 배경색 */
+}
+
+.retry-button:active {
+  background-color: #d35400; /* 클릭 시 배경색 */
 }
 
 .choices_2 {
