@@ -16,6 +16,7 @@
       </div>
       <div class="text-center">
       <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
+      <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="deletePost">삭제</button> <!-- 삭제 버튼 추가 -->
     </div>
       
       <div class="list-group mt-5 mb-5">
@@ -52,13 +53,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
 
 const route = useRoute();
 const post = ref({});
 const category = ref('');
+const router = useRouter(); // useRouter 추가
 
 onMounted(() => {
   fetchPost();
@@ -73,6 +75,22 @@ const fetchPost = async () => {
     console.error('게시글을 가져오는 데 실패했습니다:', error);
   }
 };
+
+const deletePost = async () => {
+  const postId = route.params.postId; // 삭제할 게시글의 ID 가져오기
+  try {
+    await axios.delete(`http://localhost:8080/api/community/view/${postId}`);
+    alert('게시글이 삭제되었습니다.');
+    router.push(`/community/${category.value}`); // category.value로 변경
+  } catch (error) {
+    console.error('게시글 삭제 실패:', error);
+    alert('게시글 삭제에 실패했습니다.');
+  }
+};
+
+
+
+
 const comments = ref([
   { author: '작성자1', content: '댓글댓글댓글댓글댓글...', date: '2014-01-23' },
   { author: '작성자2', content: '댓글댓글댓글댓글...', date: '2015-01-25' },
