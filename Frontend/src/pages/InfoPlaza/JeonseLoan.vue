@@ -263,7 +263,8 @@
                                 <p class="fs-5 me-1">금리</p>
                                 <p class="fs-5 fw-bolder text-start ms-12">
                                   <!-- text-start 추가 -->
-                                  {{ item.lendRateAvg }}
+                                  {{ item.lendRateMin }} ~
+                                  {{ item.lendRateMax }} %
                                 </p>
                               </div>
                             </div>

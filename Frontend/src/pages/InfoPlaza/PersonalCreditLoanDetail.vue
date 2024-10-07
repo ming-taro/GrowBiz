@@ -9,9 +9,22 @@
             <div class="d-none d-md-block" style="margin-top: -90px"></div>
             <div class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0">
               <div class="d-none d-md-block" style="padding-top: 90px"></div>
-              <h1 class="d-none d-md-inline-block pb-1 mb-2">
-                <!-- {{ data.loanProductName }} -->
-              </h1>
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center me-7">
+                  <img
+                    :src="'/images/banklogo/' + data.korCoNm + '.png'"
+                    alt=""
+                    style="width: 50px"
+                  />
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="text-left">
+                    <span class="fs-2 text-gray-500 fw-bolder d-block">
+                      {{ data.finPrdtNm }}
+                    </span>
+                  </div>
+                </div>
+              </div>
               <hr />
               <div class="row">
                 <div
@@ -49,7 +62,7 @@
                     <i class="fa-solid fa-won-sign" style="font-size: 50px"></i>
                   </span>
                   <span class="text ms-3">
-                    <span style="color: gray">금리</span> <br />
+                    <span style="color: gray">평균 금리</span> <br />
                     <strong style="color: brown"
                       >{{ data.crdtGradAvg }}%</strong
                     >
@@ -58,9 +71,57 @@
               </div>
 
               <hr />
-              <h3>상품 안내</h3>
-
-              <hr />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-1">
+              <PersonalLoanHeader class="" />
+            </div>
+            <div class="col-11">
+              <div class="content-box">
+                <h3>신용 점수별 금리</h3>
+                <br />
+                <div class="content-item">
+                  <span class="label fw-bold">900점 초과</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad1 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">801~900점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad4 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">701~800점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad5 }}%</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">601~700점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad6 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">501~600점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad10 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">401~500점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad11 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">301~400점</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad12 }}</span>
+                </div>
+                <div class="content-item">
+                  <span class="label fw-bold">300점 이하</span>
+                  <span class="colon">: </span>
+                  <span class="value">{{ data.crdtGrad13 }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -73,6 +134,7 @@
 </template>
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
 import { useRoute } from 'vue-router';
 import { ref, computed } from 'vue';
 import axios from 'axios';
@@ -130,4 +192,25 @@ const formatEndDate = (date) => {
 bringDataList();
 </script>
 
-<style></style>
+<style scoped>
+.content-box {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.content-item {
+  display: flex;
+  margin-bottom: 8px;
+}
+.label {
+  min-width: 120px; /* Ensure labels align properly */
+  color: #333;
+}
+.value {
+  color: #555;
+}
+.colon {
+  padding-right: 5px; /* Optional additional spacing */
+}
+</style>

@@ -263,7 +263,8 @@
                                 <p class="fs-5 me-1">금리</p>
                                 <p class="fs-5 fw-bolder text-start ms-12">
                                   <!-- text-start 추가 -->
-                                  {{ item.lendRateAvg }}
+                                  {{ item.lendRateMin }} ~
+                                  {{ item.lendRateMax }} %
                                 </p>
                               </div>
                             </div>
@@ -276,7 +277,7 @@
                   <!-- Info (상세 보기 버튼) -->
                   <div class="d-flex justify-content-end pt-0 mt-auto">
                     <RouterLink
-                      :to="`/infoPlaza/jeonseLoan/jeonseLoanDetail/${item.id}`"
+                      :to="`/infoPlaza/mortgageLoan/mortgageLoanDetail/${item.id}`"
                       class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                       >상세 보기</RouterLink
                     >
