@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <!-- 검색 기능 -->
-    <div v-if="showSearch" class="row mb-10 justify-content-center  ">
+    <div v-if="showSearch" class="row mb-10 justify-content-center">
       <div class="col-8">
-        <div class="d-flex justify-content-between align-items-center mt-2">
+        <div class="d-flex align-items-center mt-2">
           <form class="form-group flex-grow-1 me-2">
             <div class="input-group input-group-sm">
               <div class="btn-group dropdown">
@@ -24,16 +24,14 @@
               </span>
             </div>
           </form>
-          </div>
 
           <!-- 작성 버튼 추가 -->
-          <div v-if="showCreateButton" class="ms-auto">
-            <div>
-              <button type="button" @click="createPost" class="btn btn-sm btn-primary mb-5">글작성</button>
-          </div>
+          <div v-if="showCreateButton" class="ms-2">
+            <button type="button" @click="createPost" class="btn btn-sm btn-primary">글작성</button>
           </div>
         </div>
       </div>
+    </div>
       <div class="border-top">
       <div class="table-responsive mb-5">
         <table class="table table-nowrap text-center">
