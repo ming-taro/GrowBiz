@@ -24,9 +24,10 @@
       <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
       <div class="list-group-item py-3" v-for="comment in comments" :key="comment.commentId">
         <div class="d-flex flex-wrap w-100 justify-content-between py-2">
-          <h6>{{ comment.userId }}</h6>
+          <h4 class="pt-1">{{ comment.userId }}</h4>
+          <button type="button" class="btn btn-sm btn-danger" @click="deleteComment(comment.commentId)">삭제</button>
         </div>
-        <p class="fs-sm font-weight-normal text-body py-2">{{ comment.content }}</p>
+        <p class="font-weight-normal fs-4 text-body py-2 pt-0">{{ comment.content }}</p>
         <small class="text-muted">{{ comment.createdAt }}</small>
       </div>
     </div>
@@ -169,6 +170,18 @@ const addComment = async () => {
   } catch (error) {
     console.error('댓글 추가 실패:', error);
     alert('댓글 추가에 실패했습니다.');
+  }
+};
+
+// 댓글 삭제 함수
+const deleteComment = async (commentId) => {
+  const postId = route.params.postId; // 현재 게시글 ID
+  try {
+    await axios.delete(`http://localhost:8080/api/community/comment/${commentId}`); // 댓글 삭제 API 호출
+    comments.value = comments.value.filter(comment => comment.commentId !== commentId); // 댓글 목록에서 삭제
+  } catch (error) {
+    console.error('댓글 삭제 실패:', error);
+    alert('댓글 삭제에 실패했습니다.');
   }
 };
 

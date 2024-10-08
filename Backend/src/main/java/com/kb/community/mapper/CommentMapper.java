@@ -10,4 +10,7 @@ import java.util.List;
 public interface CommentMapper {
     List<CommentDTO> findByPostId(@Param("postId") Long postId);
     void insertComment(CommentDTO commentDTO);
+
+    // 댓글 삭제
+    void deleteComment(@Param("commentId") Long commentId); // 댓글 삭제 메서드 추가
 }

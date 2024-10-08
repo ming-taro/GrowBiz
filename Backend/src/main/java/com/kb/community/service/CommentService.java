@@ -23,4 +23,10 @@ public class CommentService {
     public void addComment(CommentDTO commentDTO) {
         commentMapper.insertComment(commentDTO);
     }
+
+    // 댓글 삭제
+    @Transactional
+    public void deleteComment(Long commentId) {
+        commentMapper.deleteComment(commentId);
+    }
 }
