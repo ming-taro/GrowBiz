@@ -89,48 +89,128 @@
                   <hr />
                 </div>
               </div>
-              <div class="content-box">
-                <h3>신용 점수별 금리</h3>
-                <br />
-                <div class="content-item">
-                  <span class="label fw-bold">900점 초과</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad1 }}</span>
+              <div class="row">
+                <div class="col-6">
+                  <div class="content-box">
+                    <h3>신용 점수별 금리</h3>
+                    <br />
+                    <div class="content-item">
+                      <span class="label fw-bold">900점 초과</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad1 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">801~900점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad4 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">701~800점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad5 }}%</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">601~700점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad6 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">501~600점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad10 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">401~500점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad11 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">301~400점</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad12 }}</span>
+                    </div>
+                    <div class="content-item">
+                      <span class="label fw-bold">300점 이하</span>
+                      <span class="colon">: </span>
+                      <span class="value">{{ data.crdtGrad13 }}</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="content-item">
-                  <span class="label fw-bold">801~900점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad4 }}</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">701~800점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad5 }}%</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">601~700점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad6 }}</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">501~600점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad10 }}</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">401~500점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad11 }}</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">301~400점</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad12 }}</span>
-                </div>
-                <div class="content-item">
-                  <span class="label fw-bold">300점 이하</span>
-                  <span class="colon">: </span>
-                  <span class="value">{{ data.crdtGrad13 }}</span>
+                <div class="col-6">
+                  <h3>대출 계산기</h3>
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-custom"
+                      :class="{ active: activeButton === 'left' }"
+                      @click="setActiveButton('left')"
+                    >
+                      원리금균등
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-custom"
+                      :class="{ active: activeButton === 'middle' }"
+                      @click="setActiveButton('middle')"
+                    >
+                      원금균등
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-custom"
+                      :class="{ active: activeButton === 'right' }"
+                      @click="setActiveButton('right')"
+                    >
+                      만기일시
+                    </button>
+                  </div>
+                  <form @submit.prevent="calculate">
+                    <div class="form-group">
+                      <label for="loanAmount">대출금액</label>
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="loanAmount"
+                          placeholder="대출금액을 입력하세요"
+                          aria-label="대출금액"
+                          v-model="formattedLoanAmount"
+                          @input="formatCurrency"
+                          required
+                        />
+                        <div class="input-group-append">
+                          <span class="input-group-text">₩</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="loanTerm">대출 기간</label>
+                      <div class="input-group mb-3">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="loanTerm"
+                          placeholder="대출 기간을 입력하세요"
+                          v-model="loanTerm"
+                          required
+                        />
+                        <span class="input-group-text">개월</span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button type="submit" class="btn btn-primary mt-2">
+                        계산하기
+                      </button>
+                    </div>
+                  </form>
+                  <div v-if="monthlyPayment || totalInterest" class="result">
+                    <p>월 상환액: {{ monthlyPayment.toFixed(0) }}원</p>
+                    <p>총 이자액: {{ totalInterest.toFixed(0) }}원</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -149,6 +229,12 @@ import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
 import { useRoute } from 'vue-router';
 import { ref, computed } from 'vue';
 import axios from 'axios';
+
+const activeButton = ref('left'); // 초기 활성화된 버튼 없음
+
+const setActiveButton = (button) => {
+  activeButton.value = button; // 클릭한 버튼을 활성화 상태로 설정
+};
 
 const route = useRoute();
 
@@ -199,6 +285,66 @@ const formatEndDate = (date) => {
   }
   return formatDate(date);
 };
+// 아래는 대출 계산 관련 변수와 함수들
+const formattedLoanAmount = ref('');
+const loanTerm = ref('');
+// 월상환액과 총 이자액 저장할 변수
+const monthlyPayment = ref(0);
+const totalInterest = ref(0);
+
+const formatCurrency = () => {
+  // Remove all non-numeric characters
+  let value = formattedLoanAmount.value.replace(/[^0-9]/g, '');
+
+  // Format number with commas
+  if (value) {
+    value = parseInt(value).toLocaleString(); // Use toLocaleString for formatting
+  }
+
+  // Update the ref value
+  formattedLoanAmount.value = value;
+};
+
+const calculate = () => {
+  const rawLoanAmount = parseInt(
+    formattedLoanAmount.value.replace(/,/g, '').replace('₩', '')
+  );
+  const termMonths = parseInt(loanTerm.value);
+  const interestRate = data.value.crdtGradAvg / 100; // 연 이자율을 소수로 변환
+  let monthlyInterestRate = interestRate / 12;
+
+  // 초기값 설정
+  monthlyPayment.value = 0;
+  totalInterest.value = 0;
+
+  if (activeButton.value === 'left') {
+    // 원리금균등상환
+    monthlyPayment.value =
+      (rawLoanAmount * monthlyInterestRate) /
+      (1 - Math.pow(1 + monthlyInterestRate, -termMonths));
+    totalInterest.value = monthlyPayment.value * termMonths - rawLoanAmount;
+  } else if (activeButton.value === 'middle') {
+    // 원금균등상환
+    const principalPayment = rawLoanAmount / termMonths;
+    monthlyPayment.value =
+      principalPayment +
+      (rawLoanAmount -
+        principalPayment * Math.floor((termMonths - 1) / termMonths)) *
+        monthlyInterestRate;
+    totalInterest.value = monthlyPayment.value * termMonths - rawLoanAmount; // 적절한 이자 계산이 필요
+  } else if (activeButton.value === 'right') {
+    // 만기일시상환
+    totalInterest.value = rawLoanAmount * interestRate; // 만기일시상환의 경우 전체 이자
+    monthlyPayment.value = 0; // 만기일시상환은 만기일까지 월 상환액이 없음
+  }
+
+  console.log(`대출금액: ₩${rawLoanAmount}, 대출기간: ${loanTerm.value}개월`);
+  console.log(
+    `월 상환액: ₩${monthlyPayment.value.toFixed(
+      2
+    )}, 총 이자액: ₩${totalInterest.value.toFixed(2)}`
+  );
+};
 
 bringDataList();
 </script>
@@ -223,5 +369,43 @@ bringDataList();
 }
 .colon {
   padding-right: 5px; /* Optional additional spacing */
+}
+.btn-group {
+  display: flex;
+  justify-content: center; /* 버튼을 중앙에 배치 */
+  margin: 20px 0; /* 버튼 그룹의 위 아래 여백 */
+}
+
+.btn-custom {
+  background-color: #f0c040; /* 부드러운 노란색 배경 */
+  color: #fff; /* 텍스트 색상 */
+  border: none; /* 기본 테두리 제거 */
+  padding: 12px 20px; /* 버튼의 안쪽 여백 */
+  margin: 0 5px; /* 버튼 사이의 간격 */
+  border-radius: 5px; /* 모서리를 둥글게 */
+  font-size: 16px; /* 텍스트 크기 */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* 부드러운 애니메이션 */
+}
+
+.btn-custom:hover {
+  background-color: #e0b030; /* 호버 시 배경색 변경 (조금 더 어두운 노란색) */
+  transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
+}
+
+.btn-custom.active {
+  background-color: #d0a020; /* 활성화된 버튼의 배경색 (더 진한 노란색) */
+}
+.loan-calculator {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.active {
+  background-color: #ffc107; /* 진한 노란색 */
+  color: white;
 }
 </style>

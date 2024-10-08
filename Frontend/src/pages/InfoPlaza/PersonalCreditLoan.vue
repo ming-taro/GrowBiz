@@ -114,74 +114,35 @@
           <div class="col-2">
             <select
               class="form-select round-corner"
-              aria-label="Default select example"
+              aria-label="은행명 선택"
               @change="onBankChange"
               v-model="selectedBank"
             >
               <option value="전체" selected disabled hidden>은행명</option>
               <option value="전체">전체</option>
               <option value="우리은행">우리은행</option>
-              <option value="한국스탠다드차타드은행">
-                한국스탠다드차타드은행
-              </option>
               <option value="한국씨티은행">한국씨티은행</option>
-              <option value="아이엠뱅크">아이엠뱅크</option>
               <option value="부산은행">부산은행</option>
-              <option value="광주은행">광주은행</option>
               <option value="제주은행">제주은행</option>
               <option value="전북은행">전북은행</option>
-              <option value="경남은행">경남은행</option>
               <option value="중소기업은행">중소기업은행</option>
               <option value="한국산업은행">한국산업은행</option>
-              <option value="국민은행">국민은행</option>
-              <option value="신한은행">신한은행</option>
               <option value="농협은행주식회사">농협은행주식회사</option>
               <option value="하나은행">하나은행</option>
-              <option value="주식회사 케이뱅크">주식회사 케이뱅크</option>
-              <option value="수협은행">수협은행</option>
-              <option value="주식회사 카카오뱅크">주식회사 카카오뱅크</option>
               <option value="토스뱅크 주식회사">토스뱅크 주식회사</option>
               <option value="한화생명보험주식회사">한화생명보험주식회사</option>
-              <option value="삼성생명보험주식회사">삼성생명보험주식회사</option>
-              <option value="흥국생명보험주식회사">흥국생명보험주식회사</option>
               <option value="교보생명보험주식회사">교보생명보험주식회사</option>
-              <option value="신한라이프생명보험주식회사">
-                신한라이프생명보험주식회사
-              </option>
-              <option value="미래에셋생명보험주식회사">
-                미래에셋생명보험주식회사
-              </option>
               <option value="농협생명보험주식회사">농협생명보험주식회사</option>
               <option value="애큐온저축은행">애큐온저축은행</option>
-              <option value="오에스비저축은행">오에스비저축은행</option>
-              <option value="디비저축은행">디비저축은행</option>
               <option value="키움예스저축은행">키움예스저축은행</option>
-              <option value="에스비아이저축은행">에스비아이저축은행</option>
-              <option value="다올저축은행">다올저축은행</option>
               <option value="고려저축은행">고려저축은행</option>
-              <option value="모아저축은행">모아저축은행</option>
-              <option value="키움저축은행">키움저축은행</option>
-              <option value="세람상호저축은행">세람상호저축은행</option>
-              <option value="페퍼저축은행">페퍼저축은행</option>
               <option value="한화저축은행">한화저축은행</option>
               <option value="우리금융저축은행">우리금융저축은행</option>
-              <option value="한성저축은행">한성저축은행</option>
-              <option value="상상인플러스저축은행">상상인플러스저축은행</option>
               <option value="스타저축은행">스타저축은행</option>
-              <option value="동양저축은행">동양저축은행</option>
-              <option value="스마트저축은행">스마트저축은행</option>
               <option value="한국투자저축은행">한국투자저축은행</option>
-              <option value="예가람저축은행">예가람저축은행</option>
-              <option value="제이티저축은행">제이티저축은행</option>
-              <option value="삼호저축은행">삼호저축은행</option>
-              <option value="엔에이치저축은행">엔에이치저축은행</option>
               <option value="아이비케이저축은행">아이비케이저축은행</option>
               <option value="비엔케이저축은행">비엔케이저축은행</option>
-              <option value="케이비저축은행">케이비저축은행</option>
-              <option value="하나저축은행">하나저축은행</option>
               <option value="제이티친애저축은행">제이티친애저축은행</option>
-              <option value="신한저축은행">신한저축은행</option>
-              <option value="웰컴저축은행">웰컴저축은행</option>
               <option value="오케이저축은행">오케이저축은행</option>
               <option value="현대카드㈜">현대카드㈜</option>
               <option value="롯데카드㈜">롯데카드㈜</option>
@@ -461,6 +422,7 @@ const bringLoanList = async () => {
         type: selectedType.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
+    console.log(selectedBank.value);
     if (response.status === 200) {
       dataList.value = response.data;
       totalItems.value = dataList.value.length;
