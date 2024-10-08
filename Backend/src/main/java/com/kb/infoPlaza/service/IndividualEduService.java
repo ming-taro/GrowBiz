@@ -39,11 +39,13 @@ public class IndividualEduService {
     }
 
     public List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam param) {
+        log.info("SearchKeyword------------------------------");
         // Option 배열이 존재하면 category에서 검색
         if (param.getOption() != null && !param.getOption().isEmpty()) {
+            log.info("if");
             return mapper.searchIndividualEduByKeyword(param);
         }
-
+        System.out.println("asdf");
         // Option이 없을 경우 기본 검색 처리 (필요시 전체 데이터를 반환하거나 에러 처리 가능)
         return new ArrayList<>();  // 예: 빈 리스트 반환
     }

@@ -9,7 +9,7 @@
           <canvas id="doughnut-chart"></canvas>
         </div>
       </div>
-      <div class="wid-half">
+      <div class="wid-half" style="margin-right: 15px">
         <div>
           <h4 class="">전주 매출 비교</h4>
         </div>

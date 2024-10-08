@@ -16,5 +16,4 @@ import MainMyStore from '@/components/main/MainMyStore.vue';
 import MainCommunity from '@/components/main/MainCommunity.vue';
 import MainInfoPlaza from '@/components/main/MainInfoPlaza.vue';
 import SimulMore from '@/components/main/SimulMore.vue';
-
 </script>

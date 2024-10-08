@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Auth implements GrantedAuthority {
-    private String id;
+    private long mno;
     private String authority;
 
     @Override
