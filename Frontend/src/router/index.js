@@ -70,6 +70,11 @@ const router = createRouter({
       component: BoardCreate,
     },
     {
+      path: '/community/:category/edit/:postId',
+      name: 'BoardCreate',
+      component: BoardCreate, // 같은 컴포넌트를 사용
+    },
+    {
       path: '/infoPlaza/industry',
       name: 'Industry',
       component: PopularIndustry,
