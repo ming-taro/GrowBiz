@@ -24,7 +24,9 @@
           <hr class="my-6" />
           <div class="d-flex justify-content-end gap-2">
             <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral">취소</RouterLink>            
-            <button type="button" class="btn btn-sm btn-primary" @click="submitPost">등록</button>
+            <button type="button" class="btn btn-sm btn-primary" @click="submitPost">
+              {{ isEditMode ? '수정' : '등록' }}
+            </button>
           </div>
         </main>
       </div>
@@ -33,48 +35,76 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router'; // Router 가져오기
-import Editor from '@/components/editor/Editor.vue';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
+import Editor from '@/components/editor/Editor.vue'; 
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
 
-// Reactive properties for title and content
 const postTitle = ref('');
 const postContent = ref('');
-const route = useRoute(); // 라우트 객체를 사용하여 URL에서 카테고리 값을 가져옴
-const router = useRouter(); // 라우터 인스턴스 가져오기
-const category = route.params.category; // 카테고리 매개변수 가져오기
+const route = useRoute();
+const router = useRouter();
+const category = route.params.category; // URL에서 category를 가져옴
+
+const postId = sessionStorage.getItem('editPostId') || null; // postId가 없으면 null로 초기화
+const isEditMode = ref(!!postId); // postId가 있으면 수정 모드로 설정
+
+
 
 const submitPost = async () => {
   if (postTitle.value.trim() && postContent.value.trim()) {
-
     try {
-      const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
-        title: postTitle.value,
-        content: postContent.value,
-        category: category,
-        userId: '이유리'
-      });
+      if (isEditMode.value) {
+        // 수정 모드일 때 PUT 요청
+        const response = await axios.put(`http://localhost:8080/api/community/${category}/edit`, {
+          postId: postId,
+          title: postTitle.value,
+          content: postContent.value,
+          userId: '김이나'
+        });
+        alert('글이 성공적으로 수정되었습니다.');
+      } else {
+        // 생성 모드일 때 POST 요청
+        const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
+          title: postTitle.value,
+          content: postContent.value,
+          userId: '김이나'
+        });
+        alert('글이 성공적으로 작성되었습니다.');
+      }
 
-      alert('글이 성공적으로 작성되었습니다.');
       resetFields();
-
-      router.push(`/community/${category}`); // 글 작성 후 해당 카테고리로 이동
+      router.push(`/community/${category}`); // 글 작성 또는 수정 후 해당 카테고리로 이동
     } catch (error) {
-      console.error('글 작성 중 오류 발생:', error);
-      alert('글 작성 중 오류가 발생했습니다.');
+      console.error('글 처리 중 오류 발생:', error);
+      alert('글 처리 중 오류가 발생했습니다.');
     }
   } else {
     alert('제목과 내용을 입력해주세요.');
   }
 };
 
-// Method to reset input fields
 const resetFields = () => {
   postTitle.value = '';
   postContent.value = '';
 };
+
+// onMounted 시점에서 postId가 null인 경우 새 글 작성으로 처리
+onMounted(async () => {
+  if (isEditMode.value) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/community/view/${postId}`);
+      postTitle.value = response.data.title;
+      postContent.value = response.data.content;
+    } catch (error) {
+      console.error('게시글 불러오기 중 오류 발생:', error);
+    }
+  } else {
+    // 수정 모드가 아닐 경우 필드를 초기화합니다.
+    resetFields(); // 새 글 작성 시 필드 초기화
+  }
+});
 </script>
 
 <style scoped>

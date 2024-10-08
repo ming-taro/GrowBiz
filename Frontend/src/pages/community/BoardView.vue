@@ -16,6 +16,7 @@
       </div>
       <div class="text-center">
       <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
+      <button type="button" class="btn btn-sm btn-primary ms-2 mb-5 mt-1" @click="editPost">수정</button> <!-- 수정 버튼 추가 -->
       <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="deletePost">삭제</button> <!-- 삭제 버튼 추가 -->
     </div>
       
@@ -83,7 +84,6 @@ const fetchComments = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/community/comment/${postId}`);
     comments.value = response.data; // 댓글 데이터를 comments 배열에 저장
-    console.log(comments);
   } catch (error) {
     console.error('댓글을 가져오는 데 실패했습니다:', error);
   }
@@ -101,6 +101,11 @@ const deletePost = async () => {
   }
 };
 
+const editPost = () => {
+  // 게시글 ID를 세션 스토리지에 저장
+  sessionStorage.setItem('editPostId', route.params.postId);
+  router.push(`/community/${category.value}/edit`);
+};
 
 
 

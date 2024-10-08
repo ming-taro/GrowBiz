@@ -53,11 +53,13 @@ public class CommunityController {
     }
 
     // 게시글 수정
-    @PutMapping
-    public ResponseEntity<Void> updatePost(@RequestBody PostDTO post) {
+    @PutMapping("/{category}/edit")
+    public ResponseEntity<Void> updatePost(@PathVariable String category, @RequestBody PostDTO post) {
         communityService.updatePost(post);
         return ResponseEntity.ok().build();
     }
+
+
 
     @GetMapping("/view/{postId}")
     public PostDTO getPostById(@PathVariable long postId) {

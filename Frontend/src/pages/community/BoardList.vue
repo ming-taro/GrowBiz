@@ -29,9 +29,7 @@
           <!-- 작성 버튼 추가 -->
           <div v-if="showCreateButton" class="ms-auto">
             <div>
-            <RouterLink :to="`/community/${category}/create`" class="btn btn-sm btn-neutral mb-5 mt-1">
-                글쓰기
-            </RouterLink>
+              <button type="button" @click="createPost" class="btn btn-sm btn-primary mb-5">글작성</button>
           </div>
           </div>
         </div>
@@ -95,6 +93,9 @@
 import { ref, watch } from 'vue';
 import { defineProps } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router'; // useRouter 추가
+
+const router = useRouter(); // router 정의
 
 const props = defineProps({
   posts: {
@@ -137,6 +138,13 @@ watch(() => props.category, (newCategory) => {
 
 // 페이지 로드 시 기본 카테고리 게시글을 가져옴
 fetchPostsByCategory(props.category);
+
+
+// 글 작성 버튼의 경우 세션 스토리지를 비우고 글 작성 페이지로 이동
+const createPost = () => {
+  sessionStorage.removeItem('editPostId'); // 세션 스토리지 비우기
+  router.push(`/community/${props.category}/create`); // 새로운 게시글 작성 페이지로 이동
+};
 </script>
 
 <style scoped>

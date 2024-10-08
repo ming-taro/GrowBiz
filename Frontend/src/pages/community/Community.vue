@@ -20,7 +20,6 @@ onMounted(async () => {
   try {
     const response = await axios.get(`http://localhost:8080/api/community/${category}`); // API 호출
     posts.value = response.data; // 받은 데이터를 posts에 저장
-    console.log(posts.value);
   } catch (error) {
     console.error('게시글을 불러오는 데 실패했습니다.', error);
   }
