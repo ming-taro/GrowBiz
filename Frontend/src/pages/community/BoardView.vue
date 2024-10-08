@@ -8,12 +8,12 @@
         <span class="fw-light ms-auto">{{ post.createdAt }}</span>
       </h4>
       <hr/>
-      <p class="text-m text-muted mb-5 fs-4" v-html="post.content"></p>
+      <p class="text-m text-muted mb-10 fs-4" v-html="post.content"></p>
       <hr/>
-      <div class="text-center gap-2 mb-5">
+      <!-- <div class="text-center gap-2 mb-5">
         <button type="button" class="btn btn-sm btn-neutral mx-1">👍 추천</button>
         <button type="button" class="btn btn-sm btn-neutral mx-1">👎 비추천</button>
-      </div>
+      </div> -->
       <div class="text-center">
         <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
         <button type="button" class="btn btn-sm btn-primary ms-2 mb-5 mt-1" @click="editPost">수정</button>

@@ -26,7 +26,8 @@
     <update id="updatePost" parameterType="com.kb.community.dto.PostDTO">
         UPDATE community_post
         SET title = #{title}, content = #{content}
-        WHERE post_id = #{postId} and user_id = #{userId}
+        WHERE post_id = #{postId}
+        <!-- 유저 id 없어서 주석 처리       WHERE post_id = #{postId} and user_id = #{userId} -->
     </update>
 
 </mapper>
