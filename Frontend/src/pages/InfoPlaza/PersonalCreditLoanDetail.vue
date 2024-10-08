@@ -4,80 +4,91 @@
     <div class="container mw-screen-xl">
       <div class="row">
         <div class="">
-          <!-- Product details-->
-          <div class="offset-xl-1">
-            <div class="d-none d-md-block" style="margin-top: -90px"></div>
-            <div class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0">
-              <div class="d-none d-md-block" style="padding-top: 90px"></div>
-              <div class="d-flex align-items-center">
-                <div class="d-flex align-items-center me-7">
-                  <img
-                    :src="'/images/banklogo/' + data.korCoNm + '.png'"
-                    alt=""
-                    style="width: 50px"
-                  />
-                </div>
-                <div class="d-flex align-items-center">
-                  <div class="text-left">
-                    <span class="fs-2 text-gray-500 fw-bolder d-block">
-                      {{ data.finPrdtNm }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div class="row">
-                <div
-                  class="col-4 d-flex align-items-center justify-content-center"
-                >
-                  <span>
-                    <i
-                      class="fa-solid fa-calendar-days"
-                      style="font-size: 50px"
-                    ></i>
-                  </span>
-                  <span class="text ms-3">
-                    <span style="color: gray">신청기간</span> <br />
-                    <strong
-                      >{{ formatDate(data.dclsStrtDay) }} ~
-                      {{ formatEndDate(data.dclsEndDay) }}</strong
-                    >
-                  </span>
-                </div>
-                <div
-                  class="col-4 d-flex align-items-center justify-content-center"
-                >
-                  <span>
-                    <i class="fa-solid fa-coins" style="font-size: 50px"></i>
-                  </span>
-                  <span class="text ms-3">
-                    <span style="color: gray">대출유형</span> <br />
-                    <strong>{{ data.crdtPrdtTypeNm }}</strong>
-                  </span>
-                </div>
-                <div
-                  class="col-4 d-flex align-items-center justify-content-center"
-                >
-                  <span>
-                    <i class="fa-solid fa-won-sign" style="font-size: 50px"></i>
-                  </span>
-                  <span class="text ms-3">
-                    <span style="color: gray">평균 금리</span> <br />
-                    <strong style="color: brown"
-                      >{{ data.crdtGradAvg }}%</strong
-                    >
-                  </span>
-                </div>
-              </div>
-
-              <hr />
-            </div>
-          </div>
           <div class="row">
             <div class="col-1">
               <PersonalLoanHeader class="" />
             </div>
             <div class="col-11">
+              <!-- Product details-->
+              <div class="">
+                <div class="d-none d-md-block" style="margin-top: -90px"></div>
+                <div
+                  class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0 ms-5"
+                >
+                  <div
+                    class="d-none d-md-block"
+                    style="padding-top: 90px"
+                  ></div>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center me-5">
+                      <img
+                        :src="'/images/banklogo/' + data.korCoNm + '.png'"
+                        alt=""
+                        style="width: 50px"
+                      />
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="text-left">
+                        <span class="fs-2 text-gray-500 fw-bolder d-block">
+                          {{ data.finPrdtNm }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="row">
+                    <div
+                      class="col-4 d-flex align-items-center justify-content-center"
+                    >
+                      <span>
+                        <i
+                          class="fa-solid fa-calendar-days"
+                          style="font-size: 50px"
+                        ></i>
+                      </span>
+                      <span class="text ms-3">
+                        <span style="color: gray">신청기간</span> <br />
+                        <strong
+                          >{{ formatDate(data.dclsStrtDay) }} ~
+                          {{ formatEndDate(data.dclsEndDay) }}</strong
+                        >
+                      </span>
+                    </div>
+                    <div
+                      class="col-4 d-flex align-items-center justify-content-center"
+                    >
+                      <span>
+                        <i
+                          class="fa-solid fa-coins"
+                          style="font-size: 50px"
+                        ></i>
+                      </span>
+                      <span class="text ms-3">
+                        <span style="color: gray">대출유형</span> <br />
+                        <strong>{{ data.crdtPrdtTypeNm }}</strong>
+                      </span>
+                    </div>
+                    <div
+                      class="col-4 d-flex align-items-center justify-content-center"
+                    >
+                      <span>
+                        <i
+                          class="fa-solid fa-won-sign"
+                          style="font-size: 50px"
+                        ></i>
+                      </span>
+                      <span class="text ms-3">
+                        <span style="color: gray">평균 금리</span> <br />
+                        <strong style="color: brown"
+                          >{{ data.crdtGradAvg }}%</strong
+                        >
+                      </span>
+                    </div>
+                  </div>
+
+                  <hr />
+                </div>
+              </div>
               <div class="content-box">
                 <h3>신용 점수별 금리</h3>
                 <br />

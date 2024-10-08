@@ -20,7 +20,9 @@
         <div class="row">
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
-            <a href="#">
+            <RouterLink
+              :to="`/infoPlaza/jeonseLoan/jeonseLoanDetail/${item.id}`"
+            >
               <div class="card card-xl-stretch h-100">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
@@ -77,7 +79,7 @@
                   </div>
                 </div>
               </div>
-            </a>
+            </RouterLink>
           </div>
         </div>
       </div>
