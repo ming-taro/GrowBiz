@@ -43,6 +43,7 @@ const AssetReg = () => import('@/pages/asset/AssetReg.vue');
 const AssetFin = () => import('@/pages/asset/AssetFin.vue');
 const Simul = () => import('@/pages/simul/Simul.vue');
 const Register = () => import('@/pages/register/Register.vue');
+const Welcome = () => import('@/pages/register/Welcome.vue');
 const Login = () => import('@/pages/login/Login.vue');
 const MypageUpdate = () => import('@/components/mypage/MypageUpdate.vue');
 const MypageReport = () => import('@/components/mypage/MypageReport.vue');
@@ -52,7 +53,7 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/shop', name: 'Shop', component: Shop },
-//    { path: '/community', name: 'Community', component: Community },
+    //    { path: '/community', name: 'Community', component: Community },
     {
       path: '/community/:category',
       name: 'Community',
@@ -163,7 +164,8 @@ const router = createRouter({
       name: 'video',
       component: Video, // 비디오 상세보기 컴포넌트 연결
       props: true, // route param을 컴포넌트에 props로 전달
-    },{
+    },
+    {
       path: '/infoPlaza/education/categoryList/:category',
       name: 'CategoryList',
       component: CategoryList,
@@ -180,6 +182,7 @@ const router = createRouter({
     { path: '/asset/storereg', name: 'StoreReg', component: StoreReg },
     { path: '/simul', name: 'Simul', component: Simul },
     { path: '/register', name: 'Register', component: Register },
+    { path: '/welcome', name: 'Welcome', component: Welcome },
     { path: '/login', name: 'Login', component: Login },
     { path: '/mypageupdate', name: 'MypageUpdate', component: MypageUpdate },
     { path: '/mypagereport', name: 'MypageReport', component: MypageReport },

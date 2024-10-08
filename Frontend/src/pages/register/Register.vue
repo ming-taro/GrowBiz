@@ -136,6 +136,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const form = ref({
   id: '',
@@ -146,6 +147,7 @@ const form = ref({
 });
 
 const avatar = ref(null);
+const router = useRouter();
 
 const isFormValid = computed(() => {
   return (
@@ -177,6 +179,7 @@ const submitForm = async () => {
       }
     );
     console.log('회원가입 성공:', response.data);
+    router.push('/welcome');
   } catch (error) {
     console.error('회원가입 실패:', error);
   }
