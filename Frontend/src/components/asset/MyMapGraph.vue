@@ -20,20 +20,21 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Chart } from 'chart.js/auto';
 import {
-  asset_data_doughnut,
-  asset_doughnutoptions,
+  mixed_data2,
+  mixed_options2,
   mixed_data,
   mixed_options,
   fetchChartData,
-} from '@/assets/js/assetChart.js';
+} from '@/assets/js/mapChart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 Chart.register(ChartDataLabels);
 
-let doughnutChartInstance = ref(null); // 도넛 차트 인스턴스
+let mixedChartInstance2 = ref(null); // 도넛 차트 인스턴스
 let mixedChartInstance = ref(null); // 혼합 차트 인스턴스
 let loanRepaymentStatus = ref(''); // 대출 상환 현황 상태 추가
 
@@ -46,11 +47,11 @@ onMounted(async () => {
   const mixedCtx = document.getElementById('mixed-chart2').getContext('2d');
 
   // Chart.js를 사용하여 도넛 차트 생성
-  doughnutChartInstance.value = new Chart(doughnutCtx, {
-    type: 'pie',
-    data: asset_data_doughnut,
+  mixedChartInstance2.value = new Chart(doughnutCtx, {
+    type: 'bar',
+    data: mixed_data2,
     options: {
-      ...asset_doughnutoptions, // asset_doughnutoptions의 모든 속성을 가져옴
+      ...mixed_options2, // asset_doughnutoptions의 모든 속성을 가져옴
       maintainAspectRatio: false, // 이 속성을 덮어쓰는 방식으로 추가
     },
   });
