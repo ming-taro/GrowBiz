@@ -89,4 +89,17 @@ public class CommunityController {
         return ResponseEntity.noContent().build();
     }
 
+    // 좋아요 추가
+    @PostMapping("/view/{postId}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long postId) {
+        communityService.incrementLikes(postId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 싫어요 추가
+    @PostMapping("/view/{postId}/dislike")
+    public ResponseEntity<Void> dislikePost(@PathVariable Long postId) {
+        communityService.incrementDislikes(postId);
+        return ResponseEntity.ok().build();
+    }
 }

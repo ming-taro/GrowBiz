@@ -36,4 +36,16 @@
         SET view = view + 1
         WHERE post_id = #{postId}
     </update>
+
+    <update id="incrementLikes" parameterType="long">
+        UPDATE community_post
+        SET recommend = recommend + 1
+        WHERE post_id = #{postId}
+    </update>
+
+    <update id="incrementDislikes" parameterType="long">
+        UPDATE community_post
+        SET no_recommend = no_recommend + 1
+        WHERE post_id = #{postId}
+    </update>
 </mapper>

@@ -16,10 +16,10 @@
       <hr/>
       <p class="text-m text-muted mb-10 fs-4" v-html="post.content"></p>
       <hr/>
-      <!-- <div class="text-center gap-2 mb-5">
-        <button type="button" class="btn btn-sm btn-neutral mx-1">👍 추천</button>
-        <button type="button" class="btn btn-sm btn-neutral mx-1">👎 비추천</button>
-      </div> -->
+      <div class="text-center gap-2 mb-5">
+        <button type="button" class="btn btn-sm btn-neutral mx-1" @click="likePost(post.postId)">👍 추천 {{ post.recommend }}</button>
+        <button type="button" class="btn btn-sm btn-neutral mx-1" @click="dislikePost(post.postId)">👎 비추천 {{ post.noRecommend }}</button>
+      </div>
       <div class="text-center">
         <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
         <button type="button" class="btn btn-sm btn-primary ms-2 mb-5 mt-1" @click="editPost">수정</button>
@@ -122,7 +122,7 @@ const isModalVisible = ref(false); // Post deletion modal state
 const isCommentModalVisible = ref(false); // Comment deletion modal state
 const newComment = ref('');
 const comments = ref([]);
-let commentToDelete = ref(null); // Store ID of comment to delete
+let commentToDelete = ref(null); // 삭제할 댓글 ID
 
 onMounted(() => {
   fetchPost();
@@ -235,6 +235,26 @@ const confirmCommentDelete = async () => {
     alert('Failed to delete comment.');
   } finally {
     hideCommentDeleteModal(); // Hide modal
+  }
+};
+
+// 좋아요 추가
+const likePost = async (postId) => {
+  try {
+    await axios.post(`http://localhost:8080/api/community/view/${postId}/like`);
+    post.value.recommend += 1; // 로컬 상태 업데이트
+  } catch (error) {
+    console.error('Failed to like post:', error);
+  }
+};
+
+// 싫어요 추가
+const dislikePost = async (postId) => {
+  try {
+    await axios.post(`http://localhost:8080/api/community/view/${postId}/dislike`);
+    post.value.noRecommend += 1; // 로컬 상태 업데이트
+  } catch (error) {
+    console.error('Failed to dislike post:', error);
   }
 };
 </script>

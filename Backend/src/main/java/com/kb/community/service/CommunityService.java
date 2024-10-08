@@ -68,4 +68,16 @@ public class CommunityService {
     public void incrementViewCount(long postId) {
         communityMapper.incrementViewCount(postId);
     }
+
+    // 좋아요 추가
+    @Transactional
+    public void incrementLikes(Long postId) {
+        communityMapper.incrementLikes(postId);
+    }
+
+    // 싫어요 추가
+    @Transactional
+    public void incrementDislikes(Long postId) {
+        communityMapper.incrementDislikes(postId);
+    }
 }
