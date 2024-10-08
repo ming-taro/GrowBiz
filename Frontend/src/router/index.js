@@ -67,9 +67,16 @@ const router = createRouter({
       component: BoardView,
     },
     {
+      path: '/community/:category/edit',
+      name: 'BoardEdit',
+      component: BoardCreate,
+      props: { isEdit: true }, // 수정 모드
+    },
+    {
       path: '/community/:category/create',
       name: 'BoardCreate',
       component: BoardCreate,
+      props: { isEdit: false }, // 등록 모드
     },
     {
       path: '/infoPlaza/industry',

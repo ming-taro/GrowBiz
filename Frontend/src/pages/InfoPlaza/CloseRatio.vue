@@ -16,13 +16,12 @@
         <!-- 필터링 -->
         <div class="row mb-14">
           <div class="col-1 d-flex justify-content-center align-items-center">
-            <button
-              class="btn btn-primary p-0 col-6"
-              style="font-size: 20px"
-              @click="resetFunction"
-            >
-              <i class="fa-solid fa-rotate-right"></i>
-            </button>
+            <i
+              class="fa-solid fa-rotate-right refresh-icon mb-2"
+              :class="{ spinning: isSpinning }"
+              style="font-size: 24px; color: #5a5a5a; cursor: pointer"
+              @click="refreshIcon"
+            ></i>
           </div>
           <!-- 지역 검색(구) -->
           <div class="col-2">
@@ -32,9 +31,9 @@
               id="signgu-select"
               @change="onSignguChange"
               ref="signguSelect"
+              v-model="selectedSigngu"
             >
-              <option value="전체" disabled>구 선택</option>
-              <option value="전체" hidden>구 선택</option>
+              <option value="전체" selected hidden disabled>구 선택</option>
               <option value="전체">전체</option>
               <option value="용산구">용산구</option>
               <option value="광진구">광진구</option>
@@ -73,9 +72,9 @@
               :disabled="selectedSigngu === '전체'"
               @change="onDongChange"
               ref="adstrdSelect"
+              v-model="selectedDong"
             >
               <option selected disabled hidden>동 선택</option>
-              <option value="전체" disabled>동 선택</option>
               <option value="전체">전체</option>
               <option v-for="dong in filteredDongs" :key="dong" :value="dong">
                 {{ dong }}
@@ -89,9 +88,9 @@
               class="form-select round-corner"
               aria-label="Default select example"
               @change="onServiceChange"
+              v-model="selectedService"
             >
-              <option selected disabled>서비스 업종</option>
-              <option selected disabled hidden>서비스 업종</option>
+              <option value="전체" selected disabled hidden>서비스 업종</option>
               <option value="전체">전체</option>
               <option value="수산물판매">수산물판매</option>
               <option value="일반의류">일반의류</option>
@@ -465,11 +464,19 @@ const changePage = (page) => {
   currentPage.value = page;
 };
 
+const isSpinning = ref(false);
 // 리셋 버튼 함수
-const resetFunction = async () => {
+const refreshIcon = async () => {
   try {
     // Best 인기 업종 - 전체
+    isSpinning.value = !isSpinning.value;
     const response = await axios.get(BASEURI + '/getRate');
+    setTimeout(() => {
+      isSpinning.value = false; // 회전 후 원래 상태로 돌아오게 함
+      selectedSigngu.value = '전체';
+      selectedDong.value = '전체';
+      selectedService.value = '전체';
+    }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제
     if (response.status === 200) {
       dataList.value = response.data;
     } else {
@@ -499,5 +506,13 @@ bringDataList();
 .badge-light-middle {
   background-color: rgba(255, 165, 0, 0.1); /* 연한 오렌지색 배경 */
   color: #ff8c00; /* 짙은 오렌지색 텍스트 */
+}
+.refresh-icon {
+  transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.refresh-icon.spinning {
+  color: #000; /* 클릭 시 검은색으로 변경 */
+  transform: rotate(360deg); /* 회전 애니메이션 */
 }
 </style>

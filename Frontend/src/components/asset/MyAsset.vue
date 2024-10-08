@@ -6,7 +6,7 @@
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="wid-half">
-        <MyGraph />
+        <MyMapGraph />
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@ export default {
 </script>
 
 <script setup>
-import MyGraph from '@/components/asset/MyGraph.vue';
+import MyMapGraph from '@/components/asset/MyMapGraph.vue';
 </script>
 
 <style scoped>

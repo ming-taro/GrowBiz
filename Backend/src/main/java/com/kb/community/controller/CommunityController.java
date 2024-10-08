@@ -1,7 +1,9 @@
 package com.kb.community.controller;
 import com.kb.community.dto.CategoryDTO;
+import com.kb.community.dto.CommentDTO;
 import com.kb.community.dto.PostDTO;
 import com.kb.community.service.CategoryService;
+import com.kb.community.service.CommentService;
 import com.kb.community.service.CommunityService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class CommunityController {
 
     private final CategoryService categoryService;
     private final CommunityService communityService;
+    private final CommentService commentService;
 
     // 모든 카테고리 조회
     @GetMapping("/all-category")
@@ -43,21 +46,45 @@ public class CommunityController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/view/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         communityService.deletePost(postId);
         return ResponseEntity.ok().build();
     }
 
     // 게시글 수정
-    @PutMapping
-    public ResponseEntity<Void> updatePost(@RequestBody PostDTO post) {
+    @PutMapping("/{category}/edit")
+    public ResponseEntity<Void> updatePost(@PathVariable String category, @RequestBody PostDTO post) {
         communityService.updatePost(post);
         return ResponseEntity.ok().build();
     }
 
+
+
     @GetMapping("/view/{postId}")
     public PostDTO getPostById(@PathVariable long postId) {
         return communityService.getPostById(postId);
+    }
+
+
+    // 특정 게시글의 댓글 조회
+    @GetMapping("/comment/{postId}")
+    public ResponseEntity<List<CommentDTO>> getCommentsByPostId(@PathVariable Long postId) {
+        List<CommentDTO> comments = commentService.getCommentsByPostId(postId);
+        return ResponseEntity.ok(comments);
+    }
+
+    // 댓글 추가
+    @PostMapping("/comment")
+    public ResponseEntity<Void> addComment(@RequestBody CommentDTO commentDTO) {
+        commentService.addComment(commentDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,26 +1,25 @@
 <template>
   <div>
-    <div style="height: 400px; display: flex">
-      <div class="wid-half">
+    <div style="height: 400px">
+      <div class="he-half">
         <div>
-          <h4 class="mb-2">금일 매출정보: {{ loanRepaymentStatus }}</h4>
+          <h4 class="mb-2">주변 상권 별 매출 데이터 비교</h4>
         </div>
         <div>
-          <canvas id="doughnut-chart"></canvas>
+          <canvas id="doughnut-chart2" style="height: 202px"></canvas>
         </div>
       </div>
-      <div class="wid-half">
-        <div>
-          <h4 class="">전주 매출 비교</h4>
+      <div>
+        <div class="he-half">
+          <h4 class="">대분류 별 월매출 비교</h4>
         </div>
         <div>
-          <canvas id="mixed-chart"></canvas>
+          <canvas id="mixed-chart2" height="100px"></canvas>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Chart } from 'chart.js/auto';
@@ -42,9 +41,9 @@ onMounted(async () => {
   const asdf = await fetchChartData(loanRepaymentStatus); // loanRepaymentStatus를 매개변수로 전달
 
   const doughnutCtx = document
-    .getElementById('doughnut-chart')
+    .getElementById('doughnut-chart2')
     .getContext('2d');
-  const mixedCtx = document.getElementById('mixed-chart').getContext('2d');
+  const mixedCtx = document.getElementById('mixed-chart2').getContext('2d');
 
   // Chart.js를 사용하여 도넛 차트 생성
   doughnutChartInstance.value = new Chart(doughnutCtx, {
@@ -67,7 +66,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.wid-half {
-  width: 50%;
+.he-half {
+  width: 80%;
+  height: 60%;
 }
 </style>

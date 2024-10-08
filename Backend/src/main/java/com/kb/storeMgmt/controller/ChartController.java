@@ -1,13 +1,13 @@
 package com.kb.storeMgmt.controller;
 
-import com.kb.storeMgmt.dto.FlowPopulationDTO;
+import com.kb.storeMgmt.dto.CategoriesDTO;
 import com.kb.storeMgmt.service.ChartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chart")
@@ -18,8 +18,15 @@ public class ChartController {
     @Autowired
     private ChartService chartService;
 
-    @GetMapping("/doughnut/{adstrdCdNm}")
-    public FlowPopulationDTO getAddress(FlowPopulationDTO flowPopulationDTO) {
-        return chartService.getFlpopCobyDongname(flowPopulationDTO);
+    @GetMapping("/doughnut")
+    public List<CategoriesDTO> getAddress(CategoriesDTO categoriesDTO) {
+        System.out.println("asdfasdf");
+        return chartService.getDoughnut(categoriesDTO);
     }
+
+    @GetMapping("/mixchart")
+    public List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO) {
+        return chartService.getMixAddress(categoriesDTO);
+    }
+
 }

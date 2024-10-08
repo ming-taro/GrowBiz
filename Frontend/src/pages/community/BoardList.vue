@@ -29,15 +29,13 @@
           <!-- 작성 버튼 추가 -->
           <div v-if="showCreateButton" class="ms-auto">
             <div>
-            <RouterLink :to="`/community/${category}/create`" class="btn btn-sm btn-neutral mb-5 mt-1">
-                글쓰기
-            </RouterLink>
+              <button type="button" @click="createPost" class="btn btn-sm btn-primary mb-5">글작성</button>
           </div>
           </div>
         </div>
       </div>
       <div class="border-top">
-      <div class="table-responsive">
+      <div class="table-responsive mb-5">
         <table class="table table-nowrap text-center">
           <thead>
             <tr>
@@ -50,7 +48,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="post in posts" :key="post.originalPostId">
+            <tr v-for="post in paginatedPosts" :key="post.originalPostId">
               <td>{{ post.postId }}</td>
               <td>
                 <a :href="`/community/${category}/view/` + post.originalPostId">{{ post.title }}</a>
@@ -68,20 +66,14 @@
       <div v-if="showPagination" class="py-4 px-6 d-flex justify-content-center">
         <nav aria-label="Page navigation example">
           <ul class="pagination pagination-spaced gap-1">
-            <li class="page-item">
-              <a class="page-link" href="#">
-                <i class="bi bi-chevron-left"></i>
-              </a>
+            <li class="page-item" :class="{ disabled: currentPage === 1 }">
+              <a class="page-link" @click="changePage(currentPage - 1)" href="#"><</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
-            <li class="page-item">
-              <a class="page-link me-3" href="#">
-                <i class="bi bi-chevron-right"></i>
-              </a>
+            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+              <a class="page-link" @click="changePage(page)" href="#">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+              <a class="page-link" @click="changePage(currentPage + 1)" href="#">></a>
             </li>
           </ul>
         </nav>
@@ -92,9 +84,12 @@
 
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue'; // computed 추가
 import { defineProps } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router'; // useRouter 추가
+
+const router = useRouter(); // router 정의
 
 const props = defineProps({
   posts: {
@@ -120,11 +115,21 @@ const props = defineProps({
 });
 
 const posts = ref([]);
+const currentPage = ref(1); // 현재 페이지
+const postsPerPage = ref(8); // 페이지당 게시글 수
+const totalPages = ref(0); // 전체 페이지 수
+
+const paginatedPosts = computed(() => {
+  const start = (currentPage.value - 1) * postsPerPage.value;
+  const end = start + postsPerPage.value;
+  return posts.value.slice(start, end); // 현재 페이지에 해당하는 게시글 반환
+});
 
 const fetchPostsByCategory = async (category) => {
   try {
     const response = await axios.get(`http://localhost:8080/api/community/${category}`);
     posts.value = response.data; // 받아온 게시글 목록 설정
+    totalPages.value = Math.ceil(posts.value.length / postsPerPage.value); // 전체 페이지 수 계산
   } catch (error) {
     console.error("Error fetching posts:", error);
   }
@@ -137,6 +142,19 @@ watch(() => props.category, (newCategory) => {
 
 // 페이지 로드 시 기본 카테고리 게시글을 가져옴
 fetchPostsByCategory(props.category);
+
+// 페이지 변경 함수
+const changePage = (page) => {
+  if (page < 1 || page > totalPages.value) return; // 유효하지 않은 페이지 수는 무시
+  currentPage.value = page; // 현재 페이지 업데이트
+};
+
+
+// 글 작성 버튼의 경우 세션 스토리지를 비우고 글 작성 페이지로 이동
+const createPost = () => {
+  sessionStorage.removeItem('editPostId'); // 세션 스토리지 비우기
+  router.push(`/community/${props.category}/create`); // 새로운 게시글 작성 페이지로 이동
+};
 </script>
 
 <style scoped>
