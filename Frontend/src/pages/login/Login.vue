@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mt-10 row g-0 justify-content-center gradient-bottom-right middle-indigo end-pink"
+    class="mt-2 row g-0 justify-content-center gradient-bottom-right middle-indigo end-pink"
   >
     <div
       class="col-md-6 col-lg-5 col-xl-5 position-absolute start-0 vh-100 overflow-y-hidden d-none d-lg-flex flex-lg-column back-img"
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div
-      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column justify-content-center position-relative bg-body border-start-lg shadow-soft-5"
+      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column mt-20 position-relative bg-body border-start-lg shadow-soft-5"
       style="height: 100vh"
     >
       <div class="w-md-50 mx-auto px-10 px-md-0 py-10">
@@ -76,6 +76,6 @@
   background-image: url('@/assets/img/register/register.jpg');
   background-size: cover; /* 이미지가 div를 채우도록 설정 */
   background-position: center; /* 이미지를 중앙에 위치시킴 */
-  height: 100vh; /* 왼쪽 이미지 div의 높이 설정 */
+  height: 50vh; /* 왼쪽 이미지 div의 높이 설정 */
 }
 </style>

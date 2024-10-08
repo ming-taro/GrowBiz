@@ -6,7 +6,7 @@
       class="col-md-6 col-lg-5 col-xl-5 position-absolute start-0 vh-100 overflow-y-hidden d-none d-lg-flex flex-lg-column back-img"
     >
       <div class="p-10 py-xl-10 px-xl-20">
-        <div class="mt-16">
+        <div class="mt-20">
           <h1 class="ls-tight fw-bolder display-6 text-white mb-5">
             환영합니다!
             <br />자영업자 키우기입니다.
@@ -20,18 +20,18 @@
       </div>
     </div>
     <div
-      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column justify-content-center position-relative bg-body border-start-lg shadow-soft-5"
+      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column position-relative bg-body border-start-lg shadow-soft-5"
       style="height: 100vh"
     >
-      <div class="w-md-50 mx-auto px-10 px-md-0 py-10">
-        <div class="mb-6">
+      <div class="w-md-50 mx-auto px-10 px-md-0">
+        <div class="mb-3">
           <a class="d-inline-block d-lg-none mb-10" href="/pages/dashboard.html"
             ><img
               src="../../img/logos/logo-dark.svg"
               class="h-rem-10"
               alt="..."
           /></a>
-          <h1 class="ls-tight fw-bolder h3">회원가입</h1>
+          <h1 class="ls-tight fw-bolder h3 mt-7">회원가입</h1>
           <div class="mt-3 text-sm text-muted">
             <span>이미 회원이라면</span>
             <a href="/login" class="fw-semibold"> 로그인 </a>페이지
