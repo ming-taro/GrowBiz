@@ -88,14 +88,23 @@
         <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
         <div class="col-9 d-flex">
+          <div class="col-1">
+            <i
+              class="fa-solid fa-rotate-right refresh-icon mt-2"
+              :class="{ spinning: isSpinning }"
+              style="font-size: 24px; color: #5a5a5a; cursor: pointer"
+              @click="refreshIcon"
+            ></i>
+          </div>
           <!-- 상환방식 구분 -->
           <div class="col-2">
             <select
               class="form-select round-corner"
               aria-label="Default select example"
               @change="onRepayChange"
+              v-model="selectedRepay"
             >
-              <option selected disabled hidden>상환방식</option>
+              <option value="전체" selected disabled hidden>상환방식</option>
               <option value="전체">전체</option>
               <option value="분할상환방식">분할상환방식</option>
               <option value="만기일시상환방식">만기일시상환방식</option>
@@ -107,8 +116,9 @@
               class="form-select round-corner"
               aria-label="Default select example"
               @change="onTypeChange"
+              v-model="selectedType"
             >
-              <option selected disabled hidden>유형</option>
+              <option value="전체" selected disabled hidden>유형</option>
               <option value="전체">전체</option>
               <option value="고정금리">고정금리</option>
               <option value="변동금리">변동금리</option>
@@ -120,8 +130,9 @@
               class="form-select round-corner"
               aria-label="Default select example"
               @change="onBankChange"
+              v-model="selectedBank"
             >
-              <option selected disabled hidden>은행명</option>
+              <option value="전체" selected disabled hidden>은행명</option>
               <option value="전체">전체</option>
               <option value="우리은행">우리은행</option>
               <option value="한국스탠다드차타드은행">
@@ -144,7 +155,7 @@
             </select>
           </div>
           <!-- 검색창 -->
-          <div class="col-6">
+          <div class="col-5">
             <div class="h-100">
               <form class="h-100 form-group">
                 <div class="h-100 input-group input-group-sm">
@@ -498,6 +509,40 @@ const formatEndDate = (date) => {
   }
   return formatDate(date);
 };
+const isSpinning = ref(false);
+// 데이터 리스트 가져오는 함수
+const bringTotalList = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    const response = await axios.get(BASEURI + '/getFilteredJeonseList', {
+      params: {
+        bankName: '전체',
+        repayMethod: '전체',
+        type: '전체',
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
+    if (response.status === 200) {
+      dataList.value = response.data;
+      totalItems.value = dataList.value.length;
+      // console.log(dataList.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+};
+
+const refreshIcon = () => {
+  isSpinning.value = !isSpinning.value;
+  bringTotalList();
+  setTimeout(() => {
+    isSpinning.value = false; // 회전 후 원래 상태로 돌아오게 함
+    selectedBank.value = '전체';
+    selectedType.value = '전체';
+    selectedRepay.value = '전체';
+  }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제
+};
 
 bringBest4List();
 bringLoanList();
@@ -522,5 +567,13 @@ bringLoanList();
 .custom-card {
   padding: 1rem; /* 기본 패딩을 줄입니다 */
   font-size: 0.875rem; /* 폰트 크기를 줄입니다 */
+}
+.refresh-icon {
+  transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.refresh-icon.spinning {
+  color: #000; /* 클릭 시 검은색으로 변경 */
+  transform: rotate(360deg); /* 회전 애니메이션 */
 }
 </style>
