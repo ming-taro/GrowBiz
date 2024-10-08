@@ -20,7 +20,7 @@
       <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="showDeleteModal">삭제</button>
     </div>
       
-    <div class="list-group mt-5 mb-5">
+    <div class="list-group mt-5 mb-10">
       <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
       <div class="list-group-item py-3" v-for="comment in comments" :key="comment.commentId">
         <div class="d-flex flex-wrap w-100 justify-content-between py-2">
@@ -28,6 +28,15 @@
         </div>
         <p class="fs-sm font-weight-normal text-body py-2">{{ comment.content }}</p>
         <small class="text-muted">{{ comment.createdAt }}</small>
+      </div>
+    </div>
+    
+    <!-- 댓글 추가 섹션 -->
+    <div class="mt-4 mb-10">
+      <h5 class="fw-semibold mb-3">댓글 작성</h5>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="댓글을 입력하세요." v-model="newComment" />
+        <button class="btn btn-primary" @click="addComment">추가</button>
       </div>
     </div>
 
@@ -84,6 +93,8 @@ const category = ref('');
 const router = useRouter(); // useRouter 추가
 const totalPages = ref(5); // 페이지네이션
 const isModalVisible = ref(false); // 모달 표시 상태
+const newComment = ref(''); // 새로운 댓글 내용
+const comments = ref([]); 
 
 onMounted(() => {
   fetchPost();
@@ -143,12 +154,23 @@ const editPost = () => {
 };
 
 
+const addComment = async () => {
+  const postId = route.params.postId; // 현재 게시글 ID
+  try {
+    const response = await axios.post(`http://localhost:8080/api/community/comment`, {
+      postId: postId, // 게시글 ID
+      userId: 'user34', // 사용자 ID는 로그인된 사용자로 설정해야 합니다.
+      content: newComment.value // 댓글 내용
+    });
+    comments.value.push(response.data); // 새 댓글을 댓글 목록에 추가
+    newComment.value = ''; // 입력 필드 비우기
+    await fetchComments(); // 새로운 댓글 추가 후 댓글 목록을 다시 가져옴
 
-const comments = ref([
-  { author: '작성자1', content: '댓글댓글댓글댓글댓글...', date: '2014-01-23' },
-  { author: '작성자2', content: '댓글댓글댓글댓글...', date: '2015-01-25' },
-  { author: '작성자3', content: '댓글댓글댓글댓글...', date: '2017-03-23' },
-]);
+  } catch (error) {
+    console.error('댓글 추가 실패:', error);
+    alert('댓글 추가에 실패했습니다.');
+  }
+};
 
 </script>
 
