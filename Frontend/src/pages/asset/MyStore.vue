@@ -2,15 +2,15 @@
   <AssetHeader />
   <div class="container mw-screen-xl">
     <StoreInfo class="mb-5" />
+    <MyGraph />
     <MyAsset class="mb-5" />
-    <!-- <MyGraph /> -->
   </div>
 </template>
 
 <script>
 import StoreInfo from '@/components/asset/StoreInfo.vue';
 import MyAsset from '@/components/asset/MyAsset.vue';
-// import MyGraph from '@/components/asset/MyGraph.vue';
+import MyGraph from '@/components/asset/MyGraph.vue';
 import AssetHeader from '@/components/asset/AssetHeader.vue';
 
 export default {
@@ -18,7 +18,7 @@ export default {
   components: {
     StoreInfo,
     MyAsset,
-    // MyGraph,
+    MyGraph,
     AssetHeader,
   },
   setup() {

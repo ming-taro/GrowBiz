@@ -1,20 +1,20 @@
 <template>
   <div>
-    <div style="height: 400px">
-      <div class="he-half">
+    <div style="height: 400px; display: flex">
+      <div class="wid-half">
         <div>
-          <h4 class="mb-2">대출 상환 현황 : {{ loanRepaymentStatus }}</h4>
+          <h4 class="mb-2">금일 매출정보: {{ loanRepaymentStatus }}</h4>
         </div>
         <div>
-          <canvas id="doughnut-chart" height="150px"></canvas>
+          <canvas id="doughnut-chart"></canvas>
         </div>
       </div>
-      <div>
-        <div class="he-half">
-          <h4 class="">가게 자산 현황 (혼합 차트)</h4>
+      <div class="wid-half">
+        <div>
+          <h4 class="">전주 매출 비교</h4>
         </div>
         <div>
-          <canvas id="mixed-chart" height="100px"></canvas>
+          <canvas id="mixed-chart"></canvas>
         </div>
       </div>
     </div>
@@ -67,8 +67,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.he-half {
-  width: 65%;
-  height: 50%;
+.wid-half {
+  width: 50%;
 }
 </style>

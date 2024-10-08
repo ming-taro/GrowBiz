@@ -20,7 +20,6 @@
     </div>
   </div>
 </template>
-<!-- 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Chart } from 'chart.js/auto';
@@ -71,4 +70,4 @@ onMounted(async () => {
   width: 80%;
   height: 60%;
 }
-</style> -->
+</style>

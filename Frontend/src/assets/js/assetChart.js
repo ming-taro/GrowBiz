@@ -77,15 +77,15 @@ export let mixed_data = {
   datasets: [
     {
       type: 'bar',
-      label: '일주일 전 판매량',
-      data: [10, 20, 30, 30],
+      label: '금일 판매량',
+      data: [],
       borderColor: 'rgb(255, 9, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
     },
     {
-      type: 'line', // 첫 번째 라인 데이터셋
-      label: '금일 판매량',
-      data: [10, 20, 22, 30],
+      type: 'bar', // 첫 번째 라인 데이터셋
+      label: '일주일 전 판매량',
+      data: [],
       fill: false,
       borderColor: 'rgb(54, 162, 235)',
       tension: 0.1, // 선의 곡률 조정
@@ -145,6 +145,6 @@ export async function fetchChartData(loanRepaymentStatus) {
 
   mixed_data.labels = firstData.map((item) => item.categoryName);
 
-  mixed_data.datasets[0].data = firstData.map((item) => item.amount);
-  mixed_data.datasets[1].data = secondData.map((item) => item.amount);
+  mixed_data.datasets[0].data = secondData.map((item) => item.amount);
+  mixed_data.datasets[1].data = firstData.map((item) => item.amount);
 }
