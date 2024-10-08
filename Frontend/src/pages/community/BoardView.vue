@@ -17,7 +17,7 @@
       <div class="text-center">
       <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
       <button type="button" class="btn btn-sm btn-primary ms-2 mb-5 mt-1" @click="editPost">수정</button> <!-- 수정 버튼 추가 -->
-      <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="deletePost">삭제</button> <!-- 삭제 버튼 추가 -->
+      <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="showDeleteModal">삭제</button>
     </div>
       
     <div class="list-group mt-5 mb-5">
@@ -50,6 +50,26 @@
       </nav>
     </div>
   </div>
+
+    <!-- 삭제 확인 모달 -->
+  <div v-if="isModalVisible" class="modal show" tabindex="-1" aria-modal="true" style="display: block;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">삭제 확인</h5>
+            <button type="button" class="btn-close" @click="hideDeleteModal"></button>
+          </div>
+          <div class="modal-body">
+            정말로 이 게시글을 삭제하시겠습니까?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="hideDeleteModal">취소</button>
+            <button type="button" class="btn btn-danger" @click="confirmDelete">삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <script setup>
@@ -62,6 +82,8 @@ const route = useRoute();
 const post = ref({});
 const category = ref('');
 const router = useRouter(); // useRouter 추가
+const totalPages = ref(5); // 페이지네이션
+const isModalVisible = ref(false); // 모달 표시 상태
 
 onMounted(() => {
   fetchPost();
@@ -89,17 +111,30 @@ const fetchComments = async () => {
   }
 };
 
-const deletePost = async () => {
-  const postId = route.params.postId; // 삭제할 게시글의 ID 가져오기
+const confirmDelete = async () => {
+  const postId = route.params.postId; 
   try {
     await axios.delete(`http://localhost:8080/api/community/view/${postId}`);
-    alert('게시글이 삭제되었습니다.');
-    router.push(`/community/${category.value}`); // category.value로 변경
+    router.push(`/community/${category.value}`); 
   } catch (error) {
     console.error('게시글 삭제 실패:', error);
     alert('게시글 삭제에 실패했습니다.');
+  } finally {
+    hideDeleteModal(); // 모달 숨기기
   }
 };
+
+// 모달을 여는 함수
+const showDeleteModal = () => {
+  isModalVisible.value = true;
+};
+
+// 모달을 닫는 함수
+const hideDeleteModal = () => {
+  isModalVisible.value = false;
+};
+
+
 
 const editPost = () => {
   // 게시글 ID를 세션 스토리지에 저장
@@ -115,9 +150,17 @@ const comments = ref([
   { author: '작성자3', content: '댓글댓글댓글댓글...', date: '2017-03-23' },
 ]);
 
-const totalPages = ref(5); // 페이지네이션
 </script>
 
 <style scoped>
-/* 스타일 추가 */
+.modal {
+  display: block; /* 모달을 항상 표시 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경을 어둡게 처리 */
+  z-index: 1050; /* Bootstrap 모달 기본 z-index */
+}
 </style>
