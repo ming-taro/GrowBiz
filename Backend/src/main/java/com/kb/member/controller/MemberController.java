@@ -55,6 +55,7 @@ public class MemberController {
     public ResponseEntity<Member> join(MemberDTO memberDTO,
                                        @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
         Member member = memberDTO.toMember();
+
         return ResponseEntity.ok(service.join(member, avatar));
     }
 

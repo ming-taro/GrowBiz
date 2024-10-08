@@ -82,12 +82,17 @@ public class MemberService{
         if(result != 1){
             throw new IllegalAccessException();
         }
-        Auth auth = new Auth(member.getId(), "ROLE_MEMBER");
+        log.info("member joined successfully");
+        long mno = member.getMno();
+        log.info("mno is {}",mno);
+
+        Auth auth = new Auth(member.getMno(), "ROLE_MEMBER");
         result = mapper.insertAuth(auth);
         if(result != 1){
             throw new IllegalAccessException();
         }
         saveAvatar(avatar, member.getUsername());
+        log.info("join------------");
         return mapper.selectById(member.getId());
     }
 

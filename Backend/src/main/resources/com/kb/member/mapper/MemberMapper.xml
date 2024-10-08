@@ -28,24 +28,27 @@
 
     <select id="selectMemberAll" resultMap="memberResultMap">
         SELECT
-            mno, m.id, password, name, email, status, create_date, modify_date, a.authority
+            m.mno, id, password, name, email, status, create_date, modify_date, a.authority
         FROM
             member m
-            LEFT OUTER JOIN member_auth a ON m.id = a.id
+            LEFT OUTER JOIN member_auth a ON m.mno = a.mno
         WHERE m.status = 'y'
     </select>
 
 
     <select id="selectById" resultMap="memberResultMap" parameterType="string">
         SELECT
-            mno, m.id, password, name, email, status, create_date, modify_date, a.authority
+            m.mno, id, password, name, email, status, create_date, modify_date, a.authority
         FROM
             member m
-            LEFT OUTER JOIN member_auth a ON m.id = a.id
-        WHERE m.status = 'y' and m.id = #{id}
+            LEFT OUTER JOIN member_auth a ON m.mno = a.mno
+        WHERE m.status = 'y' and m.mno = #{mno}
     </select>
 
     <insert id="insertMember" parameterType="com.kb.member.dto.Member">
+        <selectKey keyProperty="mno" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         INSERT INTO member(mno, id, password, name, email, status)
         VALUES(default, #{id}, #{password}, #{name}, #{email}, default)
     </insert>
@@ -66,7 +69,7 @@
         SET
             password = #{newPassword},
             modify_date = now()
-        WHERE id = #{id}
+        WHERE mno = #{mno}
     </update>
 
 <!--    <delete id="deleteMember">-->
@@ -83,12 +86,12 @@
     </update>
 
     <insert id="insertAuth"  parameterType="com.kb.member.dto.Auth">
-        INSERT INTO member_auth(id, authority)
-        VALUES(#{id}, #{authority})
+        INSERT INTO member_auth(mno, authority)
+        VALUES(#{mno}, #{authority})
     </insert>
 
     <delete id="deleteAuth"  parameterType="com.kb.member.dto.Auth">
         DELETE FROM  member_auth
-        WHERE id = #{id} AND authority = #{auth}
+        WHERE mno = #{mno} AND authority = #{auth}
     </delete>
 </mapper>
