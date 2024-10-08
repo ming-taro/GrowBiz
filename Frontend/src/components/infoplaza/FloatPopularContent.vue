@@ -105,7 +105,8 @@ const loadKakaoMap = (container) => {
             };
 
             kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
-            
+            fetchDistinctDistricts();
+            fetchLocation(); 
 
             // 줌 변경 이벤트 리스너 등록
             kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
@@ -163,6 +164,10 @@ const fetchTowns = async (guName) => {
 
 const fetchLocation = async () => {
     try {
+        if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
+            console.error('Kakao Maps services not loaded yet.');
+            return;
+        }
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = `${selectedCity.value} ${selectedDistrict.value} ${selectedTown.value}`; // 주소를 직접 설정
 
