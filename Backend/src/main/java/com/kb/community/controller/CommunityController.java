@@ -59,11 +59,12 @@ public class CommunityController {
         return ResponseEntity.ok().build();
     }
 
-
-
+    // 특정 게시글 조회 및 조회수 증가
     @GetMapping("/view/{postId}")
-    public PostDTO getPostById(@PathVariable long postId) {
-        return communityService.getPostById(postId);
+    public ResponseEntity<PostDTO> getPostById(@PathVariable long postId) {
+        communityService.incrementViewCount(postId);
+        PostDTO post = communityService.getPostById(postId);
+        return ResponseEntity.ok(post);
     }
 
 
@@ -87,4 +88,5 @@ public class CommunityController {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
     }
+
 }

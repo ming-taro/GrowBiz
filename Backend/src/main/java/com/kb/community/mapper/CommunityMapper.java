@@ -22,4 +22,7 @@ public interface CommunityMapper {
 
     // 게시글 수정
     void updatePost(PostDTO post);
+
+    // 조회수 증가
+    void incrementViewCount(@Param("postId") long postId);
 }

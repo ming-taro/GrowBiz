@@ -30,4 +30,10 @@
         <!-- 유저 id 없어서 주석 처리       WHERE post_id = #{postId} and user_id = #{userId} -->
     </update>
 
+    <!-- 조회수 증가 -->
+    <update id="incrementViewCount" parameterType="long">
+        UPDATE community_post
+        SET view = view + 1
+        WHERE post_id = #{postId}
+    </update>
 </mapper>

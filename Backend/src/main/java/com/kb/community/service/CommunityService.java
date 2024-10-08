@@ -62,4 +62,10 @@ public class CommunityService {
     public void updatePost(PostDTO post) {
         communityMapper.updatePost(post);
     }
+
+    // 조회수 증가
+    @Transactional
+    public void incrementViewCount(long postId) {
+        communityMapper.incrementViewCount(postId);
+    }
 }
