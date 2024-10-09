@@ -421,7 +421,6 @@
 </template>
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
-import LoanHeader from '@/components/infoplaza/LoanHeader.vue';
 
 import { ref, computed } from 'vue';
 import axios from 'axios';
