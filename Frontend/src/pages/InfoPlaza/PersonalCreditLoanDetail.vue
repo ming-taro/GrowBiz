@@ -57,55 +57,55 @@
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">900점 초과</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad1 }}%</span>
+              <span class="ms-1">{{ data.crdtGrad1 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">801~900점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad4 }}</span>
+              <span class="ms-1">{{ data.crdtGrad4 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">701~800점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad5 }}%</span>
+              <span class="ms-1">{{ data.crdtGrad5 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">601~700점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad6 }}</span>
+              <span class="ms-1">{{ data.crdtGrad6 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">501~600점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad10 }}</span>
+              <span class="ms-1">{{ data.crdtGrad10 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">401~500점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad11 }}</span>
+              <span class="ms-1">{{ data.crdtGrad11 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">401~500점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad11 }}</span>
+              <span class="ms-1">{{ data.crdtGrad11 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">301~400점</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad12 }}</span>
+              <span class="ms-1">{{ data.crdtGrad12 }}%</span>
             </li>
             <li class="d-flex">
               <span class="text-primary fs-lg me-2">&#8226;</span>
               <span class="label">300점 이하</span>
               <span class="colon">: </span>
-              <span>{{ data.crdtGrad13 }}</span>
+              <span class="ms-1">{{ data.crdtGrad13 }}%</span>
             </li>
           </ul>
           <h3 class="h6 pt-2">Company offers:</h3>
@@ -385,7 +385,7 @@ bringDataList();
   margin-bottom: 8px;
 }
 .label {
-  min-width: 95px; /* Ensure labels align properly */
+  min-width: 100px; /* Ensure labels align properly */
   color: #333;
 }
 .value {
