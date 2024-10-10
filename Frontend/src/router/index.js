@@ -44,7 +44,7 @@ const AssetFin = () => import('@/pages/asset/AssetFin.vue');
 const Simul = () => import('@/pages/simul/Simul.vue');
 const Register = () => import('@/pages/register/Register.vue');
 const Welcome = () => import('@/pages/register/Welcome.vue');
-const Login = () => import('@/pages/login/Login.vue');
+const Login = () => import('@/pages/auth/Login.vue');
 const MypageUpdate = () => import('@/components/mypage/MypageUpdate.vue');
 const MypageReport = () => import('@/components/mypage/MypageReport.vue');
 

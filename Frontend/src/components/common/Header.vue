@@ -100,14 +100,24 @@
                 class="navbar-nav align-items-lg-center justify-content-end gap-2 ms-lg-4 w-lg-64"
               >
                 <a
+                  v-if="!authStore.isLogin"
                   href="/register"
                   class="btn fw-bold btn-sm btn-secondary bg-hover border-0 rounded-pill w-100 w-lg-auto mb-4 mb-lg-0"
                   >회원가입</a
                 >
+                <!-- 로그인/로그아웃 버튼 -->
                 <a
+                  v-if="!authStore.isLogin"
                   class="fw-bold nav-item nav-link rounded-pill d-none d-lg-block"
                   href="/login"
                   >로그인</a
+                >
+                <a
+                  v-else
+                  @click="logout"
+                  class="btn fw-bold btn-sm btn-secondary bg-hover rounded-pill"
+                  href="#"
+                  >로그아웃</a
                 >
               </div>
             </div>
@@ -119,7 +129,17 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/auth';
 import { onMounted } from 'vue';
+
+const authStore = useAuthStore();
+
+const logout = (event) => {
+  event.preventDefault(); // 기본 동작(페이지 리로딩) 막기
+  console.log('logout'); // 로그아웃 클릭 로그 확인
+  authStore.logout();
+  window.location.href = '/login'; // 로그아웃 후 리디렉션
+};
 
 onMounted(() => {
   const headerInfoContainers = document.querySelectorAll(
