@@ -114,7 +114,7 @@
                 >
                 <a
                   v-else
-                  @click="authStore.logout"
+                  @click="logout"
                   class="btn fw-bold btn-sm btn-secondary bg-hover rounded-pill"
                   href="#"
                   >로그아웃</a
@@ -134,9 +134,11 @@ import { onMounted } from 'vue';
 
 const authStore = useAuthStore();
 
-const logout = () => {
+const logout = (event) => {
+  event.preventDefault(); // 기본 동작(페이지 리로딩) 막기
+  console.log('logout'); // 로그아웃 클릭 로그 확인
   authStore.logout();
-  window.location.herf = '/login';
+  window.location.href = '/login'; // 로그아웃 후 리디렉션
 };
 
 onMounted(() => {
