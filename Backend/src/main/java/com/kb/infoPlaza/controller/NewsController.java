@@ -32,10 +32,18 @@ public class NewsController {
     @Value("${naver.secret}")
     private String naverSecret;
 
+    // 날짜 기반으로 뉴스를 가져오도록 변경된 API
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getNews(@RequestParam String query) throws IOException {
-        String apiUrl = "https://openapi.naver.com/v1/search/news.json?query=" + query + "&display=10&start=1&sort=date";
+    public ResponseEntity<Map<String, Object>> getNews(@RequestParam String query,
+                                                       @RequestParam String startDate,
+                                                       @RequestParam String endDate) throws IOException {
 
+        // 네이버 뉴스 API 요청 URL 구성 (날짜 추가)
+        String apiUrl = "https://openapi.naver.com/v1/search/news.json?query=" + query +
+                "&display=10&start=1&sort=date" +
+                "&startDate=" + startDate + "&endDate=" + endDate;
+
+        // 네이버 API 요청
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", naverApiKey);

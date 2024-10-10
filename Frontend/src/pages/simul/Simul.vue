@@ -18,7 +18,7 @@
         <div v-if="showChoices" class="choices_2">
           <div v-for="(choice, index) in choices" :key="index">
             <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
-              @click="updateChoice(choice.value, index)">
+              @click="updateChoice(choice.text, index)">
               <span class="arrow">{{
                 isHovered === choice.text ? '▶' : ''
               }}</span>
@@ -43,11 +43,12 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getQuestions } from '@/services/QuestionAPI';
+import { getQuestions, saveSimulationAnswer } from '@/services/QuestionAPI';
 
 const questions = ref([]);
 const questionID = ref(-1);
 const choices = ref([]);
+let lastQuestionID = 0;
 
 const currentChoices = ref([]);
 const currentChoiceType = ref(0);
@@ -114,10 +115,14 @@ const isLastChoice = () => {
   return true;
 }
 
+const isLastQuestion = () => {
+  return questions.value[questionID.value].ind == lastQuestionID;
+}
+
 const updateFirstChoice = () => {
   userChoice = {};             // 유저 답변 초기화
   currentChoiceType.value = 0; // 선택 번호 초기화
-  questionID.value += 1;       // 다음 질문
+  // questionID.value += 1;       // 다음 질문
   currentChoices.value = questions.value[questionID.value].choices;
   choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
 
@@ -130,8 +135,6 @@ const updateFirstChoice = () => {
   for (let i = 0; i < currentChoices.value.length; i++) {
     choices.value.push({ text: currentChoices.value[i][dataType], value: i });
   }
-
-  console.log(currentChoices.value);
 }
 
 const updateChoice = (choice, index) => {
@@ -140,8 +143,16 @@ const updateChoice = (choice, index) => {
 
   if (isLastChoice()) {
     userAnswers[questionID.value] = userChoice;
+
+    if (isLastQuestion()) {
+      console.log("지금까지의 답변: ", userAnswers);
+      saveSimulationAnswer(userAnswers);
+      // location.href = "/simul/report"; // 시뮬레이션 종료
+      return;
+    }
+
+    questionID.value += 1;
     updateFirstChoice();
-    console.log("지금까지의 답변: ", userAnswers);
     return;
   }
 
@@ -152,12 +163,18 @@ const updateChoice = (choice, index) => {
   dataType = choiceType.value[currentChoiceType.value];
 
   for (let i = 0; i < currentChoices.value[dataType].length; i++) {
-    choices.value.push({ 
-      text: currentChoices.value[dataType][i],
-      value: i
-    });
+    if (questionID.value == 0) { // 위치 선택 질문
+      choices.value.push({
+        text: currentChoices.value[dataType][i],
+        value: i
+      });
+    } else { // 업종 선택 질문
+      choices.value.push({
+        text: currentChoices.value[dataType][i].text,
+        value: i
+      });
+    }
   }
-  console.log(choices.value);
 }
 
 const fetchQuestions = async () => {
@@ -165,7 +182,10 @@ const fetchQuestions = async () => {
     questions.value = await getQuestions();
     if (questions.value.length > 0) {
       totalSteps.value = questions.value.length;
+      questionID.value += 1;       // 첫 번째 질문
       updateFirstChoice();
+
+      lastQuestionID = questions.value[questions.value.length - 1].ind;
     }
   } catch (error) {
     console.error('Failed to fetch questions:', error);
@@ -174,6 +194,7 @@ const fetchQuestions = async () => {
 
 const retry = () => {
   currentChoiceType.value = 0;
+  updateFirstChoice();
 }
 
 onMounted(async () => {
@@ -316,14 +337,15 @@ onMounted(async () => {
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
-
 .choices_2 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 200px;
+  height: auto;
+  max-height: 300px;
   overflow-y: auto;
-  margin: 20px 0px;
+  margin: 30px 15px 30px 25px;
+  padding: 0px 0px 10px 0px;
 }
 
 /* 스크롤바 스타일링 */
@@ -395,15 +417,6 @@ onMounted(async () => {
   /* 클릭 시 배경색 */
 }
 
-/*
-.choices_2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  margin: 5px 0px 5px 0px;
-}*/
-
 .choices_2 div {
   margin-bottom: -5px;
   /* 버튼 간 간격을 줄이기 */
@@ -463,9 +476,10 @@ onMounted(async () => {
   /* Center horizontally */
   transform: translateX(-50%);
   /* Centering adjustment */
-  width: 200px;
+  width: 230px;
   border-radius: 80px;
-  padding: 15px 15px 15px 25px;
+  /* width: auto;
+  white-space: nowrap; */
 }
 
 .progress-container {
