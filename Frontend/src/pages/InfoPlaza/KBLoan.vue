@@ -53,9 +53,7 @@
         <div class="row">
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
-            <RouterLink
-              :to="`/infoPlaza/KBLoan/${item.loanKey}`"
-            >
+            <RouterLink :to="`/infoPlaza/KBLoan/${item.loanKey}`">
               <div class="card card-xl-stretch h-100">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
@@ -101,18 +99,7 @@
         <div class="col-5 d-flex">
           <!-- col-auto 사용 -->
           <!-- 대출 구분 -->
-          <div class="col-4">
-            <select
-              class="form-select round-corner"
-              aria-label="Default select example"
-              @change="onCategoryChange"
-            >
-              <option selected disabled hidden>구분</option>
-              <option value="전체">전체</option>
-              <option value="직접대출">직접대출</option>
-              <option value="대리대출">대리대출</option>
-            </select>
-          </div>
+          <div class="col-4"></div>
           <!-- 검색창 -->
           <div class="col-8">
             <div class="h-100">
@@ -176,7 +163,6 @@
                         <div class="carousel-wrapper">
                           <div class="d-flex flex-column flex-grow-1">
                             <!-- 첫 번째 행: 신청기간 마감 -->
-                            
 
                             <!-- 세 번째 행: 금리 -->
                             <div
@@ -185,7 +171,11 @@
                             >
                               <p class="fs-3">금리</p>
                               <p class="fs-3 fw-bolder">
-                                {{ item.lowestInterestRate ? item.lowestInterestRate + '%' : '변동' }}
+                                {{
+                                  item.lowestInterestRate
+                                    ? item.lowestInterestRate + '%'
+                                    : '변동'
+                                }}
                               </p>
                             </div>
                           </div>
@@ -209,42 +199,86 @@
         </div>
 
         <!-- 페이지네이션 -->
-    <div class="py-4 px-6 mt-3">
-      <div class="row align-items-center justify-content-center text-center">
-        <div class="col-md-12 d-flex flex-column align-items-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-spaced gap-1">
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" @click.prevent="changePage(1)">
-                  <<
-                </a>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">
-                  <i class="bi bi-chevron-left"></i>
-                </a>
-              </li>
-              <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
-                <a class="page-link" href="#" @click.prevent="changePage(page)">
-                  {{ page }}
-                </a>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">
-                  <i class="bi bi-chevron-right"></i>
-                </a>
-              </li>
-              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                <a class="page-link" href="#" @click.prevent="changePage(totalPages)">
-                  >>
-                </a>
-              </li>
-            </ul>
-          </nav>
+        <div class="py-4 px-6 mt-3">
+          <div
+            class="row align-items-center justify-content-center text-center"
+          >
+            <div class="col-md-12 d-flex flex-column align-items-center">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-spaced gap-1">
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(1)"
+                    >
+                      <<
+                    </a>
+                  </li>
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage - 1)"
+                    >
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  </li>
+                  <li
+                    v-for="page in totalPages"
+                    :key="page"
+                    class="page-item"
+                    :class="{ active: currentPage === page }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(page)"
+                    >
+                      {{ page }}
+                    </a>
+                  </li>
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage + 1)"
+                    >
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(totalPages)"
+                    >
+                      >>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              <!-- Showing Items Text -->
+              <span class="text-muted text-sm mt-3">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
+                of {{ totalItems }} results found
+              </span>
+            </div>
+          </div>
         </div>
-</div>
-</div>
-
       </div>
     </div>
   </div>
@@ -252,7 +286,7 @@
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
-import { ref, computed, onMounted  } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 const selectedCategory = ref('전체');
@@ -260,28 +294,34 @@ const dataList = ref([]);
 const best4List = ref([]);
 
 // 전체 페이지 수 계산
-const totalPages = computed(() => Math.ceil(loanProductList.value.length / itemsPerPage));
+const totalPages = computed(() =>
+  Math.ceil(loanProductList.value.length / itemsPerPage)
+);
 
 const currentPage = ref(1);
 const itemsPerPage = 6; // 페이지당 6개의 아이템을 보여줍니다.
+const totalItems = ref(48);
 
 const loanProductList = ref([]);
 
 // 데이터 가져오는 함수
 const fetchKBLoanAll = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/infoPlaza/loan/getKBLoanAll');
+    const response = await axios.get(
+      'http://localhost:8080/infoPlaza/loan/getKBLoanAll'
+    );
     loanProductList.value = response.data;
   } catch (error) {
     console.error('에러 발생: ', error);
-
   }
 };
 
 // BEST 4 상품 데이터 가져오는 함수
 const fetchKBLoanBest4 = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/infoPlaza/loan/getKBLoanBest4');
+    const response = await axios.get(
+      'http://localhost:8080/infoPlaza/loan/getKBLoanBest4'
+    );
     best4List.value = response.data;
   } catch (error) {
     console.error('에러 발생: ', error);
@@ -315,7 +355,6 @@ onMounted(() => {
   fetchKBLoanAll();
   fetchKBLoanBest4();
 });
-
 </script>
 
 <style scoped>

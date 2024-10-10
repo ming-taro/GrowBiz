@@ -95,4 +95,11 @@ public class LoanController {
         return ResponseEntity.ok(service.getKBLoanBest4Info());
     }
 
+    @GetMapping("/getKBLoanRecommand")
+    public ResponseEntity<List<KBLoanDTO>> getKBLoanRecommand() {
+        return ResponseEntity.ok(service.getKBLoanRecommand());
+    }
+
+
+
 }
