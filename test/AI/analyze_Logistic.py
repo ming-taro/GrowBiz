@@ -9,8 +9,8 @@ def logistic_regression_analysis():
     print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
     df = pd.read_csv('chicken_franchise_data_with_trend.csv')
 
-    # 성공 여부를 이진 값으로 변환 (개업률 50% 이상이면 성공으로 간주)
-    df['success'] = (df['closure_rate'] <= 30).astype(int)
+    # 성공 여부를 이진 값으로 변환 (폐업률 30% 이하면 성공으로 간주)
+    df['fail'] = (df['closure_rate'] <= 20).astype(int)
 
     # 사용할 특성에서 'closure_rate' 제거
     X = df[['asset', 'liability', 'equity', 'revenue', 
@@ -19,7 +19,7 @@ def logistic_regression_analysis():
             'business_fee', 'contract_initial', 'contract_renewal']]
 
     # 목표 변수 설정 (성공 여부)
-    y = df['success']
+    y = df['fail']
 
     # 데이터 표준화
     scaler = StandardScaler()

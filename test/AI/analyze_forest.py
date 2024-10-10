@@ -8,8 +8,9 @@ def random_forest_analysis():
     print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
     df = pd.read_csv('chicken_franchise_data_with_trend.csv')
 
-    # 성공 여부를 이진 값으로 변환 (개업률 50% 이상이면 성공으로 간주)
-    df['success'] = (df['opening_rate'] >= 50).astype(int)
+    # 성공 여부를 이진 값으로 변환 (폐업률 20% 이하면 성공으로 간주)
+    # df['success'] = (df['opening_rate'] >= 50).astype(int)
+    df['fail'] = (df['closure_rate'] <= 20).astype(int)
 
     # 사용할 특성에서 'closure_rate' 제거
     X = df[['asset', 'liability', 'equity', 'revenue', 
