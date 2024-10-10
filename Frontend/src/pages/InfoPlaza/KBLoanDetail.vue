@@ -205,7 +205,7 @@
             <swiper-slide v-for="(item, index) in recommandList" :key="index">
               <div @click="navigateToDetail(item.loanKey)">
                 <RouterLink :to="`/infoPlaza/KBLoan/${item.loanKey}`">
-                  <div class="card card-xl-stretch h-100">
+                  <div class="card card-xl-stretch h-100 hover-card">
                     <div
                       class="card-body pt-5 d-flex flex-column justify-content-between"
                     >
@@ -432,6 +432,17 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translate(
+    -3px,
+    -3px
+  ); /* Moves the card slightly to the top-left */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect */
+}
 .table {
   width: 200px;
   table-layout: auto;
