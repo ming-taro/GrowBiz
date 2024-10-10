@@ -23,7 +23,7 @@ export default {
   methods: {
     loadKakaoMapsScript() {
       const script = document.createElement('script');
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&libraries=services&autoload=false`;
+      script.src = VITE_KAKAO_API_URL;
       script.onload = () => {
         kakao.maps.load(() => {
           this.initMap();
