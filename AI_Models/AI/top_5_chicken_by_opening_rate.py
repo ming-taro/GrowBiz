@@ -13,7 +13,7 @@ def get_top_30_franchises():
     df_filtered = df[columns]
 
     # 폐업률이 20% 이하인 데이터만 필터링
-    df_filtered = df_filtered[df_filtered['closure_rate'] >=50]
+    df_filtered = df_filtered[df_filtered['closure_rate'] <=20]
 
     # 폐업률로 우선 정렬하고, 그다음 개업률로 정렬 (폐업률은 오름차순, 개업률은 내림차순)
     df_sorted = df_filtered.sort_values(by=['closure_rate', 'opening_rate'], ascending=[True, False])
@@ -23,7 +23,7 @@ def get_top_30_franchises():
 
     # 순서 번호를 다시 매긴 데이터 출력
     for idx, row in enumerate(top_30.itertuples(), 1):
-        print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate}%, 개업률: {row.opening_rate}%")
+        print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate:.2f}%, 개업률: {row.opening_rate:.2f}%")
 
     # 상위 30개의 데이터를 CSV로 저장하고 싶다면 아래 주석 해제
     # top_30.to_csv('top_30_franchises.csv', index=False)
