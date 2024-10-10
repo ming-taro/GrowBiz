@@ -41,13 +41,25 @@
           <div class="row g-3">
             <div class="col-sm-12">
               <label for="id" class="form-label">사용자 아이디</label>
-              <input
-                type="text"
-                v-model="form.id"
-                class="form-control"
-                id="id"
-                required
-              />
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="form.id"
+                  class="form-control"
+                  id="id"
+                  required
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  @click="checkDuplicate"
+                >
+                  중복 확인
+                </button>
+              </div>
+              <p v-if="isDuplicate" class="text-danger small">
+                해당 아이디는 이미 사용 중입니다.
+              </p>
             </div>
             <div class="col-sm-12">
               <label for="password" class="form-label">사용자 비밀번호</label>
@@ -104,7 +116,7 @@
               <button
                 type="submit"
                 class="btn btn-dark w-100 mb-5"
-                :disabled="!isFormValid"
+                :disabled="!isFormValid || isDuplicate"
               >
                 회원가입
               </button>
@@ -146,7 +158,7 @@ const form = ref({
   email: '',
 });
 
-const avatar = ref(null);
+const isDuplicate = ref(false);
 const router = useRouter();
 
 const isFormValid = computed(() => {
@@ -156,9 +168,21 @@ const isFormValid = computed(() => {
     form.value.confirmPassword &&
     form.value.name &&
     form.value.email &&
-    form.value.password === form.value.confirmPassword
+    form.value.password === form.value.confirmPassword &&
+    !isDuplicate.value // 중복된 경우 제출 비활성화
   );
 });
+
+const checkDuplicate = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/member/checkid/${form.value.id}`
+    );
+    isDuplicate.value = response.data; // 중복 여부 설정
+  } catch (error) {
+    console.error('중복 확인 실패:', error);
+  }
+};
 
 const submitForm = async () => {
   let formData = new FormData();
