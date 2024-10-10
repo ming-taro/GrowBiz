@@ -35,18 +35,38 @@
             <a href="/register" class="fw-semibold">회원가입 </a>페이지
           </div>
         </div>
-        <form>
+        <form @submit.prevent="login">
           <div class="row g-5">
             <div class="col-sm-12">
-              <label class="form-label">이메일</label>
-              <input type="email" class="form-control" />
+              <label for="id" class="form-label">아이디</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="사용자 ID"
+                v-model="member.id"
+                autocomplete="current-id"
+                required
+              />
             </div>
             <div class="col-sm-12">
-              <label class="form-label">비밀번호</label>
-              <input type="password" class="form-control" />
+              <label for="password" class="form-label">비밀번호</label>
+              <input
+                type="password"
+                class="form-control"
+                placeholder="비밀번호"
+                v-model="member.password"
+                autocomplete="current-password"
+                required
+              />
             </div>
             <div class="col-sm-12">
-              <a href="#" class="btn btn-dark w-100 mb-5">Login</a>
+              <button
+                href="#"
+                class="btn btn-dark w-100 mb-5"
+                :disableSubmit="disableSubmit"
+              >
+                Login
+              </button>
             </div>
           </div>
         </form>
@@ -70,6 +90,39 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed, reactive, ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+const auth = useAuthStore();
+
+const member = reactive({
+  id: '',
+  password: '',
+});
+
+const error = ref('');
+const disableSubmit = computed(() => !(member.id && member.password));
+
+const login = async () => {
+  console.log(member);
+  try {
+    await auth.login(member);
+    if (route.query.next) {
+      router.push({ name: route.query.next });
+    } else {
+      router.push('/');
+    }
+  } catch (e) {
+    console.log('error', e);
+    error.value = e.response.data;
+  }
+};
+</script>
 
 <style>
 .back-img {
