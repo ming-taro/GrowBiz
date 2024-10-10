@@ -20,7 +20,10 @@
               </div>
               <div class="d-flex align-items-center">
                 <div class="text-left">
-                  <span class="fs-2 text-gray-500 fw-bolder d-block">
+                  <span
+                    class="fs-2 text-gray-500 fw-bolder d-block"
+                    style="line-height: 30px"
+                  >
                     {{ data.finPrdtNm }}
                   </span>
                 </div>
@@ -30,7 +33,7 @@
               <span class="badge bg-faded-accent rounded-pill mt-5 me-3">{{
                 data.rpayTypeNm
               }}</span>
-              <span class="badge bg-faded-accent rounded-pill mt-5">{{
+              <span class="badge bg-faded-accent2 rounded-pill mt-1">{{
                 data.lendRateTypeNm
               }}</span>
             </div>
@@ -189,7 +192,7 @@
             <swiper-slide v-for="(item, index) in recommandList" :key="index">
               <div @click="navigateToDetail(item.id)">
                 <RouterLink
-                  :to="`/infoPlaza/jeonseLoan/jeonseLoanDetail/${item.id}`"
+                  :to="`/infoPlaza/mortgageLoan/mortgageLoanDetail/${item.id}`"
                 >
                   <div class="card card-xl-stretch h-100">
                     <div
@@ -223,7 +226,7 @@
                             <div class="d-flex flex-stack flex-wrap">
                               <span
                                 class="fs-3 text-gray-500 pe-2 text-truncate"
-                                style="font-weight: 500"
+                                style="font-weight: 500; width: 220px"
                               >
                                 {{ item.finPrdtNm }}
                               </span>
@@ -386,7 +389,7 @@ const calculate = () => {
     formattedLoanAmount.value.replace(/,/g, '').replace('₩', '')
   );
   const termMonths = parseInt(loanTerm.value);
-  const interestRate = data.value.lendRateMin / 100; // 연 이자율을 소수로 변환
+  const interestRate = data.value.lendRateAvg / 100; // 연 이자율을 소수로 변환
   let monthlyInterestRate = interestRate / 12;
 
   // 초기값 설정
@@ -517,6 +520,9 @@ fetchData();
 
 .bg-faded-accent {
   background-color: rgba(80, 43, 246, 0.2) !important; /* 더 진한 배경색 */
+}
+.bg-faded-accent2 {
+  background-color: rgba(255, 0, 0, 0.2) !important; /* 더 진한 배경색 */
 }
 
 .rounded-pill {

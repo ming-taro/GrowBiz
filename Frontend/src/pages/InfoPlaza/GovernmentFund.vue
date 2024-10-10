@@ -52,6 +52,7 @@
         <!-- Best 금리상품 내용-->
         <div class="row">
           <!-- 카드 여러 개 -->
+
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
             <RouterLink
               :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"

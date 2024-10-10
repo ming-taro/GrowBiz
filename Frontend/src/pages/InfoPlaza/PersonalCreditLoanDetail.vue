@@ -250,7 +250,7 @@
                             <div class="d-flex flex-stack flex-wrap">
                               <span
                                 class="fs-3 text-gray-500 pe-2 text-truncate"
-                                style="font-weight: 500"
+                                style="font-weight: 500; width: 220px"
                               >
                                 {{ item.finPrdtNm }}
                               </span>
