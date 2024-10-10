@@ -9,7 +9,7 @@ def logistic_regression_analysis():
     print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
     df = pd.read_csv('chicken_franchise_data_with_trend.csv')
 
-    # 성공 여부를 이진 값으로 변환 (폐업률 30% 이하면 성공으로 간주)
+    # 폐업 여부를 이진 값으로 변환 (폐업률 30% 이하면 성공으로 간주)
     df['fail'] = (df['closure_rate'] <= 20).astype(int)
 
     # 사용할 특성에서 'closure_rate' 제거
