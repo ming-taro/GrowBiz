@@ -7,7 +7,7 @@ def get_top_5_franchises():
     # 필요한 열 선택
     columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'total_change', 'franchise_count', 
                'asset', 'liability', 'equity', 'revenue', 'operating_income', 'net_income', 
-               'advertising_expense', 'average_sales', 'initial_cost', 'interior_cost', 
+               'advertising_expense', 'average_sales', 'initial_cost', 'interior_cost','average_sales_per_area',
                'business_fee', 'contract_initial', 'contract_renewal']
 
     df_filtered = df[columns]
