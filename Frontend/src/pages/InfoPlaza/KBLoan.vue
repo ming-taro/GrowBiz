@@ -139,7 +139,7 @@
           <!-- 대출 상품 카드 여러개 -->
           <div
             class="col-xl-4 mb-5"
-            v-for="(item, index) in loanProductList"
+            v-for="(item, index) in paginatedDataList"
             :key="index"
           >
             <div class="card card-xl-stretch mb-5 mb-xl-8" style="height: 100%">
@@ -209,87 +209,42 @@
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="py-4 px-6 mt-3">
-          <div
-            class="row align-items-center justify-content-center text-center"
-          >
-            <div class="col-md-12 d-flex flex-column align-items-center">
-              <!-- Pagination -->
-              <nav aria-label="Page navigation example">
-                <ul class="pagination pagination-spaced gap-1">
-                  <!-- First Page Button -->
-                  <li
-                    class="page-item"
-                    :class="{ disabled: currentPage === 1 }"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="changePage(1)"
-                    >
-                      <<
-                    </a>
-                  </li>
-                  <!-- Previous Page Button -->
-                  <li
-                    class="page-item"
-                    :class="{ disabled: currentPage === 1 }"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="changePage(currentPage - 1)"
-                    >
-                      <i class="bi bi-chevron-left"></i>
-                    </a>
-                  </li>
-                  <!-- Page Numbers -->
-                  <li
-                    v-for="page in visiblePages"
-                    :key="page"
-                    class="page-item"
-                    :class="{ active: currentPage === page }"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="changePage(page)"
-                    >
-                      {{ page }}
-                    </a>
-                  </li>
-                  <!-- Next Page Button -->
-                  <li
-                    class="page-item"
-                    :class="{ disabled: currentPage === totalPages }"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="changePage(currentPage + 1)"
-                    >
-                      <i class="bi bi-chevron-right"></i>
-                    </a>
-                  </li>
-                  <!-- Last Page Button -->
-                  <li
-                    class="page-item"
-                    :class="{ disabled: currentPage === totalPages }"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="changePage(totalPages)"
-                    >
-                      >>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-              
-            </div>
-          </div>
+    <div class="py-4 px-6 mt-3">
+      <div class="row align-items-center justify-content-center text-center">
+        <div class="col-md-12 d-flex flex-column align-items-center">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-spaced gap-1">
+              <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="changePage(1)">
+                  <<
+                </a>
+              </li>
+              <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                <a class="page-link" href="#" @click.prevent="changePage(page)">
+                  {{ page }}
+                </a>
+              </li>
+              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+              <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <a class="page-link" href="#" @click.prevent="changePage(totalPages)">
+                  >>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
+</div>
+</div>
+
       </div>
     </div>
   </div>
@@ -304,11 +259,11 @@ const selectedCategory = ref('전체');
 const dataList = ref([]);
 const best4List = ref([]);
 
-const currentPage = ref(1);
-const itemsPerPage = 6;
-const totalItems = ref(16);
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
+// 전체 페이지 수 계산
+const totalPages = computed(() => Math.ceil(loanProductList.value.length / itemsPerPage));
 
+const currentPage = ref(1);
+const itemsPerPage = 6; // 페이지당 6개의 아이템을 보여줍니다.
 
 const loanProductList = ref([]);
 
@@ -337,7 +292,7 @@ const fetchKBLoanBest4 = async () => {
 const paginatedDataList = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  return dataList.value.slice(startIndex, endIndex);
+  return loanProductList.value.slice(startIndex, endIndex); // 현재 페이지에 맞는 데이터만 반환
 });
 
 // 페이지 전환 함수
