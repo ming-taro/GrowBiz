@@ -54,7 +54,7 @@
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
             <RouterLink
-              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
+              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.ProductName}`"
             >
               <div class="card card-xl-stretch h-100">
                 <div
@@ -66,7 +66,7 @@
                         class="fs-3 text-gray-500 pe-2"
                         style="font-weight: 500"
                       >
-                        {{ item.loanProductName }}
+                        {{ item.productName }}
                       </span>
                     </div>
                     <div class="carousel-inner pt-6">
@@ -85,7 +85,7 @@
                   >
                     <p class="fs-6 text-gray-600 mb-1">금리</p>
                     <p class="h2 fw-bold mb-0 ms-2">
-                      {{ item.totalInterestRate }}
+                      {{ item.lowestInterestRate }}%
                     </p>
                   </div>
                 </div>
@@ -323,6 +323,16 @@ const fetchKBLoanAll = async () => {
   }
 };
 
+// BEST 4 상품 데이터 가져오는 함수
+const fetchKBLoanBest4 = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/infoPlaza/loan/getKBLoanBest4');
+    best4List.value = response.data;
+  } catch (error) {
+    console.error('에러 발생: ', error);
+  }
+};
+
 // 현재 페이지에 해당하는 데이터만 반환하는 계산된 속성
 const paginatedDataList = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
@@ -348,6 +358,7 @@ const visiblePages = computed(() => {
 // 컴포넌트가 마운트되면 데이터 요청
 onMounted(() => {
   fetchKBLoanAll();
+  fetchKBLoanBest4();
 });
 
 </script>
