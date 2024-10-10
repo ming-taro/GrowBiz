@@ -35,4 +35,6 @@ public interface LoanMapper {
 
     List<KBLoanDTO> getKBLoanBest4Info();
 
+    List<KBLoanDTO> getKBLoanRecommand();
+
 }

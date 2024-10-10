@@ -64,5 +64,7 @@ public class LoanService {
         return mapper.getKBLoanBest4Info();
     }
 
+    public List<KBLoanDTO> getKBLoanRecommand() { return mapper.getKBLoanRecommand();}
+
 }
 

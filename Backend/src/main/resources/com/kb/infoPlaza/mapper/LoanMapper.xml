@@ -147,5 +147,9 @@
         FROM kb_loan_info where lowest_interest_rate is not null order by lowestInterestRate limit 4;
     </select>
 
+    <select id="getKBLoanRecommand" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        select * from kb_loan_info where product_name like '%소상공인%';
+    </select>
+
 
 </mapper>
