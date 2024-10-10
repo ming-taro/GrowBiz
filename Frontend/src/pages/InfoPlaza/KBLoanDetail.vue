@@ -40,6 +40,31 @@
             </div>
             <hr />
             <h3>상품 안내</h3>
+            <div>
+              <h5>
+              자격 요건
+            </h5> 
+            <span v-html="formattedLoanEligibility"></span> <!-- 줄 바꿈 적용 -->
+          </div>
+
+            <div>
+              <h5>
+              대출 한도
+            </h5> 
+            <span v-html="formattedLoanAmount"></span> <!-- 줄 바꿈 적용 -->
+          </div>
+          <div>
+            <h5>대출 기간</h5> 
+            <span v-html="formattedLoanDuration"></span> <!-- 줄 바꿈 적용 -->
+          </div>
+          <div>
+            <h5>대출 신청 시간</h5> 
+            <span v-html="formattedAvailableHours"></span> <!-- 줄 바꿈 적용 -->
+          </div>
+          <div>
+            <h5>유의사항</h5> 
+            <span v-html="formattedLoanNotice"></span> <!-- 줄 바꿈 적용 -->
+          </div>
             <hr />
           </div>
         </div>
@@ -66,6 +91,35 @@ const bringDataList = async() => {
     console.error('Failed to select:', error);
   }
 };
+
+
+// 포맷팅 함수
+const formatTextWithLineBreaks = (text) => {
+  // `-`와 `·` 기호를 기준으로 줄 바꿈 적용
+  const parts = text.split(/[-·]/); // - 또는 ·를 기준으로 분리
+  return parts[0] + (parts.length > 1 ? '-' + parts.slice(1).join('<br />-') : '');
+};
+
+
+const formattedLoanEligibility = computed(() => {
+  return formatTextWithLineBreaks(data.value?.loanEligibility || '');
+});
+
+const formattedLoanAmount = computed(() => {
+  return formatTextWithLineBreaks(data.value?.loanAmount || '');
+});
+
+const formattedLoanDuration = computed(() => {
+  return formatTextWithLineBreaks(data.value?.loanDurationAndRepayment || '');
+});
+
+const formattedAvailableHours = computed(() => {
+  return formatTextWithLineBreaks(data.value?.availableHours || '');
+});
+
+const formattedLoanNotice = computed(() => {
+  return formatTextWithLineBreaks(data.value?.loanNotice || '');
+});
 
 onMounted(async () => {
   bringDataList();
