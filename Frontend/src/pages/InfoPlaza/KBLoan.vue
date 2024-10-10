@@ -157,7 +157,7 @@
                     <div class="row mb-3" style="height: 70px">
                       <div class="col-3 d-flex align-items-center">
                         <img
-                          :src="'/images/banklogo/' + 'government' + '.png'"
+                          :src="'/images/banklogo/' + '국민은행' + '.png'"
                           alt=""
                           style="width: 100px"
                         />
@@ -183,9 +183,9 @@
                               class="d-flex justify-content-between align-items-center"
                               style="min-height: 2.5rem"
                             >
-                              <p class="fs-4">금리</p>
-                              <p class="fs-2 fw-bolder">
-                                {{ item.lowestInterestRate ? item.lowestInterestRate + '%' : '' }}
+                              <p class="fs-3">금리</p>
+                              <p class="fs-3 fw-bolder">
+                                {{ item.lowestInterestRate ? item.lowestInterestRate + '%' : '변동' }}
                               </p>
                             </div>
                           </div>
@@ -286,12 +286,7 @@
                   </li>
                 </ul>
               </nav>
-              <!-- Showing Items Text -->
-              <span class="text-muted text-sm mt-3">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
-                of {{ totalItems }} results found
-              </span>
+              
             </div>
           </div>
         </div>
