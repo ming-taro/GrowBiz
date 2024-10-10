@@ -63,8 +63,9 @@
           </div>
           <div>
             <h5>유의사항</h5> 
-            <span v-html="formattedLoanNotice"></span> <!-- 줄 바꿈 적용 -->
-          </div>
+              <span v-if="data.loanNotice" v-html="formattedLoanNotice"></span> <!-- 데이터가 있을 때 -->
+              <span v-else>- 대표전화 1588-9999 / 1599-9999 / 1644-9999</span> <!-- 데이터가 없을 때 -->
+            </div>
             <hr />
           </div>
         </div>
