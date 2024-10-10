@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="height: 400px">
-      <div class="he-half">
+      <div>
         <div>
           <h4 class="mb-2">주변 상권 별 매출 데이터 비교</h4>
         </div>
@@ -10,7 +10,7 @@
         </div>
       </div>
       <div>
-        <div class="he-half">
+        <div>
           <h4 class="">대분류 별 월매출 비교</h4>
         </div>
         <div>

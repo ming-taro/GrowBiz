@@ -5,17 +5,17 @@
         <div class="col">
           <div class="pe-5">
             <h3 class="h2 text-heading fw-semibold lh-lg mb-3">
-              This is Footer<br />
+              KB IT’s Your Life 5기<br />
             </h3>
             <a href="mailto:hello@company.com" class="h3 text-primary">
-              자영업자 키우기
+              자영업자 키우기: T라미숙해
               <span class="svg-icon svg-align-baseline ms-3">
                 <i class="bi bi-arrow-right"></i>
               </span>
             </a>
           </div>
           <div class="my-7">
-            <a href="#" class="btn btn-dark">Get In Touch</a>
+            <a href="#" class="btn btn-dark">문의하기</a>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
       <div class="row">
         <div class="col-auto">
           <p class="text-sm text-muted">
-            &copy; Copyright 2024 SelfEmployed - KB IT's Your Life
+            &copy; Copyright 2024 KB IT's Your Life 5기 - T라미숙해
           </p>
         </div>
       </div>

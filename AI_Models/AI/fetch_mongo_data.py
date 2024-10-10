@@ -32,18 +32,20 @@ def process_json_to_csv():
                         total_contract_termination += franchise_changes.get('contract_termination', 0)
                         total_contract_cancellation += franchise_changes.get('contract_cancellation', 0)
                 
-                # 신규개점 - (계약종료 + 계약해지)
-                total_change = total_new_open - (total_contract_termination + total_contract_cancellation)
+                # 전체 점포 수 계산 (기존 가맹점수 + 신규 개점 수)
+                total_store = total_franchise_count + total_new_open
 
-                # 개업률 및 폐업률 계산 (명의변경 제외)
-                total_store = total_new_open + total_contract_termination + total_contract_cancellation
+                # 개업률 = (신규 개점 수 / 전체 점포 수) * 100
                 opening_rate = (total_new_open / total_store) * 100 if total_store != 0 else 0
+                
+                # 폐업률 = (계약 해지 수 / 전체 점포 수) * 100
                 closure_rate = (total_contract_cancellation / total_store) * 100 if total_store != 0 else 0
 
                 financial_2023 = next((f for f in store_data['financial'] if f['year'] == 2023), None)
                 if financial_2023:
                     advertising_expense = store_data['advertising_cost']['advertising_expense']
                     average_sales = store_data['franchise_revenue']['average_sales']
+                    average_sales_per_area = store_data['franchise_revenue'].get('average_sales_per_area', None)  # 평당 평균 매출액 추가
                     initial_cost = store_data['initial_cost']['total']
                     interior_cost = store_data['interior_cost']['total']
                     business_fee = store_data['business_fee']['deposit_fee']
@@ -56,7 +58,7 @@ def process_json_to_csv():
                         "region": '서울',
                         "opening_rate": opening_rate,
                         "closure_rate": closure_rate,
-                        "total_change": total_change,
+                        "total_change": total_new_open - (total_contract_termination + total_contract_cancellation),
                         "franchise_count": total_franchise_count,
                         "asset": financial_2023['asset'],
                         "liability": financial_2023['liability'],
@@ -66,6 +68,7 @@ def process_json_to_csv():
                         "net_income": financial_2023['net_income'],
                         "advertising_expense": advertising_expense,
                         "average_sales": average_sales,
+                        "average_sales_per_area": average_sales_per_area,  # 평당 평균 매출액 추가
                         "initial_cost": initial_cost,
                         "interior_cost": interior_cost,
                         "business_fee": business_fee,
@@ -75,8 +78,8 @@ def process_json_to_csv():
     
     # 결과를 CSV로 저장
     df = pd.DataFrame(results)
-    df.to_csv('chicken_franchise_data_with_trend.csv', index=False)
-    print("Data saved to 'chicken_franchise_data_with_trend.csv'")
+    df.to_csv('chicken_franchise_data_with_trend2.csv', index=False)
+    print("Data saved to 'chicken_franchise_data_with_trend2.csv'")
 
 if __name__ == "__main__":
     process_json_to_csv()
