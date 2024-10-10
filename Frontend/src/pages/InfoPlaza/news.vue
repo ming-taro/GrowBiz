@@ -8,7 +8,7 @@
             <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
           </li>
         </ul>
-        <h2 class="mx-3 mb-0">2024/09/24</h2>
+        <h2 class="mx-3 mb-0">{{ formattedDate }}</h2>
         <ul class="pagination pagination-spaced gap-1 mb-0">
           <li class="page-item">
             <a class="page-link" href="#"
@@ -18,76 +18,27 @@
         </ul>
       </div>
 
-      <div class="row">
-        <div class="col-12 mb-3">
-          <div class="card">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <a href="https://n.news.naver.com/mnews/article/119/0002875193">
-                  <img
-                    src="https://mimgnews.pstatic.net/image/origin/119/2024/09/24/2875193.jpg?type=nf220_150"
-                    class="img-fluid rounded-start"
-                    alt="KGM '2024 미래 모빌리티 테크쇼' 개최…中企와 상생 모색"
-                    onerror="this.outerHTML='<span class=&quot;noimage&quot;></span>'"
-                  />
-                </a>
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <a
-                    href="https://n.news.naver.com/mnews/article/119/0002875193"
-                    class="text-decoration-none text-dark"
-                  >
-                    <h5 class="card-title">
-                      KGM '2024 미래 모빌리티 테크쇼' 개최…中企와 상생 모색
-                    </h5>
-                  </a>
-                  <p class="card-text">
-                    KG 모빌리티(KGM)는 24일 경기도 평택 본사에서 중소기업 상생과
-                    협력을 위한 ‘2024 미래 모빌리티 테크쇼’를 개최했다고
-                    밝혔다...
-                  </p>
-                  <p class="card-text">
-                    <small class="text-muted">데일리안 · 34분 전</small>
-                  </p>
-                </div>
-              </div>
+      <div v-for="news in newsList" :key="news.link" class="col-12 mb-3">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <a :href="news.link">
+                <img
+                  :src="news.thumbnail || 'https://via.placeholder.com/150'"
+                  class="img-fluid rounded-start"
+                  alt="news.title"
+                />
+              </a>
             </div>
-          </div>
-        </div>
-
-        <div class="col-12 mb-3">
-          <div class="card">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <a href="https://n.news.naver.com/mnews/article/016/0002365866">
-                  <img
-                    src="https://mimgnews.pstatic.net/image/origin/016/2024/09/24/2365866.jpg?type=nf220_150"
-                    class="img-fluid rounded-start"
-                    alt="KGM, '2024 미래 모빌리티 테크쇼' 개최…“중소기업 상생 도모”"
-                    onerror="this.outerHTML='<span class=&quot;noimage&quot;></span>'"
-                  />
+            <div class="col-md-8">
+              <div class="card-body">
+                <a :href="news.link" class="text-decoration-none text-dark">
+                  <h5 class="card-title" v-html="news.title"></h5>
                 </a>
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <a
-                    href="https://n.news.naver.com/mnews/article/016/0002365866"
-                    class="text-decoration-none text-dark"
-                  >
-                    <h5 class="card-title">
-                      KGM, '2024 미래 모빌리티 테크쇼' 개최…“중소기업 상생 도모”
-                    </h5>
-                  </a>
-                  <p class="card-text">
-                    KG 모빌리티(KGM)는 24일 경기도 평택 본사에서 중소기업 상생과
-                    협력을 위한 ‘2024 미래 모빌리티 테크쇼’를 개최했다고
-                    밝혔다...
-                  </p>
-                  <p class="card-text">
-                    <small class="text-muted">헤럴드경제 · 4시간 전</small>
-                  </p>
-                </div>
+                <p class="card-text">{{ news.shortContent }}</p>
+                <p class="card-text">
+                  <small class="text-muted">{{ news.date }}</small>
+                </p>
               </div>
             </div>
           </div>
@@ -98,9 +49,47 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import axios from 'axios';
+
+const newsList = ref([]);
+const formattedDate = ref(new Date().toLocaleDateString());
+
+async function getNews(query) {
+  try {
+    const response = await axios.get('/api/news', {
+      params: { query: query },
+    });
+
+    // 받아온 데이터를 newsList에 추가
+    const newsData = response.data.news;
+
+    // 각 뉴스마다 고유한 thumbnail을 사용하도록 수정
+    newsList.value = newsData.map((item) => ({
+      title: item.title.replace(/<[^>]+>/g, ''), // HTML 태그 제거
+      link: item.link,
+      shortContent:
+        item.description.length > 100
+          ? item.description.substring(0, 100) + '...'
+          : item.description, // 짧게 자르기
+      thumbnail: item.thumbnail || 'https://via.placeholder.com/150', // 각 뉴스 항목의 개별 thumbnail 값 사용
+      date: new Date().toLocaleDateString(), // 임의의 날짜로 설정
+    }));
+  } catch (error) {
+    console.error('뉴스 검색 중 오류 발생:', error);
+  }
+}
+
+onMounted(() => {
+  const searchQuery = '주식'; // 예시 키워드
+  getNews(searchQuery);
+});
 </script>
 
 <style>
-/* 시뮬레이션의 education의 card-text가 여기에도 영향을 끼침 */
+.img-fluid {
+  width: 250px;
+  height: 250px;
+}
 </style>
