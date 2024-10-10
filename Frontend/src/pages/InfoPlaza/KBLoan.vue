@@ -139,7 +139,7 @@
           <!-- 대출 상품 카드 여러개 -->
           <div
             class="col-xl-4 mb-5"
-            v-for="(item, index) in paginatedDataList"
+            v-for="(item, index) in loanProductList"
             :key="index"
           >
             <div class="card card-xl-stretch mb-5 mb-xl-8" style="height: 100%">
@@ -167,7 +167,7 @@
                         <span
                           class="fs-3 text-gray-500 fw-bolder pe-2 text-left"
                         >
-                          {{ item.loanProductName }}
+                          {{ item.productName }}
                         </span>
                       </div>
                     </div>
@@ -176,40 +176,16 @@
                         <div class="carousel-wrapper">
                           <div class="d-flex flex-column flex-grow-1">
                             <!-- 첫 번째 행: 신청기간 마감 -->
-                            <div
-                              class="d-flex justify-content-between align-items-center"
-                              style="min-height: 2.5rem"
-                            >
-                              <p class="fs-5">신청기간</p>
-                              <p class="fs-5 fw-bolder">
-                                {{
-                                  item.applicationPeriod
-                                    ? item.applicationPeriod.replace(/>/g, '')
-                                    : ''
-                                }}
-                                <!-- Ensured that '>' is not present -->
-                              </p>
-                            </div>
-
-                            <!-- 두 번째 행: 구분 -->
-                            <div
-                              class="d-flex justify-content-between align-items-center"
-                              style="min-height: 2.5rem"
-                            >
-                              <p class="fs-5">구분</p>
-                              <p class="fs-5 fw-bolder">
-                                {{ item.category }}
-                              </p>
-                            </div>
+                            
 
                             <!-- 세 번째 행: 금리 -->
                             <div
                               class="d-flex justify-content-between align-items-center"
                               style="min-height: 2.5rem"
                             >
-                              <p class="fs-5">금리</p>
-                              <p class="fs-5 fw-bolder">
-                                {{ item.totalInterestRate }}
+                              <p class="fs-4">금리</p>
+                              <p class="fs-2 fw-bolder">
+                                {{ item.lowestInterestRate ? item.lowestInterestRate + '%' : '' }}
                               </p>
                             </div>
                           </div>
@@ -326,7 +302,7 @@
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted  } from 'vue';
 import axios from 'axios';
 
 const selectedCategory = ref('전체');
@@ -338,47 +314,18 @@ const itemsPerPage = 6;
 const totalItems = ref(16);
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
 
-const BASEURI = '/api/infoPlaza/loan';
 
-// 데이터 리스트 가져오는 함수
-const bringLoanList = async () => {
+const loanProductList = ref([]);
+
+// 데이터 가져오는 함수
+const fetchKBLoanAll = async () => {
   try {
-    // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getFilteredList', {
-      params: {
-        category: selectedCategory.value,
-      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
-    });
-    if (response.status === 200) {
-      dataList.value = response.data;
-      totalItems.value = dataList.value.length;
-    } else {
-      console.log('데이터 조회 실패');
-    }
+    const response = await axios.get('http://localhost:8080/infoPlaza/loan/getKBLoanAll');
+    loanProductList.value = response.data;
   } catch (error) {
-    console.log('에러발생 :' + error);
-  }
-};
+    console.error('에러 발생: ', error);
 
-// 데이터 리스트 가져오는 함수
-const bringBest4List = async () => {
-  try {
-    // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4');
-    if (response.status === 200) {
-      best4List.value = response.data;
-    } else {
-      console.log('데이터 조회 실패');
-    }
-  } catch (error) {
-    console.log('에러발생 :' + error);
   }
-};
-
-// 직접대출/대리대출
-const onCategoryChange = (event) => {
-  selectedCategory.value = event.target.value;
-  bringLoanList();
 };
 
 // 현재 페이지에 해당하는 데이터만 반환하는 계산된 속성
@@ -403,8 +350,11 @@ const visiblePages = computed(() => {
   return pages;
 });
 
-bringBest4List();
-bringLoanList();
+// 컴포넌트가 마운트되면 데이터 요청
+onMounted(() => {
+  fetchKBLoanAll();
+});
+
 </script>
 
 <style scoped>

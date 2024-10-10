@@ -80,5 +80,14 @@ public class LoanController {
         return ResponseEntity.ok(service.getDetailItemMortgage(id));
     }
 
+    @GetMapping("/getKBLoanAll")
+    public ResponseEntity<List<KBLoanDTO>> getAllKBLoanInfo() {
+        return ResponseEntity.ok(service.getAllKBLoanInfo());
+    }
+
+    @GetMapping("/getKBLoan/{loanKey}")
+    public ResponseEntity<KBLoanDTO> getKBLoanInfoByLoanKey(@PathVariable String loanKey) {
+        return ResponseEntity.ok(service.getKBLoanInfoByLoanKey(loanKey));
+    }
 
 }

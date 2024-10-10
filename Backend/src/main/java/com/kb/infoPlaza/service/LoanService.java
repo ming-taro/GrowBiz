@@ -51,5 +51,13 @@ public class LoanService {
     public MortgageDTO getDetailItemMortgage(Long id) {
         return mapper.getDetailItemMortgage(id);
     }
+
+    public List<KBLoanDTO> getAllKBLoanInfo() {
+        return mapper.getAllKBLoanInfo();
+    }
+
+    public KBLoanDTO getKBLoanInfoByLoanKey(String loanKey) {
+        return mapper.getKBLoanInfoByLoanKey(loanKey);
+    }
 }
 
