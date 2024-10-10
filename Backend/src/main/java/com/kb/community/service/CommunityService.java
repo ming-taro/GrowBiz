@@ -80,4 +80,21 @@ public class CommunityService {
     public void incrementDislikes(Long postId) {
         communityMapper.incrementDislikes(postId);
     }
+
+    // 키워드 검색
+    @Transactional
+    public List<PostDTO> searchPosts(String category, String keyword, String filterType) {
+        switch (filterType) {
+            case "title":
+                return communityMapper.searchPostsByTitle(category, keyword);
+            case "content":
+                return communityMapper.searchPostsByContent(category, keyword);
+            case "user":
+                return communityMapper.searchPostsByUserId(category, keyword);
+            case "all":
+                return communityMapper.searchPosts(category, keyword);
+            default:
+                throw new IllegalArgumentException("Invalid filter type: " + filterType);
+        }
+    }
 }

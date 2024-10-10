@@ -31,4 +31,16 @@ public interface CommunityMapper {
 
     // 싫어요 추가
     void incrementDislikes(@Param("postId") Long postId);
+
+    // 제목으로 검색
+    List<PostDTO> searchPostsByTitle(@Param("category") String category, @Param("keyword") String keyword);
+
+    // 내용으로 검색
+    List<PostDTO> searchPostsByContent(@Param("category") String category, @Param("keyword") String keyword);
+
+    // 작성자로 검색
+    List<PostDTO> searchPostsByUserId(@Param("category") String category, @Param("keyword") String keyword);
+
+    // 모두 검색
+    List<PostDTO> searchPosts(@Param("category") String category, @Param("keyword") String keyword);
 }

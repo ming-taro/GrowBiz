@@ -102,4 +102,14 @@ public class CommunityController {
         communityService.incrementDislikes(postId);
         return ResponseEntity.ok().build();
     }
+
+    // 카테고리와 키워드로 게시글 검색
+    @GetMapping("/{category}/search")
+    public ResponseEntity<List<PostDTO>> searchPosts(
+            @PathVariable String category,
+            @RequestParam String keyword,
+            @RequestParam String filterType) {
+        List<PostDTO> posts = communityService.searchPosts(category, keyword, filterType);
+        return ResponseEntity.ok(posts);
+    }
 }
