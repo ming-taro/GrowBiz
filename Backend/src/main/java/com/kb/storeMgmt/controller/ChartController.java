@@ -20,7 +20,6 @@ public class ChartController {
 
     @GetMapping("/doughnut")
     public List<CategoriesDTO> getAddress(CategoriesDTO categoriesDTO) {
-        System.out.println("asdfasdf");
         return chartService.getDoughnut(categoriesDTO);
     }
 

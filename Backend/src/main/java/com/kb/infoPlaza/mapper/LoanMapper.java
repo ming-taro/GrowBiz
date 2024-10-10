@@ -28,4 +28,11 @@ public interface LoanMapper {
     JeonseDTO getDetailItemJeonse(Long id);
 
     MortgageDTO getDetailItemMortgage(Long id);
+
+    List<KBLoanDTO> getAllKBLoanInfo();
+
+    KBLoanDTO getKBLoanInfoByLoanKey(String loanKey);
+
+    List<KBLoanDTO> getKBLoanBest4Info();
+
 }
