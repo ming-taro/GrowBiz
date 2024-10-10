@@ -54,7 +54,7 @@
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
             <RouterLink :to="`/infoPlaza/KBLoan/${item.loanKey}`">
-              <div class="card card-xl-stretch h-100">
+              <div class="card card-xl-stretch h-100 hover-card">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
                 >
@@ -129,7 +129,10 @@
             v-for="(item, index) in paginatedDataList"
             :key="index"
           >
-            <div class="card card-xl-stretch mb-5 mb-xl-8" style="height: 100%">
+            <div
+              class="card card-xl-stretch mb-5 mb-xl-8 hover-card2"
+              style="height: 100%"
+            >
               <div
                 class="card-body pt-5 d-flex flex-column justify-content-between"
                 style="height: 100%"
@@ -358,6 +361,28 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translate(
+    -4px,
+    -4px
+  ); /* Moves the card slightly to the top-left */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect */
+}
+.hover-card2 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card2:hover {
+  transform: translate(
+    -3px,
+    -3px
+  ); /* Moves the card slightly to the top-left */
+}
+
 /* nav 아래 hr 같은 선 제거 */
 .nav {
   border-bottom: none !important;
