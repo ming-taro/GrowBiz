@@ -5,7 +5,7 @@
       <div class="row">
         <!-- Signle job content-->
         <div
-          class="col-lg-6 position-relative pe-0 me-10 mb-5 mb-lg-0"
+        class="col-lg-6 position-relative pe-lg-0 mb-5 mb-lg-0"
           style="z-index: 1025"
         >
         <div v-if="data">
@@ -76,6 +76,7 @@
           </ul>
           </div>
         </div>
+        <div class="col-1" style="z-index: 1025"></div>
         <!-- Sticky sidebar-->
         <aside class="col-lg-5" style="margin-top: -6rem">
           <div class="sticky-top" style="padding-top: 6rem">
