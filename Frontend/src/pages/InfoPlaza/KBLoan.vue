@@ -54,7 +54,7 @@
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
             <RouterLink
-              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.ProductName}`"
+              :to="`/infoPlaza/KBLoan/${item.loanKey}`"
             >
               <div class="card card-xl-stretch h-100">
                 <div
@@ -198,7 +198,7 @@
                 <!-- Info (상세 보기 버튼) -->
                 <div class="d-flex justify-content-end pt-0 mt-auto">
                   <RouterLink
-                    :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
+                    :to="`/infoPlaza/KBLoan/${item.loanKey}`"
                     class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                     >상세 보기</RouterLink
                   >

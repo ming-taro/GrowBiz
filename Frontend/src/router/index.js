@@ -149,7 +149,7 @@ const router = createRouter({
       component: MortgageLoanDetail,
     },
     {
-      path: '/infoPlaza/KBLoan/KBLoanDetail/:productName',
+      path: '/infoPlaza/KBLoan/:loanKey',
       name: 'KBLoanDetail',
       component: KBLoanDetail,
     },
