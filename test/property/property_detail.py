@@ -15,7 +15,8 @@ mysql_connection = pymysql.connect(
     user=os.environ.get('DB_USER'),
     password=os.environ.get('DB_PASSWORD'), 
     database="KB",
-    charset='utf8'
+    charset='utf8mb4',  # utf8mb4로 설정
+    use_unicode=True
 )
 
 def find_detail(atclNo, ctgryCd1):
@@ -31,7 +32,6 @@ def find_detail(atclNo, ctgryCd1):
     # 응답 처리
     if response.status_code == 200:
         data = response.json()  # JSON으로 파싱
-        print(data)  # 데이터 출력
 
         result_list = data.get("data", {}).get("resultList", [])
 
@@ -41,43 +41,49 @@ def find_detail(atclNo, ctgryCd1):
             return
 
         for result in result_list:
-            detail = {
-                "주소": result.get("addr"),
-                "층수": result.get("flr1"),
-                "방향": result.get("drcCd"),
-                "관리비": result.get("mmMcost"),
-                "건축물 용도": result.get("bldUsageCd"),
-                "주차대수": result.get("parkCcnt"),
-                "부동산 대표 번호": result.get("mdiatBzestRepTelno"),
-                "공인중개사 전화번호": result.get("mdiatBzestRepMoblno"),
-                "공인중개사 이름": result.get("mdiatBzestNm"),
-                "매물설명": result.get("dtlDesc"),
-            }
+            addr = result.get("addr")
+            is_first_floor = 1 if result.get("flr1") == "1" else 0
+            drc_cd = result.get("drcCd")
+            mm_mcost = result.get("mmMcost")
+            bld_usage_cd = result.get("bldUsageCd")
+            park_ccnt = result.get("parkCcnt")
+            mdiat_bzest_rep_telno = result.get("mdiatBzestRepTelno")
+            mdiat_bzest_rep_moblno = result.get("mdiatBzestRepMoblno")
+            dtl_desc = result.get("dtlDesc")
             
-            # 난방(방식/연료) 추가
+            # 난방(방식/연료)
             result_option_list = data.get("data", {}).get("resultOptionList", [])
             heating_methods = [option.get("cdNm") for option in result_option_list]
-            detail["난방(방식/연료)"] = heating_methods
-            
-            extracted_data.append(detail)
+            heating_info = "null" if len(heating_methods) == 0 else ','.join(heating_methods)
 
+            sql = "UPDATE property_listing SET addr = %s, is_first_floor = %s, drc_cd = %s, mm_mcost = %s, bld_usage_cd = %s, park_ccnt = %s, mdiat_bzest_rep_telno = %s, mdiat_bzest_rep_moblno = %s, dtl_desc = %s, heating_info = %s WHERE atcl_no = %s;"
+            mysql_cursor.execute(sql, (addr, is_first_floor, drc_cd, mm_mcost, bld_usage_cd, park_ccnt, mdiat_bzest_rep_telno, mdiat_bzest_rep_moblno, dtl_desc, heating_info, atclNo))
     else:
         print(f"요청 실패: {response.status_code}")
 
+
+def selectPropertyInfo():
     try:
         if mysql_connection.open:
             print("Successfully connected to the database")
-
-            # query = "SELECT main_category, sub_category, store_name, serial_number FROM BusinessInfo"
-            mysql_cursor = mysql_connection.cursor()
-            # mysql_cursor.execute(query)
-
-            result = mysql_cursor.fetchall()
+            query = "SELECT atcl_no, ctgry_cd1 FROM property_listing"
+            mysql_cursor.execute(query)
+            return mysql_cursor.fetchall()
     except Error as e:
         print("Error while connecting to MySQL", e)
-    finally:
-        if mysql_connection.open:
-            mysql_cursor.close()
-            mysql_connection.close()
-            print("MySQL mysql_connection is closed")
 
+mysql_cursor = mysql_connection.cursor()
+
+property_info = selectPropertyInfo()
+batch_size = 1000
+
+for index in range(0, len(property_info)):
+    print(index, ":", property_info[index])
+    find_detail(property_info[index][0], property_info[index][1])
+    if (index + 1) % batch_size == 0:
+        mysql_connection.commit()
+
+mysql_connection.commit()
+mysql_cursor.close()
+mysql_connection.close()
+print("MySQL mysql_connection is closed")
