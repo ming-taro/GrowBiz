@@ -7,21 +7,21 @@ from sklearn.metrics import accuracy_score
 def logistic_regression_analysis():
     # CSV 파일에서 데이터 불러오기
     print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
-    df = pd.read_csv('chicken_franchise_data_with_trend.csv')
+    df = pd.read_csv('chicken_franchise_data_with_trend3.csv')
 
-    # 성공 여부를 이진 값으로 변환 (폐업률 30% 이하면 성공으로 간주)
-    df['fail'] = (df['closure_rate'] <= 20).astype(int)
+    # 폐업 여부를 이진 값으로 변환 (폐업률 20% 이하면 성공으로 간주)
+    df['success'] = (df['closure_rate'] <= 10).astype(int)
 
-    # 사용할 특성에서 'closure_rate' 제거
+    # 사용할 특성에서 'closure_rate' 제거, 'opening_rate' 추가
     X = df[['asset', 'liability', 'equity', 'revenue', 
-            'operating_income', 'net_income', 'advertising_expense', 'average_sales', 
+            'operating_income', 'net_income', 'advertising_expense', 'average_sales_per_area', 
             'franchise_count', 'initial_cost', 'interior_cost', 
-            'business_fee', 'contract_initial', 'contract_renewal']]
+            'business_fee', 'contract_initial', 'contract_renewal', 'opening_rate']]  # 개업률 추가
 
     # 목표 변수 설정 (성공 여부)
-    y = df['fail']
+    y = df['success']
 
-    # 데이터 표준화
+    # 데이터 표준화 (정규화)
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
@@ -40,9 +40,9 @@ def logistic_regression_analysis():
     # 특성 중요도 계산 (계수)
     coefficients = model.coef_[0]
 
-    # 특성 중요도 출력
+    # 특성 중요도 출력 (절대값 기준으로 정렬)
     feature_importances = sorted(zip(X.columns, coefficients), key=lambda x: abs(x[1]), reverse=True)
-    print("\nFeature Importances (sorted, Logistic Regression):")
+    print("\nFeature Importances (sorted by coefficient, Logistic Regression):")
     for feature, importance in feature_importances:
         print(f"{feature}: {importance:.4f}")
 

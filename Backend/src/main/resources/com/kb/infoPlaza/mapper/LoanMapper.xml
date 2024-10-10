@@ -110,4 +110,46 @@
     </select>
 
 
+    <select id="getAllKBLoanInfo" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info order by lowestInterestRate desc;
+    </select>
+
+    <select id="getKBLoanInfoByLoanKey" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info
+        WHERE loan_key = #{loanKey};
+    </select>
+
+    <select id="getKBLoanBest4Info" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info where lowest_interest_rate is not null order by lowestInterestRate limit 4;
+    </select>
+
+    <select id="getKBLoanRecommand" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        select * from kb_loan_info where product_name like '%소상공인%';
+    </select>
+
+
 </mapper>

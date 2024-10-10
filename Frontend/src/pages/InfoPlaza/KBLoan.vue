@@ -53,10 +53,8 @@
         <div class="row">
           <!-- 카드 여러 개 -->
           <div class="col-xl-3" v-for="(item, index) in best4List" :key="index">
-            <RouterLink
-              :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
-            >
-              <div class="card card-xl-stretch h-100">
+            <RouterLink :to="`/infoPlaza/KBLoan/${item.loanKey}`">
+              <div class="card card-xl-stretch h-100 hover-card">
                 <div
                   class="card-body pt-5 d-flex flex-column justify-content-between"
                 >
@@ -66,7 +64,7 @@
                         class="fs-3 text-gray-500 pe-2"
                         style="font-weight: 500"
                       >
-                        {{ item.loanProductName }}
+                        {{ item.productName }}
                       </span>
                     </div>
                     <div class="carousel-inner pt-6">
@@ -85,7 +83,7 @@
                   >
                     <p class="fs-6 text-gray-600 mb-1">금리</p>
                     <p class="h2 fw-bold mb-0 ms-2">
-                      {{ item.totalInterestRate }}
+                      {{ item.lowestInterestRate }}%
                     </p>
                   </div>
                 </div>
@@ -101,18 +99,7 @@
         <div class="col-5 d-flex">
           <!-- col-auto 사용 -->
           <!-- 대출 구분 -->
-          <div class="col-4">
-            <select
-              class="form-select round-corner"
-              aria-label="Default select example"
-              @change="onCategoryChange"
-            >
-              <option selected disabled hidden>구분</option>
-              <option value="전체">전체</option>
-              <option value="직접대출">직접대출</option>
-              <option value="대리대출">대리대출</option>
-            </select>
-          </div>
+          <div class="col-4"></div>
           <!-- 검색창 -->
           <div class="col-8">
             <div class="h-100">
@@ -142,7 +129,10 @@
             v-for="(item, index) in paginatedDataList"
             :key="index"
           >
-            <div class="card card-xl-stretch mb-5 mb-xl-8" style="height: 100%">
+            <div
+              class="card card-xl-stretch mb-5 mb-xl-8 hover-card2"
+              style="height: 100%"
+            >
               <div
                 class="card-body pt-5 d-flex flex-column justify-content-between"
                 style="height: 100%"
@@ -157,7 +147,7 @@
                     <div class="row mb-3" style="height: 70px">
                       <div class="col-3 d-flex align-items-center">
                         <img
-                          :src="'/images/banklogo/' + 'government' + '.png'"
+                          :src="'/images/banklogo/' + '국민은행' + '.png'"
                           alt=""
                           style="width: 100px"
                         />
@@ -167,7 +157,7 @@
                         <span
                           class="fs-3 text-gray-500 fw-bolder pe-2 text-left"
                         >
-                          {{ item.loanProductName }}
+                          {{ item.productName }}
                         </span>
                       </div>
                     </div>
@@ -176,40 +166,19 @@
                         <div class="carousel-wrapper">
                           <div class="d-flex flex-column flex-grow-1">
                             <!-- 첫 번째 행: 신청기간 마감 -->
-                            <div
-                              class="d-flex justify-content-between align-items-center"
-                              style="min-height: 2.5rem"
-                            >
-                              <p class="fs-5">신청기간</p>
-                              <p class="fs-5 fw-bolder">
-                                {{
-                                  item.applicationPeriod
-                                    ? item.applicationPeriod.replace(/>/g, '')
-                                    : ''
-                                }}
-                                <!-- Ensured that '>' is not present -->
-                              </p>
-                            </div>
-
-                            <!-- 두 번째 행: 구분 -->
-                            <div
-                              class="d-flex justify-content-between align-items-center"
-                              style="min-height: 2.5rem"
-                            >
-                              <p class="fs-5">구분</p>
-                              <p class="fs-5 fw-bolder">
-                                {{ item.category }}
-                              </p>
-                            </div>
 
                             <!-- 세 번째 행: 금리 -->
                             <div
                               class="d-flex justify-content-between align-items-center"
                               style="min-height: 2.5rem"
                             >
-                              <p class="fs-5">금리</p>
-                              <p class="fs-5 fw-bolder">
-                                {{ item.totalInterestRate }}
+                              <p class="fs-3">금리</p>
+                              <p class="fs-3 fw-bolder">
+                                {{
+                                  item.lowestInterestRate
+                                    ? item.lowestInterestRate + '%'
+                                    : '변동'
+                                }}
                               </p>
                             </div>
                           </div>
@@ -222,7 +191,7 @@
                 <!-- Info (상세 보기 버튼) -->
                 <div class="d-flex justify-content-end pt-0 mt-auto">
                   <RouterLink
-                    :to="`/infoPlaza/governmentFund/governmentFundDetail/${item.loanProductName}`"
+                    :to="`/infoPlaza/KBLoan/${item.loanKey}`"
                     class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
                     >상세 보기</RouterLink
                   >
@@ -238,10 +207,8 @@
             class="row align-items-center justify-content-center text-center"
           >
             <div class="col-md-12 d-flex flex-column align-items-center">
-              <!-- Pagination -->
               <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-spaced gap-1">
-                  <!-- First Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === 1 }"
@@ -254,7 +221,6 @@
                       <<
                     </a>
                   </li>
-                  <!-- Previous Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === 1 }"
@@ -267,9 +233,8 @@
                       <i class="bi bi-chevron-left"></i>
                     </a>
                   </li>
-                  <!-- Page Numbers -->
                   <li
-                    v-for="page in visiblePages"
+                    v-for="page in totalPages"
                     :key="page"
                     class="page-item"
                     :class="{ active: currentPage === page }"
@@ -282,7 +247,6 @@
                       {{ page }}
                     </a>
                   </li>
-                  <!-- Next Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === totalPages }"
@@ -295,7 +259,6 @@
                       <i class="bi bi-chevron-right"></i>
                     </a>
                   </li>
-                  <!-- Last Page Button -->
                   <li
                     class="page-item"
                     :class="{ disabled: currentPage === totalPages }"
@@ -326,66 +289,53 @@
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 const selectedCategory = ref('전체');
 const dataList = ref([]);
 const best4List = ref([]);
 
+// 전체 페이지 수 계산
+const totalPages = computed(() =>
+  Math.ceil(loanProductList.value.length / itemsPerPage)
+);
+
 const currentPage = ref(1);
-const itemsPerPage = 6;
-const totalItems = ref(16);
-const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
+const itemsPerPage = 6; // 페이지당 6개의 아이템을 보여줍니다.
+const totalItems = ref(48);
 
-const BASEURI = '/api/infoPlaza/loan';
+const loanProductList = ref([]);
 
-// 데이터 리스트 가져오는 함수
-const bringLoanList = async () => {
+// 데이터 가져오는 함수
+const fetchKBLoanAll = async () => {
   try {
-    // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getFilteredList', {
-      params: {
-        category: selectedCategory.value,
-      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
-    });
-    if (response.status === 200) {
-      dataList.value = response.data;
-      totalItems.value = dataList.value.length;
-    } else {
-      console.log('데이터 조회 실패');
-    }
+    const response = await axios.get(
+      'http://localhost:8080/infoPlaza/loan/getKBLoanAll'
+    );
+    loanProductList.value = response.data;
   } catch (error) {
-    console.log('에러발생 :' + error);
+    console.error('에러 발생: ', error);
   }
 };
 
-// 데이터 리스트 가져오는 함수
-const bringBest4List = async () => {
+// BEST 4 상품 데이터 가져오는 함수
+const fetchKBLoanBest4 = async () => {
   try {
-    // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getBest4');
-    if (response.status === 200) {
-      best4List.value = response.data;
-    } else {
-      console.log('데이터 조회 실패');
-    }
+    const response = await axios.get(
+      'http://localhost:8080/infoPlaza/loan/getKBLoanBest4'
+    );
+    best4List.value = response.data;
   } catch (error) {
-    console.log('에러발생 :' + error);
+    console.error('에러 발생: ', error);
   }
-};
-
-// 직접대출/대리대출
-const onCategoryChange = (event) => {
-  selectedCategory.value = event.target.value;
-  bringLoanList();
 };
 
 // 현재 페이지에 해당하는 데이터만 반환하는 계산된 속성
 const paginatedDataList = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  return dataList.value.slice(startIndex, endIndex);
+  return loanProductList.value.slice(startIndex, endIndex); // 현재 페이지에 맞는 데이터만 반환
 });
 
 // 페이지 전환 함수
@@ -403,11 +353,36 @@ const visiblePages = computed(() => {
   return pages;
 });
 
-bringBest4List();
-bringLoanList();
+// 컴포넌트가 마운트되면 데이터 요청
+onMounted(() => {
+  fetchKBLoanAll();
+  fetchKBLoanBest4();
+});
 </script>
 
 <style scoped>
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translate(
+    -4px,
+    -4px
+  ); /* Moves the card slightly to the top-left */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect */
+}
+.hover-card2 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card2:hover {
+  transform: translate(
+    -3px,
+    -3px
+  ); /* Moves the card slightly to the top-left */
+}
+
 /* nav 아래 hr 같은 선 제거 */
 .nav {
   border-bottom: none !important;

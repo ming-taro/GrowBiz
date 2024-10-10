@@ -42,7 +42,7 @@
         FROM
             member m
             LEFT OUTER JOIN member_auth a ON m.mno = a.mno
-        WHERE m.status = 'y' and m.mno = #{mno}
+        WHERE m.status = 'y' and m.id = #{id}
     </select>
 
     <insert id="insertMember" parameterType="com.kb.member.dto.Member">

@@ -85,36 +85,46 @@ base_url = "https://franchise.ftc.go.kr/mnu/00013/program/userRqst/list.do"
 # Function to insert data into the database
 
 # Updated parameters to match the given URL
+# params = {
+#     'column': 'brd',  # Updated 'column' parameter to 'brd'
+#     'searchKeyword': '',  # Search keyword left blank as in the given URL
+#     'selUpjong': '21',  # Updated 'selUpjong' to '21'
+#     'selIndus': 'K1',  # Updated 'selIndus' to 'K1'
+#     'pageUnit': '10',  # Page size (10 items per page)
+#     'pageIndex': '1',  # Start from the first page
+#     'x': '41',  # Added 'x' parameter from the URL
+#     'y': '8'   # Added 'y' parameter from the URL
+# }
+# #아이스크림
 params = {
     'column': 'brd',  # Updated 'column' parameter to 'brd'
     'searchKeyword': '',  # Search keyword left blank as in the given URL
-    'selUpjong': '21',  # Updated 'selUpjong' to '21'
-    'selIndus': 'K1',  # Updated 'selIndus' to 'K1'
+    'selUpjong': '23',  # Updated 'selUpjong' to '21'
+    'selIndus': 'K3',  # Updated 'selIndus' to 'K1'
     'pageUnit': '10',  # Page size (10 items per page)
     'pageIndex': '1',  # Start from the first page
-    'x': '41',  # Added 'x' parameter from the URL
-    'y': '8'   # Added 'y' parameter from the URL
+    'x': '35',  # Added 'x' parameter from the URL
+    'y': '7'   # Added 'y' parameter from the URL
 }
-#아이스크림
-
+#PC방
 def insert_into_db(data):
     try:
         query = """
-        INSERT INTO BusinessInfo (번호, 상호명, 영업표지, 대표자, 등록번호, 최초등록일, 대분류, 중분류, 일련번호)
+        INSERT INTO BusinessInfo (number, 상호명, store_name, 대표자, 등록번호, 최초등록일, main_category, sub_category, serial_number)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.execute(query, (
-            data['번호'],
+            data['number'],
             data['상호명'],
-            data['영업표지'],  # 새로 추가된 영업표지 컬럼
+            data['store_name'],  # 새로 추가된 영업표지 컬럼
             data['대표자'],
             data['등록번호'],
             data['최초등록일'],
-            '외식',  # 대분류 is fixed as '외식'
-            '아이스크림',  # 중분류 is fixed as '치킨'
+            '서비스',  # 대분류 is fixed as '외식'
+            'PC방',  # 중분류 is fixed as '치킨'
             data['일련번호']  # 일련번호 추가
         ))
-        print(f"Data inserted for {data['번호']}")
+        print(f"Data inserted for {data['number']}")
     except mysql.connector.Error as err:
         print(f"Data insert failed: {err}")
 
@@ -144,9 +154,9 @@ def crawl_page(page_index):
 
                 # Gather the data
                 data = {
-                    '번호': cols[0].text.strip(),
+                    'number': cols[0].text.strip(),
                     '상호명': cols[1].text.strip(),
-                    '영업표지': cols[2].text.strip(),  # 영업표지 추가
+                    'store_name': cols[2].text.strip(),  # 영업표지 추가
                     '대표자': cols[3].text.strip(),
                     '등록번호': cols[4].text.strip(),
                     '최초등록일': cols[5].text.strip(),  # 상태 대신 최초등록일로 변경
@@ -158,7 +168,7 @@ def crawl_page(page_index):
         print(f"Failed to retrieve page {page_index}, Status code: {response.status_code}")
 
 # Loop through multiple pages (you can adjust the range)
-for i in range(1, 7):  # Example: page 1 to 65
+for i in range(1, 3):  # Example: page 1 to 65
     crawl_page(i)
 
 # Commit the changes and close the connection

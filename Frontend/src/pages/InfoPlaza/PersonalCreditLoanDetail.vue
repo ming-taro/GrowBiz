@@ -2,11 +2,11 @@
   <div>
     <InfoPlazaHeader />
 
-    <div class="container">
+    <div class="custom-container">
       <div class="row">
         <!-- Signle job content-->
         <div
-          class="col-lg-7 position-relative pe-lg-5 mb-5 mb-lg-0"
+          class="col-lg-6 position-relative pe-lg-5 mb-5 mb-lg-0"
           style="z-index: 1025"
         >
           <div class="d-flex justify-content-between mb-2">
@@ -108,54 +108,8 @@
               <span class="ms-1">{{ data.crdtGrad13 }}%</span>
             </li>
           </ul>
-          <h3 class="h6 pt-2">Company offers:</h3>
-          <ul class="list-unstyled">
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Et mattis sit
-              imperdiet risus, fermentum ultrices non.
-            </li>
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Sed phasellus
-              consequat nunc enim interdum tristique ultrices egestas.
-            </li>
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Molestie mus
-              ultrices tellus enim.
-            </li>
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Vitae pulvinar
-              massa id lorem aliquam fermentum egestas.
-            </li>
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Dictumst
-              blandit sit mauris in consectetur.
-            </li>
-            <li class="d-flex">
-              <span class="text-primary fs-lg me-2">&#8226;</span>Sem purus
-              lorem odio donec faucibus ipsum ultricies.
-            </li>
-          </ul>
-          <p class="pt-2 mb-1">
-            Please, send your CV marked “Partnership Manager” in the subject via
-            e-mail:
-          </p>
-          <a class="nav-link-muted fw-bold" href="mailto:contact@example.com"
-            >contact@example.com</a
-          >
-          <hr class="my-4" />
-          <div class="btn-group btn-group-lg">
-            <button
-              class="btn btn-primary rounded-pill rounded-end-0 ps-4 pe-3"
-              type="button"
-            >
-              대출 신청하기
-            </button>
-            <div
-              class="position-relative border-start border-light zindex-5"
-              style="margin-left: -1px"
-            ></div>
-          </div>
         </div>
+        <div class="col-1" style="z-index: 1025"></div>
         <!-- Sticky sidebar-->
         <aside class="col-lg-5" style="margin-top: -6rem">
           <div class="sticky-top" style="padding-top: 6rem">
@@ -245,14 +199,109 @@
           </div>
         </aside>
       </div>
+      <div class="row mt-5">
+        <h3>이 대출 상품이 마음에 드시나요?</h3>
+        <div class="row mt-5">
+          <!-- 카드 여러 개 -->
+          <swiper
+            :slides-per-view="3"
+            :space-between="50"
+            :navigation="true"
+            :pagination="false"
+            :modules="modules"
+            :preventClicks="false"
+            :preventClicksPropagation="false"
+            style="padding-left: 70px; padding-right: 70px"
+          >
+            <swiper-slide v-for="(item, index) in recommandList" :key="index">
+              <div @click="navigateToDetail(item.id)">
+                <RouterLink
+                  :to="`/infoPlaza/personalCreditLoan/personalCreditLoanDetail/${item.id}`"
+                >
+                  <div class="card card-xl-stretch h-100 hover-card">
+                    <div
+                      class="card-body pt-5 d-flex flex-column justify-content-between"
+                    >
+                      <div>
+                        <div class="d-flex flex-stack flex-wrap">
+                          <span
+                            class="fs-3 text-gray-500 pe-2"
+                            style="font-weight: 500"
+                          >
+                            <div class="row mb-3" style="height: 70px">
+                              <div class="col-4 d-flex align-items-center">
+                                <img
+                                  :src="
+                                    '/images/banklogo/' + item.korCoNm + '.png'
+                                  "
+                                  alt=""
+                                  style="width: 100px"
+                                />
+                              </div>
+                              <div class="col-8 d-flex align-items-center">
+                                <!-- Change align-items to center -->
+                                <span
+                                  class="fs-3 text-gray-500 fw-bolder pe-2 text-left text-truncate"
+                                >
+                                  {{ item.korCoNm }}
+                                </span>
+                              </div>
+                            </div>
+                            <div class="d-flex flex-stack flex-wrap">
+                              <span
+                                class="fs-3 text-gray-500 pe-2 text-truncate"
+                                style="font-weight: 500; width: 220px"
+                              >
+                                {{ item.finPrdtNm }}
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div class="carousel-inner pt-6">
+                          <div class="carousel-item active">
+                            <div class="carousel-wrapper">
+                              <div class="d-flex flex-column flex-grow-1">
+                                <!-- 콘텐츠 추가 가능 -->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 금리 -->
+                      <div
+                        class="d-flex justify-content-end align-items-end ms-auto"
+                      >
+                        <p class="fs-6 text-gray-600 mb-1">금리</p>
+                        <p class="h2 fw-bold mb-0 ms-2">
+                          {{ item.crdtGradAvg }} %
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </RouterLink>
+              </div>
+            </swiper-slide>
+          </swiper>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
-import { useRoute } from 'vue-router';
-import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/bundle';
+import 'swiper/css/a11y';
+import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+const modules = [Autoplay, Pagination, Navigation];
 
 const activeButton = ref('left'); // 초기 활성화된 버튼 없음
 
@@ -261,12 +310,20 @@ const setActiveButton = (button) => {
 };
 
 const route = useRoute();
+const router = useRouter();
+
+// 수동 라우팅 함수
+const navigateToDetail = (id) => {
+  router.push(`/infoPlaza/personalCreditLoan/personalCreditLoanDetail/${id}`);
+  window.location.reload();
+};
 
 const id = ref('');
 id.value = route.params.id;
 const BASEURI = '/api/infoPlaza/loan';
 
 const data = ref();
+const recommandList = ref();
 
 // 데이터 리스트 가져오는 함수
 const bringDataList = async () => {
@@ -280,6 +337,28 @@ const bringDataList = async () => {
     if (response.status === 200) {
       data.value = response.data;
       console.log(data.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+};
+
+// 데이터 리스트 가져오는 함수
+const bringRecommandList = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    console.log(data.value);
+    const response = await axios.get(BASEURI + '/getFilteredCreditLoanList', {
+      params: {
+        companyName: '전체',
+        type: data.value.crdtPrdtTypeNm,
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
+    if (response.status === 200) {
+      recommandList.value = response.data;
+      console.log(recommandList.value);
     } else {
       console.log('데이터 조회 실패');
     }
@@ -370,10 +449,33 @@ const calculate = () => {
   );
 };
 
-bringDataList();
+// bringDataList가 완료된 후 bringRecommandList 호출
+const fetchData = async () => {
+  await bringDataList(); // bringDataList가 완료되기를 기다림
+  await bringRecommandList(); // bringRecommandList 실행
+};
+
+// fetchData 호출
+fetchData();
 </script>
 
 <style scoped>
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translate(
+    -3px,
+    -3px
+  ); /* Moves the card slightly to the top-left */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect */
+}
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .content-box {
   padding: 10px;
   border: 1px solid #ddd;
@@ -457,5 +559,9 @@ bringDataList();
 
 .rounded-pill {
   border-radius: 50rem !important;
+}
+.custom-container {
+  max-width: 1100px; /* 원하는 너비로 설정 */
+  margin: 0 auto; /* 가운데 정렬 */
 }
 </style>
