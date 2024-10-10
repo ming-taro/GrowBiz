@@ -43,11 +43,12 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getQuestions } from '@/services/QuestionAPI';
+import { getQuestions, saveSimulationAnswer } from '@/services/QuestionAPI';
 
 const questions = ref([]);
 const questionID = ref(-1);
 const choices = ref([]);
+let lastQuestionID = 0;
 
 const currentChoices = ref([]);
 const currentChoiceType = ref(0);
@@ -114,10 +115,14 @@ const isLastChoice = () => {
   return true;
 }
 
+const isLastQuestion = () => {
+  return questions.value[questionID.value].ind == lastQuestionID;
+}
+
 const updateFirstChoice = () => {
   userChoice = {};             // 유저 답변 초기화
   currentChoiceType.value = 0; // 선택 번호 초기화
-  questionID.value += 1;       // 다음 질문
+  // questionID.value += 1;       // 다음 질문
   currentChoices.value = questions.value[questionID.value].choices;
   choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
 
@@ -138,8 +143,16 @@ const updateChoice = (choice, index) => {
 
   if (isLastChoice()) {
     userAnswers[questionID.value] = userChoice;
+
+    if (isLastQuestion()) {
+      console.log("지금까지의 답변: ", userAnswers);
+      saveSimulationAnswer(userAnswers);
+      // location.href = "/simul/report"; // 시뮬레이션 종료
+      return;
+    }
+
+    questionID.value += 1;
     updateFirstChoice();
-    console.log("지금까지의 답변: ", userAnswers);
     return;
   }
 
@@ -169,7 +182,10 @@ const fetchQuestions = async () => {
     questions.value = await getQuestions();
     if (questions.value.length > 0) {
       totalSteps.value = questions.value.length;
+      questionID.value += 1;       // 첫 번째 질문
       updateFirstChoice();
+
+      lastQuestionID = questions.value[questions.value.length - 1].ind;
     }
   } catch (error) {
     console.error('Failed to fetch questions:', error);
@@ -178,6 +194,7 @@ const fetchQuestions = async () => {
 
 const retry = () => {
   currentChoiceType.value = 0;
+  updateFirstChoice();
 }
 
 onMounted(async () => {
