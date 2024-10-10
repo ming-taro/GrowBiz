@@ -10,7 +10,7 @@ def logistic_regression_analysis():
     df = pd.read_csv('chicken_franchise_data_with_trend3.csv')
 
     # 폐업 여부를 이진 값으로 변환 (폐업률 20% 이하면 성공으로 간주)
-    df['success'] = (df['closure_rate'] <= 20).astype(int)
+    df['success'] = (df['closure_rate'] <= 10).astype(int)
 
     # 사용할 특성에서 'closure_rate' 제거, 'opening_rate' 추가
     X = df[['asset', 'liability', 'equity', 'revenue', 
