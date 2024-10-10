@@ -18,7 +18,7 @@
         <div v-if="showChoices" class="choices_2">
           <div v-for="(choice, index) in choices" :key="index">
             <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
-              @click="updateChoice(choice.value, index)">
+              @click="updateChoice(choice.text, index)">
               <span class="arrow">{{
                 isHovered === choice.text ? '▶' : ''
               }}</span>
@@ -130,8 +130,6 @@ const updateFirstChoice = () => {
   for (let i = 0; i < currentChoices.value.length; i++) {
     choices.value.push({ text: currentChoices.value[i][dataType], value: i });
   }
-
-  console.log(currentChoices.value);
 }
 
 const updateChoice = (choice, index) => {
@@ -152,12 +150,18 @@ const updateChoice = (choice, index) => {
   dataType = choiceType.value[currentChoiceType.value];
 
   for (let i = 0; i < currentChoices.value[dataType].length; i++) {
-    choices.value.push({ 
-      text: currentChoices.value[dataType][i],
-      value: i
-    });
+    if (questionID.value == 0) { // 위치 선택 질문
+      choices.value.push({
+        text: currentChoices.value[dataType][i],
+        value: i
+      });
+    } else { // 업종 선택 질문
+      choices.value.push({
+        text: currentChoices.value[dataType][i].text,
+        value: i
+      });
+    }
   }
-  console.log(choices.value);
 }
 
 const fetchQuestions = async () => {
@@ -316,14 +320,15 @@ onMounted(async () => {
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
-
 .choices_2 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 200px;
+  height: auto;
+  max-height: 300px;
   overflow-y: auto;
-  margin: 20px 0px;
+  margin: 30px 15px 30px 25px;
+  padding: 0px 0px 10px 0px;
 }
 
 /* 스크롤바 스타일링 */
@@ -395,15 +400,6 @@ onMounted(async () => {
   /* 클릭 시 배경색 */
 }
 
-/*
-.choices_2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  margin: 5px 0px 5px 0px;
-}*/
-
 .choices_2 div {
   margin-bottom: -5px;
   /* 버튼 간 간격을 줄이기 */
@@ -463,9 +459,10 @@ onMounted(async () => {
   /* Center horizontally */
   transform: translateX(-50%);
   /* Centering adjustment */
-  width: 200px;
+  width: 230px;
   border-radius: 80px;
-  padding: 15px 15px 15px 25px;
+  /* width: auto;
+  white-space: nowrap; */
 }
 
 .progress-container {
