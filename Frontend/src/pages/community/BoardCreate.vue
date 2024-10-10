@@ -61,7 +61,7 @@ const submitPost = async () => {
           postId: postId,
           title: postTitle.value,
           content: postContent.value,
-          userId: '김이나'
+          userId: '최민정'
         });
         alert('글이 성공적으로 수정되었습니다.');
       } else {
@@ -69,7 +69,7 @@ const submitPost = async () => {
         const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
           title: postTitle.value,
           content: postContent.value,
-          userId: '김이나'
+          userId: '최민정'
         });
         alert('글이 성공적으로 작성되었습니다.');
       }

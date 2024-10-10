@@ -2,17 +2,23 @@
   <div>
     <CommunityHeader />
     <div class="container">
-      <h2 class="fw-semibold mb-5">{{ post.title }}</h2>
+      <div class="d-flex justify-content-between fw-semibold mb-4 align-items-center"> <!-- align-items-center 추가 -->
+        <h2>
+        <span class="">{{ post.title }}</span></h2>
+        <h4 class="mb-0"> <!-- mb-0 추가하여 아래 마진 제거 -->
+          <span class="fw-light">조회수 {{ post.view }}</span>
+      </h4>
+      </div>
       <h4 class="fw-semibold mb-5 d-flex justify-content-between">
         <span>{{ post.userId }}</span>
         <span class="fw-light ms-auto">{{ post.createdAt }}</span>
       </h4>
       <hr/>
-      <p class="text-m text-muted mb-5 fs-4" v-html="post.content"></p>
+      <p class="text-m text-muted mb-10 fs-4" v-html="post.content"></p>
       <hr/>
       <div class="text-center gap-2 mb-5">
-        <button type="button" class="btn btn-sm btn-neutral mx-1">👍 추천</button>
-        <button type="button" class="btn btn-sm btn-neutral mx-1">👎 비추천</button>
+        <button type="button" class="btn btn-sm btn-neutral mx-1" @click="likePost(post.postId)">👍 추천 {{ post.recommend }}</button>
+        <button type="button" class="btn btn-sm btn-neutral mx-1" @click="dislikePost(post.postId)">👎 비추천 {{ post.noRecommend }}</button>
       </div>
       <div class="text-center">
         <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
@@ -116,7 +122,7 @@ const isModalVisible = ref(false); // Post deletion modal state
 const isCommentModalVisible = ref(false); // Comment deletion modal state
 const newComment = ref('');
 const comments = ref([]);
-let commentToDelete = ref(null); // Store ID of comment to delete
+let commentToDelete = ref(null); // 삭제할 댓글 ID
 
 onMounted(() => {
   fetchPost();
@@ -124,17 +130,17 @@ onMounted(() => {
   category.value = route.params.category;
 });
 
-// Fetch post data
 const fetchPost = async () => {
   const postId = route.params.postId;
+  
   try {
+    // 그 다음 게시글 데이터 가져오기
     const response = await axios.get(`http://localhost:8080/api/community/view/${postId}`);
-    post.value = response.data;
+    post.value = response.data; // 받아온 게시글 데이터 설정
   } catch (error) {
     console.error('Failed to fetch post:', error);
   }
 };
-
 // Fetch comments data
 const fetchComments = async () => {
   const postId = route.params.postId;
@@ -229,6 +235,26 @@ const confirmCommentDelete = async () => {
     alert('Failed to delete comment.');
   } finally {
     hideCommentDeleteModal(); // Hide modal
+  }
+};
+
+// 좋아요 추가
+const likePost = async (postId) => {
+  try {
+    await axios.post(`http://localhost:8080/api/community/view/${postId}/like`);
+    post.value.recommend += 1; // 로컬 상태 업데이트
+  } catch (error) {
+    console.error('Failed to like post:', error);
+  }
+};
+
+// 싫어요 추가
+const dislikePost = async (postId) => {
+  try {
+    await axios.post(`http://localhost:8080/api/community/view/${postId}/dislike`);
+    post.value.noRecommend += 1; // 로컬 상태 업데이트
+  } catch (error) {
+    console.error('Failed to dislike post:', error);
   }
 };
 </script>

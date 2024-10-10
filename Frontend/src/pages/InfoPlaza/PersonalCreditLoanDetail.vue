@@ -1,231 +1,255 @@
 <template>
   <div>
     <InfoPlazaHeader />
-    <div class="container mw-screen-xl">
-      <div class="row">
-        <div class="">
-          <div class="row">
-            <div class="col-1">
-              <PersonalLoanHeader class="" />
-            </div>
-            <div class="col-11">
-              <!-- Product details-->
-              <div class="">
-                <div class="d-none d-md-block" style="margin-top: -90px"></div>
-                <div
-                  class="position-md-sticky top-0 ps-md-4 ps-lg-5 ps-xl-0 ms-5"
-                >
-                  <div
-                    class="d-none d-md-block"
-                    style="padding-top: 90px"
-                  ></div>
-                  <div class="d-flex align-items-center">
-                    <div class="d-flex align-items-center me-5">
-                      <img
-                        :src="'/images/banklogo/' + data.korCoNm + '.png'"
-                        alt=""
-                        style="width: 50px"
-                      />
-                    </div>
-                    <div class="d-flex align-items-center">
-                      <div class="text-left">
-                        <span class="fs-2 text-gray-500 fw-bolder d-block">
-                          {{ data.finPrdtNm }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div
-                      class="col-4 d-flex align-items-center justify-content-center"
-                    >
-                      <span>
-                        <i
-                          class="fa-solid fa-calendar-days"
-                          style="font-size: 50px"
-                        ></i>
-                      </span>
-                      <span class="text ms-3">
-                        <span style="color: gray">신청기간</span> <br />
-                        <strong
-                          >{{ formatDate(data.dclsStrtDay) }} ~
-                          {{ formatEndDate(data.dclsEndDay) }}</strong
-                        >
-                      </span>
-                    </div>
-                    <div
-                      class="col-4 d-flex align-items-center justify-content-center"
-                    >
-                      <span>
-                        <i
-                          class="fa-solid fa-coins"
-                          style="font-size: 50px"
-                        ></i>
-                      </span>
-                      <span class="text ms-3">
-                        <span style="color: gray">대출유형</span> <br />
-                        <strong>{{ data.crdtPrdtTypeNm }}</strong>
-                      </span>
-                    </div>
-                    <div
-                      class="col-4 d-flex align-items-center justify-content-center"
-                    >
-                      <span>
-                        <i
-                          class="fa-solid fa-won-sign"
-                          style="font-size: 50px"
-                        ></i>
-                      </span>
-                      <span class="text ms-3">
-                        <span style="color: gray">평균 금리</span> <br />
-                        <strong style="color: brown"
-                          >{{ data.crdtGradAvg }}%</strong
-                        >
-                      </span>
-                    </div>
-                  </div>
 
-                  <hr />
+    <div class="container">
+      <div class="row">
+        <!-- Signle job content-->
+        <div
+          class="col-lg-7 position-relative pe-lg-5 mb-5 mb-lg-0"
+          style="z-index: 1025"
+        >
+          <div class="d-flex justify-content-between mb-2">
+            <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center me-5">
+                <img
+                  :src="'/images/banklogo/' + data.korCoNm + '.png'"
+                  alt=""
+                  style="width: 50px"
+                />
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="text-left">
+                  <span class="fs-2 text-gray-500 fw-bolder d-block">
+                    {{ data.finPrdtNm }}
+                  </span>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="content-box">
-                    <h3>신용 점수별 금리</h3>
-                    <br />
-                    <div class="content-item">
-                      <span class="label fw-bold">900점 초과</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad1 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">801~900점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad4 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">701~800점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad5 }}%</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">601~700점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad6 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">501~600점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad10 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">401~500점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad11 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">301~400점</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad12 }}</span>
-                    </div>
-                    <div class="content-item">
-                      <span class="label fw-bold">300점 이하</span>
-                      <span class="colon">: </span>
-                      <span class="value">{{ data.crdtGrad13 }}</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <h3>대출 계산기</h3>
-                  <div
-                    class="btn-group"
-                    role="group"
-                    aria-label="Basic example"
+            </div>
+            <div class="text-end">
+              <span class="badge bg-faded-accent rounded-pill mt-5">{{
+                data.crdtPrdtTypeNm
+              }}</span>
+            </div>
+          </div>
+          <ul class="list-unstyled fs-sm ms-1 mb-4">
+            <li class="mb-2">
+              <i class="fa-solid fa-house-user text-muted me-2"></i
+              ><span>{{ data.korCoNm }}</span>
+            </li>
+            <li class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-calendar-days text-muted me-2"></i
+              ><span
+                >{{ formatDate(data.dclsStrtDay) }} ~
+                {{ formatEndDate(data.dclsEndDay) }}</span
+              >
+            </li>
+            <li class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-coins text-muted me-2"></i
+              ><span>{{ data.crdtGradAvg }}%</span>
+            </li>
+          </ul>
+          <hr class="mb-4" />
+
+          <h3 class="h5 pt-2">신용 점수별 금리</h3>
+          <ul class="list-unstyled">
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">900점 초과</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad1 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">801~900점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad4 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">701~800점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad5 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">601~700점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad6 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">501~600점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad10 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">401~500점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad11 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">401~500점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad11 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">301~400점</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad12 }}%</span>
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>
+              <span class="label">300점 이하</span>
+              <span class="colon">: </span>
+              <span class="ms-1">{{ data.crdtGrad13 }}%</span>
+            </li>
+          </ul>
+          <h3 class="h6 pt-2">Company offers:</h3>
+          <ul class="list-unstyled">
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Et mattis sit
+              imperdiet risus, fermentum ultrices non.
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Sed phasellus
+              consequat nunc enim interdum tristique ultrices egestas.
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Molestie mus
+              ultrices tellus enim.
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Vitae pulvinar
+              massa id lorem aliquam fermentum egestas.
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Dictumst
+              blandit sit mauris in consectetur.
+            </li>
+            <li class="d-flex">
+              <span class="text-primary fs-lg me-2">&#8226;</span>Sem purus
+              lorem odio donec faucibus ipsum ultricies.
+            </li>
+          </ul>
+          <p class="pt-2 mb-1">
+            Please, send your CV marked “Partnership Manager” in the subject via
+            e-mail:
+          </p>
+          <a class="nav-link-muted fw-bold" href="mailto:contact@example.com"
+            >contact@example.com</a
+          >
+          <hr class="my-4" />
+          <div class="btn-group btn-group-lg">
+            <button
+              class="btn btn-primary rounded-pill rounded-end-0 ps-4 pe-3"
+              type="button"
+            >
+              대출 신청하기
+            </button>
+            <div
+              class="position-relative border-start border-light zindex-5"
+              style="margin-left: -1px"
+            ></div>
+          </div>
+        </div>
+        <!-- Sticky sidebar-->
+        <aside class="col-lg-5" style="margin-top: -6rem">
+          <div class="sticky-top" style="padding-top: 6rem">
+            <div class="card shadow-sm mb-3 mb-lg-0">
+              <div class="card-body">
+                <h3>대출 계산기</h3>
+                <p>이 상품에 대한 대출 금액과 이자를 계산하세요!</p>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button
+                    type="button"
+                    class="btn btn-custom"
+                    :class="{ active: activeButton === 'left' }"
+                    @click="setActiveButton('left')"
                   >
-                    <button
-                      type="button"
-                      class="btn btn-custom"
-                      :class="{ active: activeButton === 'left' }"
-                      @click="setActiveButton('left')"
-                    >
-                      원리금균등
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-custom"
-                      :class="{ active: activeButton === 'middle' }"
-                      @click="setActiveButton('middle')"
-                    >
-                      원금균등
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-custom"
-                      :class="{ active: activeButton === 'right' }"
-                      @click="setActiveButton('right')"
-                    >
-                      만기일시
+                    원리금균등
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-custom"
+                    :class="{ active: activeButton === 'middle' }"
+                    @click="setActiveButton('middle')"
+                  >
+                    원금균등
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-custom"
+                    :class="{ active: activeButton === 'right' }"
+                    @click="setActiveButton('right')"
+                  >
+                    만기일시
+                  </button>
+                </div>
+                <form @submit.prevent="calculate">
+                  <div class="form-group">
+                    <label for="loanAmount">대출금액</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="loanAmount"
+                        placeholder="대출금액을 입력하세요"
+                        aria-label="대출금액"
+                        v-model="formattedLoanAmount"
+                        @input="formatCurrency"
+                        required
+                      />
+                      <div class="input-group-append">
+                        <span class="input-group-text">₩</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="loanTerm">대출 기간</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="loanTerm"
+                        placeholder="대출 기간을 입력하세요"
+                        v-model="loanTerm"
+                        required
+                      />
+                      <span class="input-group-text">개월</span>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary mt-2">
+                      계산하기
                     </button>
                   </div>
-                  <form @submit.prevent="calculate">
-                    <div class="form-group">
-                      <label for="loanAmount">대출금액</label>
-                      <div class="input-group mb-3">
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="loanAmount"
-                          placeholder="대출금액을 입력하세요"
-                          aria-label="대출금액"
-                          v-model="formattedLoanAmount"
-                          @input="formatCurrency"
-                          required
-                        />
-                        <div class="input-group-append">
-                          <span class="input-group-text">₩</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="loanTerm">대출 기간</label>
-                      <div class="input-group mb-3">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="loanTerm"
-                          placeholder="대출 기간을 입력하세요"
-                          v-model="loanTerm"
-                          required
-                        />
-                        <span class="input-group-text">개월</span>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                      <button type="submit" class="btn btn-primary mt-2">
-                        계산하기
-                      </button>
-                    </div>
-                  </form>
+                </form>
+                <hr class="my-4" />
+                <div class="d-flex align-items-end">
                   <div v-if="monthlyPayment || totalInterest" class="result">
                     <p>월 상환액: {{ monthlyPayment.toFixed(0) }}원</p>
                     <p>총 이자액: {{ totalInterest.toFixed(0) }}원</p>
                   </div>
+                  <a
+                    class="btn btn-icon btn-translucent-primary btn-xs rounded-circle"
+                    href="#"
+                    ><i class="fi-telegram"></i
+                  ></a>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- <div class="col-6">
-            <h2>대출 계산기</h2>
-          </div> -->
+        </aside>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
-import PersonalLoanHeader from '@/components/infoplaza/PersonalLoanHeader.vue';
 import { useRoute } from 'vue-router';
 import { ref, computed } from 'vue';
 import axios from 'axios';
@@ -361,14 +385,14 @@ bringDataList();
   margin-bottom: 8px;
 }
 .label {
-  min-width: 120px; /* Ensure labels align properly */
+  min-width: 100px; /* Ensure labels align properly */
   color: #333;
 }
 .value {
   color: #555;
 }
 .colon {
-  padding-right: 5px; /* Optional additional spacing */
+  padding-right: 0px; /* Optional additional spacing */
 }
 .btn-group {
   display: flex;
@@ -407,5 +431,31 @@ bringDataList();
 .active {
   background-color: #ffc107; /* 진한 노란색 */
   color: white;
+}
+.badge {
+  --fi-badge-padding-x: 0.75em;
+  --fi-badge-padding-y: 0.4375em;
+  --fi-badge-font-size: 0.8125em;
+  --fi-badge-font-weight: 600;
+  --fi-badge-color: black;
+  --fi-badge-border-radius: 0.375rem;
+  display: inline-block;
+  padding: var(--fi-badge-padding-y) var(--fi-badge-padding-x);
+  font-size: var(--fi-badge-font-size);
+  font-weight: var(--fi-badge-font-weight);
+  line-height: 1;
+  color: var(--fi-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--fi-badge-border-radius);
+}
+
+.bg-faded-accent {
+  background-color: rgba(80, 43, 246, 0.2) !important; /* 더 진한 배경색 */
+}
+
+.rounded-pill {
+  border-radius: 50rem !important;
 }
 </style>

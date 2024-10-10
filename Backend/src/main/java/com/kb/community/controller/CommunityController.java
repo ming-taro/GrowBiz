@@ -59,11 +59,12 @@ public class CommunityController {
         return ResponseEntity.ok().build();
     }
 
-
-
+    // 특정 게시글 조회 및 조회수 증가
     @GetMapping("/view/{postId}")
-    public PostDTO getPostById(@PathVariable long postId) {
-        return communityService.getPostById(postId);
+    public ResponseEntity<PostDTO> getPostById(@PathVariable long postId) {
+        communityService.incrementViewCount(postId);
+        PostDTO post = communityService.getPostById(postId);
+        return ResponseEntity.ok(post);
     }
 
 
@@ -86,5 +87,19 @@ public class CommunityController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
+    }
+
+    // 좋아요 추가
+    @PostMapping("/view/{postId}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long postId) {
+        communityService.incrementLikes(postId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 싫어요 추가
+    @PostMapping("/view/{postId}/dislike")
+    public ResponseEntity<Void> dislikePost(@PathVariable Long postId) {
+        communityService.incrementDislikes(postId);
+        return ResponseEntity.ok().build();
     }
 }

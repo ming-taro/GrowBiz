@@ -4,9 +4,7 @@
       src="@/assets/img/headers/communityheader.jpg"
       class="result-image mb-10"
     />
-    <div class="container">
-      <div class="result-text">커뮤니티</div>
-    </div>
+
   </div>
 </template>
 
@@ -45,7 +43,7 @@ onMounted(() => {
   top: 30%; /* 컨테이너의 중간 */
   left: 15%; /* 컨테이너의 중간 */
   transform: translate(-50%, -50%); /* 중앙 정렬 */
-  color: white; /* 텍스트 색상 */
+  color: black; /* 텍스트 색상 */
   padding: 10px; /* 여백 추가 */
   border-radius: 5px; /* 모서리 둥글게 */
   z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
