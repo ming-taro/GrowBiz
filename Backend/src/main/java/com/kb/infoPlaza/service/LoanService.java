@@ -59,5 +59,10 @@ public class LoanService {
     public KBLoanDTO getKBLoanInfoByLoanKey(String loanKey) {
         return mapper.getKBLoanInfoByLoanKey(loanKey);
     }
+
+    public List<KBLoanDTO> getKBLoanBest4Info() {
+        return mapper.getKBLoanBest4Info();
+    }
+
 }
 

@@ -90,4 +90,9 @@ public class LoanController {
         return ResponseEntity.ok(service.getKBLoanInfoByLoanKey(loanKey));
     }
 
+    @GetMapping("/getKBLoanBest4")
+    public ResponseEntity<List<KBLoanDTO>> getKBLoanBest4Info() {
+        return ResponseEntity.ok(service.getKBLoanBest4Info());
+    }
+
 }

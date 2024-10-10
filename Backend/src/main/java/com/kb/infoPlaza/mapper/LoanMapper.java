@@ -32,4 +32,7 @@ public interface LoanMapper {
     List<KBLoanDTO> getAllKBLoanInfo();
 
     KBLoanDTO getKBLoanInfoByLoanKey(String loanKey);
+
+    List<KBLoanDTO> getKBLoanBest4Info();
+
 }
