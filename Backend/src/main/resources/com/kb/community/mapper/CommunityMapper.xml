@@ -48,4 +48,32 @@
         SET no_recommend = no_recommend + 1
         WHERE post_id = #{postId}
     </update>
+
+    <select id="searchPostsByTitle" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPostsByContent" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND content LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPostsByUserId" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND user_id LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPosts" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') OR user_id LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY post_id DESC
+    </select>
 </mapper>
