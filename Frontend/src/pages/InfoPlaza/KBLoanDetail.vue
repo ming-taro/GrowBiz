@@ -39,37 +39,39 @@
               </div>
             </div>
             <hr />
-            <h3>상품 안내</h3>
-            <div>
-              <h5>
+            <div class="mb-5">
+              <h4>
               자격 요건
-            </h5> 
+            </h4> 
             <span v-html="formattedLoanEligibility"></span> <!-- 줄 바꿈 적용 -->
           </div>
 
-            <div>
-              <h5>
+            <div class="mb-5">
+              <h4>
               대출 한도
-            </h5> 
+            </h4> 
             <span v-html="formattedLoanAmount"></span> <!-- 줄 바꿈 적용 -->
           </div>
-          <div>
-            <h5>대출 기간</h5> 
+          <div class="mb-5">
+            <h4>대출 기간</h4> 
             <span v-html="formattedLoanDuration"></span> <!-- 줄 바꿈 적용 -->
           </div>
-          <div>
-            <h5>대출 신청 시간</h5> 
+          <div class="mb-5">
+            <h4>대출 신청 시간</h4> 
             <span v-html="formattedAvailableHours"></span> <!-- 줄 바꿈 적용 -->
           </div>
-          <div>
-            <h5>유의사항</h5> 
+          <div class="mb-5">
+            <h4>유의사항</h4> 
               <span v-if="data.loanNotice" v-html="formattedLoanNotice"></span> <!-- 데이터가 있을 때 -->
               <span v-else>- 대표전화 1588-9999 / 1599-9999 / 1644-9999</span> <!-- 데이터가 없을 때 -->
             </div>
             <hr />
           </div>
         </div>
-      </div>
+        <div class="text-center">
+          <RouterLink :to="`/infoPlaza/KBLoan/`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
+        </div>      
+    </div>
     </div>
   </div>
 </template>
