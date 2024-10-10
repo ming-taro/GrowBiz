@@ -15,39 +15,18 @@
     <div v-if="showSpeechBubble">
       <img src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble" class="speech-bubble" />
       <div class="answer-box">
-        <div v-if="questionNumber === 0" class="district_choices_2">
-          <div v-if="showChoices" class="choices_2">
-            <div v-if="!isDistrictSelected">
-              <div v-for="(choice, index) in district" :key="index">
-                <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
-                  @click="selectDistrict(choice.value)">
-                  <span class="arrow">{{
-                    isHovered === choice.text ? '▶' : ''
-                  }}</span>
-                  <span class="text">{{ choice.text }}</span>
-                </button>
-              </div>
-            </div>
-
-            <div v-else>
-              <div v-for="(choice, index) in neighborhoods" :key="index">
-                <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
-                  @click="selectNeighborhoods(choice.value)">
-                  <span class="arrow">{{
-                    isHovered === choice.text ? '▶' : ''
-                  }}</span>
-                  <span class="text">{{ choice.text }}</span>
-                </button>
-              </div>
-            </div>
+        <div v-if="showChoices" class="choices_2">
+          <div v-for="(choice, index) in choices" :key="index">
+            <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
+              @click="updateChoice(choice.value, index)">
+              <span class="arrow">{{
+                isHovered === choice.text ? '▶' : ''
+              }}</span>
+              <span class="text">{{ choice.text }}</span>
+            </button>
           </div>
         </div>
-
-        <div v-else>
-          {{ console.log(">>", questions.value) }}
-        </div>
-
-        <div class="button-container">
+        <div v-if="questionID == 0" class="button-container">
           <button class="retry-button" @click="retry()">다시 선택하기</button>
         </div>
       </div>
@@ -63,38 +42,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { getQuestions } from '@/services/QuestionAPI';
 
 const questions = ref([]);
-const questionNumber = ref(0);
-const district = ref([]);
-const neighborhoods = ref([]);
-const districtSelection = ref([]);
+const questionID = ref(-1);
+const choices = ref([]);
 
-const isDistrictSelected = ref(false);
+const currentChoices = ref([]);
+const currentChoiceType = ref(0);
+const choiceType = ref({}); // 질문 유형
+let userChoice = {}; // 유저가 선택한 답변
+
+const userAnswers = {};
 
 const typedTextLine1 = ref('');
 const typedTextLine2 = ref('');
 const showSpeechBubble = ref(false);
 const showChoices = ref(false);
 const isHovered = ref('');
-const progress = ref(1); // 현재 진행 상태 (1/20)
-const totalSteps = 20; // 총 단계
+
+const totalSteps = ref(10); // 총 단계
 
 // 진행도 비율 계산
 const progressBarWidth = computed(() => {
-  return `${(progress.value / totalSteps) * 100}%`;
+  return `${((questionID.value + 1) / totalSteps.value) * 100}%`;
 });
 
-// 하드코딩으로 진행도 변경 함수
-const updateProgress = (step) => {
-  if (step >= 1 && step <= totalSteps) {
-    progress.value = 1;
-  }
-};
-
 const typeText = (text, typedText, nextText, delay = 0) => {
+  showSpeechBubble.value = false;
+  showChoices.value = false;
   const letters = text.split('');
   let index = 0;
 
@@ -121,39 +98,82 @@ const typeText = (text, typedText, nextText, delay = 0) => {
   }, 100);
 };
 
+const findChoiceType = (choice) => {
+  if ("district" in choice) {
+    return { 0: "district", 1: "neighborhoods" };
+  } else if ("category" in choice) {
+    return { 0: "category", 1: "subcategories" };
+  }
+  return { 0: "text" }
+}
+
+const isLastChoice = () => {
+  if ((currentChoiceType.value + 1) in choiceType.value) {
+    return false;
+  }
+  return true;
+}
+
+const updateFirstChoice = () => {
+  userChoice = {};             // 유저 답변 초기화
+  currentChoiceType.value = 0; // 선택 번호 초기화
+  questionID.value += 1;       // 다음 질문
+  currentChoices.value = questions.value[questionID.value].choices;
+  choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
+
+  typedTextLine1.value = ""; // 질문지 갱신
+  typeText(questions.value[questionID.value].fullTexts, typedTextLine1, "")
+
+  let dataType = choiceType.value[currentChoiceType.value];
+
+  choices.value = [];
+  for (let i = 0; i < currentChoices.value.length; i++) {
+    choices.value.push({ text: currentChoices.value[i][dataType], value: i });
+  }
+
+  console.log(currentChoices.value);
+}
+
+const updateChoice = (choice, index) => {
+  let dataType = choiceType.value[currentChoiceType.value];
+  userChoice[dataType] = choice;
+
+  if (isLastChoice()) {
+    userAnswers[questionID.value] = userChoice;
+    updateFirstChoice();
+    console.log("지금까지의 답변: ", userAnswers);
+    return;
+  }
+
+  currentChoices.value = currentChoices.value[index];
+  currentChoiceType.value += 1; // 같은 질문의 다음 선택으로 넘어감
+
+  choices.value = [];
+  dataType = choiceType.value[currentChoiceType.value];
+
+  for (let i = 0; i < currentChoices.value[dataType].length; i++) {
+    choices.value.push({ 
+      text: currentChoices.value[dataType][i],
+      value: i
+    });
+  }
+  console.log(choices.value);
+}
+
 const fetchQuestions = async () => {
   try {
     questions.value = await getQuestions();
     if (questions.value.length > 0) {
-      typeText(questions.value[0].fullTexts, typedTextLine1, "");
-      updateProgress(5); // 진행도를 5/20으로 설정  
-
-      for (let i = 0; i < questions.value[0].choices.length; i++) {
-        district.value.push({ text: questions.value[0].choices[i].district, value: i });
-      }
+      totalSteps.value = questions.value.length;
+      updateFirstChoice();
     }
   } catch (error) {
     console.error('Failed to fetch questions:', error);
   }
 };
 
-const selectDistrict = (selection) => {
-  districtSelection.value = selection;
-  isDistrictSelected.value = !isDistrictSelected.value;
-  let data = questions.value[0].choices[selection].neighborhoods;
-
-  for (let i = 0; i < data.length; i++) {
-    neighborhoods.value.push({ text: data[i], value: i });
-  }
-}
-
-const selectNeighborhoods = (selection) => {
-  console.log(district.value[districtSelection.value], ", ", neighborhoods.value[selection]);
-}
-
 const retry = () => {
-  isDistrictSelected.value = false;
-  neighborhoods.value = [];
+  currentChoiceType.value = 0;
 }
 
 onMounted(async () => {
@@ -296,46 +316,43 @@ onMounted(async () => {
   transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
-.district_choices_2 {
+
+.choices_2 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* 위에서 아래로 정렬 */
   height: 200px;
-  /* 원하는 높이 설정 */
   overflow-y: auto;
-  /* 세로 방향으로 스크롤 */
   margin: 20px 0px;
-  /* 상하 간격 설정 */
 }
 
 /* 스크롤바 스타일링 */
-.district_choices_2::-webkit-scrollbar {
+.choices_2::-webkit-scrollbar {
   width: 10px;
   /* 스크롤바 너비 */
 }
 
-.district_choices_2::-webkit-scrollbar-track {
+.choices_2::-webkit-scrollbar-track {
   background: #f0f0f0;
   /* 스크롤바 배경 색상 */
   border-radius: 10px;
   /* 모서리 둥글게 */
 }
 
-.district_choices_2::-webkit-scrollbar-thumb {
+.choices_2::-webkit-scrollbar-thumb {
   background: #c0c0c0;
   /* 스크롤바 색상 */
   border-radius: 10px;
   /* 모서리 둥글게 */
 }
 
-.district_choices_2::-webkit-scrollbar-thumb:hover {
+.choices_2::-webkit-scrollbar-thumb:hover {
   background: #a0a0a0;
   /* 호버 시 색상 */
 }
 
 /* 스크롤박스가 호버할 때 스크롤바 보이기 */
-.district_choices_2:hover::-webkit-scrollbar {
+.choices_2:hover::-webkit-scrollbar {
   opacity: 1;
   /* 스크롤바가 보이도록 설정 */
 }
@@ -378,13 +395,14 @@ onMounted(async () => {
   /* 클릭 시 배경색 */
 }
 
+/*
 .choices_2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
   margin: 5px 0px 5px 0px;
-}
+}*/
 
 .choices_2 div {
   margin-bottom: -5px;
@@ -445,7 +463,7 @@ onMounted(async () => {
   /* Center horizontally */
   transform: translateX(-50%);
   /* Centering adjustment */
-  width: 230px;
+  width: 200px;
   border-radius: 80px;
   padding: 15px 15px 15px 25px;
 }
