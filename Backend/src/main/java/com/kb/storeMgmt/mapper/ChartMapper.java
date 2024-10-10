@@ -10,4 +10,6 @@ public interface ChartMapper {
 
     List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO);
 
+    List<CategoriesDTO> getmcfirst(CategoriesDTO categoriesDTO);
+
 }

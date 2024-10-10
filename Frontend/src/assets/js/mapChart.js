@@ -70,11 +70,13 @@ export async function fetchChartData(loanRepaymentStatus) {
   const response = await axios.get(`/api/kmap/member/${id}`);
   const dongname = response.data.dongname;
 
+  console.log(dongname);
+
   const doughnut = await axios.get(`/api/chart/doughnut`);
 
   const sortedData = doughnut.data.sort((a, b) => b.amount - a.amount);
 
-  mixed_data2.labels = sortedData.map((item) => `${item.categoryName}`);
+  mixed_data2.labels = dongname.split(',');
   mixed_data2.datasets[0].data = sortedData.map((item) => item.amount);
   mixed_data2.datasets[1].data = sortedData.map((item) => item.amount);
 

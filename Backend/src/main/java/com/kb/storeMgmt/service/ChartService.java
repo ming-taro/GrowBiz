@@ -20,4 +20,8 @@ public class ChartService {
     public List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO){
         return chartMapper.getMixAddress(categoriesDTO);
     }
+
+    public List<CategoriesDTO> getmcfirst(CategoriesDTO categoriesDTO){
+        return chartMapper.getmcfirst(categoriesDTO);
+    }
 }

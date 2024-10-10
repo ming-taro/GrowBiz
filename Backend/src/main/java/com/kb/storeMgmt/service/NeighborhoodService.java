@@ -128,8 +128,6 @@ public class NeighborhoodService {
 
         for (String dong : dongs) {
 
-            System.out.println(dong);
-
             try {
                 String encodedDong = URLEncoder.encode(dong + " 편의점", StandardCharsets.UTF_8);
                 String urlStr = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + encodedDong;
