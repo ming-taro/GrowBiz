@@ -29,6 +29,12 @@ import Location from '@/components/report/Location.vue';
 import Bar from '@/components/report/Bar.vue';
 import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
+
+let query = window.location.search;
+let param = new URLSearchParams(query);
+let reportId = param.get('id');
+
+// console.log(reportId); 
 </script>
 
 <style>
