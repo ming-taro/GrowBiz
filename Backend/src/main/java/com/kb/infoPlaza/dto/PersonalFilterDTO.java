@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class PersonalFilterDTO {
     private String companyName;
     private String type ;
+    private String input;
 }

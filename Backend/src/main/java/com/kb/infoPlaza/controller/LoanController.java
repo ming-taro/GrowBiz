@@ -100,6 +100,10 @@ public class LoanController {
         return ResponseEntity.ok(service.getKBLoanRecommand());
     }
 
+    @GetMapping("/getFilteredKBLoan")
+    public ResponseEntity<List<KBLoanDTO>> getFilteredKBLoan(KBFilterDTO kbFilter) {
+        return ResponseEntity.ok(service.getFilteredKBLoan(kbFilter));
+    }
 
 
 }
