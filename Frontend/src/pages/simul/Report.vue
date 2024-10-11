@@ -29,12 +29,17 @@ import Location from '@/components/report/Location.vue';
 import Bar from '@/components/report/Bar.vue';
 import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
+import { findReportById } from '@/services/ReportAPI';
+import { onMounted } from 'vue';
 
 let query = window.location.search;
 let param = new URLSearchParams(query);
 let reportId = param.get('id');
 
-// console.log(reportId); 
+onMounted(async() => {
+  // console.log(reportId)
+  // console.log(await findReportById(reportId));
+})
 </script>
 
 <style>

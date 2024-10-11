@@ -24,3 +24,21 @@ export const createReport = async (userId, simulationResponseId) => {
     throw error;
   }
 };
+
+export const findReportById = async (id) => {
+  try {
+    const response = await axios.get(
+      BASE_URL + `/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error saving data:", error);
+    throw error;
+  }
+};
