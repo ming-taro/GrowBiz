@@ -20,9 +20,9 @@
         </div>
       </div>
 
-      <div class="text">로그인 후 이용하실 수 있습니다.</div>
-      <div class="row g-3 g-xl-6 blur">
-        <div class="blur-overlay"></div>
+      <div id="blur-text">로그인 후 이용하실 수 있습니다.</div>
+      <div class="row g-3 g-xl-6" id="blur">
+        <div id="blur-overlay"></div>
         <div class="col-xl-6 col-sm-6 d-flex">
           <!-- 왼쪽 카드의 부모 -->
           <div class="card image-card w-100 d-flex flex-column">
@@ -154,11 +154,20 @@ export default {
       return rate * 100 + '%';
     };
 
+    // 페이지 로딩 시 로그인 상태 확인하는 함수
+    const checkUserId = () => {
+      const userId = store.userId; // 예시로 store에서 userId를 가져옴
+    };
+
     return {
       store,
       formatMoney,
       formatRate,
+      checkUserId,
     };
+  },
+  mounted() {
+    this.checkUserId(); // 페이지가 로드될 때 checkUserId 함수 호출
   },
 };
 </script>

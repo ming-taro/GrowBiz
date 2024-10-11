@@ -6,7 +6,7 @@
           <h4 class="mb-2">주변 상권 별 매출 데이터 비교</h4>
         </div>
         <div>
-          <canvas id="doughnut-chart2" style="height: 202px"></canvas>
+          <canvas id="mixed-chart2" style="height: 202px"></canvas>
         </div>
       </div>
       <div>
@@ -14,7 +14,7 @@
           <h4 class="">대분류 별 월매출 비교</h4>
         </div>
         <div>
-          <canvas id="mixed-chart2" height="100px"></canvas>
+          <canvas id="mixed-chart3" height="100px"></canvas>
         </div>
       </div>
     </div>
@@ -41,12 +41,9 @@ let loanRepaymentStatus = ref(''); // 대출 상환 현황 상태 추가
 onMounted(async () => {
   const asdf = await fetchChartData(loanRepaymentStatus); // loanRepaymentStatus를 매개변수로 전달
 
-  const doughnutCtx = document
-    .getElementById('doughnut-chart2')
-    .getContext('2d');
-  const mixedCtx = document.getElementById('mixed-chart2').getContext('2d');
+  const doughnutCtx = document.getElementById('mixed-chart2').getContext('2d');
+  const mixedCtx = document.getElementById('mixed-chart3').getContext('2d');
 
-  // Chart.js를 사용하여 도넛 차트 생성
   mixedChartInstance2.value = new Chart(doughnutCtx, {
     type: 'bar',
     data: mixed_data2,
