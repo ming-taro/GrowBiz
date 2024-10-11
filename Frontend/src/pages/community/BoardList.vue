@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row mb-10">
+    <div class="row mb-10" v-if="showTabs">
       <ul
         class="nav nav-tabs custom justify-content-center"
         id="myTab"
@@ -163,6 +163,10 @@ const props = defineProps({
     required: true
   },
   showPagination: {
+    type: Boolean,
+    default: true
+  },
+  showTabs: {
     type: Boolean,
     default: true
   },
