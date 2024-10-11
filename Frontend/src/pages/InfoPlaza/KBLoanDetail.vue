@@ -158,6 +158,24 @@
                       <span class="input-group-text">개월</span>
                     </div>
                   </div>
+                  <div
+                    v-if="data.lowestInterestRate == null"
+                    class="form-group"
+                  >
+                    <label for="rate">금리</label>
+                    <div class="input-group mb-3">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="rate"
+                        placeholder="금리를 입력하세요"
+                        v-model="rate"
+                        required
+                      />
+                      <span class="input-group-text">%</span>
+                    </div>
+                  </div>
+
                   <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mt-2">
                       계산하기
@@ -258,7 +276,11 @@
                       >
                         <p class="fs-6 text-gray-600 mb-1">금리</p>
                         <p class="h2 fw-bold mb-0 ms-2">
-                          {{ item.lowestInterestRate }}%
+                          {{
+                            item.lowestInterestRate
+                              ? item.lowestInterestRate + '%'
+                              : '변동'
+                          }}
                         </p>
                       </div>
                     </div>
@@ -289,9 +311,15 @@ import 'swiper/css/pagination';
 const modules = [Autoplay, Pagination, Navigation];
 
 const route = useRoute();
-const data = ref(null); // 초기화
+
+// ref로 상태를 선언합니다.
+const data = ref({
+  lowestInterestRate: null, // 초기값 설정
+});
+
 const loanKey = route.params.loanKey;
 const recommandList = ref();
+const rate = ref();
 
 const bringDataList = async () => {
   try {
@@ -309,7 +337,6 @@ const bringDataList = async () => {
 const bringRecommandList = async () => {
   try {
     // Best 인기 업종 - 전체
-    console.log(data.value);
     const response = await axios.get(
       'http://localhost:8080/infoPlaza/loan' + '/getKBLoanRecommand'
     );
@@ -389,8 +416,13 @@ const calculate = () => {
     formattedLoanAmount.value.replace(/,/g, '').replace('₩', '')
   );
   const termMonths = parseInt(loanTerm.value);
-  const interestRate = data.value.lowestInterestRate; // 연 이자율을 소수로 변환
+  const interestRate =
+    data.value.lowestInterestRate == null
+      ? rate.value / 100
+      : data.value.lowestInterestRate / 100;
   let monthlyInterestRate = interestRate / 12;
+  console.log(interestRate);
+  console.log(monthlyInterestRate);
 
   // 초기값 설정
   monthlyPayment.value = 0;
