@@ -106,7 +106,7 @@ onMounted(async () => {
 // Load Kakao Map
 const loadKakaoMap = (container) => {
   const script = document.createElement('script');
-  script.src = VITE_KAKAO_API_URL;
+  script.src = import.meta.env.VITE_KAKAO_API_URL;
   document.head.appendChild(script);
 
   script.onload = () => {

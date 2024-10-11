@@ -6,19 +6,24 @@ from sklearn.metrics import accuracy_score
 def random_forest_analysis():
     # CSV 파일에서 데이터 불러오기
     print("Loading data from 'chicken_franchise_data_with_trend.csv'...")
-    df = pd.read_csv('chicken_franchise_data_with_trend.csv')
+    df = pd.read_csv('chicken_franchise_data_with_trend3.csv')
 
     # 성공 여부를 이진 값으로 변환 (폐업률 20% 이하면 성공으로 간주)
-    # df['success'] = (df['opening_rate'] >= 50).astype(int)
-    df['fail'] = (df['closure_rate'] <= 20).astype(int)
+    df['fail'] = (df['closure_rate'] <= 10).astype(int)
 
-    # 사용할 특성에서 'closure_rate' 제거
+    # 사용할 특성에서 'closure_rate' 제거, 'opening_rate' 추가
     X = df[['asset', 'liability', 'equity', 'revenue', 
-            'operating_income', 'net_income', 'advertising_expense','average_sales_per_area', 
+            'operating_income', 'net_income', 'advertising_expense', 'average_sales_per_area',
             'franchise_count', 'initial_cost', 'interior_cost', 
-            'business_fee', 'contract_initial', 'contract_renewal']]
+            'business_fee', 'contract_initial', 'contract_renewal', 'opening_rate']]  # 개업률 추가
 
-    # 목표 변수 설정 (성공 여부)
+    # 한국어로 컬럼명 변경
+    feature_names_ko = ['자산', '부채', '자본', '수익', 
+                        '영업이익', '순이익', '광고비', '평당 평균 매출', 
+                        '가맹점 수', '초기 비용', '인테리어 비용', 
+                        '비용', '초기 계약 기간', '재계약 기간', '개업률']
+
+    # 목표 변수 설정 (폐업률 기준 성공 여부)
     y = df['fail']
 
     # 데이터 분리 (훈련 세트와 테스트 세트)
@@ -37,8 +42,8 @@ def random_forest_analysis():
     importances = model.feature_importances_
 
     # 특성 중요도 출력
-    feature_importances = sorted(zip(X.columns, importances), key=lambda x: x[1], reverse=True)
-    print("\nFeature Importances (sorted, Random Forest):")
+    feature_importances = sorted(zip(feature_names_ko, importances), key=lambda x: x[1], reverse=True)
+    print("\n특성 중요도 (정렬된 결과, 랜덤 포레스트):")
     for feature, importance in feature_importances:
         print(f"{feature}: {importance:.4f}")
 

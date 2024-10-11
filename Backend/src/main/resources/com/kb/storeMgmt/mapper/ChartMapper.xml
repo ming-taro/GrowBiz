@@ -17,6 +17,13 @@
            OR insert_date = DATE_SUB(CURDATE(), INTERVAL 7 DAY)
     </select>
 
+    <select id="getmcfirst" resultType="com.kb.storeMgmt.dto.SalesInfoDTO">
+        SELECT *
+        FROM categories
+        WHERE insert_date = CURDATE()
+           OR insert_date = DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
 
 
 </mapper>

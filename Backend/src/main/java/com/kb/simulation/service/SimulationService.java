@@ -1,6 +1,7 @@
 package com.kb.simulation.service;
 
 import com.kb.simulation.dto.question.Question;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,5 +31,10 @@ public class SimulationService {
     public List<Question> findQuestions() {
         List<Question> question = mongoTemplate.findAll(Question.class);
         return question;
+    }
+
+    public Document saveAnswer(String answer) {
+        Document document = Document.parse(answer);
+        return mongoTemplate.save(document, "simulation_response");
     }
 }

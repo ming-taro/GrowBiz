@@ -4,24 +4,25 @@
     <div v-if="showSearch" class="row mb-10 justify-content-center">
       <div class="col-8">
         <div class="d-flex align-items-center mt-2">
-          <form class="form-group flex-grow-1 me-2">
+          <form class="form-group flex-grow-1 me-2" @submit.prevent="searchPosts">
             <div class="input-group input-group-sm">
               <div class="btn-group dropdown">
-                <select class="form-select" aria-label="Default select example">
-                  <option selected>전체</option>
-                  <option value="1">작성자</option>
-                  <option value="2">제목</option>
-                  <option value="3">내용</option>
+                <select v-model="filterType" class="form-select" aria-label="Default select example">
+                  <option value="all" selected>전체</option>
+                  <option value="user">작성자</option>
+                  <option value="title">제목</option>
+                  <option value="content">내용</option>
                 </select>
               </div>
               <input
                 type="text"
+                v-model="searchKeyword"
                 class="rounded form-control ms-1"
                 placeholder="검색어를 입력해 주세요."
               />
-              <span class="ms-1 rounded input-group-text">
+              <button type="submit" class="ms-1 rounded input-group-text">
                 <i class="bi bi-search"></i>
-              </span>
+              </button>
             </div>
           </form>
 
@@ -117,11 +118,32 @@ const currentPage = ref(1); // 현재 페이지
 const postsPerPage = ref(8); // 페이지당 게시글 수
 const totalPages = ref(0); // 전체 페이지 수
 
+const searchKeyword = ref(''); // 검색어 저장
+const filterType = ref('all'); // 필터 타입 저장
+
 const paginatedPosts = computed(() => {
   const start = (currentPage.value - 1) * postsPerPage.value;
   const end = start + postsPerPage.value;
   return posts.value.slice(start, end); // 현재 페이지에 해당하는 게시글 반환
 });
+
+// 검색 기능 추가
+const searchPosts = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/community/${props.category}/search`, {
+      params: {
+        keyword: searchKeyword.value,
+        filterType: filterType.value
+      }
+    });
+    posts.value = response.data;
+    totalPages.value = Math.ceil(posts.value.length / postsPerPage.value);
+    currentPage.value = 1; // 검색 시 페이지를 1로 초기화
+  } catch (error) {
+    console.error("Error searching posts:", error);
+  }
+};
+
 
 const fetchPostsByCategory = async (category) => {
   try {

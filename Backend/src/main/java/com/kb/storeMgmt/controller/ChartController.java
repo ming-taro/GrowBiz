@@ -28,4 +28,9 @@ public class ChartController {
         return chartService.getMixAddress(categoriesDTO);
     }
 
+    @GetMapping("/mcfirst")
+    public List<CategoriesDTO> getmcfirst(CategoriesDTO categoriesDTO) {
+        return chartService.getmcfirst(categoriesDTO);
+    }
+
 }
