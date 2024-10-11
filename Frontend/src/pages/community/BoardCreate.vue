@@ -66,7 +66,6 @@ const submitPost = async () => {
           content: postContent.value,
           userId: userId 
         });
-        alert('글이 성공적으로 수정되었습니다.');
       } else {
         // 생성 모드일 때 POST 요청
         const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
@@ -74,14 +73,12 @@ const submitPost = async () => {
           content: postContent.value,
           userId: userId 
         });
-        alert('글이 성공적으로 작성되었습니다.');
       }
 
       resetFields();
       router.push(`/community/${category}`); // 글 작성 또는 수정 후 해당 카테고리로 이동
     } catch (error) {
       console.error('글 처리 중 오류 발생:', error);
-      alert('글 처리 중 오류가 발생했습니다.');
     }
   } else {
     alert('제목과 내용을 입력해주세요.');
