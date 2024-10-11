@@ -9,12 +9,16 @@
             class="h3 position-relative pb-sm-2 pb-md-3 mb-5"
             style="z-index: 1021"
           >
-            최근 폐업률 순위
+            Best 인기 업종 - My 위치
           </h1>
         </div>
 
         <!-- 필터링 -->
         <div class="row mb-14">
+          <div class="col-2"></div>
+
+          <div class="col-md-2"></div>
+
           <div class="col-1 d-flex justify-content-center align-items-center">
             <i
               class="fa-solid fa-rotate-right refresh-icon mb-2"
@@ -23,65 +27,6 @@
               @click="refreshIcon"
             ></i>
           </div>
-          <!-- 지역 검색(구) -->
-          <div class="col-2">
-            <select
-              class="form-select round-corner"
-              aria-label="Default select example"
-              id="signgu-select"
-              @change="onSignguChange"
-              ref="signguSelect"
-              v-model="selectedSigngu"
-            >
-              <option value="전체" selected hidden disabled>구 선택</option>
-              <option value="전체">전체</option>
-              <option value="용산구">용산구</option>
-              <option value="광진구">광진구</option>
-              <option value="성북구">성북구</option>
-              <option value="노원구">노원구</option>
-              <option value="은평구">은평구</option>
-              <option value="강북구">강북구</option>
-              <option value="영등포구">영등포구</option>
-              <option value="중구">중구</option>
-              <option value="강동구">강동구</option>
-              <option value="관악구">관악구</option>
-              <option value="마포구">마포구</option>
-              <option value="강서구">강서구</option>
-              <option value="송파구">송파구</option>
-              <option value="도봉구">도봉구</option>
-              <option value="강남구">강남구</option>
-              <option value="양천구">양천구</option>
-              <option value="서초구">서초구</option>
-              <option value="성동구">성동구</option>
-              <option value="구로구">구로구</option>
-              <option value="금천구">금천구</option>
-              <option value="중랑구">중랑구</option>
-              <option value="종로구">종로구</option>
-              <option value="동대문구">동대문구</option>
-              <option value="동작구">동작구</option>
-              <option value="서대문구">서대문구</option>
-            </select>
-          </div>
-
-          <!-- 지역 검색(동) -->
-          <div class="col-md-2">
-            <select
-              class="form-select round-corner"
-              aria-label="Default select example"
-              id="adstrd-select"
-              :disabled="selectedSigngu === '전체'"
-              @change="onDongChange"
-              ref="adstrdSelect"
-              v-model="selectedDong"
-            >
-              <option selected disabled hidden>동 선택</option>
-              <option value="전체">전체</option>
-              <option v-for="dong in filteredDongs" :key="dong" :value="dong">
-                {{ dong }}
-              </option>
-            </select>
-          </div>
-
           <!-- 서비스 업종 -->
           <div class="col-md-2">
             <select
@@ -198,13 +143,13 @@
                 <th scope="col" class="text-center">상권</th>
                 <th scope="col" class="text-center">서비스 업종</th>
                 <th scope="col" class="text-center d-none d-xl-table-cell">
-                  폐업률
+                  총 매출액
                 </th>
                 <th scope="col" class="text-center d-none d-xl-table-cell">
-                  폐업 점포 수
+                  순위 변동
                 </th>
                 <th scope="col" class="text-center d-none d-xl-table-cell">
-                  현재 점포 수
+                  개업 점포 수
                 </th>
               </tr>
             </thead>
@@ -213,21 +158,15 @@
                 <td class="text-center">
                   <div class="d-flex align-items-center gap-3 ps-1">
                     <div>
-                      <span class="d-block text-heading fw-bold">
-                        {{ item.ranking }}
-                      </span>
+                      <span class="d-block text-heading fw-bold">{{
+                        item.rank
+                      }}</span>
                     </div>
                   </div>
                 </td>
-                <td class="text-center">
-                  {{ item.signGuCdNm }}
-                </td>
-                <td class="text-center">
-                  {{ item.adstrdCdNm }}
-                </td>
-                <td class="text-center">
-                  {{ item.trdarCdNm }}
-                </td>
+                <td class="text-center">{{ item.signguCdNm }}</td>
+                <td class="text-center">{{ item.adstrdCdNm }}</td>
+                <td class="text-center">{{ item.trdarSeCdNm }}</td>
                 <td class="text-left d-none d-xl-table-cell">
                   <img
                     :src="'/images/businessItem/' + item.svcIndutyCdNm + '.png'"
@@ -237,18 +176,33 @@
                   {{ item.svcIndutyCdNm }}
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  {{ item.clsbizRt }} %
+                  ₩ {{ item.thsmonSelngAmt.toLocaleString() }}
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  <span class="badge badge-light-danger fs-base text-center">
-                    <i class="fa-solid fa-angle-down"></i>
-                    {{ item.clsbizStorCo }}
-                    점포</span
+                  <span
+                    class="text-gray-800 fw-bold fs-6 me-3 col-4 text-center"
+                    :class="{
+                      'text-success': item.rankChange.startsWith('+'),
+                      'text-danger':
+                        item.rankChange.startsWith('-') &&
+                        !/^-\s*$/.test(item.rankChange),
+                    }"
                   >
+                    {{ item.rankChange }}
+                  </span>
                 </td>
                 <td class="text-center d-none d-xl-table-cell">
-                  {{ item.opbizStorCo }}
-                  점포
+                  <span v-if="item.opbizStorCo > 0">
+                    <span class="badge badge-light-success fs-base text-center">
+                      <i class="fa-solid fa-angle-up"></i>
+                      {{ item.opbizStorCo }} 점포</span
+                    >
+                  </span>
+                  <span v-else>
+                    <span class="badge badge-light-middle fs-base text-center">
+                      {{ item.opbizStorCo }} 점포</span
+                    >
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -382,10 +336,7 @@ const visiblePages = computed(() => {
 });
 
 // 필터링 변수
-const selectedSigngu = ref('전체');
-const selectedDong = ref('전체');
 const selectedService = ref('전체');
-const filteredDongs = ref('전체');
 const searchInput = ref('');
 
 const BASEURI = '/api/infoPlaza/businessItem';
@@ -397,57 +348,21 @@ const dataList = ref([]);
 const bringDataList = async () => {
   try {
     // Best 인기 업종 - 전체
-    const response = await axios.get(BASEURI + '/getFilteredCloseList', {
+    const response = await axios.get(BASEURI + '/getFilteredPortionList', {
       params: {
-        gu: selectedSigngu.value,
-        dong: selectedDong.value,
         service: selectedService.value,
         input: searchInput.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {
       dataList.value = response.data;
-      console.log(dataList.value);
+      // console.log(dataList.value);
     } else {
       console.log('데이터 조회 실패');
     }
   } catch (error) {
     console.log('에러발생 :' + error);
   }
-};
-
-// '구'에 해당하는 '동' 리스트 호출 함수
-const bringDongList = async () => {
-  if (selectedSigngu.value != '전체') {
-    try {
-      // Best 인기 업종 - 전체
-      const response = await axios.get(BASEURI + '/getDongClose', {
-        params: {
-          gu: selectedSigngu.value,
-        },
-      });
-      if (response.status === 200) {
-        filteredDongs.value = response.data;
-      } else {
-        console.log('데이터 조회 실패');
-      }
-    } catch (error) {
-      console.log('에러발생 :' + error);
-    }
-  }
-};
-
-// '구' 필터링 함수
-const onSignguChange = (event) => {
-  selectedSigngu.value = event.target.value;
-  bringDataList();
-  bringDongList();
-};
-
-// '동' 필터링 함수
-const onDongChange = (event) => {
-  selectedDong.value = event.target.value;
-  bringDataList();
 };
 
 // '서비스업종' 필터링 함수
@@ -460,6 +375,7 @@ const onServiceChange = (event) => {
 const changeInputData = (event) => {
   bringDataList();
 };
+
 // 페이지 변경 메소드
 const changePage = (page) => {
   if (page < 1 || page > totalPages.value) return;
@@ -472,11 +388,9 @@ const refreshIcon = async () => {
   try {
     // Best 인기 업종 - 전체
     isSpinning.value = !isSpinning.value;
-    const response = await axios.get(BASEURI + '/getRate');
+    const response = await axios.get(BASEURI + '/getPortion');
     setTimeout(() => {
       isSpinning.value = false; // 회전 후 원래 상태로 돌아오게 함
-      selectedSigngu.value = '전체';
-      selectedDong.value = '전체';
       selectedService.value = '전체';
       searchInput.value = '';
     }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제

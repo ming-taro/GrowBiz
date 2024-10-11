@@ -38,26 +38,15 @@
     </select>
 
     <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales3
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
-        LIMIT 5
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore) limit 5;
     </select>
 
     <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales3
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore);
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
@@ -88,6 +77,28 @@
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
         </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getFilteredPortionList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore)
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
     </select>
 
     <select id="getFilteredCloseList" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
@@ -101,6 +112,14 @@
         </if>
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
         </if>
     </select>
 

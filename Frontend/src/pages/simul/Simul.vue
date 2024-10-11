@@ -44,6 +44,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { getQuestions, saveSimulationAnswer } from '@/services/QuestionAPI';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const questions = ref([]);
 const questionID = ref(-1);
@@ -69,6 +72,25 @@ const totalSteps = ref(10); // 총 단계
 const progressBarWidth = computed(() => {
   return `${((questionID.value + 1) / totalSteps.value) * 100}%`;
 });
+
+const typeQuestion = (fullText) => {
+  const result = fullText.split(" ");
+  let text = "";
+  let nextText = "";
+
+  for (let i = 0; i < result.length; i++) {
+    if (text.length + result.length <= 24) {
+      text += result[i] + " ";
+    } else {
+      nextText += result[i] + " ";
+    }
+  }
+
+  typedTextLine1.value = ""; // 질문지 갱신
+  typedTextLine2.value = "";
+
+  typeText(text, typedTextLine1, nextText);
+}
 
 const typeText = (text, typedText, nextText, delay = 0) => {
   showSpeechBubble.value = false;
@@ -122,12 +144,10 @@ const isLastQuestion = () => {
 const updateFirstChoice = () => {
   userChoice = {};             // 유저 답변 초기화
   currentChoiceType.value = 0; // 선택 번호 초기화
-  // questionID.value += 1;       // 다음 질문
   currentChoices.value = questions.value[questionID.value].choices;
   choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
 
-  typedTextLine1.value = ""; // 질문지 갱신
-  typeText(questions.value[questionID.value].fullTexts, typedTextLine1, "")
+  typeQuestion(questions.value[questionID.value].fullTexts)
 
   let dataType = choiceType.value[currentChoiceType.value];
 
@@ -145,9 +165,8 @@ const updateChoice = (choice, index) => {
     userAnswers[questionID.value] = userChoice;
 
     if (isLastQuestion()) {
-      console.log("지금까지의 답변: ", userAnswers);
-      saveSimulationAnswer(userAnswers);
-      // location.href = "/simul/report"; // 시뮬레이션 종료
+      saveSimulationAnswer(authStore.id, userAnswers);
+      location.href = "/simul/report"; // 시뮬레이션 종료
       return;
     }
 

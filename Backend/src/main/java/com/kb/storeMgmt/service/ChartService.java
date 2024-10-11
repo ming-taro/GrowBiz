@@ -1,6 +1,7 @@
 package com.kb.storeMgmt.service;
 
 import com.kb.storeMgmt.dto.CategoriesDTO;
+import com.kb.storeMgmt.dto.SalesInfoDTO;
 import com.kb.storeMgmt.mapper.ChartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class ChartService {
 
     public List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO){
         return chartMapper.getMixAddress(categoriesDTO);
+    }
+
+    public List<SalesInfoDTO> getmcfirst(SalesInfoDTO salesInfoDTO){
+        return chartMapper.getmcfirst(salesInfoDTO);
     }
 }

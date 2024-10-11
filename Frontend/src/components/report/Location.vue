@@ -95,7 +95,7 @@
 export default {
   mounted() {
     const script = document.createElement('script');
-    script.src = VITE_KAKAO_API_URL;
+    script.src = import.meta.env.VITE_KAKAO_API_URL;
     script.onload = () => {
       kakao.maps.load(() => {
         var container = document.getElementById('map');

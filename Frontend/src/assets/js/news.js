@@ -2,8 +2,8 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 // 네이버 API 인증 정보 (발급받은 클라이언트 ID와 시크릿을 입력하세요)
-const CLIENT_ID = VITE_NAVER_API_KEY;
-const CLIENT_SECRET = VITE_NAVER_SECRET;
+const CLIENT_ID = import.meta.env.VITE_NAVER_API_KEY;
+const CLIENT_SECRET = import.meta.env.VITE_NAVER_SECRET;
 
 // 뉴스 검색을 위한 함수
 async function getNews(query) {

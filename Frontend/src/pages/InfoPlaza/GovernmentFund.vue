@@ -99,37 +99,60 @@
       <div class="row mb-4 d-flex justify-content-end">
         <!-- d-flex 및 justify-content-end 추가 -->
         <!-- 필터링 및 검색 -->
-        <div class="col-5 d-flex">
+        <div class="col-6"></div>
+        <div class="col-6 d-flex">
           <!-- col-auto 사용 -->
           <!-- 대출 구분 -->
-          <div class="col-4">
+          <div class="col-1">
+            <i
+              class="fa-solid fa-rotate-right refresh-icon mt-2"
+              :class="{ spinning: isSpinning }"
+              style="font-size: 24px; color: #5a5a5a; cursor: pointer"
+              @click="refreshIcon"
+            ></i>
+          </div>
+          <div class="col-2">
             <select
               class="form-select round-corner"
               aria-label="Default select example"
               @change="onCategoryChange"
+              v-model="selectedCategory"
             >
-              <option selected disabled hidden>구분</option>
+              <option value="전체" selected disabled hidden>구분</option>
               <option value="전체">전체</option>
               <option value="직접대출">직접대출</option>
               <option value="대리대출">대리대출</option>
             </select>
           </div>
           <!-- 검색창 -->
-          <div class="col-8">
+          <div class="col-7">
             <div class="h-100">
-              <form class="h-100 form-group">
+              <form
+                class="h-100 form-group"
+                @submit.prevent="changeInputData"
+                style="height: 40px"
+              >
                 <div class="h-100 input-group input-group-sm">
                   <input
                     type="text"
                     class="rounded form-control ms-1"
                     placeholder="검색어를 입력해 주세요."
+                    v-model="searchInput"
                   />
-                  <span class="ms-1 rounded input-group-text">
-                    <i class="bi bi-search"></i>
-                  </span>
                 </div>
               </form>
             </div>
+          </div>
+          <div class="col-2">
+            <button
+              type="button"
+              class="btn btn-light fs-lg mt-1 me-1"
+              aria-label="Search button"
+              style="height: 40px"
+              @click="changeInputData"
+            >
+              <i class="bi bi-search"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -255,7 +278,7 @@
                       href="#"
                       @click.prevent="changePage(1)"
                     >
-                      <<
+                      <i class="fa-solid fa-angles-left"></i>
                     </a>
                   </li>
                   <!-- Previous Page Button -->
@@ -268,8 +291,12 @@
                       href="#"
                       @click.prevent="changePage(currentPage - 1)"
                     >
-                      <i class="bi bi-chevron-left"></i>
+                      <i class="fa-solid fa-angle-left"></i>
                     </a>
+                  </li>
+                  <!-- Ellipsis -->
+                  <li v-if="currentPage >= 7" class="page-item disabled">
+                    <span class="page-link">...</span>
                   </li>
                   <!-- Page Numbers -->
                   <li
@@ -286,6 +313,13 @@
                       {{ page }}
                     </a>
                   </li>
+                  <!-- Ellipsis -->
+                  <li
+                    v-if="currentPage <= totalPages - 10"
+                    class="page-item disabled"
+                  >
+                    <span class="page-link">...</span>
+                  </li>
                   <!-- Next Page Button -->
                   <li
                     class="page-item"
@@ -296,7 +330,7 @@
                       href="#"
                       @click.prevent="changePage(currentPage + 1)"
                     >
-                      <i class="bi bi-chevron-right"></i>
+                      <i class="fa-solid fa-angle-right"></i>
                     </a>
                   </li>
                   <!-- Last Page Button -->
@@ -309,17 +343,11 @@
                       href="#"
                       @click.prevent="changePage(totalPages)"
                     >
-                      >>
+                      <i class="fa-solid fa-angles-right"></i>
                     </a>
                   </li>
                 </ul>
               </nav>
-              <!-- Showing Items Text -->
-              <span class="text-muted text-sm mt-3">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
-                of {{ totalItems }} results found
-              </span>
             </div>
           </div>
         </div>
@@ -339,6 +367,7 @@ const best4List = ref([]);
 
 const currentPage = ref(1);
 const itemsPerPage = 6;
+const searchInput = ref('');
 const totalItems = ref(16);
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage));
 
@@ -351,6 +380,7 @@ const bringLoanList = async () => {
     const response = await axios.get(BASEURI + '/getFilteredList', {
       params: {
         category: selectedCategory.value,
+        input: searchInput.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {
@@ -384,6 +414,10 @@ const onCategoryChange = (event) => {
   selectedCategory.value = event.target.value;
   bringLoanList();
 };
+// '검색' 필터링
+const changeInputData = (event) => {
+  bringLoanList();
+};
 
 // 현재 페이지에 해당하는 데이터만 반환하는 계산된 속성
 const paginatedDataList = computed(() => {
@@ -406,6 +440,37 @@ const visiblePages = computed(() => {
   }
   return pages;
 });
+
+const bringTotalList = async () => {
+  try {
+    // Best 인기 업종 - 전체
+    const response = await axios.get(BASEURI + '/getFilteredList', {
+      params: {
+        category: '전체',
+        input: '',
+      }, // 선택된 필터링 값을 쿼리 파라미터로 전송
+    });
+    if (response.status === 200) {
+      dataList.value = response.data;
+      totalItems.value = dataList.value.length;
+      console.log(dataList.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+};
+const isSpinning = ref(false);
+const refreshIcon = () => {
+  isSpinning.value = !isSpinning.value;
+  bringTotalList();
+  setTimeout(() => {
+    isSpinning.value = false; // 회전 후 원래 상태로 돌아오게 함
+    selectedCategory.value = '전체';
+    searchInput.value = '';
+  }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제
+};
 
 bringBest4List();
 bringLoanList();
@@ -482,5 +547,13 @@ bringLoanList();
 .custom-card {
   padding: 1rem; /* 기본 패딩을 줄입니다 */
   font-size: 0.875rem; /* 폰트 크기를 줄입니다 */
+}
+.refresh-icon {
+  transition: transform 0.5s ease, color 0.5s ease;
+}
+
+.refresh-icon.spinning {
+  color: #000; /* 클릭 시 검은색으로 변경 */
+  transform: rotate(360deg); /* 회전 애니메이션 */
 }
 </style>

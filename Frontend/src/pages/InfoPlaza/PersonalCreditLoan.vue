@@ -206,21 +206,34 @@
             </select>
           </div>
           <!-- 검색창 -->
-          <div class="col-7">
+          <div class="col-6">
             <div class="h-100">
-              <form class="h-100 form-group">
+              <form
+                class="h-100 form-group"
+                @submit.prevent="changeInputData"
+                style="height: 40px"
+              >
                 <div class="h-100 input-group input-group-sm">
                   <input
                     type="text"
                     class="rounded form-control ms-1"
                     placeholder="검색어를 입력해 주세요."
+                    v-model="searchInput"
                   />
-                  <span class="ms-1 rounded input-group-text">
-                    <i class="bi bi-search"></i>
-                  </span>
                 </div>
               </form>
             </div>
+          </div>
+          <div class="col-1">
+            <button
+              type="button"
+              class="btn btn-light fs-lg mt-1 me-1"
+              aria-label="Search button"
+              style="height: 40px"
+              @click="changeInputData"
+            >
+              <i class="bi bi-search"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -350,7 +363,7 @@
                       href="#"
                       @click.prevent="changePage(1)"
                     >
-                      <<
+                      <i class="fa-solid fa-angles-left"></i>
                     </a>
                   </li>
                   <!-- Previous Page Button -->
@@ -363,8 +376,12 @@
                       href="#"
                       @click.prevent="changePage(currentPage - 1)"
                     >
-                      <i class="bi bi-chevron-left"></i>
+                      <i class="fa-solid fa-angle-left"></i>
                     </a>
+                  </li>
+                  <!-- Ellipsis -->
+                  <li v-if="currentPage >= 7" class="page-item disabled">
+                    <span class="page-link">...</span>
                   </li>
                   <!-- Page Numbers -->
                   <li
@@ -381,6 +398,13 @@
                       {{ page }}
                     </a>
                   </li>
+                  <!-- Ellipsis -->
+                  <li
+                    v-if="currentPage <= totalPages - 10"
+                    class="page-item disabled"
+                  >
+                    <span class="page-link">...</span>
+                  </li>
                   <!-- Next Page Button -->
                   <li
                     class="page-item"
@@ -391,7 +415,7 @@
                       href="#"
                       @click.prevent="changePage(currentPage + 1)"
                     >
-                      <i class="bi bi-chevron-right"></i>
+                      <i class="fa-solid fa-angle-right"></i>
                     </a>
                   </li>
                   <!-- Last Page Button -->
@@ -404,17 +428,11 @@
                       href="#"
                       @click.prevent="changePage(totalPages)"
                     >
-                      >>
+                      <i class="fa-solid fa-angles-right"></i>
                     </a>
                   </li>
                 </ul>
               </nav>
-              <!-- Showing Items Text -->
-              <span class="text-muted text-sm mt-3">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
-                of {{ totalItems }} results found
-              </span>
             </div>
           </div>
         </div>
@@ -430,6 +448,7 @@ import axios from 'axios';
 
 const selectedBank = ref('전체');
 const selectedType = ref('전체');
+const searchInput = ref('');
 const dataList = ref([]);
 const best4List = ref([]);
 
@@ -447,6 +466,7 @@ const bringLoanList = async () => {
     const response = await axios.get(BASEURI + '/getFilteredCreditLoanList', {
       params: {
         companyName: selectedBank.value,
+        input: searchInput.value,
         type: selectedType.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
@@ -479,13 +499,18 @@ const bringBest4List = async () => {
   }
 };
 
-// 은행명 바꾸기
+// 은행명 필터링
 const onBankChange = (event) => {
   selectedBank.value = event.target.value;
   bringLoanList();
 };
 
-// 상품 유형 바꾸기
+// '검색' 필터링
+const changeInputData = (event) => {
+  bringLoanList();
+};
+
+// 상품 유형 필터링
 const onTypeChange = (event) => {
   selectedType.value = event.target.value;
   bringLoanList();
@@ -567,6 +592,7 @@ const refreshIcon = () => {
     isSpinning.value = false; // 회전 후 원래 상태로 돌아오게 함
     selectedBank.value = '전체';
     selectedType.value = '전체';
+    searchInput.value = '';
   }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제
 };
 

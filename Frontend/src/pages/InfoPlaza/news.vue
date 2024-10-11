@@ -101,9 +101,9 @@ async function getNews(query, date) {
       title: item.title.replace(/<[^>]+>/g, ''), // HTML 태그 제거
       link: item.link,
       shortContent:
-        item.description.length > 100
-          ? item.description.substring(0, 100) + '...'
-          : item.description, // 짧게 자르기
+        item.description.replace(/<[^>]+>/g, '').length > 100 // description에서 HTML 태그 제거 후 길이 체크
+          ? item.description.replace(/<[^>]+>/g, '').substring(0, 100) + '...' // HTML 태그 제거 후 100자로 자르기
+          : item.description.replace(/<[^>]+>/g, ''), // HTML 태그 제거
       thumbnail: item.thumbnail || 'https://via.placeholder.com/150', // 각 뉴스 항목의 개별 thumbnail 값 사용
       date: new Date().toLocaleDateString(), // 임의의 날짜로 설정
     }));

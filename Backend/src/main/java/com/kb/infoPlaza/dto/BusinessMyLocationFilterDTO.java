@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class GovernmentFilterDTO {
-    private String category;
+public class BusinessMyLocationFilterDTO {
+    private String service;
     private String input;
 }
