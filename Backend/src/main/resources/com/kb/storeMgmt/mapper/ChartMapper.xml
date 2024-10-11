@@ -18,12 +18,14 @@
     </select>
 
     <select id="getmcfirst" resultType="com.kb.storeMgmt.dto.SalesInfoDTO">
-        SELECT *
-        FROM categories
-        WHERE insert_date = CURDATE()
-           OR insert_date = DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        SELECT adstrd_cd_nm,thsmon_selng_amt, mdwk_selng_amt
+        FROM service_sales
+        WHERE stdr_yyqu_cd = '20242'
+        AND svc_induty_cd_nm = #{svcIndutyCdNm}
+        AND adstrd_cd_nm IN
+        <foreach item="adstrdCdNm" collection="dongname" open="(" separator="," close=")">
+            #{adstrdCdNm}
+        </foreach>
     </select>
-
-
 
 </mapper>
