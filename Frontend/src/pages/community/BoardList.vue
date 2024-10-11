@@ -27,7 +27,7 @@
           </form>
 
           <!-- 작성 버튼 추가 -->
-          <div v-if="showCreateButton" class="ms-2">
+          <div v-if="showCreateButton && loggedInUserId" class="ms-2"> <!-- 로그인한 ID가 있을 때만 보이도록 설정 -->
             <button type="button" @click="createPost" class="btn btn-sm btn-primary">글작성</button>
           </div>
         </div>
@@ -87,6 +87,10 @@ import { ref, watch, computed } from 'vue'; // computed 추가
 import { defineProps } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // useRouter 추가
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
+
+const auth = useAuthStore();
+const loggedInUserId = computed(() => auth.name);
 
 
 const router = useRouter(); // router 정의
