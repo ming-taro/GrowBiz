@@ -76,8 +76,8 @@ const mapContainer = ref(null);
 const propertys = ref([]);
 let kakaoMap; // Declare a variable to hold the map instance
 const selectedCity = ref('서울특별시');
-const selectedDistrict = ref('강남구');
-const selectedTown = ref('개포1동');
+const selectedDistrict = ref('광진구');
+const selectedTown = ref('화양동');
 const districts = ref([]);
 const towns = ref([]);
 let markers = [];
@@ -112,7 +112,7 @@ const loadKakaoMap = (container) => {
   script.onload = () => {
     window.kakao.maps.load(() => {
       const options = {
-        center: new window.kakao.maps.LatLng(37.4827409, 127.055737), // 강남구 개포1동
+        center: new window.kakao.maps.LatLng(37.5465421, 127.0713152), // 광진구 화양동
         level: 4, // Zoom level
         maxLevel: 6, // Maximum zoom level
       };
@@ -150,10 +150,10 @@ const loadKakaoMap = (container) => {
 const fetchDistinctDistricts = async () => {
   try {
     // 1. 기본값 미리 설정
-    districts.value = [{ guName: '강남구' }];
-    selectedDistrict.value = '강남구';
-    towns.value = [{ dongName: '개포1동' }];
-    selectedTown.value = '개포1동';
+    districts.value = [{ guName: '광진구' }];
+    selectedDistrict.value = '광진구';
+    towns.value = [{ dongName: '화양동' }];
+    selectedTown.value = '화양동';
 
     // 2. 비동기적으로 데이터 불러오기
     const response = await axios.get(
@@ -161,11 +161,8 @@ const fetchDistinctDistricts = async () => {
     );
     districts.value = response.data;
 
-    // 3. 첫 번째 데이터를 선택 (데이터가 로드된 후에도 유지)
-    if (districts.value.length) {
-      selectedDistrict.value = districts.value[0].guName; // 첫 번째 구 선택
-      await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
-    }
+    
+    await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
   } catch (error) {
     console.error('Error fetching distinct district names:', error);
   }
