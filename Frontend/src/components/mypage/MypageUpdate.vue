@@ -12,7 +12,11 @@
           />
         </div>
         <div class="col-md-8">
-          <div class="card-body m-3">
+          <div
+            class="card-body d-flex flex-column justify-content-center"
+            style="height: 150px"
+          >
+            <!-- 카드 높이를 설정 -->
             <p class="card-text">
               <small class="text-body-secondary mb-2">{{
                 authStore.state.id
@@ -21,10 +25,10 @@
 
             <h3 class="card-title mb-0">{{ authStore.state.name }}</h3>
 
-            <p class="card-text mt-2 me-5" style="max-width: 90%">
+            <p class="card-text me-5" style="max-width: 90%">
               {{ authStore.state.email }}
             </p>
-            <h6 class="card-title mt-2" style="color: #6184c6">
+            <h6 class="card-title mt-4" style="color: #6184c6">
               <span> 프로필 사진 변경하기</span>
             </h6>
           </div>
@@ -135,5 +139,9 @@ onMounted(async () => {
   width: 100%; /* 버튼을 가로로 길게 설정 */
   max-width: 200px; /* 최대 너비 설정 */
   padding: 10px 0; /* 버튼 세로 크기 조절 */
+}
+
+.card {
+  max-height: 150px;
 }
 </style>
