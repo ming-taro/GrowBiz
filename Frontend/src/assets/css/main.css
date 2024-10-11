@@ -3525,6 +3525,7 @@ progress {
     transition: none;
   }
 }
+
 .btn {
   --x-btn-padding-x: 1rem;
   --x-btn-padding-y: 0.5rem;
