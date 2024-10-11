@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class BusinessFilterDTO {
-    private String gu;
-    private String dong;
+public class BusinessMyLocationFilterDTO {
     private String service;
     private String input;
 }

@@ -1,9 +1,6 @@
 package com.kb.infoPlaza.mapper;
 
-import com.kb.infoPlaza.dto.Best3DTO;
-import com.kb.infoPlaza.dto.BusinessClosureDTO;
-import com.kb.infoPlaza.dto.BusinessFilterDTO;
-import com.kb.infoPlaza.dto.BusinessItemDTO;
+import com.kb.infoPlaza.dto.*;
 
 import java.util.List;
 
@@ -15,6 +12,8 @@ public interface BusinessItemMapper {
     List<BusinessItemDTO> getTotal();
 
     List<BusinessItemDTO> getFilteredList(BusinessFilterDTO businessFilter);
+
+    List<BusinessItemDTO> getFilteredPortionList(BusinessMyLocationFilterDTO businessMyLocationFilter);
 
     List<BusinessClosureDTO> getFilteredCloseList(BusinessFilterDTO businessFilter);
 
