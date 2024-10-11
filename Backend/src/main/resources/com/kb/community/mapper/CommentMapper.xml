@@ -16,6 +16,6 @@
 
     <delete id="deleteComment">
         DELETE FROM community_comment
-        WHERE comment_id = #{commentId}
+        WHERE comment_id = #{commentId} and user_id = ${userId}
     </delete>
 </mapper>

@@ -22,8 +22,20 @@
       </div>
       <div class="text-center">
         <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral mb-5 mt-1">목록</RouterLink>
-        <button type="button" class="btn btn-sm btn-primary ms-2 mb-5 mt-1" @click="editPost">수정</button>
-        <button type="button" class="btn btn-sm btn-danger ms-2 mb-5 mt-1" @click="showDeleteModal">삭제</button>
+          <!-- 수정 및 삭제 버튼을 조건부로 표시 -->
+          <button
+          v-if="post.userId === loggedInUserId"
+          type="button"
+          class="btn btn-sm btn-primary ms-2 mb-5 mt-1"
+          @click="editPost"
+        >수정</button>
+
+        <button
+          v-if="post.userId === loggedInUserId" 
+          type="button"
+          class="btn btn-sm btn-danger ms-2 mb-5 mt-1"
+          @click="showDeleteModal"
+        >삭제</button>
       </div>
 
       <div class="list-group mt-5 mb-10">
@@ -106,10 +118,15 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/auth';
+
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
+
+const auth = useAuthStore();
+const loggedInUserId = computed(() => auth.name);
 
 const route = useRoute();
 const post = ref({});
@@ -172,12 +189,19 @@ const paginatedComments = computed(() => {
 
 const confirmDelete = async () => {
   const postId = route.params.postId;
+  // 로그인한 사용자가 게시글의 작성자와 같은지 확인
+  if (post.value.userId !== loggedInUserId.value) {
+    alert('이 게시글을 삭제할 권한이 없습니다.');
+    hideDeleteModal();
+    return; // 권한이 없는 경우 함수 종료
+  }
+  
   try {
     await axios.delete(`http://localhost:8080/api/community/view/${postId}`);
     router.push(`/community/${category.value}`);
   } catch (error) {
-    console.error('Failed to delete post:', error);
-    alert('Failed to delete post.');
+    console.error('게시글 삭제에 실패했습니다:', error);
+    alert('게시글 삭제에 실패했습니다.');
   } finally {
     hideDeleteModal();
   }

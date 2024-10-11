@@ -40,6 +40,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import Editor from '@/components/editor/Editor.vue'; 
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
 
 const postTitle = ref('');
 const postContent = ref('');
@@ -50,6 +51,8 @@ const category = route.params.category; // URL에서 category를 가져옴
 const postId = sessionStorage.getItem('editPostId') || null; // postId가 없으면 null로 초기화
 const isEditMode = ref(!!postId); // postId가 있으면 수정 모드로 설정
 
+const authStore = useAuthStore();
+const userId = authStore.name; // Assuming you have a userId property in your auth store
 
 
 const submitPost = async () => {
@@ -61,7 +64,7 @@ const submitPost = async () => {
           postId: postId,
           title: postTitle.value,
           content: postContent.value,
-          userId: '최민정'
+          userId: userId 
         });
         alert('글이 성공적으로 수정되었습니다.');
       } else {
@@ -69,7 +72,7 @@ const submitPost = async () => {
         const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
           title: postTitle.value,
           content: postContent.value,
-          userId: '최민정'
+          userId: userId 
         });
         alert('글이 성공적으로 작성되었습니다.');
       }

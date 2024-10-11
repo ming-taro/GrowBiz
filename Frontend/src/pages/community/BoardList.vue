@@ -88,6 +88,7 @@ import { defineProps } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // useRouter 추가
 
+
 const router = useRouter(); // router 정의
 
 const props = defineProps({
