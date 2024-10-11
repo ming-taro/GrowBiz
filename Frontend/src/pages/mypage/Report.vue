@@ -1,7 +1,7 @@
 <template>
   <div>
     <MypageHeader />
-    <div class="container mw-screen-lg">
+    <div class="container">
       <div class="row">
         <ul
           class="nav nav-tabs custom justify-content-center"

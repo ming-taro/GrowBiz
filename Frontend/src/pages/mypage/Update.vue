@@ -12,7 +12,7 @@
               class="nav-link active"
               aria-current="page"
               to="mypageupdate"
-              ><h4>개인정보</h4></router-link
+              ><h4>개인정보 수정</h4></router-link
             >
           </li>
           <li class="nav-item">
@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<style>
+<!-- <style scope>
 .btn-primary {
   margin: 0px 0px 0px 20px;
 }
@@ -77,4 +77,11 @@
   display: flex;
   flex-wrap: wrap;
 }
-</style>
+
+.custom-line {
+  width: 100%; /* 선의 길이 설정 */
+  height: 1px; /* 선의 굵기 설정 */
+  background-color: #6184c6; /* 선의 색상 설정 */
+  margin: 0px 0; /* 원하는 여백 설정 */
+}
+</style> -->
