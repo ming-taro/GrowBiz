@@ -38,19 +38,23 @@
         >삭제</button>
       </div>
 
-      <div class="list-group mt-5 mb-10">
+      <div class="list-group mt-5 mb-10 " v-if="comments.length > 0">
         <h4 class="fw-semibold mb-5">댓글 {{ comments.length }}</h4>
         <div class="list-group-item py-3" v-for="comment in paginatedComments" :key="comment.commentId">
           <div class="d-flex flex-wrap w-100 justify-content-between py-2">
             <h4 class="pt-1">{{ comment.userId }}</h4>
-            <button type="button" class="btn btn-sm btn-danger" @click="showDeleteCommentModal(comment.commentId)">삭제</button>
+            <button 
+            v-if="comment.userId === loggedInUserId"
+            type="button" 
+            class="btn btn-sm btn-danger" 
+            @click="showDeleteCommentModal(comment.commentId)">삭제</button>          
           </div>
           <p class="font-weight-normal fs-4 text-body py-2 pt-0">{{ comment.content }}</p>
           <small class="text-muted">{{ comment.createdAt }}</small>
         </div>
       </div>
 
-      <div class="mt-4 mb-10">
+      <div class="mt-4 mb-10" v-if="loggedInUserId"> <!-- 로그인한 사용자일 때만 보이도록 조건 추가 -->
         <h5 class="fw-semibold mb-3">댓글 작성</h5>
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="댓글을 입력하세요." v-model="newComment" />
@@ -58,7 +62,8 @@
         </div>
       </div>
 
-      <nav aria-label="Page navigation example">
+            <!-- 페이지네이션 부분 -->
+      <nav aria-label="Page navigation example" v-if="comments.length > 0"> <!-- 댓글이 있을 때만 페이지네이션 표시 -->
         <ul class="pagination justify-content-center pagination-spaced gap-1">
           <li class="page-item">
             <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)" :class="{ disabled: currentPage === 1 }">
@@ -75,6 +80,7 @@
           </li>
         </ul>
       </nav>
+
     </div>
 
     <!-- 게시글 삭제 확인 모달 -->
@@ -225,7 +231,7 @@ const addComment = async () => {
   try {
     const response = await axios.post(`http://localhost:8080/api/community/comment`, {
       postId: postId,
-      userId: 'user34',
+      userId: loggedInUserId.value,
       content: newComment.value
     });
     comments.value.push(response.data);
