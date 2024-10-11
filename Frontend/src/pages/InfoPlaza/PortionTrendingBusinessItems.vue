@@ -110,6 +110,7 @@
                 class="form-control form-control-lg"
                 placeholder="원하시는 키워드를 입력하세요."
                 v-model="searchInput"
+                @keydown.enter="changeInputData"
                 style="
                   border: none;
                   border-bottom: 2px solid #ced4da;

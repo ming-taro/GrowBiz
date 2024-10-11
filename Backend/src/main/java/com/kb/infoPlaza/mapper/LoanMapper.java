@@ -37,4 +37,6 @@ public interface LoanMapper {
 
     List<KBLoanDTO> getKBLoanRecommand();
 
+    List<KBLoanDTO> getFilteredKBLoan(KBFilterDTO KBFilter);
+
 }

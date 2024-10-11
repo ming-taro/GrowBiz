@@ -1,7 +1,7 @@
 package com.kb.storeMgmt.mapper;
 
 import com.kb.storeMgmt.dto.CategoriesDTO;
-import org.apache.ibatis.annotations.Param;
+import com.kb.storeMgmt.dto.SalesInfoDTO;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ public interface ChartMapper {
 
     List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO);
 
-    List<CategoriesDTO> getmcfirst(CategoriesDTO categoriesDTO);
+    List<SalesInfoDTO> getmcfirst(SalesInfoDTO salesInfoDTO);
 
 }

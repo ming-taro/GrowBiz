@@ -69,20 +69,20 @@ export const mixed_options2 = {
 export async function fetchChartData(loanRepaymentStatus) {
   const response = await axios.get(`/api/kmap/member/${id}`);
   const dongname = response.data.dongname;
+  const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
-  console.log(dongname);
+  const mcfirst = await axios.get(`/api/chart/mcfirst/${svcIndutyCdNm}`, {
+    params: { dongname },
+  });
+  const mcsecend = await axios.get(`/api/chart/mcsecend/${svcIndutyCdNm}`, {
+    params: { dongname },
+  });
 
-  const doughnut = await axios.get(`/api/chart/doughnut`);
+  const mcfirstdata = mcfirst.data;
 
-  const sortedData = doughnut.data.sort((a, b) => b.amount - a.amount);
-
-  mixed_data2.labels = dongname.split(',');
-  mixed_data2.datasets[0].data = sortedData.map((item) => item.amount);
-  mixed_data2.datasets[1].data = sortedData.map((item) => item.amount);
-
-  loanRepaymentStatus.value = sortedData
-    .reduce((acc, item) => acc + item.amount, 0)
-    .toLocaleString();
+  mixed_data2.labels = mcfirstdata.map((item) => item.adstrdCdNm);
+  mixed_data2.datasets[0].data = mcfirstdata.map((item) => item.mdwkSelngAmt);
+  // mixed_data2.datasets[1].data = sortedData.map((item) => item.amount);
 
   const mixchart = await axios.get(`/api/chart/mixchart`);
 
@@ -103,8 +103,6 @@ export async function fetchChartData(loanRepaymentStatus) {
     }
     return acc;
   }, {});
-
-  const firstAndSecondData = Object.values(categorizedData).flat();
 
   mixed_data.labels = firstData.map((item) => item.categoryName);
 

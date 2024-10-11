@@ -40,6 +40,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import Editor from '@/components/editor/Editor.vue'; 
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
 
 const postTitle = ref('');
 const postContent = ref('');
@@ -50,70 +51,39 @@ const category = route.params.category; // URL에서 category를 가져옴
 const postId = sessionStorage.getItem('editPostId') || null; // postId가 없으면 null로 초기화
 const isEditMode = ref(!!postId); // postId가 있으면 수정 모드로 설정
 
+const authStore = useAuthStore();
+const userId = authStore.name; // Assuming you have a userId property in your auth store
+
 
 const submitPost = async () => {
   if (postTitle.value.trim() && postContent.value.trim()) {
     try {
-      // 이미지 변환을 위한 임시 div 생성
-      const temporaryDiv = document.createElement('div');
-      temporaryDiv.innerHTML = postContent.value; // postContent는 에디터에서 얻은 HTML 내용
-
-      const imgTags = temporaryDiv.getElementsByTagName('img');
-
-      // 모든 img 태그의 src를 Blob URL로 변환
-      for (let img of imgTags) {
-        const base64String = img.src;
-
-        // Blob 변환 함수 호출
-        const blob = await base64ToBlob(base64String);
-        const newUrl = URL.createObjectURL(blob);
-        img.src = newUrl; // img src를 Blob URL로 변경
-      }
-
-      // 변환된 HTML 내용
-      const finalContent = temporaryDiv.innerHTML;
-
       if (isEditMode.value) {
         // 수정 모드일 때 PUT 요청
         const response = await axios.put(`http://localhost:8080/api/community/${category}/edit`, {
           postId: postId,
           title: postTitle.value,
-          content: finalContent, // 최종 HTML 내용 사용
-          userId: '최민정'
+          content: postContent.value,
+          userId: userId 
         });
-        alert('글이 성공적으로 수정되었습니다.');
       } else {
         // 생성 모드일 때 POST 요청
         const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
           title: postTitle.value,
-          content: finalContent, // 최종 HTML 내용 사용
-          userId: '최민정'
+          content: postContent.value,
+          userId: userId 
         });
-        alert('글이 성공적으로 작성되었습니다.');
       }
 
       resetFields();
       router.push(`/community/${category}`); // 글 작성 또는 수정 후 해당 카테고리로 이동
     } catch (error) {
       console.error('글 처리 중 오류 발생:', error);
-      alert('글 처리 중 오류가 발생했습니다.');
     }
   } else {
     alert('제목과 내용을 입력해주세요.');
   }
 };
-
-// Base64를 Blob으로 변환하는 함수
-const base64ToBlob = (base64, mimeType = 'image/png') => {
-  const byteCharacters = atob(base64.split(',')[1]); // base64 문자열에서 메타데이터 제거
-  const byteNumbers = new Array(byteCharacters.length);
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-  const byteArray = new Uint8Array(byteNumbers);
-  return new Blob([byteArray], { type: mimeType });
-};
-
 
 const resetFields = () => {
   postTitle.value = '';

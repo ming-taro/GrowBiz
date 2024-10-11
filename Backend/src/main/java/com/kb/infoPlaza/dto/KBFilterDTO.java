@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GovernmentFilterDTO {
-    private String category;
+public class KBFilterDTO {
     private String input;
 }
