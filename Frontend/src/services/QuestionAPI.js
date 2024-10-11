@@ -34,3 +34,21 @@ export const createSimulationAnswer = async (userID, answer) => {
     throw error; // 오류 발생 시 예외 던지기
   }
 };
+
+export const fetchResponseById = async (id) => {
+  try {
+    const response = await axios.get(
+      BASE_URL + `/answer/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error saving data:", error);
+    throw error;
+  }
+};

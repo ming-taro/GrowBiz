@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 헤더 -->
-    <Result />
+    <Result v-if="report != null" v-bind:simulationResponseId=report.simulationResponseId />
+    <!-- <Result /> -->
 
     <div class="container mw-screen-xl">
       <!-- 추천 위치 -->
@@ -29,17 +30,22 @@ import Location from '@/components/report/Location.vue';
 import Bar from '@/components/report/Bar.vue';
 import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
-import { findReportById } from '@/services/ReportAPI';
-import { onMounted } from 'vue';
+import { fetchReportById } from '@/services/ReportAPI';
+import { onMounted, ref } from 'vue';
 
-let query = window.location.search;
-let param = new URLSearchParams(query);
-let reportId = param.get('id');
+const report = ref(null);
 
-onMounted(async() => {
-  // console.log(reportId)
-  // console.log(await findReportById(reportId));
-})
+const storeReport = async () => {
+  let query = window.location.search;
+  let param = new URLSearchParams(query);
+  let reportId = param.get('id');
+  
+  report.value = await fetchReportById(reportId);
+}
+
+onMounted(async () => {
+  await storeReport();
+});
 </script>
 
 <style>

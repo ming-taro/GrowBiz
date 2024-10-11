@@ -25,7 +25,7 @@ export const createReport = async (userId, simulationResponseId) => {
   }
 };
 
-export const findReportById = async (id) => {
+export const fetchReportById = async (id) => {
   try {
     const response = await axios.get(
       BASE_URL + `/${id}`,

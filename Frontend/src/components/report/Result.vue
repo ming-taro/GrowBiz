@@ -36,6 +36,17 @@
   </div>
 </template>
 
+<script setup>
+import { onMounted, ref, defineProps } from 'vue'
+import { fetchResponseById } from '@/services/QuestionAPI';
+
+const props = defineProps(["simulationResponseId"]);
+
+onMounted(async() => {
+  // console.log(await fetchResponseById(props.simulationResponseId));
+})
+</script>
+
 <style scoped>
 .result-container {
   position: relative; /* 자식 요소의 절대 위치 기준 설정 */
