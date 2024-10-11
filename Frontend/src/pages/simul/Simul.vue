@@ -44,6 +44,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { getQuestions, saveSimulationAnswer } from '@/services/QuestionAPI';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
 
 const questions = ref([]);
 const questionID = ref(-1);
@@ -122,7 +125,6 @@ const isLastQuestion = () => {
 const updateFirstChoice = () => {
   userChoice = {};             // 유저 답변 초기화
   currentChoiceType.value = 0; // 선택 번호 초기화
-  // questionID.value += 1;       // 다음 질문
   currentChoices.value = questions.value[questionID.value].choices;
   choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
 
@@ -145,9 +147,8 @@ const updateChoice = (choice, index) => {
     userAnswers[questionID.value] = userChoice;
 
     if (isLastQuestion()) {
-      console.log("지금까지의 답변: ", userAnswers);
-      saveSimulationAnswer(userAnswers);
-      // location.href = "/simul/report"; // 시뮬레이션 종료
+      saveSimulationAnswer(authStore.id, userAnswers);
+      location.href = "/simul/report"; // 시뮬레이션 종료
       return;
     }
 

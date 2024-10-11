@@ -12,12 +12,13 @@ export const getQuestions = async () => {
     });
 };
 
-export const saveSimulationAnswer = async (answer) => {
+export const saveSimulationAnswer = async (userID, answer) => {
   axios
     .post(
       BASE_URL + "/answer",
       {
-        data: answer,
+        user_id: userID,
+        answer: answer,
       },
       {
         headers: {
