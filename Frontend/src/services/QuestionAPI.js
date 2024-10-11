@@ -46,7 +46,7 @@ export const fetchResponseById = async (id) => {
       }
     );
 
-    return response.data;
+    return response.data.answer;
   } catch (error) {
     console.error("Error saving data:", error);
     throw error;

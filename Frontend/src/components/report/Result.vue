@@ -8,25 +8,24 @@
       </div>
       <div class="overlay">
         <div class="overlay-text">
-          <!-- ||안의 text는 db에서 가져오는 거임 -->
           <div class="d-flex">
             <div class="question">자금</div>
-            <div class="answer">3~5억</div>
+            <div class="answer">{{ simulationResponse[5] ? simulationResponse[5].text : "데이터 없음" }}</div>
             <div class="question">지역</div>
-            <div class="answer">서울 강남구</div>
+            <div class="answer">{{ simulationResponse[0] ? simulationResponse[0].district + " " + simulationResponse[0].neighborhoods : "데이터 없음" }}</div>
             <div class="question">대분류</div>
-            <div class="answer">유통</div>
+            <div class="answer">{{ simulationResponse[4] ? simulationResponse[4].category : "데이터 없음" }}</div>
             <div class="question">중분류</div>
-            <div class="answer">편의점</div>
-            <div class="question">프랜차이즈</div>
+            <div class="answer">{{ simulationResponse[4] ? simulationResponse[4].subcategories : "데이터 없음" }}</div>
+            <div class="question">{{ simulationResponse[7] ? simulationResponse[7].text : "데이터 없음" }}</div>
           </div>
           <div class="d-flex">
             <div class="question">월세</div>
-            <div class="answer">1000만원 이하</div>
+            <div class="answer">{{ simulationResponse[2] ? simulationResponse[2].text : "데이터 없음" }}</div>
             <div class="question">보증금</div>
-            <div class="answer">1000만원 이하</div>
+            <div class="answer">{{ simulationResponse[3] ? simulationResponse[3].text : "데이터 없음" }}</div>
             <div class="question">거주지 인근</div>
-            <div class="answer">30km 교육</div>
+            <div class="answer">{{ simulationResponse[1] ? simulationResponse[1].text : "데이터 없음" }}</div>
             <div class="question">대출 계획</div>
             <div class="answer">있음</div>
           </div>
@@ -41,9 +40,10 @@ import { onMounted, ref, defineProps } from 'vue'
 import { fetchResponseById } from '@/services/QuestionAPI';
 
 const props = defineProps(["simulationResponseId"]);
+const simulationResponse = ref([]);
 
 onMounted(async() => {
-  // console.log(await fetchResponseById(props.simulationResponseId));
+  simulationResponse.value = await fetchResponseById(props.simulationResponseId);
 })
 </script>
 
