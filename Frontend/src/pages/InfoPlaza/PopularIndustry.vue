@@ -355,15 +355,15 @@
                     <span class="fs-2hx fw-bold text-gray-800 lh-1 ls-n2">
                       Best 인기 업종 - My 위치
                     </span>
+                    <!--end::Title-->
                     <router-link
-                      to="/infoPlaza/industry/mylocationTrending"
+                      to="/infoPlaza/industry/totalTrendingBusinessItems"
                       class="ms-auto"
                       style="font-size: 13px"
                     >
                       <i class="fa-solid fa-arrow-up-right-from-square"></i>
                       더보기
                     </router-link>
-                    <!--end::Title-->
                   </div>
                   <!--end::Heading-->
                 </div>
@@ -377,252 +377,80 @@
               <div class="card-body pt-0">
                 <!--begin::Items-->
                 <div class="mb-0">
-                  <!--begin::Item-->
-                  <div class="d-flex flex-stack mt-3">
-                    <!--begin::Section-->
-                    <div
-                      class="d-flex align-items-center me-5"
-                      style="flex-grow: 1"
-                    >
-                      <!--begin::Symbol-->
-                      <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
+                  <div
+                    v-for="(item, index) in best5Mylocation"
+                    :key="item.stdrTrdarSvc"
+                    class=""
+                  >
+                    <div class="d-flex flex-stack mt-3">
+                      <!--begin::Section-->
+                      <div
+                        class="d-flex align-items-center me-5"
+                        style="flex-grow: 1"
+                      >
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-30px me-5 col-2">
+                          <img
+                            :src="
+                              '/images/businessItem/' +
+                              item.svcIndutyCdNm +
+                              '.png'
+                            "
+                            alt=""
+                            style="width: 30px"
+                          />
+                        </div>
+                        <!--end::Symbol-->
+                        <!--begin::Content-->
+                        <div class="me-auto col-7">
+                          <!--begin::Title-->
+                          <p style="color: gray; font-size: 0.6rem">
+                            {{ item.trdarSeCdNm }}
+                          </p>
+                          <span style="color: black; font-size: 1rem">{{
+                            item.svcIndutyCdNm
+                          }}</span>
+                          <!--end::Desc-->
+                        </div>
+                        <!--end::Content-->
                       </div>
-                      <!--end::Symbol-->
-                      <!--begin::Content-->
-                      <div class="me-auto">
-                        <!--begin::Title-->
-                        <p style="color: gray; font-size: 0.6rem">서대문역</p>
-                        <span style="color: black; font-size: 1rem"
-                          >한식음식점</span
+                      <!--end::Section-->
+                      <!--begin::Wrapper-->
+                      <div class="d-flex align-items-center col-5">
+                        <!--begin::Number-->
+                        <span
+                          class="text-gray-800 fw-bold fs-6 me-3 col-4 text-center"
+                          :class="{
+                            'text-success': item.rankChange.startsWith('+'),
+                            'text-danger':
+                              item.rankChange.startsWith('-') &&
+                              !/^-\s*$/.test(item.rankChange),
+                          }"
                         >
-                        <!--end::Desc-->
-                      </div>
-                      <!--end::Content-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex align-items-center">
-                      <!--begin::Number-->
-                      <span class="text-gray-800 fw-bold fs-6 me-3">124%</span>
-                      <!--end::Number-->
-                      <!--begin::Info-->
-                      <div class="d-flex flex-center">
-                        <!--begin::label-->
-                        <span class="badge badge-light-success fs-base">
-                          <i class="fa-solid fa-angle-up"></i> 4 점포
+                          {{ item.rankChange }}
                         </span>
-                        <!--end::label-->
+                        <!--end::Number-->
+                        <!--begin::Info-->
+                        <div class="d-flex flex-center">
+                          <!--begin::label-->
+                          <span
+                            class="badge badge-light-success fs-base text-center"
+                          >
+                            <i class="fa-solid fa-angle-up"></i>
+                            {{ item.opbizStorCo }} 점포
+                          </span>
+                          <!--end::label-->
+                        </div>
+                        <!--end::Info-->
                       </div>
-                      <!--end::Info-->
+                      <!--end::Wrapper-->
                     </div>
-                    <!--end::Wrapper-->
+
+                    <!--end::Item-->
+                    <!--begin::Separator-->
+                    <hr v-if="index < best5.length - 1" />
                   </div>
-                  <!--end::Item-->
-                  <!--begin::Separator-->
-                  <hr />
-                  <!--end::Separator-->
-                  <!--begin::Item-->
-                  <div class="d-flex flex-stack mt-3">
-                    <!--begin::Section-->
-                    <div
-                      class="d-flex align-items-center me-5"
-                      style="flex-grow: 1"
-                    >
-                      <!--begin::Symbol-->
-                      <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
-                      </div>
-                      <!--end::Symbol-->
-                      <!--begin::Content-->
-                      <div class="me-auto">
-                        <!--begin::Title-->
-                        <p style="color: gray; font-size: 0.6rem">서대문역</p>
-                        <span style="color: black; font-size: 1rem"
-                          >한식음식점</span
-                        >
-                        <!--end::Desc-->
-                      </div>
-                      <!--end::Content-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex align-items-center">
-                      <!--begin::Number-->
-                      <span class="text-gray-800 fw-bold fs-6 me-3">124%</span>
-                      <!--end::Number-->
-                      <!--begin::Info-->
-                      <div class="d-flex flex-center">
-                        <!--begin::label-->
-                        <span class="badge badge-light-success fs-base">
-                          <i class="fa-solid fa-angle-up"></i> 4 점포
-                        </span>
-                        <!--end::label-->
-                      </div>
-                      <!--end::Info-->
-                    </div>
-                    <!--end::Wrapper-->
-                  </div>
-                  <!--end::Item-->
-                  <!--begin::Separator-->
-                  <hr />
-                  <!--end::Separator-->
-                  <!--begin::Item-->
-                  <div class="d-flex flex-stack mt-3">
-                    <!--begin::Section-->
-                    <div
-                      class="d-flex align-items-center me-5"
-                      style="flex-grow: 1"
-                    >
-                      <!--begin::Symbol-->
-                      <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
-                      </div>
-                      <!--end::Symbol-->
-                      <!--begin::Content-->
-                      <div class="me-auto">
-                        <!--begin::Title-->
-                        <p style="color: gray; font-size: 0.6rem">서대문역</p>
-                        <span style="color: black; font-size: 1rem"
-                          >한식음식점</span
-                        >
-                        <!--end::Desc-->
-                      </div>
-                      <!--end::Content-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex align-items-center">
-                      <!--begin::Number-->
-                      <span class="text-gray-800 fw-bold fs-6 me-3">124%</span>
-                      <!--end::Number-->
-                      <!--begin::Info-->
-                      <div class="d-flex flex-center">
-                        <!--begin::label-->
-                        <span class="badge badge-light-success fs-base">
-                          <i class="fa-solid fa-angle-up"></i> 4 점포
-                        </span>
-                        <!--end::label-->
-                      </div>
-                      <!--end::Info-->
-                    </div>
-                    <!--end::Wrapper-->
-                  </div>
-                  <!--end::Item-->
-                  <!--begin::Separator-->
-                  <hr />
-                  <!--end::Separator-->
-                  <!--begin::Item-->
-                  <div class="d-flex flex-stack mt-3">
-                    <!--begin::Section-->
-                    <div
-                      class="d-flex align-items-center me-5"
-                      style="flex-grow: 1"
-                    >
-                      <!--begin::Symbol-->
-                      <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
-                      </div>
-                      <!--end::Symbol-->
-                      <!--begin::Content-->
-                      <div class="me-auto">
-                        <!--begin::Title-->
-                        <p style="color: gray; font-size: 0.6rem">서대문역</p>
-                        <span style="color: black; font-size: 1rem"
-                          >한식음식점</span
-                        >
-                        <!--end::Desc-->
-                      </div>
-                      <!--end::Content-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex align-items-center">
-                      <!--begin::Number-->
-                      <span class="text-gray-800 fw-bold fs-6 me-3">124%</span>
-                      <!--end::Number-->
-                      <!--begin::Info-->
-                      <div class="d-flex flex-center">
-                        <!--begin::label-->
-                        <span class="badge badge-light-success fs-base">
-                          <i class="fa-solid fa-angle-up"></i> 4 점포
-                        </span>
-                        <!--end::label-->
-                      </div>
-                      <!--end::Info-->
-                    </div>
-                    <!--end::Wrapper-->
-                  </div>
-                  <!--end::Item-->
-                  <!--begin::Separator-->
-                  <hr />
-                  <!--end::Separator-->
-                  <!--begin::Item-->
-                  <div class="d-flex flex-stack mt-3">
-                    <!--begin::Section-->
-                    <div
-                      class="d-flex align-items-center me-5"
-                      style="flex-grow: 1"
-                    >
-                      <!--begin::Symbol-->
-                      <div class="symbol symbol-30px me-5">
-                        <span class="symbol-label">
-                          <i class="ki-duotone ki-magnifier fs-3 text-gray-600">
-                            <!-- 아이콘 사진 넣는 곳 -->
-                            <i class="fa-solid fa-bowl-food"></i>
-                          </i>
-                        </span>
-                      </div>
-                      <!--end::Symbol-->
-                      <!--begin::Content-->
-                      <div class="me-auto">
-                        <!--begin::Title-->
-                        <p style="color: gray; font-size: 0.6rem">서대문역</p>
-                        <span style="color: black; font-size: 1rem"
-                          >한식음식점</span
-                        >
-                        <!--end::Desc-->
-                      </div>
-                      <!--end::Content-->
-                    </div>
-                    <!--end::Section-->
-                    <!--begin::Wrapper-->
-                    <div class="d-flex align-items-center">
-                      <!--begin::Number-->
-                      <span class="text-gray-800 fw-bold fs-6 me-3">124%</span>
-                      <!--end::Number-->
-                      <!--begin::Info-->
-                      <div class="d-flex flex-center">
-                        <!--begin::label-->
-                        <span class="badge badge-light-success fs-base">
-                          <i class="fa-solid fa-angle-up"></i> 4 점포
-                        </span>
-                        <!--end::label-->
-                      </div>
-                      <!--end::Info-->
-                    </div>
-                    <!--end::Wrapper-->
-                  </div>
+
                   <!--end::Item-->
                 </div>
                 <!--end::Items-->
@@ -746,13 +574,16 @@
   </div>
 </template>
 
+<script></script>
+
 <script setup>
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import axios from 'axios';
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 
 const BASEURI = '/api/infoPlaza/businessItem';
 const best5 = ref([]);
+const best5Mylocation = ref([]);
 const worst5 = ref([]);
 const selectedAge = ref('전체');
 const best3Data = ref([
@@ -819,7 +650,17 @@ const fetchTodoList = async () => {
     const response = await axios.get(BASEURI + '/getTotal5');
     if (response.status === 200) {
       best5.value = response.data;
-      console.log(best5.value);
+    } else {
+      console.log('데이터 조회 실패');
+    }
+  } catch (error) {
+    console.log('에러발생 :' + error);
+  }
+  try {
+    // Best 인기 업종 - My location
+    const response = await axios.get(BASEURI + '/getPortion5');
+    if (response.status === 200) {
+      best5Mylocation.value = response.data;
     } else {
       console.log('데이터 조회 실패');
     }

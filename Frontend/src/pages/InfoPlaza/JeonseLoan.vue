@@ -345,7 +345,7 @@
                       href="#"
                       @click.prevent="changePage(1)"
                     >
-                      <<
+                      <i class="fa-solid fa-angles-left"></i>
                     </a>
                   </li>
                   <!-- Previous Page Button -->
@@ -358,8 +358,12 @@
                       href="#"
                       @click.prevent="changePage(currentPage - 1)"
                     >
-                      <i class="bi bi-chevron-left"></i>
+                      <i class="fa-solid fa-angle-left"></i>
                     </a>
+                  </li>
+                  <!-- Ellipsis -->
+                  <li v-if="currentPage >= 7" class="page-item disabled">
+                    <span class="page-link">...</span>
                   </li>
                   <!-- Page Numbers -->
                   <li
@@ -376,6 +380,13 @@
                       {{ page }}
                     </a>
                   </li>
+                  <!-- Ellipsis -->
+                  <li
+                    v-if="currentPage <= totalPages - 10"
+                    class="page-item disabled"
+                  >
+                    <span class="page-link">...</span>
+                  </li>
                   <!-- Next Page Button -->
                   <li
                     class="page-item"
@@ -386,7 +397,7 @@
                       href="#"
                       @click.prevent="changePage(currentPage + 1)"
                     >
-                      <i class="bi bi-chevron-right"></i>
+                      <i class="fa-solid fa-angle-right"></i>
                     </a>
                   </li>
                   <!-- Last Page Button -->
@@ -399,17 +410,11 @@
                       href="#"
                       @click.prevent="changePage(totalPages)"
                     >
-                      >>
+                      <i class="fa-solid fa-angles-right"></i>
                     </a>
                   </li>
                 </ul>
               </nav>
-              <!-- Showing Items Text -->
-              <span class="text-muted text-sm mt-3">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-                {{ Math.min(currentPage * itemsPerPage, totalItems) }} items out
-                of {{ totalItems }} results found
-              </span>
             </div>
           </div>
         </div>

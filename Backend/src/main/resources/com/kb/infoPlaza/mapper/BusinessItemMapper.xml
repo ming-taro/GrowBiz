@@ -38,26 +38,15 @@
     </select>
 
     <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales3
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
-        LIMIT 5
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore) limit 5;
     </select>
 
     <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales3
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore);
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
