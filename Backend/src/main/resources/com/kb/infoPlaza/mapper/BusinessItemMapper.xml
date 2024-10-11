@@ -77,6 +77,14 @@
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
         </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
     </select>
 
     <select id="getFilteredPortionList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
@@ -84,6 +92,12 @@
         WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore)
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
         </if>
     </select>
 
@@ -98,6 +112,14 @@
         </if>
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
         </if>
     </select>
 

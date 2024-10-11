@@ -163,8 +163,8 @@
               <input
                 type="search"
                 class="form-control form-control-lg"
-                placeholder="Search for products"
-                aria-label="Search"
+                placeholder="원하시는 키워드를 입력하세요."
+                v-model="searchInput"
                 style="
                   border: none;
                   border-bottom: 2px solid #ced4da;
@@ -175,6 +175,7 @@
                 type="button"
                 class="btn btn-icon btn-ghost fs-lg text-bo border-0 position-absolute top-0 end-0 rounded-circle mt-1 me-1"
                 aria-label="Search button"
+                @click="changeInputData"
               >
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
@@ -379,11 +380,12 @@ const visiblePages = computed(() => {
   return pages;
 });
 
-// '구' 필터링 변수
+// 필터링 변수
 const selectedSigngu = ref('전체');
 const selectedDong = ref('전체');
 const selectedService = ref('전체');
 const filteredDongs = ref('전체');
+const searchInput = ref('');
 
 const BASEURI = '/api/infoPlaza/businessItem';
 
@@ -399,6 +401,7 @@ const bringDataList = async () => {
         gu: selectedSigngu.value,
         dong: selectedDong.value,
         service: selectedService.value,
+        input: searchInput.value,
       }, // 선택된 필터링 값을 쿼리 파라미터로 전송
     });
     if (response.status === 200) {
@@ -452,6 +455,10 @@ const onServiceChange = (event) => {
   bringDataList();
 };
 
+// '검색' 필터링 함수
+const changeInputData = (event) => {
+  bringDataList();
+};
 // 페이지 변경 메소드
 const changePage = (page) => {
   if (page < 1 || page > totalPages.value) return;
@@ -470,6 +477,7 @@ const refreshIcon = async () => {
       selectedSigngu.value = '전체';
       selectedDong.value = '전체';
       selectedService.value = '전체';
+      searchInput.value = '';
     }, 500); // 애니메이션 시간에 맞춰 0.5초 후 해제
     if (response.status === 200) {
       dataList.value = response.data;
@@ -485,6 +493,10 @@ bringDataList();
 </script>
 
 <style scoped>
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
 .round-corner {
   border-radius: 20px;
 }

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BusinessMyLocationFilterDTO {
     private String service;
+    private String input;
 }
