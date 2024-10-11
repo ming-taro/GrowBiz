@@ -109,6 +109,17 @@ public class MemberService{
         return mapper.selectById(updateMember.getId());
     }
 
+    public Member updateName(Member updateMember, MultipartFile avatar) throws IllegalAccessException {
+        Member oldMember = mapper.selectById(updateMember.getId());
+        System.out.println(updateMember.getId());
+        updateMember.setMno(oldMember.getMno());
+        mapper.updateMemberName(updateMember);
+        if(avatar != null && !avatar.isEmpty()) {
+            saveAvatar(avatar, oldMember.getId());
+        }
+        return mapper.selectById(updateMember.getId());
+    }
+
     public Member delete(String id) {
         Member member = mapper.selectById(id);
         mapper.deleteMember(member.getMno());

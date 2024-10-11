@@ -65,11 +65,18 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Member> changeProfile(MemberDTO memberDTO,
+//                @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
+//        Member member = memberDTO.toMember();
+//        return ResponseEntity.ok(service.update(member, avatar));
+//    }
     @PutMapping("/{id}")
-    public ResponseEntity<Member> changeProfile(MemberDTO memberDTO,
-                @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
+    public ResponseEntity<Member> changeProfileName(@RequestBody MemberDTO memberDTO,
+                                                @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
+        System.out.println("Received memberDTO: " + memberDTO);
         Member member = memberDTO.toMember();
-        return ResponseEntity.ok(service.update(member, avatar));
+        return ResponseEntity.ok(service.updateName(member, avatar));
     }
 
     @DeleteMapping("/{id}")

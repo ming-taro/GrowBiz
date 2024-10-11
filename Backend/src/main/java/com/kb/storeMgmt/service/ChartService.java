@@ -25,4 +25,9 @@ public class ChartService {
     public List<SalesInfoDTO> getmcfirst(SalesInfoDTO salesInfoDTO){
         return chartMapper.getmcfirst(salesInfoDTO);
     }
+
+    public List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO){
+        return chartMapper.getmcsecend(categoriesDTO);
+    }
+
 }

@@ -72,6 +72,31 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getToken = () => state.value.token;
 
+  const changeProfileName = async (member) => {
+    try {
+      console.log('Sending data:', {
+        id: member.id,
+        password: member.password,
+        name: member.name,
+        email: member.email,
+      });
+      const { data } = await axios.put(
+        `http://localhost:8080/api/member/${state.value.name}`,
+        {
+          id: member.id,
+          password: member.password,
+          name: member.name,
+          email: member.email,
+        }
+      );
+      state.value.name = data.name;
+      localStorage.setItem('auth', JSON.stringify(state.value));
+    } catch (error) {
+      console.error('닉네임 변경 오류', error);
+      throw error;
+    }
+  };
+
   const changeProfile = (member) => {
     state.value.name = member.name;
     state.value.email = member.email;
@@ -92,6 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
     email,
     isLogin,
     changeProfile,
+    changeProfileName,
     login,
     logout,
     getToken,

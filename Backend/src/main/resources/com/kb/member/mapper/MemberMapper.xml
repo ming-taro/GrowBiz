@@ -63,6 +63,14 @@
         WHERE mno = #{mno}
     </update>
 
+    <update id="updateMemberName" parameterType="com.kb.member.dto.Member">
+        UPDATE member
+        SET
+            name = #{name},
+            modify_date = now()
+        WHERE mno = #{mno}
+    </update>
+
 
     <update id="updatePassword" parameterType="com.kb.member.dto.Member">
         UPDATE member
