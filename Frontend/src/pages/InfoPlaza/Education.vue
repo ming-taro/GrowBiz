@@ -122,10 +122,10 @@
         <div class="row">
           <div
             class="col-3"
-            v-for="(item, index) in paginatedList"
+            v-for="(item, index) in paginatedData"
             :key="item.vno"
           >
-            <div class="card mb-5" style="cursor: pointer">
+            <div class="card mb-5 hover-card" style="cursor: pointer">
               <img
                 :src="item.thumbnail"
                 class="card-img-top"
@@ -150,22 +150,97 @@
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-center align-items-center mt-4">
-          <button
-            class="btn btn-link"
-            @click="prevPage"
-            :disabled="currentPage === 1"
+        <!-- 페이지네이션 -->
+        <div class="py-4 px-6 mt-3">
+          <div
+            class="row align-items-center justify-content-center text-center"
           >
-            < 이전
-          </button>
-          <span class="mx-3">{{ currentPage }} / {{ totalPages }}</span>
-          <button
-            class="btn btn-link"
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-          >
-            다음 >
-          </button>
+            <div class="col-md-12 d-flex flex-column align-items-center">
+              <!-- Pagination -->
+              <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-spaced gap-1">
+                  <!-- First Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(1)"
+                    >
+                      <i class="fa-solid fa-angles-left"></i>
+                    </a>
+                  </li>
+                  <!-- Previous Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === 1 }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage - 1)"
+                    >
+                      <i class="fa-solid fa-angle-left"></i>
+                    </a>
+                  </li>
+                  <!-- Ellipsis -->
+                  <li v-if="currentPage >= 7" class="page-item disabled">
+                    <span class="page-link">...</span>
+                  </li>
+                  <!-- Page Numbers -->
+                  <li
+                    v-for="page in visiblePages"
+                    :key="page"
+                    class="page-item"
+                    :class="{ active: currentPage === page }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(page)"
+                    >
+                      {{ page }}
+                    </a>
+                  </li>
+                  <!-- Ellipsis -->
+                  <li
+                    v-if="currentPage <= totalPages - 10"
+                    class="page-item disabled"
+                  >
+                    <span class="page-link">...</span>
+                  </li>
+                  <!-- Next Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(currentPage + 1)"
+                    >
+                      <i class="fa-solid fa-angle-right"></i>
+                    </a>
+                  </li>
+                  <!-- Last Page Button -->
+                  <li
+                    class="page-item"
+                    :class="{ disabled: currentPage === totalPages }"
+                  >
+                    <a
+                      class="page-link"
+                      href="#"
+                      @click.prevent="changePage(totalPages)"
+                    >
+                      <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -188,15 +263,37 @@ const searchType = ref(''); // 검색 타입 (과정명, 내용 등)
 const searchValue = ref(''); // 검색어
 
 const totalList = ref([]); // 전체 데이터를 저장할 리스트
-const currentPage = ref(1); // 현재 페이지 번호
-const itemsPerPage = ref(12); // 한 페이지에 보여줄 데이터 개수
 
-// 페이지에 맞는 데이터를 계산하는 computed
-const paginatedList = computed(() => {
+// 페이지네이션 관련 변수
+const currentPage = ref(1); // 현재 페이지
+const itemsPerPage = ref(12); // 한 페이지당 아이템 수
+
+const totalItems = computed(() => totalList.value.length); // 전체 아이템 수
+const totalPages = computed(() =>
+  Math.ceil(totalItems.value / itemsPerPage.value)
+); // 전체 페이지 수
+const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return totalList.value.slice(start, end);
+  return totalList.value.slice(start, start + itemsPerPage.value); // 현재 페이지에 표시할 데이터
 });
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisiblePages = 10; // 한 번에 보여줄 최대 페이지 수
+  const startPage = Math.max(1, currentPage.value - 5);
+
+  const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages.value);
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
+
+// 페이지 변경 메소드
+const changePage = (page) => {
+  if (page < 1 || page > totalPages.value) return;
+  currentPage.value = page;
+};
 
 // 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
 const fetchList = async () => {
@@ -328,25 +425,6 @@ const options = [
   },
 ];
 
-// 총 페이지 수 계산
-const totalPages = computed(() => {
-  return Math.ceil(totalList.value.length / itemsPerPage.value);
-});
-
-// 다음 페이지로 이동
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
-
-// 이전 페이지로 이동
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
-
 // 페이지 로딩 시 데이터 호출
 onMounted(() => {
   fetchList();
@@ -354,6 +432,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translate(
+    -3px,
+    -3px
+  ); /* Moves the card slightly to the top-left */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow effect */
+}
 .form-horizontal {
   margin: 20px;
 }

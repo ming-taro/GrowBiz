@@ -3,7 +3,7 @@
     <div class="container">
     <h2 style="font-weight: bold" class="mb-5">커뮤니티</h2>
     </div>
-    <BoardList :posts="posts" category="food" :showPagination="false" :showSearch="false" :showCreateButton="false" />
+    <BoardList :posts="posts" category="food" :showPagination="false" :showTabs="false" :showSearch="false" :showCreateButton="false" />
 </div>
 </template>
 

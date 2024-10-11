@@ -104,6 +104,7 @@ dependencies {
   // mongo db
   implementation 'org.springframework.data:spring-data-mongodb:2.1.5.RELEASE'
   implementation 'org.mongodb:mongo-java-driver:3.10.1'
+  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 }
 
 

@@ -13,4 +13,5 @@ public class JeonseFilterDTO {
     private String bankName;
     private String repayMethod;
     private String type;
+    private String input;
 }

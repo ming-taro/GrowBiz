@@ -66,5 +66,6 @@ public class LoanService {
 
     public List<KBLoanDTO> getKBLoanRecommand() { return mapper.getKBLoanRecommand();}
 
+    public List<KBLoanDTO> getFilteredKBLoan(KBFilterDTO kbFilter) { return mapper.getFilteredKBLoan(kbFilter); }
 }
 

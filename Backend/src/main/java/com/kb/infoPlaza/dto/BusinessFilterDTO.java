@@ -13,4 +13,5 @@ public class BusinessFilterDTO {
     private String gu;
     private String dong;
     private String service;
+    private String input;
 }

@@ -27,4 +27,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* 텍스트가 blur된 div 위에 표시되도록 z-index를 높임 */
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+}
+</style>

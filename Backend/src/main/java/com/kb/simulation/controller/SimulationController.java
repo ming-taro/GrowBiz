@@ -37,9 +37,13 @@ public class SimulationController {
     @PostMapping("/answer")
     public ResponseEntity<Document> postAnswer(@RequestBody String answer) {
         Document savedData = simulationService.saveAnswer(answer);
+
+        Document responseData = new Document("answer", savedData.get("answer"))
+                .append("id", savedData.getObjectId("_id").toString());
+
         if (savedData == null) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(savedData);
+        return ResponseEntity.ok(responseData);
     }
 }

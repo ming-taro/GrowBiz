@@ -4,7 +4,6 @@
       src="@/assets/img/headers/communityheader.jpg"
       class="result-image mb-10"
     />
-
   </div>
 </template>
 
@@ -85,4 +84,6 @@ onMounted(() => {
   flex: 1;
   text-align: center;
 }
+
+
 </style>

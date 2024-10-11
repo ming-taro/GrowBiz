@@ -10,6 +10,8 @@ const BoardView = () => import('@/pages/community/BoardView.vue');
 const PopularIndustry = () => import('@/pages/InfoPlaza/PopularIndustry.vue');
 const TotalTrendingBusinessItems = () =>
   import('@/pages/InfoPlaza/TotalTrendingBusinessItems.vue');
+const PortionTrendingBusinessItems = () =>
+  import('@/pages/InfoPlaza/PortionTrendingBusinessItems.vue');
 const MylocationTrending = () =>
   import('@/pages/InfoPlaza/MyLocatinTrending.vue');
 const CloseRatio = () => import('@/pages/InfoPlaza/CloseRatio.vue');
@@ -87,6 +89,11 @@ const router = createRouter({
       path: '/infoPlaza/industry/totalTrendingBusinessItems',
       name: 'totalTrendingBusinessItems',
       component: TotalTrendingBusinessItems,
+    },
+    {
+      path: '/infoPlaza/industry/portionTrendingBusinessItems',
+      name: 'portionTrendingBusinessItems',
+      component: PortionTrendingBusinessItems,
     },
     {
       path: '/infoPlaza/industry/mylocationTrending',

@@ -14,4 +14,5 @@ public class NeighborhoodDTO {
     private String id;
     private String addressname;
     private String dongname;
+    private String svcIndutyCdNm;
 }

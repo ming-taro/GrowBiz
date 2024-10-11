@@ -12,25 +12,25 @@ export const getQuestions = async () => {
     });
 };
 
-export const saveSimulationAnswer = async (answer) => {
-  axios
-    .post(
+export const createSimulationAnswer = async (userID, answer) => {
+  try {
+    const response = await axios.post(
       BASE_URL + "/answer",
       {
-        data: answer,
+        user_id: userID,
+        answer: answer,
       },
       {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
       }
-    )
-    .then((response) => {
-      console.log("Data saved successfully:", response.data);
-      return response.data; // 저장된 데이터 반환
-    })
-    .catch((error) => {
-      console.error("Error saving data:", error);
-      throw error; // 오류 발생 시 예외 던지기
-    });
+    );
+
+    console.log("Data saved successfully:", response.data);
+    return response.data; // 저장된 데이터 반환
+  } catch (error) {
+    console.error("Error saving data:", error);
+    throw error; // 오류 발생 시 예외 던지기
+  }
 };
