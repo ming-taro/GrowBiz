@@ -145,9 +145,8 @@ const isLastQuestion = () => {
 const moveReportPage = async () => {
   try {
     const simulationResponse = await createSimulationAnswer(authStore.id, userAnswers);
-    const reportResponse = await createReport(authStore.id, simulationResponse.id);
-    // console.log(response.id.toString()); // 설문조사 데이터 id값
-    location.href = "/simul/report"; // 시뮬레이션 종료
+    const reportId = await createReport(authStore.id, simulationResponse.id);
+    location.href = `/simul/report?id=${reportId}`; // 리포트 페이지로 이동
   } catch (error) {
     console.error("Error during saving simulation answer:", error);
   }
