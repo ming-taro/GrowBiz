@@ -17,10 +17,10 @@ import java.time.ZonedDateTime;
 public class ReportService {
     private final MongoTemplate mongoTemplate;
 
-    public RequestReport findBySimulationResponseId(String id) {
+    public ResponseReport findById(String id) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("simulation_response_id").is(id));
-        return mongoTemplate.findOne(query, RequestReport.class);
+        query.addCriteria(Criteria.where("_id").is(id));
+        return mongoTemplate.findOne(query, ResponseReport.class);
     }
 
     public ResponseReport save(RequestReport requestReport) {

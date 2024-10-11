@@ -22,13 +22,13 @@ public class ReportController {
         return ResponseEntity.ok(savedReport);
     }
 
-    @GetMapping("")
-    public ResponseEntity<RequestReport> findReport(@RequestParam("simulationResponseId") String id) {
-        RequestReport requestReport = reportService.findBySimulationResponseId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseReport> findReportById(@PathVariable("id") String id) {
+        ResponseReport report = reportService.findById(id);
 
-        if (requestReport == null) {
+        if (report == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(requestReport);
+        return ResponseEntity.ok(report);
     }
 }
