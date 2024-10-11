@@ -11,6 +11,7 @@ public interface MemberMapper {
     Member selectById(String id);
     int insertMember(Member member);
     int updateMember(Member member);
+    int updateMemberName(Member member);
     int updatePassword(ChangePasswordDTO changePasswordDTO);
     int deleteMember(long mno);
     int insertAuth(Auth auth);

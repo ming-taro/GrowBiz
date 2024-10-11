@@ -74,15 +74,20 @@ export async function fetchChartData(loanRepaymentStatus) {
   const mcfirst = await axios.get(`/api/chart/mcfirst/${svcIndutyCdNm}`, {
     params: { dongname },
   });
-  const mcsecend = await axios.get(`/api/chart/mcsecend/${svcIndutyCdNm}`, {
-    params: { dongname },
-  });
+  const mcsecend = await axios.get(`/api/chart/mcsecend`);
 
   const mcfirstdata = mcfirst.data;
 
+  const mcsecenddata = mcsecend.data.reduce(
+    (sum, item) => sum + item.amount * 1000,
+    0
+  );
+
   mixed_data2.labels = mcfirstdata.map((item) => item.adstrdCdNm);
   mixed_data2.datasets[0].data = mcfirstdata.map((item) => item.mdwkSelngAmt);
-  // mixed_data2.datasets[1].data = sortedData.map((item) => item.amount);
+  mixed_data2.datasets[1].data = Array(
+    mixed_data2.datasets[0].data.length
+  ).fill(mcsecenddata);
 
   const mixchart = await axios.get(`/api/chart/mixchart`);
 

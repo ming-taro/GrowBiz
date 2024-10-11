@@ -12,4 +12,6 @@ public interface ChartMapper {
 
     List<SalesInfoDTO> getmcfirst(SalesInfoDTO salesInfoDTO);
 
+    List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO);
+
 }

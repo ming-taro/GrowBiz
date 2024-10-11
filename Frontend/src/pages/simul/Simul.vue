@@ -43,7 +43,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { getQuestions, saveSimulationAnswer } from '@/services/QuestionAPI';
+import { createReport } from '@/services/ReportAPI';
+import { getQuestions, createSimulationAnswer } from '@/services/QuestionAPI';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
@@ -93,8 +94,8 @@ const typeQuestion = (fullText) => {
 }
 
 const typeText = (text, typedText, nextText, delay = 0) => {
-  showSpeechBubble.value = false;
-  showChoices.value = false;
+  // showSpeechBubble.value = false; 주석 처리
+  // showChoices.value = false;
   const letters = text.split('');
   let index = 0;
 
@@ -141,6 +142,16 @@ const isLastQuestion = () => {
   return questions.value[questionID.value].ind == lastQuestionID;
 }
 
+const moveReportPage = async () => {
+  try {
+    const simulationResponse = await createSimulationAnswer(authStore.id, userAnswers);
+    const reportId = await createReport(authStore.id, simulationResponse.id);
+    location.href = `/simul/report?id=${reportId}`; // 리포트 페이지로 이동
+  } catch (error) {
+    console.error("Error during saving simulation answer:", error);
+  }
+};
+
 const updateFirstChoice = () => {
   userChoice = {};             // 유저 답변 초기화
   currentChoiceType.value = 0; // 선택 번호 초기화
@@ -157,7 +168,7 @@ const updateFirstChoice = () => {
   }
 }
 
-const updateChoice = (choice, index) => {
+const updateChoice = async (choice, index) => {
   let dataType = choiceType.value[currentChoiceType.value];
   userChoice[dataType] = choice;
 
@@ -165,8 +176,7 @@ const updateChoice = (choice, index) => {
     userAnswers[questionID.value] = userChoice;
 
     if (isLastQuestion()) {
-      saveSimulationAnswer(authStore.id, userAnswers);
-      location.href = "/simul/report"; // 시뮬레이션 종료
+      moveReportPage();
       return;
     }
 

@@ -1,5 +1,63 @@
 <template>
   <div class="container">
+    <div class="row mb-10" v-if="showTabs">
+      <ul
+        class="nav nav-tabs custom justify-content-center"
+        id="myTab"
+        role="tablist"
+      >
+        <li class="nav-item">
+          <RouterLink
+            class="nav-link"
+            :class="{ active: category === 'food' }" 
+            to="/community/food"
+            @mouseover="hoveredCategory = 'food'" 
+            @mouseleave="hoveredCategory = ''" 
+            ><h4>음식/음료</h4></RouterLink
+          >
+        </li>
+        <li class="nav-item">
+          <RouterLink
+          class="nav-link"
+          :class="{ active: category === 'distribution' }" 
+          to="/community/distribution"
+          @mouseover="hoveredCategory = 'distribution'"
+          @mouseleave="hoveredCategory = ''"
+          ><h4>유통</h4></RouterLink
+        >
+        </li>
+        <li class="nav-item">
+          <RouterLink
+            class="nav-link"
+            :class="{ active: category === 'fashion' }"
+            to="/community/fashion"
+            @mouseover="hoveredCategory = 'fashion'"
+            @mouseleave="hoveredCategory = ''"
+            ><h4>패션/뷰티</h4></RouterLink
+          >
+        </li>
+        <li class="nav-item">
+          <RouterLink
+            class="nav-link"
+            :class="{ active: category === 'medical' }"
+            to="/community/medical"
+            @mouseover="hoveredCategory = 'medical'"
+            @mouseleave="hoveredCategory = ''"
+            ><h4>의료</h4></RouterLink
+          >
+        </li>
+        <li class="nav-item">
+          <RouterLink
+          class="nav-link"
+          :class="{ active: category === 'leisure' }"
+          to="/community/leisure"
+          @mouseover="hoveredCategory = 'leisure'"
+          @mouseleave="hoveredCategory = ''"
+          ><h4>여가/오락</h4></RouterLink
+        >
+        </li>
+      </ul>
+    </div>
     <!-- 검색 기능 -->
     <div v-if="showSearch" class="row mb-10 justify-content-center">
       <div class="col-8">
@@ -27,7 +85,7 @@
           </form>
 
           <!-- 작성 버튼 추가 -->
-          <div v-if="showCreateButton" class="ms-2">
+          <div v-if="showCreateButton && loggedInUserId" class="ms-2"> <!-- 로그인한 ID가 있을 때만 보이도록 설정 -->
             <button type="button" @click="createPost" class="btn btn-sm btn-primary">글작성</button>
           </div>
         </div>
@@ -62,20 +120,94 @@
       </div>
       
       <!-- 페이지네이션 기능 -->
-      <div v-if="showPagination" class="py-4 px-6 d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination pagination-spaced gap-1">
-            <li class="page-item" :class="{ disabled: currentPage === 1 }">
-              <a class="page-link" @click="changePage(currentPage - 1)" href="#"><</a>
-            </li>
-            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
-              <a class="page-link" @click="changePage(page)" href="#">{{ page }}</a>
-            </li>
-            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-              <a class="page-link" @click="changePage(currentPage + 1)" href="#">></a>
-            </li>
-          </ul>
-        </nav>
+      <div v-if="showPagination" class="py-4 px-6 mt-3">
+        <div
+          class="row align-items-center justify-content-center text-center"
+        >
+          <div class="col-md-12 d-flex flex-column align-items-center">
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-spaced gap-1">
+                <!-- First Page Button -->
+                <li class="page-item"
+                  :class="{ disabled: currentPage === 1 }">
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="changePage(1)"
+                  >
+                    <i class="fa-solid fa-angles-left"></i>
+                  </a>
+                </li>
+                <!-- Previous Page Button -->
+                <li
+                  class="page-item"
+                  :class="{ disabled: currentPage === 1 }"
+                >
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="changePage(currentPage - 1)"
+                  >
+                    <i class="fa-solid fa-angle-left"></i>
+                  </a>
+                </li>
+                <!-- Ellipsis -->
+                <li v-if="currentPage >= 7" class="page-item disabled">
+                  <span class="page-link">...</span>
+                </li>
+                <!-- Page Numbers -->
+                <li
+                  v-for="page in totalPages"
+                  :key="page"
+                  class="page-item"
+                  :class="{ active: currentPage === page }"
+                >
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="changePage(page)"
+                  >
+                    {{ page }}
+                  </a>
+                </li>
+                <!-- Ellipsis -->
+                <li
+                  v-if="currentPage <= totalPages - 10"
+                  class="page-item disabled"
+                >
+                  <span class="page-link">...</span>
+                </li>
+                <!-- Next Page Button -->
+                <li
+                  class="page-item"
+                  :class="{ disabled: currentPage === totalPages }"
+                >
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="changePage(currentPage + 1)"
+                  >
+                    <i class="fa-solid fa-angle-right"></i>
+                  </a>
+                </li>
+                <!-- Last Page Button -->
+                <li
+                  class="page-item"
+                  :class="{ disabled: currentPage === totalPages }"
+                >
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="changePage(totalPages)"
+                  >
+                    <i class="fa-solid fa-angles-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
 </div>
@@ -87,6 +219,11 @@ import { ref, watch, computed } from 'vue'; // computed 추가
 import { defineProps } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // useRouter 추가
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
+
+const auth = useAuthStore();
+const loggedInUserId = computed(() => auth.name);
+
 
 const router = useRouter(); // router 정의
 
@@ -100,6 +237,10 @@ const props = defineProps({
     required: true
   },
   showPagination: {
+    type: Boolean,
+    default: true
+  },
+  showTabs: {
     type: Boolean,
     default: true
   },
@@ -178,4 +319,38 @@ const createPost = () => {
 </script>
 
 <style scoped>
+
+
+
+/* nav 아래 hr 같은 선 제거 */
+.nav {
+  border-bottom: none !important;
+}
+
+/* li 간격을 늘리기 위한 스타일 */
+.nav-item {
+  margin: 0 30px; /* li 요소 간의 좌우 간격을 15px로 설정 */
+}
+/* 활성화된 탭 스타일 */
+.nav-link.active {
+  background-color: transparent !important; /* 배경 투명 */
+  border-bottom: 2px solid #007bff !important; /* 파란색 밑줄 */
+  border-radius: 0 !important; /* 테두리 둥글게 하지 않음 */
+  border-width: 0;
+}
+
+.nav-link.active h4 {
+  color: #0056b3 !important; /* 파란색 텍스트 */
+}
+
+/* 비활성화된 탭 스타일 */
+.nav-link {
+  color: #555 !important; /* 약간 어두운 회색 텍스트 */
+  border-width: 0;
+}
+
+.nav-link:hover h4 {
+  color: #007bff !important; /* 호버 시 파란색 */
+  text-decoration: none !important; /* 호버 시 밑줄 제거 */
+}
 </style>
