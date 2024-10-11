@@ -1,6 +1,8 @@
 package com.kb.simulation.service;
 
 import com.kb.simulation.dto.question.Question;
+import com.kb.simulation.dto.report.ResponseReport;
+import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,15 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class SimulationService {
     private final MongoTemplate mongoTemplate;
     private final String QUESTION_ID = "ind";
-
-    @Autowired
-    public SimulationService(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
+    private final String SIMULATION_RESPONSE_COLLECTION = "simulation_response";
 
     public Question<?> findQuestionById(int id) {
         Query query = new Query();
@@ -33,8 +32,14 @@ public class SimulationService {
         return question;
     }
 
-    public Document saveAnswer(String answer) {
+    public Document createResponse(String answer) {
         Document document = Document.parse(answer);
-        return mongoTemplate.save(document, "simulation_response");
+        return mongoTemplate.save(document, SIMULATION_RESPONSE_COLLECTION);
+    }
+
+    public Document findResponseById(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
     }
 }

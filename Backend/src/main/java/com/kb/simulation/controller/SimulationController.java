@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,8 +36,8 @@ public class SimulationController {
     }
 
     @PostMapping("/answer")
-    public ResponseEntity<Document> postAnswer(@RequestBody String answer) {
-        Document savedData = simulationService.saveAnswer(answer);
+    public ResponseEntity<Document> createResponse(@RequestBody String answer) {
+        Document savedData = simulationService.createResponse(answer);
 
         Document responseData = new Document("answer", savedData.get("answer"))
                 .append("id", savedData.getObjectId("_id").toString());
@@ -45,5 +46,15 @@ public class SimulationController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(responseData);
+    }
+
+    @GetMapping("/answer/{id}")
+    public ResponseEntity<Document> findResponseById(@PathVariable("id") String id) {
+        Document response = simulationService.findResponseById(id);
+
+        if (response == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }
