@@ -73,6 +73,27 @@ const progressBarWidth = computed(() => {
   return `${((questionID.value + 1) / totalSteps.value) * 100}%`;
 });
 
+const typeQuestion = (fullText) => {
+  const result = fullText.split(" ");
+  let text = "";
+  let nextText = "";
+
+  for (let i = 0; i < result.length; i++) {
+    if (text.length + result.length <= 24) {
+      text += result[i] + " ";
+      console.log("텍스트: ", text.length);
+    } else {
+      nextText += result[i] + " ";
+      console.log("다음 텍스트: ", nextText.length);
+    }
+  }
+
+  typedTextLine1.value = ""; // 질문지 갱신
+  typedTextLine2.value = "";
+
+  typeText(text, typedTextLine1, nextText);
+}
+
 const typeText = (text, typedText, nextText, delay = 0) => {
   showSpeechBubble.value = false;
   showChoices.value = false;
@@ -128,8 +149,7 @@ const updateFirstChoice = () => {
   currentChoices.value = questions.value[questionID.value].choices;
   choiceType.value = findChoiceType(questions.value[questionID.value].choices[0]); // 질문에 대한 답변 유형 갱신
 
-  typedTextLine1.value = ""; // 질문지 갱신
-  typeText(questions.value[questionID.value].fullTexts, typedTextLine1, "")
+  typeQuestion(questions.value[questionID.value].fullTexts)
 
   let dataType = choiceType.value[currentChoiceType.value];
 
