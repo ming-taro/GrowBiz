@@ -81,10 +81,8 @@ const typeQuestion = (fullText) => {
   for (let i = 0; i < result.length; i++) {
     if (text.length + result.length <= 24) {
       text += result[i] + " ";
-      console.log("텍스트: ", text.length);
     } else {
       nextText += result[i] + " ";
-      console.log("다음 텍스트: ", nextText.length);
     }
   }
 
