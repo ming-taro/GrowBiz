@@ -113,7 +113,6 @@ const fetchTodoList = async () => {
     const response = await axios.get(BASEURI + '/getTotal5');
     if (response.status === 200) {
       best5.value = response.data;
-      console.log(best5.value);
     } else {
       console.log('데이터 조회 실패');
     }
