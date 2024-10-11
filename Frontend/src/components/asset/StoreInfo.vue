@@ -114,6 +114,12 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
+
 export default {
   name: 'StoreInfo',
   setup() {
@@ -156,7 +162,18 @@ export default {
 
     // 페이지 로딩 시 로그인 상태 확인하는 함수
     const checkUserId = () => {
-      const userId = store.userId; // 예시로 store에서 userId를 가져옴
+      const blur_overlay = document.getElementById('blur-overlay');
+      const blur = document.getElementById('blur');
+      const blur_text = document.getElementById('blur-text');
+
+      blur_text.style.display = 'none';
+
+      if (mno == undefined) {
+        blur_text.style.display = '';
+        blur_overlay.classList.add('blur-overlay');
+        blur.classList.add('blur');
+        blur_text.classList.add('blur-text');
+      }
     };
 
     return {
@@ -206,7 +223,7 @@ export default {
   z-index: 2;
 }
 
-.text {
+.blur-text {
   position: absolute;
   top: 50%;
   left: 50%;

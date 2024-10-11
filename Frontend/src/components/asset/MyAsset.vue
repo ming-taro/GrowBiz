@@ -2,7 +2,11 @@
   <div>
     <div class="title">추천 위치</div>
     <div class="row">
-      <div class="wid-half">
+      <div :class="{ blur_text: isActive }">
+        로그인 후 이용하실 수 있습니다.
+      </div>
+      <div class="wid-half" :class="{ blur: isActive }">
+        <div :class="{ blur_overlay: isActive }"></div>
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="wid-half">
@@ -15,11 +19,13 @@
 <script>
 import axios from 'axios';
 
-import { useAuthStore } from '@/stores/auth'; // Import your auth store
+import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
 
 const mno = authStore.state.mno;
+
+const id = '1234';
 
 export default {
   data() {
@@ -28,6 +34,7 @@ export default {
       address: '', // 초기 주소를 설정할 수 있습니다.
       geocoder: null, // Geocoder 추가
       markerImage: 'null', // 커스텀 마커 이미지
+      isActive: true,
     };
   },
   mounted() {
@@ -60,11 +67,8 @@ export default {
       this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     },
     async fetchAddress() {
-      const id = '';
-
-      if (mno == undefined) {
-        id = '1234';
-      } else {
+      if (mno != undefined) {
+        this.isActive = false;
         id = mno;
       }
       try {
@@ -169,5 +173,34 @@ import MyMapGraph from '@/components/asset/MyMapGraph.vue';
 }
 .wid-half {
   width: 50%;
+}
+
+.blur {
+  background-size: cover;
+  filter: blur(5px);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 2;
+}
+
+.blur-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
