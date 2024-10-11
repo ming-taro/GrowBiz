@@ -42,8 +42,8 @@ public class ChartController {
         return chartService.getmcfirst(salesInfoDTO);
     }
 
-    @GetMapping("/mixchart")
+    @GetMapping("/mcsecend")
     public List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO) {
-        return chartService.getMixAddress(categoriesDTO);
+        return chartService.getmcsecend(categoriesDTO);
     }
 }

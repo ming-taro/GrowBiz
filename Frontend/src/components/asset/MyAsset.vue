@@ -15,7 +15,11 @@
 <script>
 import axios from 'axios';
 
-const id = '1234';
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
 
 export default {
   data() {
@@ -56,6 +60,13 @@ export default {
       this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     },
     async fetchAddress() {
+      const id = '';
+
+      if (mno == undefined) {
+        id = '1234';
+      } else {
+        id = mno;
+      }
       try {
         const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
         this.address = response.data.address; // 응답 데이터에서 주소를 가져와서 설정
