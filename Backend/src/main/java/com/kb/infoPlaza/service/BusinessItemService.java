@@ -1,9 +1,6 @@
 package com.kb.infoPlaza.service;
 
-import com.kb.infoPlaza.dto.Best3DTO;
-import com.kb.infoPlaza.dto.BusinessClosureDTO;
-import com.kb.infoPlaza.dto.BusinessFilterDTO;
-import com.kb.infoPlaza.dto.BusinessItemDTO;
+import com.kb.infoPlaza.dto.*;
 import com.kb.infoPlaza.mapper.BusinessItemMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -30,6 +27,8 @@ public class BusinessItemService {
     }
 
     public List<BusinessItemDTO> getFilteredList(BusinessFilterDTO businessFilter) { return mapper.getFilteredList(businessFilter); }
+
+    public List<BusinessItemDTO> getFilteredPortionList(BusinessMyLocationFilterDTO businessMyLocationFilter) { return mapper.getFilteredPortionList(businessMyLocationFilter); }
 
     public List<BusinessClosureDTO> getFilteredCloseList(BusinessFilterDTO businessFilter) { return mapper.getFilteredCloseList(businessFilter); }
 

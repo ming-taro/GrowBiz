@@ -79,6 +79,14 @@
         </if>
     </select>
 
+    <select id="getFilteredPortionList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore)
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+    </select>
+
     <select id="getFilteredCloseList" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
         SELECT * FROM business_closures4
         WHERE 1=1

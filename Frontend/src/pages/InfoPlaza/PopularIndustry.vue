@@ -314,11 +314,20 @@
                         <!--begin::Info-->
                         <div class="d-flex flex-center">
                           <!--begin::label-->
-                          <span
-                            class="badge badge-light-success fs-base text-center"
-                          >
-                            <i class="fa-solid fa-angle-up"></i>
-                            {{ item.opbizStorCo }} 점포
+                          <span v-if="item.opbizStorCo > 0">
+                            <span
+                              class="badge badge-light-success fs-base text-center"
+                            >
+                              <i class="fa-solid fa-angle-up"></i>
+                              {{ item.opbizStorCo }} 점포</span
+                            >
+                          </span>
+                          <span v-else>
+                            <span
+                              class="badge badge-light-middle fs-base text-center"
+                            >
+                              {{ item.opbizStorCo }} 점포</span
+                            >
                           </span>
                           <!--end::label-->
                         </div>
@@ -357,7 +366,7 @@
                     </span>
                     <!--end::Title-->
                     <router-link
-                      to="/infoPlaza/industry/totalTrendingBusinessItems"
+                      to="/infoPlaza/industry/portionTrendingBusinessItems"
                       class="ms-auto"
                       style="font-size: 13px"
                     >
@@ -433,11 +442,21 @@
                         <!--begin::Info-->
                         <div class="d-flex flex-center">
                           <!--begin::label-->
-                          <span
-                            class="badge badge-light-success fs-base text-center"
-                          >
-                            <i class="fa-solid fa-angle-up"></i>
-                            {{ item.opbizStorCo }} 점포
+                          <span v-if="item.opbizStorCo > 0">
+                            <span
+                              class="badge badge-light-success fs-base text-center"
+                            >
+                              <i class="fa-solid fa-angle-up"></i>
+                              {{ item.opbizStorCo }} 점포</span
+                            >
+                          </span>
+                          <span v-else>
+                            <span
+                              class="badge badge-light-middle fs-base text-center"
+                            >
+                              <i class="fa-solid fa-minus"></i>
+                              {{ item.opbizStorCo }} 점포</span
+                            >
                           </span>
                           <!--end::label-->
                         </div>
@@ -699,6 +718,10 @@ fetchTodoList();
 </script>
 
 <style scoped>
+.badge-light-middle {
+  background-color: rgba(255, 165, 0, 0.1); /* 연한 오렌지색 배경 */
+  color: #ff8c00; /* 짙은 오렌지색 텍스트 */
+}
 .badge-light-success {
   background-color: #d4edda !important; /* 밝은 녹색 배경색 */
   color: #155724 !important; /* 진한 녹색 텍스트 */
