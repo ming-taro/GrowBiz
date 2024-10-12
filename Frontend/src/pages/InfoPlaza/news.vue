@@ -53,7 +53,12 @@
       </div>
     </div>
 
-    <div class="container_news">
+    <div v-if="loading" class="loading-container text-center"> 
+      <img src="@/assets/img/common/loading.jpg" alt="Loading..." class="loading-image" />
+      <span>데이터 불러오는 중...</span>
+    </div>
+
+    <div class="container_news" v-else>
       <div v-for="news in newsList" :key="news.link" class="col-12 mb-3">
         <div class="card">
           <div class="row g-0">
@@ -93,7 +98,9 @@ import axios from 'axios';
 const newsList = ref([]);
 const currentDate = ref(new Date());
 const category = ref('');
-const hoveredCategory = ref(''); // Add hovered category
+const hoveredCategory = ref('');
+const loading = ref(true); // 로딩 상태 관리
+const cachedNews = ref({}); // 캐시된 뉴스 데이터
 
 const categoryMap = {
   economy: '경제',
@@ -113,6 +120,15 @@ const formattedDate = computed(() => {
 });
 
 async function getNews(query, date) {
+  loading.value = true; // 요청 시작 시 로딩 상태 설정
+
+  // 캐시된 데이터가 있는지 확인
+  if (cachedNews[query]) {
+    newsList.value = cachedNews[query];
+    loading.value = false; // 로딩 상태 해제
+    return;
+  }
+
   try {
     const response = await axios.get('/api/news', {
       params: {
@@ -134,20 +150,22 @@ async function getNews(query, date) {
       thumbnail: item.thumbnail || 'https://via.placeholder.com/150',
       date: new Date().toLocaleDateString(),
     }));
+
+    // 요청 성공 시 캐시에 저장
+    cachedNews[query] = newsList.value;
   } catch (error) {
     console.error('뉴스 검색 중 오류 발생:', error);
+  } finally {
+    loading.value = false; // 요청 완료 후 로딩 상태 해제
   }
 }
 
 watchEffect(() => {
-  const routeCategory = route.params.category;  // 라우트에서 카테고리 값 가져오기
-  category.value = categoryMap[routeCategory] || '경제'; // category는 한글로 설정
-
-  // getNews 호출 시 한글 카테고리 사용
+  const routeCategory = route.params.category;
+  category.value = categoryMap[routeCategory] || '경제';
+  
   getNews(category.value, formattedDate.value);
 });
-
-
 
 onMounted(() => {
   getNews(category.value, formattedDate.value);
@@ -192,5 +210,19 @@ onMounted(() => {
   color: #007bff !important;
   text-decoration: none !important;
 }
+.loading-image {
+  width: 50px; /* 적절한 크기로 변경 */
+  height: 50px; /* 비율에 맞게 높이 자동 조정 */
+  margin-bottom: 20px; /* 이미지와 텍스트 간격 조정 */
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: top; /* 수평 중앙 정렬 */
+  height: calc(100vh - 100px); /* 헤더 높이를 고려한 조정 (80px는 필요에 따라 변경) */
+  margin-top: 100px; /* 적절한 마진을 추가하여 아래로 내리기 */
+}
+
 
 </style>
