@@ -142,7 +142,6 @@ async function getNews(query, date) {
 watchEffect(() => {
   const routeCategory = route.params.category;  // 라우트에서 카테고리 값 가져오기
   category.value = categoryMap[routeCategory] || '경제'; // category는 한글로 설정
-  console.log(category.value); // 현재 카테고리 출력 (한글)
 
   // getNews 호출 시 한글 카테고리 사용
   getNews(category.value, formattedDate.value);
