@@ -34,7 +34,6 @@ import { onMounted, ref } from 'vue';
 import { fetchReportById } from '@/services/ReportAPI';
 import { findLocation } from '@/services/SimulationAPI';
 
-
 const report = ref(null);
 const location = ref(null);
 
