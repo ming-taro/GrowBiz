@@ -302,15 +302,12 @@ const changePage = (page) => {
 // 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
 const fetchList = async () => {
   try {
-    console.log('TRYING......');
     // 전체 데이터 불러오기
     const response = await axios.get(
       'http://localhost:8080/api/infoPlaza/education/list'
     );
     if (response.status === 200) {
-      console.log('데이터 조회 시작');
       totalList.value = response.data; // 조회된 데이터를 totalList에 저장
-      console.log(totalList.value);
     } else {
       alert('데이터 조회 실패');
     }
@@ -319,19 +316,26 @@ const fetchList = async () => {
   }
 };
 const submitOptions = async () => {
-  console.log('submitOptions 호출됨');
-  console.log('현재 searchType:', searchType.value); // searchType 값을 로그로 확인
-  
+
+  // Check if both options are selected and searchValue is not empty
+  const hasSelectedOptions = Object.values(selectedOptions.value).some(
+    (options) => options.length > 0
+  );
+
+  if (searchValue.value.trim() && hasSelectedOptions) {
+    alert('키워드 검색을 하려면 선택된 옵션을 해제해야 합니다.');
+    return; // Prevent form submission if both are filled
+  }
+
   // 키워드가 입력되었을 경우
   if (searchValue.value.trim()) {
-    console.log('키워드 검색:', searchValue.value);
     await searchByKeyword(searchValue.value, searchType.value);
     return; // 키워드 검색 후 함수 종료
   }
 
   // 옵션이 선택된 경우
   const selectedQuery = {};
-  
+
   if (selectedOptions.value['사업주기'].length > 0) {
     selectedQuery['사업주기'] = selectedOptions.value['사업주기'].join(',');
   }
@@ -344,17 +348,15 @@ const submitOptions = async () => {
 
   // 선택된 옵션이 없으면 아무 것도 하지 않음
   if (Object.keys(selectedQuery).length === 0) {
-    console.log('선택된 옵션이 없습니다. 검색을 진행하지 않습니다.');
     return; // 아무 일도 하지 않음
   }
 
-  console.log('전송 할 쿼리', selectedQuery); // 전송할 쿼리 로그
   await searchByOptions(selectedQuery); // 옵션을 기반으로 검색
 };
 
 
+
 const searchByKeyword = async (keyword, type) => {
-  console.log('searchByKeyword 호출됨:', keyword, type); // 추가된 로그
   try {
     const response = await axios.get(`http://localhost:8080/api/infoPlaza/education/search/keyword`, {
       params: {
@@ -365,7 +367,6 @@ const searchByKeyword = async (keyword, type) => {
 
     if (response.status === 200) {
       totalList.value = response.data.content || response.data; // content가 없는 경우 전체 데이터 사용
-      console.log('키워드 검색 결과:', totalList.value);
     } else {
       console.error('키워드 검색 실패:', response.status);
     }
@@ -392,7 +393,6 @@ const searchByOptions = async (selectedQuery) => {
     const response = await axios.get(url.toString());
     if (response.status === 200) {
       totalList.value = response.data.content || response.data; // content가 없는 경우 전체 데이터 사용
-      console.log('옵션 검색 결과:', totalList.value);
     } else {
       console.error('옵션 검색 실패:', response.status);
     }
@@ -412,10 +412,8 @@ const load = async (options) => {
       url.searchParams.append('option', option);
     });
 
-    console.log('요청 URL:', url.toString()); // 디버깅용 URL 출력
 
     const response = await axios.get(url.toString());
-    console.log('전체 응답 데이터:', response.data);
 
     if (response.status === 200) {
       if (response.data.content) {
@@ -423,7 +421,6 @@ const load = async (options) => {
       } else {
         totalList.value = response.data; // content가 없는 경우 전체 데이터 사용
       }
-      console.log('설정된 totalList:', totalList.value);
     } else {
       console.error('데이터 조회 실패:', response.status);
     }
