@@ -2,6 +2,12 @@
   <div>
     <CommunityHeader />
     <div class="container">
+      <!-- 로딩 메시지 -->
+      <div v-if="loadingPost" class="loading-container text-center">
+        <img src="@/assets/img/common/loading.jpg" alt="Loading..." class="loading-image" />
+        <span>게시글 불러오는 중...</span>
+      </div>
+      
       <div class="d-flex justify-content-between fw-semibold mb-4 align-items-center"> <!-- align-items-center 추가 -->
         <h2>
         <span class="">{{ post.title }}</span></h2>
@@ -147,24 +153,27 @@ const newComment = ref('');
 const comments = ref([]);
 let commentToDelete = ref(null); // 삭제할 댓글 ID
 
-onMounted(() => {
-  fetchPost();
-  fetchComments();
+onMounted(async () => {
+  await fetchPost();
+  await fetchComments();
   category.value = route.params.category;
 });
+const loadingPost = ref(true);
 
 const fetchPost = async () => {
+  loadingPost.value = true; // 로딩 시작
   const postId = route.params.postId;
-  
+
   try {
-    // 그 다음 게시글 데이터 가져오기
     const response = await axios.get(`http://localhost:8080/api/community/view/${postId}`);
     post.value = response.data; // 받아온 게시글 데이터 설정
   } catch (error) {
     console.error('Failed to fetch post:', error);
+  } finally {
+    loadingPost.value = false; // 로딩 종료
   }
 };
-// Fetch comments data
+
 const fetchComments = async () => {
   const postId = route.params.postId;
   try {
@@ -173,7 +182,7 @@ const fetchComments = async () => {
     calculateTotalPages(); // Update total pages after fetching comments
   } catch (error) {
     console.error('Failed to fetch comments:', error);
-  }
+  } 
 };
 
 // Calculate total pages for comments
@@ -254,18 +263,18 @@ const hideCommentDeleteModal = () => {
   isCommentModalVisible.value = false;
 };
 
-// Confirm comment deletion
 const confirmCommentDelete = async () => {
-  try {
-    await axios.delete(`http://localhost:8080/api/community/comment/${commentToDelete.value}`);
-    comments.value = comments.value.filter(comment => comment.commentId !== commentToDelete.value); // Remove from list
-    calculateTotalPages(); // Update total pages after deleting
-  } catch (error) {
-    console.error('Failed to delete comment:', error);
-    alert('Failed to delete comment.');
-  } finally {
-    hideCommentDeleteModal(); // Hide modal
-  }
+    try {
+        await axios.delete(`http://localhost:8080/api/community/comment/${commentToDelete.value}`, {
+            params: { userId: loggedInUserId.value } // 여기에서 userId 추가
+        });
+        comments.value = comments.value.filter(comment => comment.commentId !== commentToDelete.value);
+        calculateTotalPages(); // 삭제 후 총 페이지 수 업데이트
+    } catch (error) {
+        console.error('댓글 삭제에 실패했습니다:', error);
+    } finally {
+        hideCommentDeleteModal(); // 모달 숨기기
+    }
 };
 
 // 좋아요 추가
@@ -299,5 +308,18 @@ const dislikePost = async (postId) => {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1050;
+}
+.loading-image {
+  width: 50px; /* 적절한 크기로 변경 */
+  height: 50px; /* 비율에 맞게 높이 자동 조정 */
+  margin-bottom: 20px; /* 이미지와 텍스트 간격 조정 */
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: top; /* 수평 중앙 정렬 */
+  height: calc(100vh - 100px); /* 헤더 높이를 고려한 조정 (80px는 필요에 따라 변경) */
+  margin-top: 100px; /* 적절한 마진을 추가하여 아래로 내리기 */
 }
 </style>

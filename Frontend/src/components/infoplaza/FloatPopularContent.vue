@@ -77,7 +77,7 @@ const propertys = ref([]);
 let kakaoMap; // Declare a variable to hold the map instance
 const selectedCity = ref('서울특별시');
 const selectedDistrict = ref('광진구');
-const selectedTown = ref('화양동');
+const selectedTown = ref('광장동');
 const districts = ref([]);
 const towns = ref([]);
 let markers = [];
@@ -98,10 +98,12 @@ const cities = [
 ];
 
 onMounted(async () => {
-  loadKakaoMap(mapContainer.value);
-  await fetchDistinctDistricts(); // 중복 제거된 구 가져오기
-  fetchLocation(); // 지도 로드 시 개포1동의 주변 동 가져오기
+    await loadKakaoMap(mapContainer.value);
+    await fetchDistinctDistricts();
+    // 맵이 초기화된 후에만 fetchLocation 호출
+    fetchLocation();
 });
+
 
 // Load Kakao Map
 const loadKakaoMap = (container) => {
@@ -139,7 +141,7 @@ const fetchDistinctDistricts = async () => {
     // 1. 기본값 미리 설정
     districts.value = [{ guName: '광진구' }];
     selectedDistrict.value = '광진구';
-    towns.value = '광장동'; // 초기화
+    towns.value = [{ dongName: '광장동' }];
     selectedTown.value = '광장동'; // 초기화
 
     // 2. 비동기적으로 데이터 불러오기
@@ -297,7 +299,7 @@ const displayMarkers = (populationData) => {
           title: adstrdCdNm,
           image: new window.kakao.maps.MarkerImage(
             `/src/assets/img/infoplaza/marker_${markerColor}.png`,
-            new window.kakao.maps.Size(35, 35)
+            new window.kakao.maps.Size(50, 50)
           ),
         });
 

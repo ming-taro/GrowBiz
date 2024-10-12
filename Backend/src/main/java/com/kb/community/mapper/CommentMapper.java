@@ -12,5 +12,5 @@ public interface CommentMapper {
     void insertComment(CommentDTO commentDTO);
 
     // 댓글 삭제
-    void deleteComment(@Param("commentId") Long commentId); // 댓글 삭제 메서드 추가
+    void deleteComment(@Param("commentId") Long commentId, @Param("userId") String userId);
 }

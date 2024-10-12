@@ -26,7 +26,7 @@ public class CommentService {
 
     // 댓글 삭제
     @Transactional
-    public void deleteComment(Long commentId) {
-        commentMapper.deleteComment(commentId);
+    public void deleteComment(Long commentId, String userId) {
+        commentMapper.deleteComment(commentId, userId); // userId를 파라미터로 추가
     }
 }
