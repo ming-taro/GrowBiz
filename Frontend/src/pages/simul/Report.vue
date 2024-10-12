@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 헤더 -->
-    <Result v-if="report != null" v-bind:simulationResponseId=report.simulationResponseId />
+    <Result v-if="report != null" v-bind:simulation_response_id=report.simulation_response_id />
     <!-- <Result /> -->
 
     <div class="container mw-screen-xl">
@@ -38,7 +38,7 @@ const report = ref(null);
 const location = ref(null);
 
 const storeLocation = async () => {
-  const id = report.value.simulationResponseId;
+  const id = report.value.simulation_response_id;
   location.value = await findLocation(id);
 }
 
@@ -48,7 +48,6 @@ const storeReport = async () => {
   let reportId = param.get('id');
 
   console.log("리포트 아이디:", reportId);
-  
   report.value = await fetchReportById(reportId);
 }
 

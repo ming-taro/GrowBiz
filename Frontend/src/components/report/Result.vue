@@ -39,11 +39,11 @@
 import { onMounted, ref, defineProps } from 'vue'
 import { fetchResponseById } from '@/services/SimulationAPI';
 
-const props = defineProps(["simulationResponseId"]);
+const props = defineProps(["simulation_response_id"]);
 const simulationResponse = ref([]);
 
 onMounted(async() => {
-  simulationResponse.value = await fetchResponseById(props.simulationResponseId);
+  simulationResponse.value = await fetchResponseById(props.simulation_response_id);
 })
 </script>
 
