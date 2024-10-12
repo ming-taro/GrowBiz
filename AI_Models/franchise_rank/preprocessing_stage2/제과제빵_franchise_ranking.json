@@ -1,0 +1,58 @@
+[
+    {
+        "rank": 1,
+        "store_name": "던킨/던킨도너츠",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "23.14%",
+        "closure_rate": "6.96%",
+        "average_sales": "42014700.00 만원",
+        "average_sales_per_area": "22791.00 만원",
+        "initial_cost": "291504.00 만원",
+        "business_fee": "50450.00 만원",
+        "interior_cost": "92100.00 만원",
+        "score": "100.00"
+    },
+    {
+        "rank": 2,
+        "store_name": "코코호도",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "10.21%",
+        "closure_rate": "0.00%",
+        "average_sales": "17450800.00 만원",
+        "average_sales_per_area": "18599.00 만원",
+        "initial_cost": "111650.00 만원",
+        "business_fee": "9350.00 만원",
+        "interior_cost": "27500.00 만원",
+        "score": "87.89"
+    },
+    {
+        "rank": 3,
+        "store_name": "뚜레쥬르",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "11.78%",
+        "closure_rate": "1.55%",
+        "average_sales": "58922600.00 만원",
+        "average_sales_per_area": "20277.00 만원",
+        "initial_cost": "3294050.00 만원",
+        "business_fee": "27050.00 만원",
+        "interior_cost": "1012000.00 만원",
+        "score": "79.23"
+    },
+    {
+        "rank": 4,
+        "store_name": "한스(HANS)",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "4.79%",
+        "closure_rate": "0.00%",
+        "average_sales": "52677900.00 만원",
+        "average_sales_per_area": "12780.00 만원",
+        "initial_cost": "327400.00 만원",
+        "business_fee": "43000.00 만원",
+        "interior_cost": "169410.00 만원",
+        "score": "75.28"
+    }
+]

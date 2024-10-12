@@ -45,6 +45,7 @@ def process_json_to_csv():
             total_new_open = 0
             total_contract_termination = 0
             total_contract_cancellation = 0
+            total_ownership_change = 0
 
             # 2020년부터 2023년까지 연도별로 폐업률/개업률 및 총 변경 사항 계산
             for year in [2020, 2021, 2022, 2023]:
@@ -53,10 +54,11 @@ def process_json_to_csv():
                     year_new_open = franchise_changes.get('new_open', 0)
                     year_contract_termination = franchise_changes.get('contract_termination', 0)
                     year_contract_cancellation = franchise_changes.get('contract_cancellation', 0)
+                    year_ownership_change = franchise_changes.get('ownership_change', 0)
 
-                    year_total_store = total_franchise_count + year_new_open
+                    year_total_store = total_franchise_count + year_new_open + year_contract_termination + year_contract_cancellation + year_ownership_change
                     if year_total_store > 0:
-                        year_closure_rate = (year_contract_cancellation / year_total_store) * 100
+                        year_closure_rate = ((year_contract_termination + year_contract_cancellation) / year_total_store) * 100
                         year_opening_rate = (year_new_open / year_total_store) * 100
                         yearly_closure_rates.append(year_closure_rate)
                         yearly_opening_rates.append(year_opening_rate)
@@ -65,11 +67,12 @@ def process_json_to_csv():
                     total_new_open += year_new_open
                     total_contract_termination += year_contract_termination
                     total_contract_cancellation += year_contract_cancellation
+                    total_ownership_change += year_ownership_change
 
             # 평균 폐업률 및 개업률 계산
             opening_rate = sum(yearly_opening_rates) / len(yearly_opening_rates) if yearly_opening_rates else 0
             closure_rate = sum(yearly_closure_rates) / len(yearly_closure_rates) if yearly_closure_rates else 0
-            total_change = total_new_open - (total_contract_termination + total_contract_cancellation)
+            total_change = total_new_open - (total_contract_termination + total_contract_cancellation + total_ownership_change)
 
             # 2023년 재무 데이터가 없는 경우, 2022년 데이터를 사용
             financial_2023 = next((f for f in store_data['financial'] if f['year'] == 2023), None)

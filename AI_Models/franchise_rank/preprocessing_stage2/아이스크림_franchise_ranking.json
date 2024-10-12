@@ -1,0 +1,44 @@
+[
+    {
+        "rank": 1,
+        "store_name": "배스킨라빈스",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "11.51%",
+        "closure_rate": "1.72%",
+        "average_sales": "66248600.00 만원",
+        "average_sales_per_area": "35539.00 만원",
+        "initial_cost": "318850.00 만원",
+        "business_fee": "50450.00 만원",
+        "interior_cost": "90000.00 만원",
+        "score": "100.00"
+    },
+    {
+        "rank": 2,
+        "store_name": "설빙",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "15.88%",
+        "closure_rate": "2.56%",
+        "average_sales": "65756600.00 만원",
+        "average_sales_per_area": "12596.00 만원",
+        "initial_cost": "177560.00 만원",
+        "business_fee": "19300.00 만원",
+        "interior_cost": "61050.00 만원",
+        "score": "81.63"
+    },
+    {
+        "rank": 3,
+        "store_name": "요거트아이스크림의정석",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "46.13%",
+        "closure_rate": "3.39%",
+        "average_sales": "25568600.00 만원",
+        "average_sales_per_area": "20305.00 만원",
+        "initial_cost": "50200.00 만원",
+        "business_fee": "12800.00 만원",
+        "interior_cost": "22000.00 만원",
+        "score": "76.45"
+    }
+]
