@@ -5,6 +5,9 @@ import pymysql
 from dotenv import load_dotenv
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
@@ -212,6 +215,7 @@ def adjust_density_scores(densities):
     
     return adjusted_scores, mean_density, std_density
 
+
 # 밀도 점수와 기존 랭킹 점수를 결합하여 최종 점수를 계산
 def calculate_final_scores(franchise_data, adjusted_density_scores):
     final_scores = []
@@ -224,6 +228,25 @@ def calculate_final_scores(franchise_data, adjusted_density_scores):
         final_scores.append((store['store_name'], final_score))
     
     return final_scores
+
+# 밀도와 랭킹 점수를 랜덤포레스트로 학습시키는 함수
+def random_forest_accuracy(final_scores):
+    # 데이터를 학습에 적합한 형태로 변환
+    X = [[score[1]] for score in final_scores]  # 점수만 추출
+    y = [1 if score[1] >= 70 else 0 for score in final_scores]  # 임의로 70 이상이면 성공 (1), 아니면 실패 (0)
+
+    # 학습과 테스트 데이터로 분리
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    # 랜덤포레스트 모델 학습
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X_train, y_train)
+    
+    # 예측 및 정확도 계산
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    
+    return accuracy
 
 def recommend_top_3_franchises(final_scores):
     # final_scores는 (store_name, final_score) 형식의 리스트
@@ -249,6 +272,24 @@ def recommend_top_3_franchises(final_scores):
     
     return sorted(top_3_franchises, key=lambda x: x[1], reverse=True)
 
+# 자본금 조건을 만족하지 않는 프랜차이즈 필터링 함수
+def get_excluded_franchises(initial_capital):
+    franchise_data = load_franchise_data()  # JSON 파일에서 프랜차이즈 데이터 가져오기
+    excluded_franchises = []
+    
+    for store in franchise_data:
+        initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
+        business_fee = float(store['business_fee'].replace('만원', '').replace(',', ''))  # 가맹비 변환
+        
+        # 조건: 초기 비용 + 가맹비 > 사용자가 입력한 자본금
+        total_initial_cost = initial_cost + business_fee
+        
+        if total_initial_cost > initial_capital:
+            excluded_franchises.append(store)
+    
+    return excluded_franchises
+
+
 
 # 메인 실행 함수
 if __name__ == "__main__":
@@ -257,8 +298,8 @@ if __name__ == "__main__":
     print("\n=== 매물 리스트 (plno) ===")
     for listing in property_listings:
         print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}")
-
-    # 2. 프랜차이즈 브랜드 검색 및 밀도 계산
+    
+    # 2. 프랜차이즈 밀도 계산 후 밀도 리스트 얻기
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
 
     if densities:
@@ -272,8 +313,19 @@ if __name__ == "__main__":
         # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
         
-        # 6. 상위 3개 프랜차이즈 추천
+        # 6. 랜덤포레스트 모델 정확도 계산
+        accuracy = random_forest_accuracy(final_scores)
+        print(f"\n랜덤포레스트 모델의 정확도: {accuracy:.2f}")
+
+        # 7. 상위 3개 프랜차이즈 추천
         top_3_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]
         print("\n=== 추천 프랜차이즈 상위 3개 ===")
         for franchise, score in top_3_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
+        
+        # 8. 자본금 조건을 만족하지 않는 프랜차이즈 리스트 출력
+        excluded_franchises = get_excluded_franchises(user_data['initial_capital'])
+        if excluded_franchises:
+            print("\n=== 자본금 때문에 제외된 프랜차이즈 ===")
+            for store in excluded_franchises:
+                print(f"{store['store_name']} - 초기 비용: {store['initial_cost']}만원, 가맹비: {store['business_fee']}만원")
