@@ -9,7 +9,7 @@ def process_csv_file(file_name, category):
 
     # 필요한 열 선택
     columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'average_sales', 'average_sales_per_area', 
-               'initial_cost', 'business_fee']
+               'initial_cost', 'business_fee', 'interior_cost']
 
     df_filtered = df[columns]
 
@@ -45,9 +45,10 @@ def process_csv_file(file_name, category):
         average_sales = row.average_sales / 10  # 천원 단위에서 만원 단위로 변환
         initial_cost = row.initial_cost / 10  # 초기비용 천원에서 만원 단위로 변환
         business_fee = row.business_fee / 10  # 가맹비 천원에서 만원 단위로 변환
+        interior_cost = row.interior_cost / 10  # 인테리어 비용 천원에서 만원 단위로 변환
         print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate:.2f}%, 개업률: {row.opening_rate:.2f}%, "
               f"1년 평균 매출액: {average_sales:.2f} 만원, 1평당 매출액: {average_sales_per_area:.2f} 만원, "
-              f"초기비용: {initial_cost:.2f} 만원, 가맹비: {business_fee:.2f} 만원, 점수: {row.normalized_score:.2f}")
+              f"초기비용: {initial_cost:.2f} 만원, 가맹비: {business_fee:.2f} 만원, 인테리어 비용: {interior_cost:.2f} 만원, 점수: {row.normalized_score:.2f}")
 
     # JSON 형식으로 저장할 데이터 구성
     results = []
@@ -56,6 +57,7 @@ def process_csv_file(file_name, category):
         average_sales = row.average_sales / 10  # 천원 단위에서 만원 단위로 변환
         initial_cost = row.initial_cost / 10  # 초기비용 천원에서 만원 단위로 변환
         business_fee = row.business_fee / 10  # 가맹비 천원에서 만원 단위로 변환
+        interior_cost = row.interior_cost / 10  # 인테리어 비용 천원에서 만원 단위로 변환
 
         results.append({
             "rank": idx + 1,
@@ -68,6 +70,7 @@ def process_csv_file(file_name, category):
             "average_sales_per_area": f"{average_sales_per_area:.2f} 만원",
             "initial_cost": f"{initial_cost:.2f} 만원",
             "business_fee": f"{business_fee:.2f} 만원",
+            "interior_cost": f"{interior_cost:.2f} 만원",
             "score": f"{row.normalized_score:.2f}"
         })
 

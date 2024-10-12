@@ -3,6 +3,8 @@ import requests
 import os
 import pymysql
 from dotenv import load_dotenv
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
@@ -138,16 +140,18 @@ def search_brand_in_region():
 
     if not dong_list:
         print(f"{gu}에 '{dong_prefix}'로 시작하는 동을 찾을 수 없습니다.")
-        return
+        return []
 
     total_area = get_total_area_from_db(gu, dong_prefix)
 
     if total_area == 0:
         print(f"{gu} {dong_prefix}에 대한 면적 정보를 찾을 수 없습니다.")
-        return
+        return []
 
     print(f"{gu}의 '{dong_prefix}'로 시작하는 동 목록: {dong_list}")
     print(f"총 면적은 {total_area} km² 입니다.\n")
+
+    densities = []  # 밀도 리스트를 저장할 배열
 
     for store in franchise_data:
         store_name = store['store_name']
@@ -155,9 +159,84 @@ def search_brand_in_region():
         store_count = len(places)
         if store_count > 0:
             density = store_count / total_area  # 밀도 계산
+            densities.append(density)  # 밀도를 리스트에 저장
             print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 {store_count}개 있습니다. 밀도: {density:.2f} 가게/km²")
         else:
+            densities.append(0)  # 밀도가 없을 경우 0으로 처리
             print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 없습니다.")
+    
+    return densities  # 계산된 밀도 리스트 반환
+
+# 보증금과 초기 자본금 조건을 만족하는지 확인하는 함수
+def filter_franchises_by_cost(franchise_data, property_listings, initial_capital):
+    filtered_franchises = []
+    
+    for store in franchise_data:
+        initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
+        for listing in property_listings:
+            deposit = listing['bsc_tnth_wunt_amt']  # 매물의 보증금
+            
+            # 조건: 초기 비용 + 보증금 <= 사용자가 입력한 자본금
+            if initial_cost + deposit <= initial_capital:
+                filtered_franchises.append(store)
+    
+    return filtered_franchises
+
+# 밀도 계산 후 평균과 표준편차를 구해 가산/감점 적용
+def adjust_density_scores(densities):
+    mean_density = np.mean(densities)
+    std_density = np.std(densities)
+    
+    adjusted_scores = []
+    for density in densities:
+        if density < mean_density:
+            # 평균보다 밀도가 작으면 가산점
+            score_adjustment = 1 + (mean_density - density) / std_density
+        else:
+            # 평균보다 크면 감점
+            score_adjustment = 1 - (density - mean_density) / std_density
+        
+        adjusted_scores.append(score_adjustment)
+    
+    return adjusted_scores, mean_density, std_density
+
+# 밀도 점수와 기존 랭킹 점수를 결합하여 최종 점수를 계산
+def calculate_final_scores(franchise_data, adjusted_density_scores):
+    final_scores = []
+    for i, store in enumerate(franchise_data):
+        rank_score = float(store['score'])  # 기존 랭킹 점수
+        density_score = adjusted_density_scores[i] * 5  # 밀도 점수 (5점 만점)
+        
+        # 기존 랭킹 점수와 밀도 점수의 가중치를 5:5로 반영
+        final_score = (rank_score * 5 + density_score * 5) / 10
+        final_scores.append((store['store_name'], final_score))
+    
+    return final_scores
+
+def recommend_top_3_franchises(final_scores):
+    # final_scores는 (store_name, final_score) 형식의 리스트
+    # 데이터를 학습시키기 위해 (score, 밀도) 형식으로 변환
+    store_names = [store[0] for store in final_scores]
+    scores = [store[1] for store in final_scores]
+    
+    # RandomForest 모델을 사용해 상위 3개의 점수를 가진 프랜차이즈 추천
+    model = RandomForestRegressor(n_estimators=100)
+    
+    # 임시로 X, y를 동일하게 설정 (RandomForest 학습을 위한 형태)
+    X = np.array(scores).reshape(-1, 1)
+    y = np.array(scores)
+    
+    model.fit(X, y)
+    
+    # 예측을 위해 학습된 결과를 다시 활용
+    predictions = model.predict(X)
+    
+    # 상위 3개 프랜차이즈 선택
+    top_3_indices = np.argsort(predictions)[-3:]  # 점수가 높은 상위 3개 선택
+    top_3_franchises = [(store_names[i], predictions[i]) for i in top_3_indices]
+    
+    return sorted(top_3_franchises, key=lambda x: x[1], reverse=True)
+
 
 # 메인 실행 함수
 if __name__ == "__main__":
@@ -168,4 +247,24 @@ if __name__ == "__main__":
         print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}")
 
     # 2. 프랜차이즈 브랜드 검색 및 밀도 계산
-    search_brand_in_region()
+    densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
+
+    if densities:
+        # 3. 밀도의 평균과 표준편차 계산
+        adjusted_density_scores, mean_density, std_density = adjust_density_scores(densities)
+        print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
+
+        # 4. 기존 랭킹 데이터 로드
+        franchise_data = load_franchise_data()  # 기존 랭킹 데이터를 JSON에서 로드
+        
+        # 5. 초기 자본금 조건을 만족하는 프랜차이즈 필터링
+        filtered_franchises = filter_franchises_by_cost(franchise_data, property_listings, user_data['initial_capital'])
+        
+        # 6. 필터링된 프랜차이즈의 최종 점수 계산
+        final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
+        
+        # 7. 상위 3개 프랜차이즈 추천
+        top_3_franchises = recommend_top_3_franchises(final_scores)
+        print("\n=== 추천 프랜차이즈 상위 3개 ===")
+        for franchise, score in top_3_franchises:
+            print(f"{franchise} - 최종 점수: {score:.2f}")
