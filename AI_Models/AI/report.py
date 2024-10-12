@@ -1,6 +1,6 @@
 import json
-import requests
 import os
+import requests
 import pymysql
 from dotenv import load_dotenv
 import numpy as np
@@ -18,31 +18,53 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 
+# 1. 지역을 선택해주세요.    
+# 2. 점포 임대 계약 시 수용 가능한 월세    
+# 3. 점포 임대 계약 시 수용 가능한 보증금
+# 4. 업종 중 분류, 대분류 선택
+# 5. 보증금을 포함하여, 자본금은 어느 정도 가지고 계신가요?
+# 6. 개인창업과 프랜차이즈 중 어느 것을 선호하시나요?
+# 7. 가맹비를 크게 신경쓰고 계신가요?     7부터 매우그렇다, 그렇다, 보통, 아니다, 매우 아니다
+# 8. 현재 유행 중인 업종을 원하십니까?
+# 9. 매출액이 얼마나 중요하신가요?
+# 10. 폐업률을 신경 쓰시나요?
+# 11. 근처에 같은 브랜드 매장과 경쟁 할 자신 있으신가요?
 # 사용자 입력 데이터
 user_data = {
     'region': '서울시, 강남구, 역삼동',
     'monthly_rent': 300,  # 만원
     'deposit': 10000,  # 만원 (1억)
-    'industry': '외식업, 치킨',
-    'initial_capital': 10000,  # 만원 (2억)
+    'industry': '외식업, 치킨',  # '치킨', '커피' 등 선택
+    'initial_capital': 20000,  # 만원 (1억)
     'preference': '프랜차이즈',
-    'trending_industry': '아니오',
-    'cost_burden': '중간',
-    'stability_concern': '중간',
-    'franchise_fee_burden': '중간'
+    'franchise_fee_concern': '아니오', #7 가맹비
+    'trending_industry_preference': '중간', #8 유행업종
+    'sales_importance': '중간', #9 매출액
+    'closure_rate_concern': '중간', #10 폐업률
+    'competition_confidence': '그렇다' #11 경쟁 할 자신? 
 }
+
+
 
 # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
 gu = user_data['region'].split(', ')[1]  # '강남구'
 dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
 
+# 산업 카테고리에서 필요한 부분만 추출 ('치킨', '커피' 등)
+industry_category = user_data['industry'].split(', ')[1]  # '치킨' 부분만 추출
 
 # 치킨 프랜차이즈 데이터를 json 파일에서 읽기
-def load_franchise_data():
-    with open('치킨_franchise_ranking.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    return data
-
+def load_franchise_data(industry):
+    # 산업 카테고리에 맞는 JSON 파일을 불러옴
+    json_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage2', f'{industry}_franchise_ranking.json')
+    
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        return data
+    else:
+        print(f"{industry}_franchise_ranking.json 파일을 찾을 수 없습니다.")
+        return []
 
 # MySQL DB 연결 함수
 def connect_to_db():
@@ -69,7 +91,8 @@ def get_property_listings():
                 plno,                  -- 매물 ID
                 add_tnth_wunt_amt,      -- 월세
                 bsc_tnth_wunt_amt,      -- 보증금
-                addr                   -- 주소
+                addr,                  -- 주소
+                area2
             FROM 
                 KB.property_listing  -- 테이블 명
             WHERE 
@@ -120,12 +143,6 @@ def get_dong_names_from_db(gu, dong_prefix):
     finally:
         connection.close()
 
-# 치킨 프랜차이즈 데이터를 json 파일에서 읽기
-def load_franchise_data():
-    with open('치킨_franchise_ranking.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-    return data
-
 # 카카오 맵 API로 가게 검색
 def search_store_kakao(gu, dong_list, store_name):
     headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
@@ -146,7 +163,7 @@ def search_store_kakao(gu, dong_list, store_name):
 
 # 브랜드 별로 검색 후 밀도 구하기
 def search_brand_in_region():
-    franchise_data = load_franchise_data()
+    franchise_data = load_franchise_data(industry_category)  # 산업 카테고리에 맞는 데이터 불러오기
     dong_list = get_dong_names_from_db(gu, dong_prefix)
 
     if not dong_list:
@@ -178,10 +195,10 @@ def search_brand_in_region():
     
     return densities  # 계산된 밀도 리스트 반환
 
+
 # 보증금과 초기 자본금 조건을 만족하는지 확인하는 함수
-# 초기 자본금 조건을 만족하는지 확인하는 함수 (제외된 프랜차이즈도 반환)
 def filter_franchises_by_cost(initial_capital):
-    franchise_data = load_franchise_data()  # JSON 파일에서 프랜차이즈 데이터 가져오기
+    franchise_data = load_franchise_data(industry_category)  # JSON 파일에서 프랜차이즈 데이터 가져오기
     filtered_franchises = []
     excluded_franchises = []
     
@@ -198,8 +215,6 @@ def filter_franchises_by_cost(initial_capital):
             excluded_franchises.append(store)  # 조건 불만족 (제외됨)
     
     return filtered_franchises, excluded_franchises
-
-
 
 
 # 밀도 계산 후 조정하는 함수
@@ -220,7 +235,6 @@ def adjust_density_scores(densities):
     
     return adjusted_scores, mean_density, std_density
 
-
 # 밀도 점수와 기존 랭킹 점수를 결합하여 최종 점수를 계산
 def calculate_final_scores(franchise_data, adjusted_density_scores):
     final_scores = []
@@ -234,67 +248,34 @@ def calculate_final_scores(franchise_data, adjusted_density_scores):
     
     return final_scores
 
-# 밀도와 랭킹 점수를 랜덤포레스트로 학습시키는 함수
-def random_forest_accuracy(final_scores):
-    # 데이터를 학습에 적합한 형태로 변환
-    X = [[score[1]] for score in final_scores]  # 점수만 추출
-    y = [1 if score[1] >= 70 else 0 for score in final_scores]  # 임의로 70 이상이면 성공 (1), 아니면 실패 (0)
-
-    # 학습과 테스트 데이터로 분리
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# 매물 면적과 프랜차이즈 평균 면적을 비교하여 추천할 수 있는 매물 필터링
+# 매물 면적과 프랜차이즈 평균 면적을 비교하여 추천할 수 있는 매물 필터링
+def filter_listings_by_franchise_area(listings, franchise_data):
+    valid_recommendations = []  # 프랜차이즈와 매물이 모두 추천 가능한 리스트
     
-    # 랜덤포레스트 모델 학습
-    model = RandomForestClassifier(n_estimators=100)
-    model.fit(X_train, y_train)
-    
-    # 예측 및 정확도 계산
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    
-    return accuracy
-
-def recommend_top_3_franchises(final_scores):
-    # final_scores는 (store_name, final_score) 형식의 리스트
-    # 데이터를 학습시키기 위해 (score, 밀도) 형식으로 변환
-    store_names = [store[0] for store in final_scores]
-    scores = [store[1] for store in final_scores]
-    
-    # RandomForest 모델을 사용해 상위 3개의 점수를 가진 프랜차이즈 추천
-    model = RandomForestRegressor(n_estimators=100)
-    
-    # 임시로 X, y를 동일하게 설정 (RandomForest 학습을 위한 형태)
-    X = np.array(scores).reshape(-1, 1)
-    y = np.array(scores)
-    
-    model.fit(X, y)
-    
-    # 예측을 위해 학습된 결과를 다시 활용
-    predictions = model.predict(X)
-    
-    # 상위 3개 프랜차이즈 선택
-    top_3_indices = np.argsort(predictions)[-3:]  # 점수가 높은 상위 3개 선택
-    top_3_franchises = [(store_names[i], predictions[i]) for i in top_3_indices]
-    
-    return sorted(top_3_franchises, key=lambda x: x[1], reverse=True)
-
-# 자본금 조건을 만족하지 않는 프랜차이즈 필터링 함수
-def get_excluded_franchises(initial_capital):
-    franchise_data = load_franchise_data()  # JSON 파일에서 프랜차이즈 데이터 가져오기
-    excluded_franchises = []
-    
-    for store in franchise_data:
-        initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
-        business_fee = float(store['business_fee'].replace('만원', '').replace(',', ''))  # 가맹비 변환
+    for franchise in franchise_data:
+        try:
+            # 프랜차이즈의 표준 스토어 면적을 가져와서 '㎡'를 제거하고 숫자로 변환
+            franchise_area_str = franchise.get('standard_store_area', '0').replace('㎡', '').replace(',', '').strip()
+            franchise_area = float(franchise_area_str)  # 프랜차이즈 평균 면적 (제곱미터 단위)
+        except ValueError:
+            print(f"Error converting franchise area: {franchise_area_str}")
+            continue
         
-        # 조건: 초기 비용 + 가맹비 > 사용자가 입력한 자본금
-        total_initial_cost = initial_cost + business_fee
-        
-        if total_initial_cost > initial_capital:
-            excluded_franchises.append(store)
+        # 매물과 프랜차이즈의 면적을 비교하여 추천 가능한 매물 필터링
+        for listing in listings:
+            if listing['area2'] >= franchise_area:  # 매물 면적이 프랜차이즈 요구 면적 이상인 경우
+                valid_recommendations.append({
+                    'franchise_name': franchise['store_name'],
+                    'franchise_score': franchise['score'],
+                    'property_id': listing['plno'],
+                    'property_address': listing['addr'],
+                    'property_rent': listing['add_tnth_wunt_amt'],
+                    'property_deposit': listing['bsc_tnth_wunt_amt'],
+                    'property_area': listing['area2']  # 매물 면적
+                })
     
-    return excluded_franchises
-
-
+    return valid_recommendations
 
 # 메인 실행 함수
 if __name__ == "__main__":
@@ -302,8 +283,8 @@ if __name__ == "__main__":
     property_listings = get_property_listings()
     print("\n=== 매물 리스트 (plno) ===")
     for listing in property_listings:
-        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}")
-    
+        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
+
     # 2. 프랜차이즈 밀도 계산 후 밀도 리스트 얻기
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
 
@@ -317,22 +298,38 @@ if __name__ == "__main__":
         
         # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
-        print("\n=== 모든 추천 가능한 프랜차이즈 ===")
-        for franchise, score in sorted(final_scores, key=lambda x: x[1], reverse=True):
+
+        # 6. 상위 3개의 프랜차이즈 선택 (청년치킨 포함)
+        top_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]  # 상위 3개의 프랜차이즈 선택
+        print("\n=== 상위 3개 추천 프랜차이즈 ===")
+        for franchise, score in top_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
-        
-        # 6. 상위 3개 프랜차이즈 추천
-        top_3_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]
-        print("\n=== 추천 프랜차이즈 상위 3개 ===")
-        for franchise, score in top_3_franchises:
-            print(f"{franchise} - 최종 점수: {score:.2f}")
-        
-        # 7. 제외된 프랜차이즈들의 최종 점수 계산
-        if excluded_franchises:
-            excluded_scores = calculate_final_scores(excluded_franchises, adjusted_density_scores)
-            print("\n=== 자본금 때문에 제외된 프랜차이즈 (최종 점수 포함) ===")
-            for franchise_name, score in sorted(excluded_scores, key=lambda x: x[1], reverse=True):
-                # 해당 프랜차이즈의 초기 비용과 가맹비를 찾아 출력
-                franchise = next(store for store in excluded_franchises if store['store_name'] == franchise_name)
-                print(f"{franchise_name} - 최종 점수: {score:.2f}, 초기 비용: {franchise['initial_cost']}만원, 가맹비: {franchise['business_fee']}만원")
+
+            
+        # 7. 제외된 프랜차이즈 3개를 출력
+        print("\n=== 가맹비가 비싸서 제외된 프랜차이즈 3개 ===")
+        excluded_franchises_sorted = sorted(
+            excluded_franchises, 
+            key=lambda x: (
+                float(x['initial_cost'].replace('만원', '').replace(',', '').strip()), 
+                float(x['business_fee'].replace('만원', '').replace(',', '').strip())
+            )
+        )[:3]
+        for franchise in excluded_franchises_sorted:
+            print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, 초기 비용: {franchise['initial_cost']}만원, 점수: {franchise['score']}")
+
+        # 8. 추천된 프랜차이즈 중에서 매물 필터링 (청년치킨에 해당하는 매물만)
+        top_franchise_name = top_franchises[0][0]  # 상위 1개의 프랜차이즈 이름 (청년치킨)
+        valid_recommendations = filter_listings_by_franchise_area(property_listings, [store for store in filtered_franchises if store['store_name'] == top_franchise_name])
+
+        # 9. 보증금과 월세가 적은 매물 3개 선택
+        top_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
+
+        print("\n=== 추천 가능한 매물 (청년치킨에 해당하는 상위 3개) ===")
+        if top_listings:
+            for recommendation in top_listings:
+                print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
+                print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
+        else:
+            print("조건에 맞는 추천 가능한 매물이 없습니다.")
 

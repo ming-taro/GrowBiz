@@ -18,19 +18,33 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_NAME = os.getenv("DB_NAME")
 
+# 1. 지역을 선택해주세요.    
+# 2. 점포 임대 계약 시 수용 가능한 월세    
+# 3. 점포 임대 계약 시 수용 가능한 보증금
+# 4. 업종 중 분류, 대분류 선택
+# 5. 보증금을 포함하여, 자본금은 어느 정도 가지고 계신가요?
+# 6. 개인창업과 프랜차이즈 중 어느 것을 선호하시나요?
+# 7. 가맹비를 크게 신경쓰고 계신가요?     7부터 매우그렇다, 그렇다, 보통, 아니다, 매우 아니다
+# 8. 현재 유행 중인 업종을 원하십니까?
+# 9. 매출액이 얼마나 중요하신가요?
+# 10. 폐업률을 신경 쓰시나요?
+# 11. 근처에 같은 브랜드 매장과 경쟁 할 자신 있으신가요?
 # 사용자 입력 데이터
 user_data = {
     'region': '서울시, 강남구, 역삼동',
     'monthly_rent': 300,  # 만원
     'deposit': 10000,  # 만원 (1억)
     'industry': '외식업, 치킨',  # '치킨', '커피' 등 선택
-    'initial_capital': 10000,  # 만원 (1억)
+    'initial_capital': 20000,  # 만원 (1억)
     'preference': '프랜차이즈',
-    'trending_industry': '아니오',
-    'cost_burden': '중간',
-    'stability_concern': '중간',
-    'franchise_fee_burden': '중간'
+    'franchise_fee_concern': '아니오', #7 가맹비
+    'trending_industry_preference': '중간', #8 유행업종
+    'sales_importance': '중간', #9 매출액
+    'closure_rate_concern': '중간', #10 폐업률
+    'competition_confidence': '그렇다' #11 경쟁 할 자신? 
 }
+
+
 
 # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
 gu = user_data['region'].split(', ')[1]  # '강남구'
