@@ -8,9 +8,9 @@ def process_csv_file(file_name, category):
     # CSV 파일 불러오기
     df = pd.read_csv(file_name)
 
-    # 필요한 열 선택
+    # 필요한 열 선택 (standard_store_area 추가)
     columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'average_sales', 'average_sales_per_area', 
-               'initial_cost', 'business_fee', 'interior_cost']
+               'initial_cost', 'business_fee', 'interior_cost', 'standard_store_area']
 
     df_filtered = df[columns].copy()  # 슬라이스된 데이터 복사를 명시적으로 수행
 
@@ -20,7 +20,7 @@ def process_csv_file(file_name, category):
 
     # 개업률이 폐업률 대비 1.5배 이상인 데이터만 필터링
     df_filtered = df_filtered[(df_filtered['opening_rate'] >= df_filtered['closure_rate'] * 1.5) & 
-                              (df_filtered['closure_rate'] <= 31.4 / 100)]  # 폐업률 50% 이하
+                              (df_filtered['closure_rate'] <= 31.4 / 100)]  # 폐업률 31.4% 이하
 
     # 필터링 후 데이터가 1개 이하일 경우 처리
     if len(df_filtered) < 10:
@@ -33,7 +33,7 @@ def process_csv_file(file_name, category):
     df_filtered['adjusted_closure_rate'] = -df_filtered['closure_rate']
 
     # 독립 변수(X)와 종속 변수(y) 설정
-    X = df_filtered[['opening_rate', 'adjusted_closure_rate', 'average_sales_per_area', 'initial_cost', 'business_fee']]
+    X = df_filtered[['opening_rate', 'adjusted_closure_rate', 'average_sales_per_area', 'initial_cost', 'business_fee', 'standard_store_area']]
     y = df_filtered['average_sales_per_area']
 
     # 랜덤포레스트 모델 학습
@@ -58,13 +58,14 @@ def process_csv_file(file_name, category):
     # 상위 30개의 데이터 선택 (필터링 결과가 30개 미만이면, 나오는 개수만큼 출력)
     top_franchises = df_filtered.sort_values(by='normalized_score', ascending=False).head(30)
 
-    # 순서 번호를 다시 매긴 데이터 출력
+    # 순서 번호를 다시 매긴 데이터 출력 (standard_store_area 포함)
     for idx, row in enumerate(top_franchises.itertuples(index=False), 1):
         print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate * 100:.2f}%, 개업률: {row.opening_rate * 100:.2f}%, "
               f"1년 평균 매출액: {row.average_sales:.2f} 만원, 1평당 매출액: {row.average_sales_per_area:.2f} 만원, "
-              f"초기비용: {row.initial_cost:.2f} 만원, 가맹비: {row.business_fee:.2f} 만원, 인테리어 비용: {row.interior_cost:.2f} 만원, 점수: {row.normalized_score:.2f}")
+              f"초기비용: {row.initial_cost:.2f} 만원, 가맹비: {row.business_fee:.2f} 만원, 인테리어 비용: {row.interior_cost:.2f} 만원, "
+              f"표준 스토어 면적: {row.standard_store_area} ㎡, 점수: {row.normalized_score:.2f}")
 
-    # JSON 형식으로 저장할 데이터 구성
+    # JSON 형식으로 저장할 데이터 구성 (standard_store_area 포함)
     results = []
     for idx, row in enumerate(top_franchises.itertuples(index=False)):
         results.append({
@@ -79,6 +80,7 @@ def process_csv_file(file_name, category):
             "initial_cost": f"{row.initial_cost:.2f} 만원",
             "business_fee": f"{row.business_fee:.2f} 만원",
             "interior_cost": f"{row.interior_cost:.2f} 만원",
+            "standard_store_area": f"{row.standard_store_area} ㎡",
             "score": f"{row.normalized_score:.2f}"
         })
 

@@ -11,6 +11,7 @@
         "initial_cost": "31885.00 만원",
         "business_fee": "5045.00 만원",
         "interior_cost": "9000.00 만원",
+        "standard_store_area": "83 ㎡",
         "score": "100.00"
     },
     {
@@ -25,7 +26,8 @@
         "initial_cost": "5020.00 만원",
         "business_fee": "1280.00 만원",
         "interior_cost": "2200.00 만원",
-        "score": "67.33"
+        "standard_store_area": "33 ㎡",
+        "score": "67.75"
     },
     {
         "rank": 3,
@@ -39,7 +41,8 @@
         "initial_cost": "4306.50 만원",
         "business_fee": "1100.00 만원",
         "interior_cost": "1749.00 만원",
-        "score": "62.87"
+        "standard_store_area": "33 ㎡",
+        "score": "64.80"
     },
     {
         "rank": 4,
@@ -53,6 +56,7 @@
         "initial_cost": "17756.00 만원",
         "business_fee": "1930.00 만원",
         "interior_cost": "6105.00 만원",
-        "score": "54.80"
+        "standard_store_area": "99 ㎡",
+        "score": "57.09"
     }
 ]

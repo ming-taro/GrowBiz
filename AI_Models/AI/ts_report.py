@@ -1,5 +1,6 @@
 import json
 import os
+import requests
 import pymysql
 from dotenv import load_dotenv
 import numpy as np
@@ -76,7 +77,8 @@ def get_property_listings():
                 plno,                  -- 매물 ID
                 add_tnth_wunt_amt,      -- 월세
                 bsc_tnth_wunt_amt,      -- 보증금
-                addr                   -- 주소
+                addr,                  -- 주소
+                area2
             FROM 
                 KB.property_listing  -- 테이블 명
             WHERE 
@@ -201,6 +203,24 @@ def filter_franchises_by_cost(initial_capital):
     return filtered_franchises, excluded_franchises
 
 
+# 밀도 계산 후 조정하는 함수
+def adjust_density_scores(densities):
+    mean_density = np.mean(densities)
+    std_density = np.std(densities)
+    
+    adjusted_scores = []
+    for density in densities:
+        if density < mean_density:
+            # 평균보다 밀도가 작으면 가산점
+            score_adjustment = 1 + (mean_density - density) / std_density
+        else:
+            # 평균보다 크면 감점
+            score_adjustment = 1 - (density - mean_density) / std_density
+        
+        adjusted_scores.append(score_adjustment)
+    
+    return adjusted_scores, mean_density, std_density
+
 # 밀도 점수와 기존 랭킹 점수를 결합하여 최종 점수를 계산
 def calculate_final_scores(franchise_data, adjusted_density_scores):
     final_scores = []
@@ -214,13 +234,40 @@ def calculate_final_scores(franchise_data, adjusted_density_scores):
     
     return final_scores
 
+# 매물 면적과 프랜차이즈 평균 면적을 비교하여 추천할 수 있는 매물 필터링
+def filter_listings_by_franchise_area(listings, franchise_data):
+    valid_recommendations = []  # 프랜차이즈와 매물이 모두 추천 가능한 리스트
+    
+    for franchise in franchise_data:
+        try:
+            franchise_area_str = franchise.get('average_sales_per_area', '0').replace('만원', '').replace(',', '').strip()
+            franchise_area = float(franchise_area_str)  # 프랜차이즈 평균 면적 (평수)
+        except ValueError:
+            print(f"Error converting franchise area: {franchise_area_str}")
+            continue
+        
+        # 매물과 프랜차이즈의 면적을 비교하여 추천 가능한 매물 필터링
+        for listing in listings:
+            if listing['area2'] >= franchise_area:  # 매물 면적이 프랜차이즈 요구 면적 이상인 경우
+                valid_recommendations.append({
+                    'franchise_name': franchise['store_name'],
+                    'franchise_score': franchise['score'],
+                    'property_id': listing['plno'],
+                    'property_address': listing['addr'],
+                    'property_rent': listing['add_tnth_wunt_amt'],
+                    'property_deposit': listing['bsc_tnth_wunt_amt'],
+                    'property_area': listing['area2']
+                })
+    
+    return valid_recommendations
+
 # 메인 실행 함수
 if __name__ == "__main__":
     # 1. 매물 리스트 가져오기
     property_listings = get_property_listings()
     print("\n=== 매물 리스트 (plno) ===")
     for listing in property_listings:
-        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}")
+        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
     
     # 2. 프랜차이즈 밀도 계산 후 밀도 리스트 얻기
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
@@ -239,8 +286,12 @@ if __name__ == "__main__":
         for franchise, score in sorted(final_scores, key=lambda x: x[1], reverse=True):
             print(f"{franchise} - 최종 점수: {score:.2f}")
         
-        # 6. 상위 3개 프랜차이즈 추천
-        top_3_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]
-        print("\n=== 추천 프랜차이즈 상위 3개 ===")
-        for franchise, score in top_3_franchises:
-            print(f"{franchise} - 최종 점수: {score:.2f}")
+        # 6. 추천된 프랜차이즈의 면적과 매물 면적 비교
+        valid_recommendations = filter_listings_by_franchise_area(property_listings, filtered_franchises)
+        print("\n=== 추천 가능한 프랜차이즈와 매물 ===")
+        if valid_recommendations:
+            for recommendation in valid_recommendations:
+                print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
+                print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
+        else:
+            print("조건에 맞는 추천 가능한 프랜차이즈와 매물이 없습니다.")
