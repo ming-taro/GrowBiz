@@ -4,53 +4,49 @@
 
     <div class="container">
       <div class="row mb-10">
-        <ul
-          class="nav nav-tabs custom justify-content-center"
-          id="myTab"
-          role="tablist"
-        >
+        <ul class="nav nav-tabs custom justify-content-center" id="myTab" role="tablist">
           <li class="nav-item">
             <RouterLink
               class="nav-link"
-              :class="{ active: category === 'economy' }"
+              :class="{ active: category === '경제' || hoveredCategory === 'economy' }"
               to="/infoplaza/news/economy"
               @mouseover="hoveredCategory = 'economy'"
               @mouseleave="hoveredCategory = ''"
             >
-              <h4 :class="{ 'hovered': hoveredCategory === 'economy' }">경제</h4>
+              <h4>경제</h4>
             </RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink
               class="nav-link"
-              :class="{ active: category === 'smallowner' }"
+              :class="{ active: category === '소상공인' || hoveredCategory === 'smallowner' }"
               to="/infoplaza/news/smallowner"
               @mouseover="hoveredCategory = 'smallowner'"
               @mouseleave="hoveredCategory = ''"
             >
-              <h4 :class="{ 'hovered': hoveredCategory === 'smallowner' }">소상공인</h4>
+              <h4>소상공인</h4>
             </RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink
               class="nav-link"
-              :class="{ active: category === 'loan' }"
+              :class="{ active: category === '대출' || hoveredCategory === 'loan' }"
               to="/infoplaza/news/loan"
               @mouseover="hoveredCategory = 'loan'"
               @mouseleave="hoveredCategory = ''"
             >
-              <h4 :class="{ 'hovered': hoveredCategory === 'loan' }">대출</h4>
+              <h4>대출</h4>
             </RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink
               class="nav-link"
-              :class="{ active: category === 'stock' }"
+              :class="{ active: category === '주식' || hoveredCategory === 'stock' }"
               to="/infoplaza/news/stock"
               @mouseover="hoveredCategory = 'stock'"
               @mouseleave="hoveredCategory = ''"
             >
-              <h4 :class="{ 'hovered': hoveredCategory === 'stock' }">주식</h4>
+              <h4>주식</h4>
             </RouterLink>
           </li>
         </ul>
@@ -144,10 +140,15 @@ async function getNews(query, date) {
 }
 
 watchEffect(() => {
-  const routeCategory = route.params.category;
-  category.value = categoryMap[routeCategory] || '경제';
+  const routeCategory = route.params.category;  // 라우트에서 카테고리 값 가져오기
+  category.value = categoryMap[routeCategory] || '경제'; // category는 한글로 설정
+  console.log(category.value); // 현재 카테고리 출력 (한글)
+
+  // getNews 호출 시 한글 카테고리 사용
   getNews(category.value, formattedDate.value);
 });
+
+
 
 onMounted(() => {
   getNews(category.value, formattedDate.value);
@@ -193,9 +194,4 @@ onMounted(() => {
   text-decoration: none !important;
 }
 
-/* Hovered category style */
-.hovered {
-  color: #007bff !important; /* Change the text color on hover */
-  text-decoration: underline; /* Optional: Underline on hover */
-}
 </style>
