@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="title">추천 위치</div>
-    <div class="row">
-      <div :class="{ blur_text: isActive }">
+    <div class="row" style="position: relative">
+      <div :class="{ blur_text: isActive, disnon: nonActive }">
         로그인 후 이용하실 수 있습니다.
       </div>
       <div class="wid-half" :class="{ blur: isActive }">
@@ -25,7 +25,7 @@ const authStore = useAuthStore();
 
 const mno = authStore.state.mno;
 
-const id = '1234';
+let id = '1234';
 
 export default {
   data() {
@@ -35,6 +35,7 @@ export default {
       geocoder: null, // Geocoder 추가
       markerImage: 'null', // 커스텀 마커 이미지
       isActive: true,
+      nonActive: true,
     };
   },
   mounted() {
@@ -70,6 +71,8 @@ export default {
       if (mno != undefined) {
         this.isActive = false;
         id = mno;
+      } else {
+        this.nonActive = false;
       }
       try {
         const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
@@ -183,7 +186,7 @@ import MyMapGraph from '@/components/asset/MyMapGraph.vue';
   z-index: 1;
 }
 
-.blur-overlay {
+.blur_overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -193,14 +196,18 @@ import MyMapGraph from '@/components/asset/MyMapGraph.vue';
   z-index: 2;
 }
 
-.blur-text {
+.blur_text {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-37%, -80%);
   z-index: 3;
   color: black;
   font-size: 20px;
   font-weight: bold;
+}
+
+.disnon {
+  display: none;
 }
 </style>

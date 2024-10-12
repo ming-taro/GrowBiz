@@ -5,16 +5,28 @@
         <div>
           <h4 class="mb-2">주변 상권 별 매출 데이터 비교</h4>
         </div>
-        <div>
-          <canvas id="mixed-chart2" style="height: 202px"></canvas>
+        <div style="position: relative">
+          <div :class="{ blur_text: isActive, disnon: nonActive }">
+            로그인 후 이용하실 수 있습니다.
+          </div>
+          <div :class="{ blur: isActive }">
+            <div :class="{ blur_overlay: isActive }"></div>
+            <canvas id="mixed-chart2" style="height: 202px"></canvas>
+          </div>
         </div>
       </div>
       <div>
         <div>
-          <h4 class="">대분류 별 월매출 비교</h4>
+          <h4>대분류 별 월매출 비교</h4>
         </div>
-        <div>
-          <canvas id="mixed-chart3" height="100px"></canvas>
+        <div style="position: relative">
+          <div :class="{ blur_text: isActive, disnon: nonActive }">
+            로그인 후 이용하실 수 있습니다.
+          </div>
+          <div :class="{ blur: isActive }">
+            <div :class="{ blur_overlay: isActive }"></div>
+            <canvas id="mixed-chart3" width="550" height="203"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -32,6 +44,7 @@ import {
   fetchChartData,
 } from '@/assets/js/mapChart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 Chart.register(ChartDataLabels);
 
 let mixedChartInstance2 = ref(null); // 도넛 차트 인스턴스
@@ -63,9 +76,71 @@ onMounted(async () => {
 });
 </script>
 
+<script>
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
+
+let id = '1234';
+export default {
+  data() {
+    return {
+      isActive: true,
+      nonActive: true,
+    };
+  },
+  mounted() {
+    this.loadpage();
+  },
+  methods: {
+    loadpage() {
+      if (mno != undefined) {
+        this.isActive = false;
+        id = mno;
+      } else {
+        this.nonActive = false;
+      }
+    },
+  },
+};
+</script>
+
 <style scoped>
 .he-half {
   width: 80%;
   height: 60%;
+}
+.blur {
+  background-size: cover;
+  filter: blur(5px);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.blur_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 2;
+}
+
+.blur_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+}
+.disnon {
+  display: none;
 }
 </style>
