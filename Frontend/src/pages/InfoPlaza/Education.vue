@@ -94,7 +94,7 @@
                     v-model="searchType"
                   >
                     <option selected value="">전체</option>
-                    <option value="title">과정명</option>
+                    <option value="title">제목</option>
                     <option value="content">내용</option>
                   </select>
                 </div>

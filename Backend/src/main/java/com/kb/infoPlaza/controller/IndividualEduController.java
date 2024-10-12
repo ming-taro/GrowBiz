@@ -1,8 +1,6 @@
 package com.kb.infoPlaza.controller;
 
 
-import com.kb.board.dto.BoardPageResult;
-import com.kb.board.dto.BoardParam;
 import com.kb.infoPlaza.dto.IndividualEduDTO;
 import com.kb.infoPlaza.dto.IndividualEduParam;
 import com.kb.infoPlaza.service.IndividualEduService;
@@ -37,14 +35,15 @@ public class IndividualEduController {
     }
     // 검색 엔드포인트: 옵션으로 검색
     @GetMapping("/search")
-    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(IndividualEduParam individualEduParam) {
-        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(individualEduParam);
+    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEdu(IndividualEduParam individualEduParam) {
+        List<IndividualEduDTO> result;
+        if (individualEduParam.getSearchType() != null){
+            result = individualEduService.searchIndividualEdu(individualEduParam);
+        }
+        else {
+            result = individualEduService.searchIndividualEduByOption(individualEduParam);
+        }
         return ResponseEntity.ok(result);
     }
-//        @PostMapping("/search")
-//        public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByOption(@RequestParam IndividualEduParam individualEduParam) {
-//        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByOption(individualEduParam);
-//        return ResponseEntity.ok(result);
-//        }
 
 }
