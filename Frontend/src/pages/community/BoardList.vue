@@ -299,6 +299,7 @@ const fetchPostsByCategory = async (category) => {
 // 카테고리 prop이 변경될 때마다 게시글 목록을 다시 가져옴
 watch(() => props.category, (newCategory) => {
   fetchPostsByCategory(newCategory);
+  currentPage.value = 1; // 카테고리 변경 시 페이지를 1로 초기화
 });
 
 // 페이지 로드 시 기본 카테고리 게시글을 가져옴
