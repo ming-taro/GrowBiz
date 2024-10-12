@@ -175,6 +175,13 @@
           </div>
         </aside>
       </div>
+      <div class="text-center mt-10 mb-5">
+        <RouterLink
+          :to="`/infoPlaza/mortgageLoan/`"
+          class="btn btn-sm btn-neutral mb-5 mt-1"
+          >목록</RouterLink
+        >
+      </div>
       <div class="row mt-5">
         <h3>이 대출 상품이 마음에 드시나요?</h3>
         <div class="row mt-5">
