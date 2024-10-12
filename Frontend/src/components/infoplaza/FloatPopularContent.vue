@@ -299,7 +299,7 @@ const displayMarkers = (populationData) => {
           title: adstrdCdNm,
           image: new window.kakao.maps.MarkerImage(
             `/src/assets/img/infoplaza/marker_${markerColor}.png`,
-            new window.kakao.maps.Size(35, 35)
+            new window.kakao.maps.Size(50, 50)
           ),
         });
 
