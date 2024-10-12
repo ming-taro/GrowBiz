@@ -265,8 +265,6 @@ const hideCommentDeleteModal = () => {
 
 const confirmCommentDelete = async () => {
     try {
-      console.log(commentToDelete.value);
-      console.log(loggedInUserId.value);
         await axios.delete(`http://localhost:8080/api/community/comment/${commentToDelete.value}`, {
             params: { userId: loggedInUserId.value } // 여기에서 userId 추가
         });

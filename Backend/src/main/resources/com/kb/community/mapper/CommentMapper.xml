@@ -16,6 +16,6 @@
 
     <delete id="deleteComment">
         DELETE FROM community_comment
-        WHERE comment_id = #{commentId} and user_id = ${userId}
+        WHERE comment_id = #{commentId} and user_id = #{userId} <!-- userId를 ${userId}에서 #{userId}로 변경 -->
     </delete>
 </mapper>
