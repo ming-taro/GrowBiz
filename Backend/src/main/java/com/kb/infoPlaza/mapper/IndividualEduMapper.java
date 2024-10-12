@@ -2,8 +2,8 @@ package com.kb.infoPlaza.mapper;
 
 import com.kb.infoPlaza.dto.IndividualEduDTO;
 import com.kb.infoPlaza.dto.IndividualEduParam;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,6 +14,8 @@ public interface IndividualEduMapper {
     // 특정 영상 조회
    IndividualEduDTO selectIndividualEduById(int vno);
 
-   List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam individualEduParam);
-//   List<IndividualEduDTO> searchIndividualEduByOption(IndividualEduParam param);
+   List<IndividualEduDTO> searchIndividualEduByOption(IndividualEduParam individualEduParam);
+   List<IndividualEduDTO> searchIndividualEdu(IndividualEduParam individualEduParam);
+   List<IndividualEduDTO> searchIndividualEduByTitle(IndividualEduParam individualEduParam);
+   List<IndividualEduDTO> searchIndividualEduByContent(IndividualEduParam individualEduParam);
 }

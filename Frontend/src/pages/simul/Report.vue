@@ -46,6 +46,8 @@ const storeReport = async () => {
   let query = window.location.search;
   let param = new URLSearchParams(query);
   let reportId = param.get('id');
+
+  console.log("리포트 아이디:", reportId);
   
   report.value = await fetchReportById(reportId);
 }
