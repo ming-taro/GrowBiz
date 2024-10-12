@@ -37,7 +37,7 @@
 
 <script setup>
 import { onMounted, ref, defineProps } from 'vue'
-import { fetchResponseById } from '@/services/QuestionAPI';
+import { fetchResponseById } from '@/services/SimulationAPI';
 
 const props = defineProps(["simulationResponseId"]);
 const simulationResponse = ref([]);

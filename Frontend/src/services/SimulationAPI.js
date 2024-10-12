@@ -52,3 +52,8 @@ export const fetchResponseById = async (id) => {
     throw error;
   }
 };
+
+export const findLocation = async (id) => {
+  const data = await fetchResponseById(id);
+  return data[0].district + " " + data[0].neighborhoods;
+}
