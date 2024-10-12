@@ -62,32 +62,33 @@
 
       <div class="row mb-3">
         <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >현재 비밀번호</label
+          >현재 비밀번호를 입력하세요.</label
         >
         <div class="col-sm-9">
-          <input type="text" class="form-control" />
+          <input type="text" class="form-control" v-model="oldPassword" />
         </div>
       </div>
       <div class="row mb-3">
         <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >새로운 비밀번호</label
+          >새로운 비밀번호를 입력하세요.</label
         >
         <div class="col-sm-9">
-          <input type="text" class="form-control" />
+          <input type="password" class="form-control" v-model="newPassword1" />
         </div>
       </div>
       <div class="row mb-3">
         <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >새로운 비밀번호 확인</label
+          >새로운 비밀번호 확인를 입력하세요.</label
         >
         <div class="col-sm-9">
-          <input type="text" class="form-control" />
+          <input type="password" class="form-control" v-model="newPassword2" />
         </div>
       </div>
 
       <button
         type="submit"
         class="btn btn-primary rounded-pill btn-custom mt-10"
+        @click="changePassword"
       >
         비밀번호 변경하기
       </button>
@@ -103,6 +104,9 @@ import { ref, onMounted } from 'vue';
 
 const authStore = useAuthStore();
 const newNickname = ref('');
+const oldPassword = ref('');
+const newPassword1 = ref('');
+const newPassword2 = ref('');
 
 const changeNickname = () => {
   if (newNickname.value) {
@@ -118,10 +122,33 @@ const changeNickname = () => {
     alert('닉네임을 입력해주세요.');
   }
 };
+const changePassword = () => {
+  // oldPassword, newPassword1, newPassword2가 모두 존재하고 newPassword1과 newPassword2가 같을 때
+  if (
+    oldPassword.value &&
+    newPassword1.value &&
+    newPassword2.value &&
+    newPassword1.value === newPassword2.value
+  ) {
+    const passwordInfo = {
+      id: authStore.state.id,
+      oldPassword: oldPassword.value,
+      newPassword: newPassword1.value,
+    };
 
-onMounted(async () => {
-  await authStore.load(); // store에서 데이터를 로드
-});
+    // 비밀번호 변경 로직 호출
+    authStore.changePassword(passwordInfo);
+  } else {
+    // 조건을 만족하지 않는 경우의 알림 메시지
+    if (!oldPassword.value) {
+      alert('현재 비밀번호를 입력해주세요.');
+    } else if (!newPassword1.value || !newPassword2.value) {
+      alert('새 비밀번호를 입력해주세요.');
+    } else if (newPassword1.value !== newPassword2.value) {
+      alert('새 비밀번호가 일치하지 않습니다.');
+    }
+  }
+};
 </script>
 
 <style>

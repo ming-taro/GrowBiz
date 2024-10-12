@@ -77,7 +77,7 @@
         SET
             password = #{newPassword},
             modify_date = now()
-        WHERE mno = #{mno}
+        WHERE id = #{id}
     </update>
 
 <!--    <delete id="deleteMember">-->

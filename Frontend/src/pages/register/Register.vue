@@ -93,7 +93,7 @@
               </p>
             </div>
             <div class="col-sm-12">
-              <label for="name" class="form-label">사용자 이름</label>
+              <label for="name" class="form-label">닉네임</label>
               <input
                 type="text"
                 v-model="form.name"
