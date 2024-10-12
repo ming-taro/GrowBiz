@@ -33,6 +33,14 @@ user_data = {
 gu = user_data['region'].split(', ')[1]  # '강남구'
 dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
 
+
+# 치킨 프랜차이즈 데이터를 json 파일에서 읽기
+def load_franchise_data():
+    with open('치킨_franchise_ranking.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return data
+
+
 # MySQL DB 연결 함수
 def connect_to_db():
     connection = pymysql.connect(
@@ -168,21 +176,25 @@ def search_brand_in_region():
     return densities  # 계산된 밀도 리스트 반환
 
 # 보증금과 초기 자본금 조건을 만족하는지 확인하는 함수
-def filter_franchises_by_cost(franchise_data, property_listings, initial_capital):
+def filter_franchises_by_cost(initial_capital):
+    franchise_data = load_franchise_data()  # JSON 파일에서 프랜차이즈 데이터 가져오기
     filtered_franchises = []
     
     for store in franchise_data:
         initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
-        for listing in property_listings:
-            deposit = listing['bsc_tnth_wunt_amt']  # 매물의 보증금
-            
-            # 조건: 초기 비용 + 보증금 <= 사용자가 입력한 자본금
-            if initial_cost + deposit <= initial_capital:
-                filtered_franchises.append(store)
+        business_fee = float(store['business_fee'].replace('만원', '').replace(',', ''))  # 가맹비 변환
+        
+        # 조건: 초기 비용 + 가맹비 <= 사용자가 입력한 자본금
+        total_initial_cost = initial_cost + business_fee
+        
+        if total_initial_cost <= initial_capital:
+            filtered_franchises.append(store)
     
     return filtered_franchises
 
-# 밀도 계산 후 평균과 표준편차를 구해 가산/감점 적용
+
+
+# 밀도 계산 후 조정하는 함수
 def adjust_density_scores(densities):
     mean_density = np.mean(densities)
     std_density = np.std(densities)
@@ -250,21 +262,18 @@ if __name__ == "__main__":
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
 
     if densities:
-        # 3. 밀도의 평균과 표준편차 계산
+        # 3. 밀도의 평균과 표준편차 계산 및 밀도 점수 조정
         adjusted_density_scores, mean_density, std_density = adjust_density_scores(densities)
         print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
 
-        # 4. 기존 랭킹 데이터 로드
-        franchise_data = load_franchise_data()  # 기존 랭킹 데이터를 JSON에서 로드
+        # 4. 초기 자본금 조건을 만족하는 프랜차이즈 필터링
+        filtered_franchises = filter_franchises_by_cost(user_data['initial_capital'])  # 자본금 조건을 만족하는 프랜차이즈 필터링
         
-        # 5. 초기 자본금 조건을 만족하는 프랜차이즈 필터링
-        filtered_franchises = filter_franchises_by_cost(franchise_data, property_listings, user_data['initial_capital'])
-        
-        # 6. 필터링된 프랜차이즈의 최종 점수 계산
+        # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
         
-        # 7. 상위 3개 프랜차이즈 추천
-        top_3_franchises = recommend_top_3_franchises(final_scores)
+        # 6. 상위 3개 프랜차이즈 추천
+        top_3_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]
         print("\n=== 추천 프랜차이즈 상위 3개 ===")
         for franchise, score in top_3_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
