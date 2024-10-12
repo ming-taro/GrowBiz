@@ -44,7 +44,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { createReport } from '@/services/ReportAPI';
-import { getQuestions, createSimulationAnswer } from '@/services/QuestionAPI';
+import { getQuestions, createSimulationAnswer } from '@/services/SimulationAPI';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();

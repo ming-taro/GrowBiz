@@ -91,25 +91,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  mounted() {
-    const script = document.createElement('script');
-    script.src = import.meta.env.VITE_KAKAO_API_URL;
-    script.onload = () => {
-      kakao.maps.load(() => {
-        var container = document.getElementById('map');
-        var options = {
-          center: new kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        };
+<script setup>
+import { onMounted, defineProps } from 'vue';
+import { findLocationByAddress } from '@/services/LocationAPI';
 
-        var map = new kakao.maps.Map(container, options);
-      });
-    };
-    document.head.appendChild(script);
-  },
-};
+const props = defineProps(["location"]);
+
+onMounted(async() => {
+  const location = await findLocationByAddress(props.location);
+  const script = document.createElement('script');
+  script.src = import.meta.env.VITE_KAKAO_API_URL;
+  script.onload = () => {
+    kakao.maps.load(() => {
+      var container = document.getElementById('map');
+      var options = {
+        center: new kakao.maps.LatLng(location.y, location.x),
+        level: 5,
+      };
+
+      var map = new kakao.maps.Map(container, options);
+    });
+  };
+  document.head.appendChild(script);
+})
 </script>
 
 <style scoped>

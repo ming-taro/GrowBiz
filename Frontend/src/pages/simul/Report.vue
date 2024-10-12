@@ -6,7 +6,7 @@
 
     <div class="container mw-screen-xl">
       <!-- 추천 위치 -->
-      <Location />
+      <Location v-if="location != null" v-bind:location=location />
     </div>
 
     <!-- 그래프 -->
@@ -30,10 +30,18 @@ import Location from '@/components/report/Location.vue';
 import Bar from '@/components/report/Bar.vue';
 import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
-import { fetchReportById } from '@/services/ReportAPI';
 import { onMounted, ref } from 'vue';
+import { fetchReportById } from '@/services/ReportAPI';
+import { findLocation } from '@/services/SimulationAPI';
+
 
 const report = ref(null);
+const location = ref(null);
+
+const storeLocation = async () => {
+  const id = report.value.simulationResponseId;
+  location.value = await findLocation(id);
+}
 
 const storeReport = async () => {
   let query = window.location.search;
@@ -45,6 +53,7 @@ const storeReport = async () => {
 
 onMounted(async () => {
   await storeReport();
+  await storeLocation();
 });
 </script>
 
