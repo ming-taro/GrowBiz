@@ -285,21 +285,37 @@ if __name__ == "__main__":
         # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
 
-        # 6. 상위 1개의 프랜차이즈 선택
-        top_franchise = sorted(final_scores, key=lambda x: x[1], reverse=True)[0]  # 점수가 가장 높은 프랜차이즈 선택
-        print("\n=== 추천된 상위 프랜차이즈 ===")
-        print(f"{top_franchise[0]} - 최종 점수: {top_franchise[1]:.2f}")
+        # 6. 상위 3개의 프랜차이즈 선택 (청년치킨 포함)
+        top_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]  # 상위 3개의 프랜차이즈 선택
+        print("\n=== 상위 3개 추천 프랜차이즈 ===")
+        for franchise, score in top_franchises:
+            print(f"{franchise} - 최종 점수: {score:.2f}")
 
-        # 7. 추천된 프랜차이즈의 면적과 매물 면적 비교
-        valid_recommendations = filter_listings_by_franchise_area(property_listings, [store for store in filtered_franchises if store['store_name'] == top_franchise[0]])
-        
-        # 상위 3개의 매물만 선택
+            
+        # 7. 제외된 프랜차이즈 3개를 출력
+        print("\n=== 가맹비가 비싸서 제외된 프랜차이즈 3개 ===")
+        excluded_franchises_sorted = sorted(
+            excluded_franchises, 
+            key=lambda x: (
+                float(x['initial_cost'].replace('만원', '').replace(',', '').strip()), 
+                float(x['business_fee'].replace('만원', '').replace(',', '').strip())
+            )
+        )[:3]
+        for franchise in excluded_franchises_sorted:
+            print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, 초기 비용: {franchise['initial_cost']}만원, 점수: {franchise['score']}")
+
+        # 8. 추천된 프랜차이즈 중에서 매물 필터링 (청년치킨에 해당하는 매물만)
+        top_franchise_name = top_franchises[0][0]  # 상위 1개의 프랜차이즈 이름 (청년치킨)
+        valid_recommendations = filter_listings_by_franchise_area(property_listings, [store for store in filtered_franchises if store['store_name'] == top_franchise_name])
+
+        # 9. 보증금과 월세가 적은 매물 3개 선택
         top_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
 
-        print("\n=== 추천 가능한 매물 (상위 3개) ===")
+        print("\n=== 추천 가능한 매물 (청년치킨에 해당하는 상위 3개) ===")
         if top_listings:
             for recommendation in top_listings:
                 print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
                 print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
+
