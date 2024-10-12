@@ -96,8 +96,6 @@
                     <option selected value="">전체</option>
                     <option value="title">과정명</option>
                     <option value="content">내용</option>
-                    <option value="hashtag">해시태그</option>
-                    <option value="teacher">강사명</option>
                   </select>
                 </div>
                 <input

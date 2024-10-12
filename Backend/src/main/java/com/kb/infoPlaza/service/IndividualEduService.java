@@ -6,7 +6,6 @@ import com.kb.infoPlaza.dto.IndividualEduParam;
 import com.kb.infoPlaza.mapper.IndividualEduMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,15 +23,12 @@ public class IndividualEduService {
 
 
     public List<IndividualEduDTO> selectAllIndividualEdu() {
-        System.out.println("@@@!!!!");
-        log.info("getlist-----------------");
         List<IndividualEduDTO> list = mapper.selectAllIndividualEdu();
         return list;
     }
 
 
     public IndividualEduDTO selectIndividualEduById(int vno) {
-        log.info("get------------------------------");
         IndividualEduDTO individualEduDTO = mapper.selectIndividualEduById(vno);
         return Optional.ofNullable(individualEduDTO)
                 .orElseThrow(() -> new NoSuchElementException("Can't find video number" + vno ));
@@ -43,7 +39,7 @@ public class IndividualEduService {
         // Option 배열이 존재하면 category에서 검색
         if (param.getOption() != null && !param.getOption().isEmpty()) {
             log.info("if");
-            return mapper.searchIndividualEduByKeyword(param);
+            return mapper.searchIndividualEduByOption(param);
         }
         System.out.println("asdf");
         // Option이 없을 경우 기본 검색 처리 (필요시 전체 데이터를 반환하거나 에러 처리 가능)
@@ -51,7 +47,7 @@ public class IndividualEduService {
     }
 
 //
-//    public List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam param) {
+//    public List<IndividualEduDTO> searchIndividualEduByOption(IndividualEduParam param) {
 //
 //        // OPTION 배열을 이용한 검색 조건
 //        if (param.getOption() != null && !param.getOption().isEmpty()) {

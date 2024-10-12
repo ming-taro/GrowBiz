@@ -42,8 +42,8 @@ public class IndividualEduController {
         return ResponseEntity.ok(result);
     }
 //        @PostMapping("/search")
-//        public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(@RequestParam IndividualEduParam individualEduParam) {
-//        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(individualEduParam);
+//        public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByOption(@RequestParam IndividualEduParam individualEduParam) {
+//        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByOption(individualEduParam);
 //        return ResponseEntity.ok(result);
 //        }
 

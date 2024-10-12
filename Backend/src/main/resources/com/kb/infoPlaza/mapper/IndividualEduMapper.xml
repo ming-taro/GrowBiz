@@ -12,7 +12,7 @@
         </select>
 
 
-    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
+    <select id="searchIndividualEduByOption" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
         <![CDATA[
     SELECT * FROM individual_edu
     WHERE 1=1
@@ -28,7 +28,7 @@
     </select>
 
 <!--    &lt;!&ndash; 검색하는 SQL 쿼리 &ndash;&gt;-->
-<!--    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">-->
+<!--    <select id="searchIndividualEduByOption" parameterType="IndividualEduParam" resultType="IndividualEduDTO">-->
 <!--        <![CDATA[-->
 <!--        SELECT *-->
 <!--        FROM individual_edu-->
