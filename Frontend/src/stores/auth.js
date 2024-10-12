@@ -97,6 +97,35 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const changePassword = async (passwordInfo) => {
+    try {
+      console.log('Sending data:', {
+        id: passwordInfo.id,
+        oldPassword: passwordInfo.oldPassword,
+        newPassword: passwordInfo.newPassword, // 수정: name 속성을 제거
+      });
+      const { data } = await axios.put(
+        `http://localhost:8080/api/member/${passwordInfo.id}/changepassword`, // state.value.id를 passwordInfo.id로 수정
+        {
+          id: passwordInfo.id,
+          oldPassword: passwordInfo.oldPassword,
+          newPassword: passwordInfo.newPassword, // 수정: name 속성을 제거
+        }
+      );
+      console.log(data);
+      alert('성공적으로 비밀번호가 변경되었습니다.');
+      state.value.password = data.newPassword;
+      localStorage.setItem('auth', JSON.stringify(state.value));
+    } catch (error) {
+      console.error('에러 객체:', error); // 에러 정보를 콘솔에 출력
+      if (error.response) {
+        alert(error.response.data); // 서버에서 보낸 에러 메시지
+      } else {
+        alert('네트워크 오류 또는 요청 오류 발생'); // 다른 오류 처리
+      }
+    }
+  };
+
   const changeProfile = (member) => {
     state.value.name = member.name;
     state.value.email = member.email;
@@ -118,6 +147,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLogin,
     changeProfile,
     changeProfileName,
+    changePassword,
     login,
     logout,
     getToken,

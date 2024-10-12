@@ -12,7 +12,7 @@ import java.util.List;
 public class IndividualEduParam {
     // html - form의 name과 일치하는 파라메터
     private String searchType;
-    private String searchValue;
+    private String searchKeyword;
 //    private int amount;
     private List<String> Option;
 //

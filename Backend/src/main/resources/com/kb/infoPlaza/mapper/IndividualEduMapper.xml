@@ -12,7 +12,7 @@
         </select>
 
 
-    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
+    <select id="searchIndividualEduByOption" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
         <![CDATA[
     SELECT * FROM individual_edu
     WHERE 1=1
@@ -26,67 +26,29 @@
             )
         </if>
     </select>
+    <select id="searchIndividualEdu" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
 
-<!--    &lt;!&ndash; 검색하는 SQL 쿼리 &ndash;&gt;-->
-<!--    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">-->
-<!--        <![CDATA[-->
-<!--        SELECT *-->
-<!--        FROM individual_edu-->
-<!--        WHERE 1=1-->
-<!--    ]]>-->
-<!--        &lt;!&ndash; Option 배열에 값이 있는 경우 &ndash;&gt;-->
-<!--        <if test="Option != null and Option.size() > 0">-->
-<!--            <foreach item="option" collection="Option" open="AND (" separator="OR" close=")">-->
-<!--                category LIKE CONCAT('%', #{option}, '%')-->
-<!--            </foreach>-->
-<!--        </if>-->
-<!--    </select>-->
+    <select id="searchIndividualEduByTitle" parameterType="IndividualEduParam" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
 
-<!--    <select id="searchIndividualEduByOption" parameterType="IndividualEduParam" resultType="IndividualEduDTO">-->
-<!--        <![CDATA[-->
-<!--        select-->
-<!--            distinct v.vno, v.video_url, v.thumbnail, v.title, v.content,-->
-<!--            v.brief_introduction, v.learning_goal, v.category,-->
-<!--            v.edu_time, v.hashtag, v.industry_subcategory-->
-<!--        from individual_edu v-->
-<!--        where-->
-<!--    ]]>-->
-<!--        v.status = 'y' &lt;!&ndash; 1=1을 사용해도 무관  &ndash;&gt;-->
-<!--        <if test="types != null">-->
-<!--            and v.category in-->
-<!--            <foreach item="item" collection="types" open="(" separator="," close=")">-->
-<!--                #{item}-->
-<!--            </foreach>-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'briefIntroduction'">-->
-<!--            and v.brief_introduction like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'learningGoal'">-->
-<!--            and v.learning_goal like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'category'">-->
-<!--            and v.category like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'eduTime'">-->
-<!--            and v.edu_time like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'hashtag'">-->
-<!--            and v.hashtag like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'industrySubcategory'">-->
-<!--            and v.industry_subcategory like '%${searchValue}%'-->
-<!--        </if>-->
-<!--        <if test="searchOption == 'all'">-->
-<!--            and(-->
-<!--            v.title like '%${searchValue}%'-->
-<!--            or v.content like '%${searchValue}%'-->
-<!--            or v.brief_introduction like '%${searchValue}%'-->
-<!--            or v.learning_goal like '%${searchValue}%'-->
-<!--            or v.category like '%${searchValue}%'-->
-<!--            or v.edu_time like '%${searchValue}%'-->
-<!--            or v.hashtag like '%${searchValue}%'-->
-<!--            or v.industry_subcategory like '%${searchValue}%'-->
-<!--            )-->
-<!--        </if>-->
-<!--    </select>-->
+    <select id="searchIndividualEduByContent" parameterType="IndividualEduParam" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
+
 </mapper>

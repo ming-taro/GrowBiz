@@ -6,19 +6,19 @@
         <div class="card none_border">
           <div class="d-flex">
             <img
-              src="@/assets/img/media/img-1.jpg"
+              src="@/assets/img/report/cafe2.png"
               class="rounded card-img-left"
               alt="Card image"
             />
             <div class="card-body">
-              <h4 class="mb-3">강서구 카페</h4>
+              <h3 class="mb-3">동작구 카페</h3>
               <div class="d-flex justify-content-between">
-                <h5 class="mb-1">보증금</h5>
-                <h4 class="mb-0">1억</h4>
+                <h5 class="mb-1 fw-medium">보증금</h5>
+                <h4 class="mb-0">2억</h4>
               </div>
               <div class="d-flex justify-content-between">
-                <h5 class="mb-0">월세</h5>
-                <h4 class="mb-0">500만</h4>
+                <h5 class="mb-0 fw-medium">월세</h5>
+                <h4 class="mb-0">550만</h4>
               </div>
             </div>
           </div>
@@ -28,19 +28,19 @@
         <div class="card none_border">
           <div class="d-flex">
             <img
-              src="@/assets/img/media/img-1.jpg"
+              src="@/assets/img/report/cafe1.png"
               class="rounded card-img-left"
               alt="Card image"
             />
             <div class="card-body">
-              <h4 class="mb-3">강서구 카페</h4>
+              <h3 class="mb-3">강남구 카페</h3>
               <div class="d-flex justify-content-between">
-                <h5 class="mb-1">보증금</h5>
+                <h5 class="mb-1 fw-medium">보증금</h5>
                 <h4 class="mb-0">1억</h4>
               </div>
               <div class="d-flex justify-content-between">
-                <h5 class="mb-0">월세</h5>
-                <h4 class="mb-0">500만</h4>
+                <h5 class="mb-0 fw-medium">월세</h5>
+                <h4 class="mb-0">900만</h4>
               </div>
             </div>
           </div>
