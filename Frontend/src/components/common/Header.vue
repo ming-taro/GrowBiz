@@ -37,7 +37,7 @@
 
                 <li class="nav-item">
                   <a class="fw-bold nav-link rounded-pill" href="/asset"
-                    >가계관리</a
+                    >가게관리</a
                   >
                 </li>
                 <li class="nav-item flex-item header-info-container">
