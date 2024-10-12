@@ -184,7 +184,12 @@ const router = createRouter({
       name: 'CategoryList',
       component: CategoryList,
     },
-    { path: '/infoPlaza/news', name: 'news', component: news },
+//    { path: '/infoPlaza/news', name: 'news', component: news },
+      {
+        path: '/infoplaza/news/:category', // :category를 동적으로 받아옴
+        name: 'news',
+        component: news, // 해당 컴포넌트에서 뉴스 카테고리를 처리
+      },
     // { path: '/infoPlaza/education/video', name: 'video', component: Video },
     { path: '/simul/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },

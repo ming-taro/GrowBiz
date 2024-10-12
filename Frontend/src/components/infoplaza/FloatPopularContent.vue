@@ -139,8 +139,8 @@ const fetchDistinctDistricts = async () => {
     // 1. 기본값 미리 설정
     districts.value = [{ guName: '광진구' }];
     selectedDistrict.value = '광진구';
-    towns.value = '화양동'; // 초기화
-    selectedTown.value = '화양동'; // 초기화
+    towns.value = '광장동'; // 초기화
+    selectedTown.value = '광장동'; // 초기화
 
     // 2. 비동기적으로 데이터 불러오기
     const response = await axios.get(

@@ -85,7 +85,7 @@
                     <RouterLink to="/infoPlaza/personalCreditLoan"
                       ><span>대출정보</span></RouterLink
                     >
-                    <RouterLink to="/infoPlaza/news"
+                    <RouterLink to="/infoPlaza/news/economy"
                       ><span>뉴스</span></RouterLink
                     >
                   </div>
