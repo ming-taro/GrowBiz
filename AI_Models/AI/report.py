@@ -179,9 +179,11 @@ def search_brand_in_region():
     return densities  # 계산된 밀도 리스트 반환
 
 # 보증금과 초기 자본금 조건을 만족하는지 확인하는 함수
+# 초기 자본금 조건을 만족하는지 확인하는 함수 (제외된 프랜차이즈도 반환)
 def filter_franchises_by_cost(initial_capital):
     franchise_data = load_franchise_data()  # JSON 파일에서 프랜차이즈 데이터 가져오기
     filtered_franchises = []
+    excluded_franchises = []
     
     for store in franchise_data:
         initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
@@ -191,9 +193,12 @@ def filter_franchises_by_cost(initial_capital):
         total_initial_cost = initial_cost + business_fee
         
         if total_initial_cost <= initial_capital:
-            filtered_franchises.append(store)
+            filtered_franchises.append(store)  # 조건 만족
+        else:
+            excluded_franchises.append(store)  # 조건 불만족 (제외됨)
     
-    return filtered_franchises
+    return filtered_franchises, excluded_franchises
+
 
 
 
@@ -307,25 +312,27 @@ if __name__ == "__main__":
         adjusted_density_scores, mean_density, std_density = adjust_density_scores(densities)
         print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
 
-        # 4. 초기 자본금 조건을 만족하는 프랜차이즈 필터링
-        filtered_franchises = filter_franchises_by_cost(user_data['initial_capital'])  # 자본금 조건을 만족하는 프랜차이즈 필터링
+        # 4. 초기 자본금 조건을 만족하는 프랜차이즈 필터링 (제외된 프랜차이즈 포함)
+        filtered_franchises, excluded_franchises = filter_franchises_by_cost(user_data['initial_capital'])  
         
         # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
+        print("\n=== 모든 추천 가능한 프랜차이즈 ===")
+        for franchise, score in sorted(final_scores, key=lambda x: x[1], reverse=True):
+            print(f"{franchise} - 최종 점수: {score:.2f}")
         
-        # 6. 랜덤포레스트 모델 정확도 계산
-        accuracy = random_forest_accuracy(final_scores)
-        print(f"\n랜덤포레스트 모델의 정확도: {accuracy:.2f}")
-
-        # 7. 상위 3개 프랜차이즈 추천
+        # 6. 상위 3개 프랜차이즈 추천
         top_3_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]
         print("\n=== 추천 프랜차이즈 상위 3개 ===")
         for franchise, score in top_3_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
         
-        # 8. 자본금 조건을 만족하지 않는 프랜차이즈 리스트 출력
-        excluded_franchises = get_excluded_franchises(user_data['initial_capital'])
+        # 7. 제외된 프랜차이즈들의 최종 점수 계산
         if excluded_franchises:
-            print("\n=== 자본금 때문에 제외된 프랜차이즈 ===")
-            for store in excluded_franchises:
-                print(f"{store['store_name']} - 초기 비용: {store['initial_cost']}만원, 가맹비: {store['business_fee']}만원")
+            excluded_scores = calculate_final_scores(excluded_franchises, adjusted_density_scores)
+            print("\n=== 자본금 때문에 제외된 프랜차이즈 (최종 점수 포함) ===")
+            for franchise_name, score in sorted(excluded_scores, key=lambda x: x[1], reverse=True):
+                # 해당 프랜차이즈의 초기 비용과 가맹비를 찾아 출력
+                franchise = next(store for store in excluded_franchises if store['store_name'] == franchise_name)
+                print(f"{franchise_name} - 최종 점수: {score:.2f}, 초기 비용: {franchise['initial_cost']}만원, 가맹비: {franchise['business_fee']}만원")
+
