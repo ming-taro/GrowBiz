@@ -30,7 +30,7 @@
             <div class="row">
               <div class="col-6">
                 <div
-                  class="d-flex justify-content-center align-items-center mb-4"
+                  class="d-flex justify-content-center align-items-center mb-4 mt-4"
                 >
                   <!-- 수직, 수평 중앙 정렬 -->
                   <h1 style="font-weight: bold">강남구 유통업</h1>
@@ -41,55 +41,55 @@
                     <div
                       class="circle d-flex flex-column justify-content-center align-items-center"
                     >
-                      <h6 style="font-weight: 400">보증금</h6>
-                      <h2 style="font-weight: 600">1억</h2>
+                      <h3 style="font-weight: 400">보증금</h3>
+                      <h1 style="font-weight: 600">1억</h1>
                     </div>
                     <!-- 월세 -->
                     <div
                       class="circle d-flex flex-column justify-content-center align-items-center"
                     >
-                      <h6 style="font-weight: 400">월세</h6>
-                      <h2 style="font-weight: 600">600만</h2>
+                      <h3 style="font-weight: 400">월세</h3>
+                      <h1 style="font-weight: 600">600만</h1>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-6 mt-1 d-flex flex-column align-self-end">
+              <div class="col-6 ps-8 mt-10 mb-0 d-flex flex-column align-self-end">
                 <!-- 부모 요소를 flex로 설정 -->
                 <div>
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h4 class="mb-2 fw-light">중분류</h4>
-                    <h4 class="mb-2 me-5">편의점</h4>
+                    <h3 class="mb-2 fw-light">중분류</h3>
+                    <h3 class="mb-2 me-5">편의점</h3>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h4 class="mb-2 fw-light">유형</h4>
-                    <h4 class="mb-2 me-5">프랜차이즈</h4>
+                    <h3 class="mb-2 fw-light">유형</h3>
+                    <h3 class="mb-2 me-5">프랜차이즈</h3>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h4 class="mb-2 fw-light">거주지</h4>
-                    <h4 class="mb-2 me-5">인근 30km</h4>
+                    <h3 class="mb-2 fw-light">거주지</h3>
+                    <h3 class="mb-2 me-5">인근 30km</h3>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h4 class="mb-2 fw-light">교육</h4>
-                    <h4 class="mb-2 me-5">필요</h4>
+                    <h3 class="mb-2 fw-light">교육</h3>
+                    <h3 class="mb-2 me-5">필요</h3>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h4 class="fw-light">대출 계획</h4>
-                    <h4 class="me-5">있음</h4>
+                    <h3 class="fw-light">대출 계획</h3>
+                    <h3 class="me-5">있음</h3>
                   </div>
                 </div>
               </div>
@@ -97,7 +97,7 @@
           </div>
           <div class="col-6" style="display: flex; align-items: stretch">
             <img
-              src="@/assets/img/report/clothes.png"
+              src="@/assets/img/report/gs25.jpg"
               alt=""
               class="full-image"
             />

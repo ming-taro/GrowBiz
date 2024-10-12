@@ -14,7 +14,10 @@ build/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+/caches
+/wrapper
+/daemon
+/native
 ### Eclipse ###
 application.properties
 .apt_generated

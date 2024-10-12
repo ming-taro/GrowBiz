@@ -64,7 +64,6 @@ public class MemberController {
         service.changePassword(changePassword);
         return ResponseEntity.ok().build();
     }
-
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Member> changeProfile(MemberDTO memberDTO,
 //                @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {

@@ -97,44 +97,56 @@ const cities = [
   // 추가 도시 및 구 데이터...
 ];
 
+
 onMounted(async () => {
-    await loadKakaoMap(mapContainer.value);
-    await fetchDistinctDistricts();
-    // 맵이 초기화된 후에만 fetchLocation 호출
-    fetchLocation();
+  try {
+    await loadKakaoMap();
+    if (kakaoMap) {
+      await fetchDistinctDistricts();
+      fetchLocation();
+    }
+  } catch (error) {
+    console.error("Error loading Kakao Map: ", error);
+  }
 });
 
 
-// Load Kakao Map
-const loadKakaoMap = (container) => {
-  const script = document.createElement('script');
-  script.src = import.meta.env.VITE_KAKAO_API_URL;
-  document.head.appendChild(script);
 
-  script.onload = () => {
-    window.kakao.maps.load(() => {
+const loadKakaoMap = () => {
+  return new Promise((resolve, reject) => {
+    if (window.kakao && window.kakao.maps) {
       const options = {
-        center: new window.kakao.maps.LatLng(37.5465421, 127.0713152), // 광진구 화양동
-        level: 5, // Zoom level
-        maxLevel: 6, // Maximum zoom level
+        center: new window.kakao.maps.LatLng(37.5465421, 127.0713152),
+        level: 5,
       };
-
-      kakaoMap = new window.kakao.maps.Map(container, options); // Create map instance
-      fetchDistinctDistricts();
-      fetchLocation();
-
-      // 줌 변경 이벤트 리스너 등록
-      kakao.maps.event.addListener(kakaoMap, 'zoom_changed', () => {
-        const level = kakaoMap.getLevel();
-        // 오버레이가 존재한다면 닫기
-        if (infowindow) {
-          infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
-          infowindow = null; // infowindow 초기화
+      kakaoMap = new window.kakao.maps.Map(mapContainer.value, options);
+      resolve(kakaoMap);
+    } else {
+      const script = document.createElement('script');
+      script.src = `${import.meta.env.VITE_KAKAO_API_URL}&v=${new Date().getTime()}`;
+      document.head.appendChild(script);
+      script.onload = () => {
+        if (window.kakao && window.kakao.maps) {
+          window.kakao.maps.load(() => {
+            const options = {
+              center: new window.kakao.maps.LatLng(37.5465421, 127.0713152),
+              level: 5,
+            };
+            kakaoMap = new window.kakao.maps.Map(mapContainer.value, options);
+            resolve(kakaoMap);
+          });
+        } else {
+          reject(new Error('Kakao Maps API failed to load'));
         }
-      });
-    });
-  };
+      };
+      script.onerror = () => {
+        reject(new Error('Kakao Maps API script failed to load'));
+      };
+    }
+  });
 };
+
+
 
 const fetchDistinctDistricts = async () => {
   try {
@@ -299,7 +311,7 @@ const displayMarkers = (populationData) => {
           title: adstrdCdNm,
           image: new window.kakao.maps.MarkerImage(
             `/src/assets/img/infoplaza/marker_${markerColor}.png`,
-            new window.kakao.maps.Size(35, 35)
+            new window.kakao.maps.Size(50, 50)
           ),
         });
 

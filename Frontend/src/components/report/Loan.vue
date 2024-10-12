@@ -19,11 +19,11 @@
                   data-bs-interval="8000"
                 >
                   <div style="width: 25%">
-                    <img src="@/assets/img/banklogo/국민은행.png" alt="" />
+                    <img src="@/assets/img/banklogo/우리은행.png" alt="" />
                   </div>
                   <div class="d-flex flex-stack flex-wrap">
                     <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
-                      >혁신성장촉진자금</span
+                      >개인신용대출 우대고객</span
                     >
                   </div>
                   <div class="carousel-inner pt-6">
@@ -37,7 +37,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5">신청기간</p>
-                            <p class="fs-5 fw-bolder">마감됨</p>
+                            <p class="fs-5 fw-bolder">24/08/20 ~</p>
                           </div>
 
                           <!-- 두 번째 행: 구분 -->
@@ -45,7 +45,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5">구분</p>
-                            <p class="fs-5 fw-bolder">성장기반자금/직접대출</p>
+                            <p class="fs-5 fw-bolder">일반신용대출</p>
                           </div>
 
                           <!-- 세 번째 행: 금리 -->
@@ -53,7 +53,139 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5 0">금리</p>
-                            <p class="fs-5 fw-bolder">3.83%</p>
+                            <p class="fs-5 fw-bolder">5.24%</p>
+                          </div>
+                        </div>
+
+                        <!-- Info (상세 보기 버튼) -->
+                        <div class="d-flex justify-content-end pt-4">
+                          <a
+                            href="#"
+                            class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
+                            >상세 보기</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 카드 1개끝 -->
+          <!-- 카드 1개 -->
+          <div class="col-xl-3">
+            <div class="card card-xl-stretch mb-5 mb-xl-8">
+              <div class="card-body pt-5">
+                <div
+                  id="kt_stats_widget_8_carousel"
+                  class="carousel carousel-custom carousel-stretch slide"
+                  data-bs-ride="carousel"
+                  data-bs-interval="8000"
+                >
+                  <div style="width: 25%">
+                    <img src="@/assets/img/banklogo/한국씨티은행.png" alt="" />
+                  </div>
+                  <div class="d-flex flex-stack flex-wrap">
+                    <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
+                      >장기카드대출</span
+                    >
+                  </div>
+                  <div class="carousel-inner pt-6">
+                    <div class="carousel-item active">
+                      <div class="carousel-wrapper">
+                        <div
+                          class="d-flex flex-column justify-content-between flex-grow-1"
+                        >
+                          <!-- 첫 번째 행: 신청기간 마감 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5">신청기간</p>
+                            <p class="fs-5 fw-bolder">
+                              24/08/21 ~</p>
+                          </div>
+
+                          <!-- 두 번째 행: 구분 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5">구분</p>
+                            <p class="fs-5 fw-bolder">장기카드대출(카드론)</p>
+                          </div>
+
+                          <!-- 세 번째 행: 금리 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5 0">금리</p>
+                            <p class="fs-5 fw-bolder">5.2%</p>
+                          </div>
+                        </div>
+
+                        <!-- Info (상세 보기 버튼) -->
+                        <div class="d-flex justify-content-end pt-4">
+                          <a
+                            href="#"
+                            class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
+                            >상세 보기</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 카드 1개끝 -->
+          <!-- 카드 1개 -->
+          <div class="col-xl-3">
+            <div class="card card-xl-stretch mb-5 mb-xl-8">
+              <div class="card-body pt-5">
+                <div
+                  id="kt_stats_widget_8_carousel"
+                  class="carousel carousel-custom carousel-stretch slide"
+                  data-bs-ride="carousel"
+                  data-bs-interval="8000"
+                >
+                  <div style="width: 25%">
+                    <img src="@/assets/img/banklogo/중소기업은행.png" alt="" />
+                  </div>
+                  <div class="d-flex flex-stack flex-wrap">
+                    <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
+                      >
+                      장기카드대출</span
+                    >
+                  </div>
+                  <div class="carousel-inner pt-6">
+                    <div class="carousel-item active">
+                      <div class="carousel-wrapper">
+                        <div
+                          class="d-flex flex-column justify-content-between flex-grow-1"
+                        >
+                          <!-- 첫 번째 행: 신청기간 마감 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5">신청기간</p>
+                            <p class="fs-5 fw-bolder">24/08/21 ~</p>
+                          </div>
+
+                          <!-- 두 번째 행: 구분 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5">구분</p>
+                            <p class="fs-5 fw-bolder">장기카드대출(카드론)</p>
+                          </div>
+
+                          <!-- 세 번째 행: 금리 -->
+                          <div
+                            class="d-flex justify-content-between align-items-center"
+                          >
+                            <p class="fs-5 0">금리</p>
+                            <p class="fs-5 fw-bolder">5.78%</p>
                           </div>
                         </div>
 
@@ -88,7 +220,7 @@
                   </div>
                   <div class="d-flex flex-stack flex-wrap">
                     <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
-                      >혁신성장촉진자금</span
+                      >KB사장님+ 마이너스통장</span
                     >
                   </div>
                   <div class="carousel-inner pt-6">
@@ -102,7 +234,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5">신청기간</p>
-                            <p class="fs-5 fw-bolder">마감됨</p>
+                            <p class="fs-5 fw-bolder">이용 가능</p>
                           </div>
 
                           <!-- 두 번째 행: 구분 -->
@@ -110,7 +242,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5">구분</p>
-                            <p class="fs-5 fw-bolder">성장기반자금/직접대출</p>
+                            <p class="fs-5 fw-bolder">마이너스한도대출</p>
                           </div>
 
                           <!-- 세 번째 행: 금리 -->
@@ -118,137 +250,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5 0">금리</p>
-                            <p class="fs-5 fw-bolder">3.83%</p>
-                          </div>
-                        </div>
-
-                        <!-- Info (상세 보기 버튼) -->
-                        <div class="d-flex justify-content-end pt-4">
-                          <a
-                            href="#"
-                            class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
-                            >상세 보기</a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 카드 1개끝 -->
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
-            <div class="card card-xl-stretch mb-5 mb-xl-8">
-              <div class="card-body pt-5">
-                <div
-                  id="kt_stats_widget_8_carousel"
-                  class="carousel carousel-custom carousel-stretch slide"
-                  data-bs-ride="carousel"
-                  data-bs-interval="8000"
-                >
-                  <div style="width: 25%">
-                    <img src="@/assets/img/banklogo/국민은행.png" alt="" />
-                  </div>
-                  <div class="d-flex flex-stack flex-wrap">
-                    <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
-                      >혁신성장촉진자금</span
-                    >
-                  </div>
-                  <div class="carousel-inner pt-6">
-                    <div class="carousel-item active">
-                      <div class="carousel-wrapper">
-                        <div
-                          class="d-flex flex-column justify-content-between flex-grow-1"
-                        >
-                          <!-- 첫 번째 행: 신청기간 마감 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5">신청기간</p>
-                            <p class="fs-5 fw-bolder">마감됨</p>
-                          </div>
-
-                          <!-- 두 번째 행: 구분 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5">구분</p>
-                            <p class="fs-5 fw-bolder">성장기반자금/직접대출</p>
-                          </div>
-
-                          <!-- 세 번째 행: 금리 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5 0">금리</p>
-                            <p class="fs-5 fw-bolder">3.83%</p>
-                          </div>
-                        </div>
-
-                        <!-- Info (상세 보기 버튼) -->
-                        <div class="d-flex justify-content-end pt-4">
-                          <a
-                            href="#"
-                            class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
-                            >상세 보기</a
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 카드 1개끝 -->
-          <!-- 카드 1개 -->
-          <div class="col-xl-3">
-            <div class="card card-xl-stretch mb-5 mb-xl-8">
-              <div class="card-body pt-5">
-                <div
-                  id="kt_stats_widget_8_carousel"
-                  class="carousel carousel-custom carousel-stretch slide"
-                  data-bs-ride="carousel"
-                  data-bs-interval="8000"
-                >
-                  <div style="width: 25%">
-                    <img src="@/assets/img/banklogo/국민은행.png" alt="" />
-                  </div>
-                  <div class="d-flex flex-stack flex-wrap">
-                    <span class="fs-3 text-gray-500 fw-bolder pe-2 pt-4"
-                      >혁신성장촉진자금</span
-                    >
-                  </div>
-                  <div class="carousel-inner pt-6">
-                    <div class="carousel-item active">
-                      <div class="carousel-wrapper">
-                        <div
-                          class="d-flex flex-column justify-content-between flex-grow-1"
-                        >
-                          <!-- 첫 번째 행: 신청기간 마감 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5">신청기간</p>
-                            <p class="fs-5 fw-bolder">마감됨</p>
-                          </div>
-
-                          <!-- 두 번째 행: 구분 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5">구분</p>
-                            <p class="fs-5 fw-bolder">성장기반자금/직접대출</p>
-                          </div>
-
-                          <!-- 세 번째 행: 금리 -->
-                          <div
-                            class="d-flex justify-content-between align-items-center"
-                          >
-                            <p class="fs-5 0">금리</p>
-                            <p class="fs-5 fw-bolder">3.83%</p>
+                            <p class="fs-5 fw-bolder">4.31%</p>
                           </div>
                         </div>
 

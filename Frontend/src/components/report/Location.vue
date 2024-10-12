@@ -98,7 +98,7 @@ import { findLocationByAddress } from '@/services/LocationAPI';
 const props = defineProps(["location"]);
 
 onMounted(async() => {
-  const location = await findLocationByAddress(props.location);
+  const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
   const script = document.createElement('script');
   script.src = import.meta.env.VITE_KAKAO_API_URL;
   script.onload = () => {
