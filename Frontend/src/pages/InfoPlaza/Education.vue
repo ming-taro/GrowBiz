@@ -125,7 +125,11 @@
             v-for="(item, index) in paginatedData"
             :key="item.vno"
           >
-            <div class="card mb-5 hover-card" style="cursor: pointer">
+            <div
+              class="card mb-5 hover-card"
+              style="cursor: pointer"
+              @click="goToDetail(item.vno)"
+            >
               <img
                 :src="item.thumbnail"
                 class="card-img-top"
@@ -143,8 +147,9 @@
                   <router-link
                     :to="`/infoplaza/education/video/${item.vno}`"
                     class="btn btn-sm btn-primary mt-2 ms-2"
-                    >상세보기</router-link
                   >
+                    상세보기
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -251,6 +256,7 @@
 import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
 import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const BASEURI = '/api/infoPlaza/education';
 
@@ -388,6 +394,13 @@ function openVideoPopup(videoUrl) {
     alert('비디오 URL이 없습니다.');
   }
 }
+
+const router = useRouter();
+
+const goToDetail = (vno) => {
+  router.push(`/infoplaza/education/video/${vno}`);
+};
+
 const options = [
   {
     category: '사업주기',
