@@ -60,4 +60,21 @@ public class IndividualEduService {
         }
         return list;
     }
+
+    public List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam param) {
+        if (param.getSearchKeyword() == null || param.getSearchKeyword().isEmpty()) {
+            return new ArrayList<>(); // 검색어가 없을 경우 빈 리스트 반환
+        }
+
+        switch (param.getSearchType()) {
+            case "title":
+                return mapper.searchIndividualEduByTitle(param);
+            case "content":
+                return mapper.searchIndividualEduByContent(param);
+            case "all":
+                return mapper.searchIndividualEduByKeyword(param); // 전체 검색
+            default:
+                throw new IllegalArgumentException("Invalid search type: " + param.getSearchType());
+        }
+    }
 }

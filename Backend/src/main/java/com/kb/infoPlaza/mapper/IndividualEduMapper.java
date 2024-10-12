@@ -18,4 +18,6 @@ public interface IndividualEduMapper {
    List<IndividualEduDTO> searchIndividualEdu(IndividualEduParam individualEduParam);
    List<IndividualEduDTO> searchIndividualEduByTitle(IndividualEduParam individualEduParam);
    List<IndividualEduDTO> searchIndividualEduByContent(IndividualEduParam individualEduParam);
+    List<IndividualEduDTO> searchIndividualEduByKeyword(IndividualEduParam individualEduParam);
+
 }

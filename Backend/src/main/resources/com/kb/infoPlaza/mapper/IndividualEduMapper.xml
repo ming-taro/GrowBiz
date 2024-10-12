@@ -50,5 +50,13 @@
            OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
            OR category LIKE CONCAT('%', #{searchKeyword}, '%')
     </select>
-
+    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
 </mapper>

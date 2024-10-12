@@ -45,5 +45,9 @@ public class IndividualEduController {
         }
         return ResponseEntity.ok(result);
     }
-
+    @GetMapping("/search/keyword")
+    public ResponseEntity<List<IndividualEduDTO>> searchIndividualEduByKeyword(IndividualEduParam individualEduParam) {
+        List<IndividualEduDTO> result = individualEduService.searchIndividualEduByKeyword(individualEduParam);
+        return ResponseEntity.ok(result);
+    }
 }
