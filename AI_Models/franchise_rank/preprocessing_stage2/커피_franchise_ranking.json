@@ -25,24 +25,10 @@
         "initial_cost": "7092.60 만원",
         "business_fee": "1180.00 만원",
         "interior_cost": "1540.00 만원",
-        "score": "97.26"
+        "score": "96.42"
     },
     {
         "rank": 3,
-        "store_name": "컴포즈커피(COMPOSE COFFEE)",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "36.81%",
-        "closure_rate": "0.85%",
-        "average_sales": "28419.10 만원",
-        "average_sales_per_area": "7224.50 만원",
-        "initial_cost": "9523.20 만원",
-        "business_fee": "1270.00 만원",
-        "interior_cost": "1600.00 만원",
-        "score": "96.80"
-    },
-    {
-        "rank": 4,
         "store_name": "카페인중독",
         "year": "2020-2023",
         "region": "서울",
@@ -53,7 +39,21 @@
         "initial_cost": "5200.00 만원",
         "business_fee": "980.00 만원",
         "interior_cost": "1800.00 만원",
-        "score": "96.09"
+        "score": "94.72"
+    },
+    {
+        "rank": 4,
+        "store_name": "컴포즈커피(COMPOSE COFFEE)",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "36.81%",
+        "closure_rate": "0.85%",
+        "average_sales": "28419.10 만원",
+        "average_sales_per_area": "7224.50 만원",
+        "initial_cost": "9523.20 만원",
+        "business_fee": "1270.00 만원",
+        "interior_cost": "1600.00 만원",
+        "score": "94.25"
     },
     {
         "rank": 5,
@@ -67,24 +67,10 @@
         "initial_cost": "7357.20 만원",
         "business_fee": "860.00 만원",
         "interior_cost": "1672.00 만원",
-        "score": "96.01"
+        "score": "93.80"
     },
     {
         "rank": 6,
-        "store_name": "포트캔커피 PORT CAN COFFEE",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "31.53%",
-        "closure_rate": "2.35%",
-        "average_sales": "29384.90 만원",
-        "average_sales_per_area": "2684.90 만원",
-        "initial_cost": "8101.00 만원",
-        "business_fee": "1600.00 만원",
-        "interior_cost": "2200.00 만원",
-        "score": "95.82"
-    },
-    {
-        "rank": 7,
         "store_name": "카페일리터",
         "year": "2020-2023",
         "region": "서울",
@@ -95,7 +81,21 @@
         "initial_cost": "4390.00 만원",
         "business_fee": "1090.00 만원",
         "interior_cost": "1100.00 만원",
-        "score": "93.89"
+        "score": "93.51"
+    },
+    {
+        "rank": 7,
+        "store_name": "포트캔커피 PORT CAN COFFEE",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "31.53%",
+        "closure_rate": "2.35%",
+        "average_sales": "29384.90 만원",
+        "average_sales_per_area": "2684.90 만원",
+        "initial_cost": "8101.00 만원",
+        "business_fee": "1600.00 만원",
+        "interior_cost": "2200.00 만원",
+        "score": "91.90"
     },
     {
         "rank": 8,
@@ -109,24 +109,10 @@
         "initial_cost": "9640.10 만원",
         "business_fee": "1650.00 만원",
         "interior_cost": "2365.00 만원",
-        "score": "91.75"
+        "score": "87.05"
     },
     {
         "rank": 9,
-        "store_name": "디저트39",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "39.77%",
-        "closure_rate": "4.12%",
-        "average_sales": "36731.70 만원",
-        "average_sales_per_area": "1896.60 만원",
-        "initial_cost": "16350.00 만원",
-        "business_fee": "1650.00 만원",
-        "interior_cost": "7000.00 만원",
-        "score": "76.61"
-    },
-    {
-        "rank": 10,
         "store_name": "커피기업",
         "year": "2020-2023",
         "region": "서울",
@@ -137,7 +123,21 @@
         "initial_cost": "9539.00 만원",
         "business_fee": "1520.00 만원",
         "interior_cost": "3630.00 만원",
-        "score": "75.96"
+        "score": "76.49"
+    },
+    {
+        "rank": 10,
+        "store_name": "디저트39",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "39.77%",
+        "closure_rate": "4.12%",
+        "average_sales": "36731.70 만원",
+        "average_sales_per_area": "1896.60 만원",
+        "initial_cost": "16350.00 만원",
+        "business_fee": "1650.00 만원",
+        "interior_cost": "7000.00 만원",
+        "score": "76.05"
     },
     {
         "rank": 11,
@@ -151,7 +151,7 @@
         "initial_cost": "9029.00 만원",
         "business_fee": "3100.00 만원",
         "interior_cost": "1804.00 만원",
-        "score": "75.52"
+        "score": "74.97"
     },
     {
         "rank": 12,
@@ -165,7 +165,7 @@
         "initial_cost": "6003.20 만원",
         "business_fee": "1355.00 만원",
         "interior_cost": "1269.00 만원",
-        "score": "72.48"
+        "score": "72.29"
     },
     {
         "rank": 13,
@@ -179,24 +179,10 @@
         "initial_cost": "9085.50 만원",
         "business_fee": "1710.00 만원",
         "interior_cost": "2200.00 만원",
-        "score": "69.55"
+        "score": "69.76"
     },
     {
         "rank": 14,
-        "store_name": "커스텀커피",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "30.89%",
-        "closure_rate": "2.85%",
-        "average_sales": "20432.70 만원",
-        "average_sales_per_area": "1646.60 만원",
-        "initial_cost": "12118.00 만원",
-        "business_fee": "2200.00 만원",
-        "interior_cost": "4400.00 만원",
-        "score": "68.01"
-    },
-    {
-        "rank": 15,
         "store_name": "감성커피",
         "year": "2020-2023",
         "region": "서울",
@@ -207,24 +193,24 @@
         "initial_cost": "4240.00 만원",
         "business_fee": "750.00 만원",
         "interior_cost": "1150.00 만원",
-        "score": "65.34"
+        "score": "67.14"
+    },
+    {
+        "rank": 15,
+        "store_name": "커스텀커피",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "30.89%",
+        "closure_rate": "2.85%",
+        "average_sales": "20432.70 만원",
+        "average_sales_per_area": "1646.60 만원",
+        "initial_cost": "12118.00 만원",
+        "business_fee": "2200.00 만원",
+        "interior_cost": "4400.00 만원",
+        "score": "67.04"
     },
     {
         "rank": 16,
-        "store_name": "투썸플레이스",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "14.80%",
-        "closure_rate": "3.82%",
-        "average_sales": "59634.00 만원",
-        "average_sales_per_area": "1079.50 만원",
-        "initial_cost": "31250.00 만원",
-        "business_fee": "3915.00 만원",
-        "interior_cost": "9840.00 만원",
-        "score": "44.18"
-    },
-    {
-        "rank": 17,
         "store_name": "에슬로우커피 (ESLOW COFFEE)",
         "year": "2020-2023",
         "region": "서울",
@@ -235,7 +221,21 @@
         "initial_cost": "5610.00 만원",
         "business_fee": "960.00 만원",
         "interior_cost": "2250.00 만원",
-        "score": "42.22"
+        "score": "43.95"
+    },
+    {
+        "rank": 17,
+        "store_name": "투썸플레이스",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "14.80%",
+        "closure_rate": "3.82%",
+        "average_sales": "59634.00 만원",
+        "average_sales_per_area": "1079.50 만원",
+        "initial_cost": "31250.00 만원",
+        "business_fee": "3915.00 만원",
+        "interior_cost": "9840.00 만원",
+        "score": "43.28"
     },
     {
         "rank": 18,
@@ -249,7 +249,7 @@
         "initial_cost": "6845.00 만원",
         "business_fee": "850.00 만원",
         "interior_cost": "2200.00 만원",
-        "score": "38.86"
+        "score": "39.97"
     },
     {
         "rank": 19,
@@ -263,7 +263,7 @@
         "initial_cost": "7446.00 만원",
         "business_fee": "880.00 만원",
         "interior_cost": "2090.00 만원",
-        "score": "38.20"
+        "score": "39.36"
     },
     {
         "rank": 20,
@@ -277,7 +277,7 @@
         "initial_cost": "4086.50 만원",
         "business_fee": "550.00 만원",
         "interior_cost": "1584.00 만원",
-        "score": "31.47"
+        "score": "33.09"
     },
     {
         "rank": 21,
@@ -291,7 +291,7 @@
         "initial_cost": "6274.10 만원",
         "business_fee": "275.00 만원",
         "interior_cost": "1980.00 만원",
-        "score": "20.94"
+        "score": "19.92"
     },
     {
         "rank": 22,
@@ -305,6 +305,6 @@
         "initial_cost": "7139.00 만원",
         "business_fee": "1180.00 만원",
         "interior_cost": "2090.00 만원",
-        "score": "14.31"
+        "score": "15.97"
     }
 ]

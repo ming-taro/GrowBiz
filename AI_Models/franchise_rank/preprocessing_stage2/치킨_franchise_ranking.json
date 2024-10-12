@@ -25,7 +25,7 @@
         "initial_cost": "9078.90 만원",
         "business_fee": "2018.00 만원",
         "interior_cost": "4213.00 만원",
-        "score": "94.72"
+        "score": "90.28"
     },
     {
         "rank": 3,
@@ -39,7 +39,7 @@
         "initial_cost": "13100.60 만원",
         "business_fee": "2103.50 만원",
         "interior_cost": "6900.00 만원",
-        "score": "63.36"
+        "score": "62.19"
     },
     {
         "rank": 4,
@@ -53,7 +53,7 @@
         "initial_cost": "8543.60 만원",
         "business_fee": "2342.00 만원",
         "interior_cost": "4510.00 만원",
-        "score": "62.15"
+        "score": "59.22"
     },
     {
         "rank": 5,
@@ -67,7 +67,7 @@
         "initial_cost": "9245.50 만원",
         "business_fee": "770.00 만원",
         "interior_cost": "3520.00 만원",
-        "score": "60.97"
+        "score": "57.09"
     },
     {
         "rank": 6,
@@ -81,7 +81,7 @@
         "initial_cost": "7578.00 만원",
         "business_fee": "770.00 만원",
         "interior_cost": "1880.00 만원",
-        "score": "53.89"
+        "score": "51.77"
     },
     {
         "rank": 7,
@@ -95,24 +95,10 @@
         "initial_cost": "7285.00 만원",
         "business_fee": "1430.00 만원",
         "interior_cost": "3080.00 만원",
-        "score": "53.18"
+        "score": "50.69"
     },
     {
         "rank": 8,
-        "store_name": "노랑통닭",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "24.06%",
-        "closure_rate": "11.03%",
-        "average_sales": "65453.80 만원",
-        "average_sales_per_area": "3135.60 만원",
-        "initial_cost": "6010.00 만원",
-        "business_fee": "760.00 만원",
-        "interior_cost": "3000.00 만원",
-        "score": "51.83"
-    },
-    {
-        "rank": 9,
         "store_name": "지코바양념치킨",
         "year": "2020-2023",
         "region": "서울",
@@ -123,7 +109,21 @@
         "initial_cost": "5700.00 만원",
         "business_fee": "1100.00 만원",
         "interior_cost": "2000.00 만원",
-        "score": "51.09"
+        "score": "49.61"
+    },
+    {
+        "rank": 9,
+        "store_name": "노랑통닭",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "24.06%",
+        "closure_rate": "11.03%",
+        "average_sales": "65453.80 만원",
+        "average_sales_per_area": "3135.60 만원",
+        "initial_cost": "6010.00 만원",
+        "business_fee": "760.00 만원",
+        "interior_cost": "3000.00 만원",
+        "score": "49.16"
     },
     {
         "rank": 10,
@@ -137,7 +137,7 @@
         "initial_cost": "4159.00 만원",
         "business_fee": "980.00 만원",
         "interior_cost": "1716.00 만원",
-        "score": "44.55"
+        "score": "42.46"
     },
     {
         "rank": 11,
@@ -151,24 +151,10 @@
         "initial_cost": "4850.00 만원",
         "business_fee": "990.00 만원",
         "interior_cost": "2500.00 만원",
-        "score": "40.57"
+        "score": "37.73"
     },
     {
         "rank": 12,
-        "store_name": "누구나홀딱반한닭",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "20.84%",
-        "closure_rate": "10.92%",
-        "average_sales": "55419.10 만원",
-        "average_sales_per_area": "1744.10 만원",
-        "initial_cost": "7783.60 만원",
-        "business_fee": "0.00 만원",
-        "interior_cost": "2860.00 만원",
-        "score": "38.40"
-    },
-    {
-        "rank": 13,
         "store_name": "가마치통닭",
         "year": "2020-2023",
         "region": "서울",
@@ -179,38 +165,10 @@
         "initial_cost": "5440.00 만원",
         "business_fee": "740.00 만원",
         "interior_cost": "3300.00 만원",
-        "score": "37.72"
+        "score": "34.86"
     },
     {
-        "rank": 14,
-        "store_name": "동근이숯불두마리치킨",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "40.23%",
-        "closure_rate": "21.25%",
-        "average_sales": "41775.90 만원",
-        "average_sales_per_area": "1909.40 만원",
-        "initial_cost": "4986.00 만원",
-        "business_fee": "550.00 만원",
-        "interior_cost": "2475.00 만원",
-        "score": "36.63"
-    },
-    {
-        "rank": 15,
-        "store_name": "자담치킨",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "41.51%",
-        "closure_rate": "10.35%",
-        "average_sales": "31874.40 만원",
-        "average_sales_per_area": "2067.10 만원",
-        "initial_cost": "4290.00 만원",
-        "business_fee": "990.00 만원",
-        "interior_cost": "1320.00 만원",
-        "score": "35.93"
-    },
-    {
-        "rank": 16,
+        "rank": 13,
         "store_name": "보드람치킨",
         "year": "2020-2023",
         "region": "서울",
@@ -221,7 +179,49 @@
         "initial_cost": "7590.00 만원",
         "business_fee": "1650.00 만원",
         "interior_cost": "4290.00 만원",
-        "score": "35.12"
+        "score": "34.83"
+    },
+    {
+        "rank": 14,
+        "store_name": "자담치킨",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "41.51%",
+        "closure_rate": "10.35%",
+        "average_sales": "31874.40 만원",
+        "average_sales_per_area": "2067.10 만원",
+        "initial_cost": "4290.00 만원",
+        "business_fee": "990.00 만원",
+        "interior_cost": "1320.00 만원",
+        "score": "34.26"
+    },
+    {
+        "rank": 15,
+        "store_name": "누구나홀딱반한닭",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "20.84%",
+        "closure_rate": "10.92%",
+        "average_sales": "55419.10 만원",
+        "average_sales_per_area": "1744.10 만원",
+        "initial_cost": "7783.60 만원",
+        "business_fee": "0.00 만원",
+        "interior_cost": "2860.00 만원",
+        "score": "34.19"
+    },
+    {
+        "rank": 16,
+        "store_name": "동근이숯불두마리치킨",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "40.23%",
+        "closure_rate": "21.25%",
+        "average_sales": "41775.90 만원",
+        "average_sales_per_area": "1909.40 만원",
+        "initial_cost": "4986.00 만원",
+        "business_fee": "550.00 만원",
+        "interior_cost": "2475.00 만원",
+        "score": "33.14"
     },
     {
         "rank": 17,
@@ -235,6 +235,6 @@
         "initial_cost": "4950.00 만원",
         "business_fee": "330.00 만원",
         "interior_cost": "2750.00 만원",
-        "score": "33.08"
+        "score": "29.30"
     }
 ]

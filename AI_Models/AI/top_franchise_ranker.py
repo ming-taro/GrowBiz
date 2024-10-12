@@ -20,7 +20,7 @@ def process_csv_file(file_name, category):
 
     # 개업률이 폐업률 대비 1.5배 이상인 데이터만 필터링
     df_filtered = df_filtered[(df_filtered['opening_rate'] >= df_filtered['closure_rate'] * 1.5) & 
-                              (df_filtered['closure_rate'] <= 50 / 100)]  # 폐업률 50% 이하
+                              (df_filtered['closure_rate'] <= 31.4 / 100)]  # 폐업률 50% 이하
 
     # 필터링 후 데이터가 1개 이하일 경우 처리
     if len(df_filtered) < 10:

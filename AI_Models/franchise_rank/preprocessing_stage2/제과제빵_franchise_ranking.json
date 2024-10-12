@@ -25,7 +25,7 @@
         "initial_cost": "29150.40 만원",
         "business_fee": "5045.00 만원",
         "interior_cost": "9210.00 만원",
-        "score": "95.10"
+        "score": "94.26"
     },
     {
         "rank": 3,
@@ -39,7 +39,7 @@
         "initial_cost": "32740.00 만원",
         "business_fee": "4300.00 만원",
         "interior_cost": "16941.00 만원",
-        "score": "86.79"
+        "score": "87.65"
     },
     {
         "rank": 4,
@@ -53,6 +53,6 @@
         "initial_cost": "11165.00 만원",
         "business_fee": "935.00 만원",
         "interior_cost": "2750.00 만원",
-        "score": "81.29"
+        "score": "84.25"
     }
 ]
