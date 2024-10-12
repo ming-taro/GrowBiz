@@ -2,6 +2,12 @@ import pandas as pd
 import json
 import os
 
+def convert_numberlong(value):
+    """MongoDB의 $numberLong 값을 정수로 변환 또는 숫자로 변환"""
+    if isinstance(value, dict) and '$numberLong' in value:
+        return int(value['$numberLong'])
+    return value
+
 def process_json_to_csv():
     # JSON 파일 경로 설정
     json_file_path = os.path.join('..', 'franchise_rank', 'franchise_detail.json')
@@ -25,14 +31,15 @@ def process_json_to_csv():
         total_franchise_count = 0
         valid_years = 0  # To track if the franchise has data for all required years
 
-        # 서울 지역의 가맹점수만 카운트 (모든 연도 포함)
+        # 2021, 2022, 2023년의 서울 지역의 가맹점 수가 모두 10개 이상인 경우만 처리
         for store in store_data['store']:
             if store['region'] == '서울' and store['year'] in [2021, 2022, 2023]:
-                total_franchise_count += store['franchise_count']
-                if store['franchise_count'] > 0:
+                if store['franchise_count'] >= 10:  # 각 연도의 가맹점 수가 10개 이상이어야 함
+                    total_franchise_count += store['franchise_count']
                     valid_years += 1
 
-        if valid_years == 3 and total_franchise_count >= 10:
+        # 3년 모두 가맹점 수가 10개 이상인 경우에만 데이터 처리
+        if valid_years == 3:
             yearly_closure_rates = []
             yearly_opening_rates = []
             total_new_open = 0
@@ -64,16 +71,27 @@ def process_json_to_csv():
             closure_rate = sum(yearly_closure_rates) / len(yearly_closure_rates) if yearly_closure_rates else 0
             total_change = total_new_open - (total_contract_termination + total_contract_cancellation)
 
+            # 2023년 재무 데이터가 없는 경우, 2022년 데이터를 사용
             financial_2023 = next((f for f in store_data['financial'] if f['year'] == 2023), None)
-            if financial_2023:
-                advertising_expense = store_data['advertising_cost']['advertising_expense']
-                average_sales = store_data['franchise_revenue']['average_sales']
-                average_sales_per_area = store_data['franchise_revenue'].get('average_sales_per_area', None)
-                initial_cost = store_data['initial_cost']['total']
-                interior_cost = store_data['interior_cost']['total']
-                business_fee = store_data['business_fee']['deposit_fee']
+            financial_latest = financial_2023 if financial_2023 else next((f for f in store_data['financial'] if f['year'] == 2022), None)
+
+            if financial_latest:
+                advertising_expense = convert_numberlong(store_data['advertising_cost']['advertising_expense'])
+                average_sales = convert_numberlong(store_data['franchise_revenue']['average_sales'])
+                average_sales_per_area = convert_numberlong(store_data['franchise_revenue'].get('average_sales_per_area', None))
+                initial_cost = convert_numberlong(store_data['initial_cost']['total'])
+                interior_cost = convert_numberlong(store_data['interior_cost']['total'])
+                business_fee = convert_numberlong(store_data['business_fee']['deposit_fee'])
                 contract_initial = store_data['contract_period']['initial']
                 contract_renewal = store_data['contract_period']['renewal']
+
+                # 재무 정보에서 숫자 값을 변환
+                asset = convert_numberlong(financial_latest['asset'])
+                liability = convert_numberlong(financial_latest['liability'])
+                equity = convert_numberlong(financial_latest['equity'])
+                revenue = convert_numberlong(financial_latest['revenue'])
+                operating_income = convert_numberlong(financial_latest['operating_income'])
+                net_income = convert_numberlong(financial_latest['net_income'])
 
                 # sub_category별로 데이터를 딕셔너리에 추가
                 if sub_category not in category_data:
@@ -87,12 +105,12 @@ def process_json_to_csv():
                     "closure_rate": closure_rate,
                     "total_change": total_change,
                     "franchise_count": total_franchise_count,
-                    "asset": financial_2023['asset'],
-                    "liability": financial_2023['liability'],
-                    "equity": financial_2023['equity'],
-                    "revenue": financial_2023['revenue'],
-                    "operating_income": financial_2023['operating_income'],
-                    "net_income": financial_2023['net_income'],
+                    "asset": asset,
+                    "liability": liability,
+                    "equity": equity,
+                    "revenue": revenue,
+                    "operating_income": operating_income,
+                    "net_income": net_income,
                     "advertising_expense": advertising_expense,
                     "average_sales": average_sales,
                     "initial_cost": initial_cost,
