@@ -1,20 +1,27 @@
 
 // 밑에 그래프 개업률, 폐업률
-export const data_bar2 = {
-  labels: ['Category A', 'Category B'],
+export const data_bar2 = (data) => ({
+  labels: ['개업률', '폐업률'],
   datasets: [
     {
-      label: 'Data Set 1',
+      label: '업종 평균',
       backgroundColor: '#42a5f5',
-      data: [30, 50], // Category A와 B에 대한 값
+      data: [
+        data.industry_opening_rate_average, // 업종 평균 개업률
+        data.industry_closing_rate_average, // 업종 평균 폐업률 recommended_brand_opening_rate_average
+
+      ],
     },
     {
-      label: 'Data Set 2',
+      label: '추천 브랜드',
       backgroundColor: '#ff7043',
-      data: [20, 40], // Category A와 B에 대한 값
+      data: [
+        data.recommended_brand_opening_rate_average, // 추천 브랜드 개업률
+        data.recommended_brand_closing_rate_average, // 추천 브랜드 폐업률
+      ],
     },
   ],
-};
+});
 
 export const barOptions2 = {
   responsive: true,
