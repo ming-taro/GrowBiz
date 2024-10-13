@@ -38,7 +38,7 @@ import {
   barOptions
 } from '@/assets/js/reportChart1.js';
 import axios from 'axios';
-
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 let barChartInstance1 = ref(null);
 const recommendedBrand = ref('');
 const recommendedScore = ref('');
@@ -58,8 +58,14 @@ onMounted(async () => {
         {
           label: '업종 평균',
           backgroundColor: '#fca3b9',
+          
+          originalData: [ // 원본 데이터 추가
+            data.industry_density_average, // 원본 업종 밀도 평균
+            data.industry_initial_cost, // 원본 업종 평균 가맹비
+            data.industry_total_interior_cost // 원본 업종 총 인테리어 비용
+          ],
           data: [
-        data.industry_density_average, // 업종 밀도 평균
+        data.industry_density_average*1000, // 업종 밀도 평균
         data.industry_initial_cost, // 업종 평균 가맹비
         data.industry_total_interior_cost // 업종 총 인테리어 비용
       ], 
@@ -67,7 +73,15 @@ onMounted(async () => {
         {
           label: '추천 브랜드 평균',
           backgroundColor: '#fcd752',
-          data: [data.recommended_brand_density, data.recommended_brand_initial_cost, data.recommended_brand_total_interior_cost], // 추천 브랜드 평균 데이터
+          originalData: [ // 원본 데이터 추가
+            data.recommended_brand_density, // 원본 추천 브랜드 밀도 평균
+            data.recommended_brand_initial_cost, // 원본 추천 브랜드 평균 가맹비
+            data.recommended_brand_total_interior_cost // 원본 추천 브랜드 총 인테리어 비용
+          ],
+          data: [data.recommended_brand_density*1000, 
+          data.recommended_brand_initial_cost, 
+          data.recommended_brand_total_interior_cost], // 추천 브랜드 평균 데이터
+          
         },
       ],
     };
@@ -90,6 +104,7 @@ onMounted(async () => {
 
 
 });
+Chart.register(ChartDataLabels);
 
 </script>
 

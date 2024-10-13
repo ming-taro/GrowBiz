@@ -1,5 +1,5 @@
 // 위에 그래프 업종 밀도 평균, 업종 평균 가맹비, 업종 인테리어 총 비용
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 
   
   export const barOptions = {
@@ -49,16 +49,23 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
               weight: 'bold', // 글자 두께
             },
           },
-        },
-        datalabels: {
-          display: true,
-          anchor: 'end',
-          align: 'end',
-          color: '#000',
-          formatter: (value) => {
-            return Math.abs(value); // 데이터 값을 양수로 표시
+          datalabels: {
+            display: true,
+            anchor: 'end', // 텍스트를 막대의 끝에 붙입니다
+            align: 'end',  // 텍스트를 막대의 끝에 맞춥니다
+            color: '#000',
+            formatter: (value, context) => {
+              const originalValue = context.chart.data.datasets[context.datasetIndex].originalData[context.dataIndex];
+              return originalValue; // 원본 값을 그대로 표시
+            },
           },
         },
+        datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'end',
+            color: '#000',
+          },
       },
     elements: {
         bar: {
