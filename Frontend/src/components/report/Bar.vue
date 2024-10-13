@@ -1,102 +1,59 @@
 <template>
   <div style="background-color: #f6f4f9">
     <div class="container mw-screen-xl">
-      <div class="title">상권분석</div>
       <div class="row">
         <div class="col-6">
-          <div class="chart-container">
-            <div class="text-cont">
-              <div class="chart-text">text aera</div>
-            </div>
+          <div>
+        <h4>추천 브랜드</h4>
+      <span>ㅇㅇ치킨</span>
+      </div>
+      <div>
+        <h4>추천 점수</h4>
+      <span>ㅇㅇ점</span>
+      <span>/ 지역 평균 ㅇㅇ점</span>
+
+      </div>
+      <div>
+        <h4>저희가 추천한 브랜드로 창업하실 경우</h4>
+      <span>ㅇㅇㅇ만원</span>
+      <span>만큼 아끼실 수 있어요.</span>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="chart-container">
             <div class="p-5">
               <canvas id="bar-chart" style="height: 200px"></canvas>
             </div>
           </div>
-        </div>
-
-        <div class="col-6">
-          <div class="chart-container">
-            <div class="text-cont">
-              <div class="chart-text">text aera</div>
-            </div>
-            <div class="p-5">
-              <canvas id="doughnut-chart" style="height: 200px"></canvas>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="chart-container">
-            <div class="text-cont">
-              <div class="chart-text">text aera</div>
-            </div>
-            <div class="p-5">
-              <canvas id="bar-chart2" style="height: 200px"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="chart-container">
-            <div class="text-cont">
-              <div class="chart-text">text aera</div>
-            </div>
-            <div class="p-5">
-              <canvas id="bar-chart3" style="height: 200px"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Chart } from 'chart.js/auto';
 import {
   data_bar,
-  data_doughnut,
   barOptions,
-  options,
-} from '@/assets/js/chart.js';
+} from '@/assets/js/reportChart1.js';
 
-let barChartInstance = ref(null); // 막대 차트 인스턴스
-let doughnutChartInstance = ref(null); // 도넛 차트 인스턴스
+let barChartInstance1 = ref(null);
 
 onMounted(() => {
   const barCtx = document.getElementById('bar-chart').getContext('2d');
-  const barCtx2 = document.getElementById('bar-chart2').getContext('2d');
-  const barCtx3 = document.getElementById('bar-chart3').getContext('2d');
-  const doughnutCtx = document
-    .getElementById('doughnut-chart')
-    .getContext('2d');
 
-  // Chart.js를 사용하여 바 차트 생성
-  barChartInstance.value = new Chart(barCtx, {
+  // 첫 번째 가로 양방향 막대 차트
+  barChartInstance1.value = new Chart(barCtx, {
     type: 'bar',
     data: data_bar,
     options: barOptions,
-  });
-  barChartInstance.value = new Chart(barCtx2, {
-    type: 'bar',
-    data: data_bar,
-    options: barOptions,
-  });
-  barChartInstance.value = new Chart(barCtx3, {
-    type: 'bar',
-    data: data_bar,
-    options: barOptions,
-  });
-
-  // Chart.js를 사용하여 도넛 차트 생성
-  doughnutChartInstance.value = new Chart(doughnutCtx, {
-    type: 'doughnut',
-    data: data_doughnut,
-    options: options,
-  });
+  }); 
 });
+
 </script>
+
 
 <style scoped>
 canvas {

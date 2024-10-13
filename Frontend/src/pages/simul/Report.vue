@@ -4,13 +4,24 @@
     <Result v-if="report != null" v-bind:simulation_response_id=report.simulation_response_id />
     <!-- <Result /> -->
 
+    <!-- 그래프 -->
+    <Bar />
+
     <div class="container mw-screen-xl">
       <!-- 추천 위치 -->
       <Location v-if="report != null" v-bind:location=location :plno_list=report.plno_list />
     </div>
 
-    <!-- 그래프 -->
-    <Bar />
+    <div class="container mw-screen-xl">
+      <AvgCard></AvgCard>
+
+    </div>
+
+    
+    <div class="container mw-screen-xl">
+      <Result3></Result3>
+
+    </div>
 
     <!-- 교육정보 -->
     <div class="container mw-screen-xl">
@@ -33,7 +44,8 @@ import Loan from '@/components/report/Loan.vue';
 import { onMounted, ref } from 'vue';
 import { fetchReportById } from '@/services/simulation/ReportAPI';
 import { findLocation } from '@/services/simulation/SimulationAPI';
-
+import AvgCard from '@/components/report/AvgCard.vue';
+import Result3 from '@/components/report/Result3.vue';
 const report = ref(null);
 const location = ref(null);
 
