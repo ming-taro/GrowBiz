@@ -19,9 +19,9 @@
                         </div>
                         <div class="row no-gutters align-items-center justify-content-center">
                             <div class="col text-center">
-                                <div class="h3 mt-5 mb-2 font-weight-bold text-purple">123</div>
-                                <div class="h4 mb-1 text-gray-300"><h4>123</h4></div>
-                                <p>123</p>
+                                <div class="h3 mt-5 mb-2 font-weight-bold text-purple">{{ firstStation }}</div>
+                                <div class="h4 mb-1 text-gray-300"><h4>{{ firstPeople }}명</h4></div>
+                                <p>{{ firstDate }} 기준</p>
                             </div>
                         </div>
                     </div>
@@ -37,9 +37,8 @@
                             <img src="@/assets/img/medals/second_place_medal.png" style="max-width: 60px; height: auto" alt="2등 메달" />
                         </div>
                         <div>
-                            <div class="h4 font-weight-bold text-purple mb-1">123</div>
-                            <div class="h6 text-gray-300">123</div>
-                            <p class="text-gray-300">123</p>
+                            <div class="h4 font-weight-bold text-purple mb-1">{{ secondStation }}</div>
+                            <div class="h6 text-gray-300">{{ secondPeople }}명</div>
                         </div>
                     </div>
                 </div>
@@ -51,9 +50,8 @@
                             <img src="@/assets/img/medals/third_place_medal.png" style="max-width: 60px; height: auto" alt="3등 메달" />
                         </div>
                         <div>
-                            <div class="h4 font-weight-bold text-purple mb-1">123</div>
-                            <div class="h6 text-gray-300">123</div>
-                            <p class="text-gray-300">123</p>
+                            <div class="h4 font-weight-bold text-purple mb-1">{{ thirdStation }}</div>
+                            <div class="h6 text-gray-300">{{ thirdPeople }}명</div>
                         </div>
                     </div>
                 </div>
@@ -104,19 +102,49 @@ import {
 import axios from 'axios';
 
 let barChartInstance2 = ref(null);
+const data = ref({});
+
+// 역 데이터
+const firstStation = ref('');
+const secondStation = ref('');
+const thirdStation = ref('');
+const firstPeople = ref(0);
+const secondPeople = ref(0);
+const thirdPeople = ref(0);
+const firstDate = ref('');
+const secondDate = ref('');
+const thirdDate = ref('');
 
 onMounted(async () => {
   // API 호출
   const response = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
-  const data = response.data;
+  data.value = response.data;
+
+
+  // 각 역 데이터 할당
+  firstStation.value = data.value.top_3_nearby_stations[0].station_name;
+  firstPeople.value = data.value.top_3_nearby_stations[0].people;
+  firstDate.value = data.value.top_3_nearby_stations[0].date;
+
+  secondStation.value = data.value.top_3_nearby_stations[1].station_name;
+  secondPeople.value = data.value.top_3_nearby_stations[1].people;
+  secondDate.value = data.value.top_3_nearby_stations[1].date;
+
+  thirdStation.value = data.value.top_3_nearby_stations[2].station_name;
+  thirdPeople.value = data.value.top_3_nearby_stations[2].people;
+  thirdDate.value = data.value.top_3_nearby_stations[2].date;
 
   // 데이터 바 차트에 추가
   const barCtx2 = document.getElementById('bar-chart2').getContext('2d');
   barChartInstance2.value = new Chart(barCtx2, {
     type: 'bar',
-    data: data_bar2(data), // 데이터에 따라 동적으로 생성
+    data: data_bar2(data.value), // 데이터에 따라 동적으로 생성
     options: barOptions2
   });
+
+
+
+
 });
 
 </script>
