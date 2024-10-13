@@ -131,10 +131,10 @@ export default {
       try {
         let response = await axios.get(`/api/kmap/member/${mno}`); // mno를 사용하여 사용자 데이터를 가져옴
 
+        disable.style.display = 'none';
         if (response.data.length == 0) {
           const disable = document.getElementById('disable');
 
-          disable.style.display = 'none';
           disable.style.display = '';
           const id = '1234';
           response = await axios.get(`/api/kmap/member/${id}`);
