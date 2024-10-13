@@ -15,4 +15,5 @@ public interface PropertyListingMapper {
     //동 코드로 매물조회
     List<PropertyListingDTO> selectPropertyListingByDongCode(String dongCode);
 
+    PropertyListingDTO findById(String id);
 }

@@ -47,4 +47,7 @@ public class PropertyListingService {
         return listings;
     }
 
+    public PropertyListingDTO findPropertyById(String id) {
+        return mapper.findById(id);
+    }
 }

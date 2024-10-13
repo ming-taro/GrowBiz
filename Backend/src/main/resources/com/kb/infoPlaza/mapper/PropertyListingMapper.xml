@@ -15,4 +15,9 @@
     <select id="selectPropertyListingByDongCode" resultType="PropertyListingDTO">
         SELECT * FROM property_listing WHERE ldong_cd = #{dongCode}
     </select>
+
+    <!-- 매물 번호(plno)로 매물 정보 조회 -->
+    <select id="findById" resultType="PropertyListingDTO">
+        SELECT * FROM property_listing where plno = #{id}
+    </select>
 </mapper>
