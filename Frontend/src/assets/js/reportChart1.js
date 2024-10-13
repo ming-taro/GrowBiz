@@ -17,6 +17,11 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
           callback: function(value) {
             return ''; // 아래 단위 제거
           },
+          font: {
+            size: 14, // x축 글자 크기
+            family: 'Pretendard', // 원하는 폰트 패밀리
+            weight: 'bold', // 글자 두께
+          },
         },
       },
       y: {
@@ -24,12 +29,26 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
           color: 'rgba(255, 255, 255, 0.3)',
           lineWidth: 1,
         },
+        ticks: {
+            font: {
+              size: 16, // y축 글자 크기
+              family: 'Pretendard', // 원하는 폰트 패밀리
+              weight: 'light', // 글자 두께
+            },
+          },
       },
     },
     plugins: {
         legend: {
           display: true,
           position: 'top',
+          labels: {
+            font: {
+              size: 14, // 범례 글자 크기
+              family: 'Pretendard', // 원하는 폰트 패밀리
+              weight: 'bold', // 글자 두께
+            },
+          },
         },
         datalabels: {
           display: true,
@@ -37,11 +56,10 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
           align: 'end',
           color: '#000',
           formatter: (value) => {
-            // 음수 값을 양수로 표시
             return Math.abs(value); // 데이터 값을 양수로 표시
           },
         },
-    },
+      },
     elements: {
         bar: {
           // 막대의 두께를 설정

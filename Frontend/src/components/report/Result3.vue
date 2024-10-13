@@ -2,14 +2,14 @@
 
     <!-- 개업률, 폐업률, 유동인구 -->
     <div class="row">
-        <div class="col-6">
-          <div class="chart-container">
-            <div class="p-5">
+        <div class="col-6 d-flex align-items-center">
+            <div class="chart-container">
+            <div class="p-3 ms-10">
               <canvas id="bar-chart2" style="height: 200px"></canvas>
             </div>
           </div>
         </div>
-        <div class="col-6 d-flex">
+        <div class="col-6 d-flex ">
             <!-- 1등 카드 -->
             <div class="col-7 me-3">
                 <div class="card border-left-primary shadow h-100 py-2">
