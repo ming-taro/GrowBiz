@@ -93,7 +93,7 @@
                     aria-label="Default select example"
                     v-model="searchType"
                   >
-                    <option selected value="">전체</option>
+                    <option selected value="all">전체</option>
                     <option value="title">제목</option>
                     <option value="content">내용</option>
                   </select>
@@ -263,7 +263,7 @@ const selectedOptions = ref({
   업종: [],
   과목: [],
 });
-const searchType = ref(''); // 검색 타입 (과정명, 내용 등)
+const searchType = ref('all'); // 검색 타입 (과정명, 내용 등)
 const searchValue = ref(''); // 검색어
 
 const totalList = ref([]); // 전체 데이터를 저장할 리스트
@@ -302,15 +302,12 @@ const changePage = (page) => {
 // 초기 화면 렌더링 시 불러올 초기 데이터 불러오기
 const fetchList = async () => {
   try {
-    console.log('TRYING......');
     // 전체 데이터 불러오기
     const response = await axios.get(
       'http://localhost:8080/api/infoPlaza/education/list'
     );
     if (response.status === 200) {
-      console.log('데이터 조회 시작');
       totalList.value = response.data; // 조회된 데이터를 totalList에 저장
-      console.log(totalList.value);
     } else {
       alert('데이터 조회 실패');
     }
@@ -318,9 +315,25 @@ const fetchList = async () => {
     alert('에러발생 :' + error);
   }
 };
-
 const submitOptions = async () => {
-  console.log('submitOptions 호출됨'); // 로그 추가
+
+  // Check if both options are selected and searchValue is not empty
+  const hasSelectedOptions = Object.values(selectedOptions.value).some(
+    (options) => options.length > 0
+  );
+
+  if (searchValue.value.trim() && hasSelectedOptions) {
+    alert('키워드 검색을 하려면 선택된 옵션을 해제해야 합니다.');
+    return; // Prevent form submission if both are filled
+  }
+
+  // 키워드가 입력되었을 경우
+  if (searchValue.value.trim()) {
+    await searchByKeyword(searchValue.value, searchType.value);
+    return; // 키워드 검색 후 함수 종료
+  }
+
+  // 옵션이 선택된 경우
   const selectedQuery = {};
 
   if (selectedOptions.value['사업주기'].length > 0) {
@@ -332,26 +345,61 @@ const submitOptions = async () => {
   if (selectedOptions.value['과목'].length > 0) {
     selectedQuery['과목'] = selectedOptions.value['과목'].join(',');
   }
+
   // 선택된 옵션이 없으면 아무 것도 하지 않음
   if (Object.keys(selectedQuery).length === 0) {
-    console.log('선택된 옵션이 없습니다. 검색을 진행하지 않습니다.');
     return; // 아무 일도 하지 않음
   }
+
+  await searchByOptions(selectedQuery); // 옵션을 기반으로 검색
+};
+
+
+
+const searchByKeyword = async (keyword, type) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/infoPlaza/education/search/keyword`, {
+      params: {
+        searchType: type,
+        searchKeyword: keyword,
+      },
+    });
+
+    if (response.status === 200) {
+      totalList.value = response.data.content || response.data; // content가 없는 경우 전체 데이터 사용
+    } else {
+      console.error('키워드 검색 실패:', response.status);
+    }
+  } catch (error) {
+    console.error('키워드 검색 중 에러 발생:', error);
+    totalList.value = [];
+  }
+};
+
+const searchByOptions = async (selectedQuery) => {
   const options = [];
-  if (selectedQuery['사업주기']) {
-    options.push(...selectedQuery['사업주기'].split(','));
-  }
-  if (selectedQuery['업종']) {
-    options.push(...selectedQuery['업종'].split(','));
-  }
-  if (selectedQuery['과목']) {
-    options.push(...selectedQuery['과목'].split(','));
+  for (const key in selectedQuery) {
+    if (selectedQuery[key]) {
+      options.push(...selectedQuery[key].split(','));
+    }
   }
 
-  console.log('전송 할 쿼리', { option: options }); // 전송할 쿼리 로그
+  const url = new URL('http://localhost:8080/api/infoPlaza/education/search');
+  options.forEach((option) => {
+    url.searchParams.append('option', option);
+  });
 
-  // load 함수 호출 시 options 배열을 전달
-  await load(options);
+  try {
+    const response = await axios.get(url.toString());
+    if (response.status === 200) {
+      totalList.value = response.data.content || response.data; // content가 없는 경우 전체 데이터 사용
+    } else {
+      console.error('옵션 검색 실패:', response.status);
+    }
+  } catch (error) {
+    console.error('옵션 검색 중 에러 발생:', error);
+    totalList.value = [];
+  }
 };
 
 const load = async (options) => {
@@ -364,10 +412,8 @@ const load = async (options) => {
       url.searchParams.append('option', option);
     });
 
-    console.log('요청 URL:', url.toString()); // 디버깅용 URL 출력
 
     const response = await axios.get(url.toString());
-    console.log('전체 응답 데이터:', response.data);
 
     if (response.status === 200) {
       if (response.data.content) {
@@ -375,7 +421,6 @@ const load = async (options) => {
       } else {
         totalList.value = response.data; // content가 없는 경우 전체 데이터 사용
       }
-      console.log('설정된 totalList:', totalList.value);
     } else {
       console.error('데이터 조회 실패:', response.status);
     }

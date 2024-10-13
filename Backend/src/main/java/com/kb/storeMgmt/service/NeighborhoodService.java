@@ -43,12 +43,13 @@ public class NeighborhoodService {
         result.put("center", centerCoord);
         List<String> nearbyDongs = getNearbyDongsByCoordinates(centerCoord);
         result.put("nearbyDongs", nearbyDongs);
+//        System.out.println(getNearbyDongsByCoordinates(centerCoord));
         List<Coordinate> convenienceStores = getConvenienceStores(nearbyDongs);
         result.put("convenienceStores", convenienceStores);
         return result;
     }
 
-    private Coordinate getCoordinates(String address) {
+    Coordinate getCoordinates(String address) {
         try {
             String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
             String urlStr = "https://dapi.kakao.com/v2/local/search/address.json?query=" + encodedAddress;
@@ -77,7 +78,7 @@ public class NeighborhoodService {
         return null;
     }
 
-    private List<String> getNearbyDongsByCoordinates(Coordinate center) {
+    List<String> getNearbyDongsByCoordinates(Coordinate center) {
         Set<String> nearbyDongs = new HashSet<>();
         List<Coordinate> points = generatePointsInRadius(center, 1);
         for (Coordinate point : points) {

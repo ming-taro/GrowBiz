@@ -42,7 +42,13 @@
         <!-- 사진 업로드 섹션 -->
         <div style="width: 40%">
           <div class="photo-area" @click="triggerFileInput">
-            <img :src="imageUrl" alt="미리보기" class="photo-preview" />
+            <img
+              :src="imageUrl"
+              alt="미리보기"
+              class="photo-preview"
+              v-if="imageUrl"
+            />
+            <p v-else>이미지를 선택하세요</p>
           </div>
           <input
             type="file"
@@ -52,7 +58,6 @@
           />
         </div>
       </div>
-
       <!-- 종합 정보 섹션 -->
       <div class="mb-8">
         <div class="d-flex mb-3 align-items-end">
@@ -105,23 +110,26 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import AssetHeader from '@/components/asset/AssetHeader.vue';
 import AssetReg from '@/pages/asset/AssetReg.vue';
 import defaultImage from '@/assets/img/infoplaza/house.png';
+import { useAuthStore } from '@/stores/auth';
 
-// 라우터 사용
-const router = useRouter();
+const imageFile = ref(null); // 선택된 파일을 저장
+const authStore = useAuthStore();
+const mno = authStore.state.mno; // 사용자 번호
 
 // 데이터 관련 변수들
 const imageUrl = ref(defaultImage);
 const fileInput = ref(null); // 파일 입력 필드를 참조하는 ref
-const address = ref(''); // 주소 저장
-const detailAddress = ref(''); // 상세 주소 저장
-const rent = ref(''); // 월세
-const utilityExpenses = ref(''); // 공과금
-const laborCost = ref(''); // 인건비
-const otherExpenses = ref(''); // 기타비용
+const address = ref('');
+const detailAddress = ref('');
+const rent = ref('');
+const utilityExpenses = ref('');
+const laborCost = ref('');
+const otherExpenses = ref('');
 
 // 파일 선택을 트리거하는 함수
 const triggerFileInput = () => {
@@ -131,37 +139,70 @@ const triggerFileInput = () => {
 // 파일 변경 시 호출되는 함수
 const onFileChange = (event) => {
   const file = event.target.files[0];
+
   if (file) {
-    imageUrl.value = URL.createObjectURL(file); // 미리보기용 이미지 URL 생성
+    imageFile.value = file;
+    imageUrl.value = URL.createObjectURL(file); // 선택된 파일의 미리보기 URL 설정
   }
 };
 
 // Daum 우편번호 검색 창 열기
 const openDaumPostcode = () => {
-  new daum.Postcode({
-    oncomplete: function (data) {
-      address.value = data.address; // 주소 저장
-    },
-  }).open();
+  if (window.daum) {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        address.value = data.address;
+      },
+    }).open();
+  }
 };
 
-// 등록하기 버튼을 눌렀을 때 실행되는 함수
-const submitForm = () => {
-  const formData = {
-    address: address.value,
-    detailAddress: detailAddress.value,
-    rent: rent.value,
-    utilityExpenses: utilityExpenses.value,
-    laborCost: laborCost.value,
-    otherExpenses: otherExpenses.value,
-    imageUrl: imageUrl.value,
+// Daum 우편번호 API 스크립트를 동적으로 로드
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src =
+    'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+  script.onload = () => {
+    console.log('Daum Postcode script loaded.');
   };
+  document.body.appendChild(script);
+});
 
-  // InfoAgree 페이지로 데이터를 넘기면서 이동 (query 사용)
-  router.push({
-    name: 'InfoAgree',
-    query: formData, // 데이터를 query로 전달
-  });
+// 폼 데이터를 서버로 전송하는 함수
+const router = useRouter();
+
+const submitForm = () => {
+  const formDataToSend = new FormData();
+  formDataToSend.append('address', address.value);
+  formDataToSend.append('id', mno);
+  formDataToSend.append('detailAddress', detailAddress.value);
+  formDataToSend.append('rent', rent.value);
+  formDataToSend.append('utilityExpenses', utilityExpenses.value);
+  formDataToSend.append('laborCost', laborCost.value);
+  formDataToSend.append('otherExpenses', otherExpenses.value);
+
+  console.log(imageFile.value + 'imageFile.value');
+
+  // 이미지 파일 추가
+  if (imageFile.value) {
+    formDataToSend.append('image', imageFile.value); // 선택된 파일 추가
+    console.log(imageFile.value); // 선택된 파일 확인 로그 추가
+  }
+
+  // 서버로 데이터를 전송
+  axios
+    .post('/api/store/insert', formDataToSend, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then(() => {
+      // 성공 시 다음 페이지로 이동
+      router.push({ name: 'AssetFin' });
+    })
+    .catch((error) => {
+      console.error('데이터 전송 오류:', error);
+    });
 };
 </script>
 
