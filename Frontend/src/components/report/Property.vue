@@ -2,8 +2,10 @@
   <div
     class="d-flex justify-content-between m-3 align-items-stretch"
     v-if="property != null"
-    @click="moveMapCenter" style="cursor: pointer;"
+    style="cursor: pointer;"
+    @click="clickDetail"
   >
+  <!-- @click="moveMapCenter" -->
     <!-- 왼쪽 텍스트 -->
     <div
       style="width: 60%; height: 100%"
@@ -35,11 +37,17 @@
 </template>
 
 <script setup>
-import { onMounted, defineProps, ref } from 'vue';
+import { onMounted, defineProps, defineEmits, ref } from 'vue';
 import { fetchPropertyById } from '@/services/simulation/PropertyAPI';
 
 const props = defineProps(["plno", "map"]);
 const property = ref(null);
+const emit = defineEmits(['property-clicked']);
+
+const clickDetail = () => {
+  moveMapCenter();
+  emit('property-clicked', props.plno);  // 클릭한 plno를 부모로 전달
+};
 
 const moveMapCenter = () => {
   const newLatLng = new kakao.maps.LatLng(property.value.laCrd, property.value.loCrd);

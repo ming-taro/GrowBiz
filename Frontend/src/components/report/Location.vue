@@ -18,10 +18,15 @@
           </div>
 
           <div v-for="(plno, index) in props.plno_list" v-bind:key="index">
-            <Property v-bind:plno="plno" :map="map"/>
+            <Property v-bind:plno="plno" :map="map" @property-clicked="handlePropertyClick(plno)"
+            @click="openModal" />
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-if="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <PropertyDetail :property=property :closeModal=closeModal />
     </div>
   </div>
 </template>
@@ -30,9 +35,29 @@
 import { onMounted, defineProps, ref } from 'vue';
 import { findLocationByAddress } from '@/services/simulation/LocationAPI';
 import Property from '@/components/report/Property.vue'
+import { fetchPropertyById } from '@/services/simulation/PropertyAPI';
+import PropertyDetail from '@/components/report/PropertyDetail.vue';
 
 const props = defineProps(["location", "plno_list"]);
 const map = ref(null);
+
+const isModalOpen = ref(false);
+const selectedPropertyIndex = ref(null);
+const property = ref(null);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+const handlePropertyClick = async (plno) => {
+  selectedPropertyIndex.value = plno;
+  property.value = await fetchPropertyById(plno);
+  openModal();
+};
 
 const setLocation = async () => {
   // const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
