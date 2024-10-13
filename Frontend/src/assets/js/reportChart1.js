@@ -51,8 +51,8 @@
           },
           datalabels: {
             display: true,
-            anchor: 'end', // 텍스트를 막대의 끝에 붙입니다
-            align: 'end',  // 텍스트를 막대의 끝에 맞춥니다
+            anchor: 'center', // 텍스트를 막대의 끝에 붙입니다
+            align: 'center',  // 텍스트를 막대의 끝에 맞춥니다
             color: '#000',
             formatter: (value, context) => {
               const originalValue = context.chart.data.datasets[context.datasetIndex].originalData[context.dataIndex];
@@ -60,12 +60,6 @@
             },
           },
         },
-        datalabels: {
-            display: true,
-            anchor: 'end',
-            align: 'end',
-            color: '#000',
-          },
       },
     elements: {
         bar: {
