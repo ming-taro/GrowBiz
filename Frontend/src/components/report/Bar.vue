@@ -15,7 +15,7 @@
         </div>
         <div class="mb-5">
           <h4 class="mb-1">저희가 추천한 브랜드로 창업하실 경우</h4>
-          <h2 class="mb-1">{{ recommendedCost }} 만원</h2> 
+          <h2 class="mb-1">{{ formatNumber(recommendedCost) }} 만원</h2> 
           <h4>만큼 아낄 수 있어요.</h4>
         </div>
       </div>
@@ -45,7 +45,9 @@ const recommendedScore = ref('');
 const industryAverageScore = ref('');
 const recommendedCost = ref('');
 
-
+const formatNumber = (num) => {
+  return new Intl.NumberFormat('ko-KR').format(num);
+};
 onMounted(async () => {
   const response = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
   const data = response.data;
