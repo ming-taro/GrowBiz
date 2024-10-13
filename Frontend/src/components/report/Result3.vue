@@ -9,92 +9,58 @@
             </div>
           </div>
         </div>
-        <div class="col-6">
-          
-        <!-- 1등 카드 -->
-        <div class="col-4">
-          <div class="card border-left-primary shadow h-100 py-2">
-            <div
-              class="card-body d-flex flex-column justify-content-center align-items-center"
-            >
-              <div class="text-center">
-                <img
-                  src="@/assets/img/medals/first_place_medal.png"
-                  style="max-width: 60%; height: auto"
-                  alt="..."
-                />
-              </div>
-              <div
-                class="row no-gutters align-items-center justify-content-center"
-              >
-                <div class="col text-center">
-                  <div class="h3 mt-5 mb-2 font-weight-bold text-purple">
-123                  </div>
-                  <div class="h4 mb-1 text-gray-300">
-                    <h4>
-123
-123                    </h4>
-                  </div>
-                  <p>
-123
-                  </p>
+        <div class="col-6 d-flex">
+            <!-- 1등 카드 -->
+            <div class="col-7 me-3">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <div class="text-center">
+                            <img src="@/assets/img/medals/first_place_medal.png" style="max-width: 60%; height: auto" alt="1등 메달" />
+                        </div>
+                        <div class="row no-gutters align-items-center justify-content-center">
+                            <div class="col text-center">
+                                <div class="h3 mt-5 mb-2 font-weight-bold text-purple">123</div>
+                                <div class="h4 mb-1 text-gray-300"><h4>123</h4></div>
+                                <p>123</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- 2등, 3등 카드 -->
-        <div class="col-2 d-flex flex-column">
-          <!-- 2등 카드 -->
-          <div
-            class="card border-left-primary shadow py-2 mb-2"
-            style="flex: 1"
-          >
-            <div class="card-body d-flex align-items-center">
-              <div class="text-left me-2">
-                <img
-                  src="@/assets/img/medals/second_place_medal.png"
-                  style="max-width: 60px; height: auto"
-                  alt="2nd place medal"
-                />
-              </div>
-              <div class="ml-3">
-                <div class="h4 font-weight-bold text-purple mb-1">
-                  123
+            <!-- 2등, 3등 카드 -->
+            <div class="col-4 d-flex flex-column justify-content-between">
+                <!-- 2등 카드 -->
+                <div class="card border-left-primary shadow py-2 mb-2">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="text-left me-2">
+                            <img src="@/assets/img/medals/second_place_medal.png" style="max-width: 60px; height: auto" alt="2등 메달" />
+                        </div>
+                        <div>
+                            <div class="h4 font-weight-bold text-purple mb-1">123</div>
+                            <div class="h6 text-gray-300">123</div>
+                            <p class="text-gray-300">123</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="h6 text-gray-300">
-123                </div>
-                <p class="text-gray-300">123</p>
-              </div>
+
+                <!-- 3등 카드 -->
+                <div class="card border-left-primary shadow py-2">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="text-left me-2">
+                            <img src="@/assets/img/medals/third_place_medal.png" style="max-width: 60px; height: auto" alt="3등 메달" />
+                        </div>
+                        <div>
+                            <div class="h4 font-weight-bold text-purple mb-1">123</div>
+                            <div class="h6 text-gray-300">123</div>
+                            <p class="text-gray-300">123</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- 3등 카드 -->
-          <div class="card border-left-primary shadow py-2" style="flex: 1">
-            <div class="card-body d-flex align-items-center">
-              <div class="text-left me-2">
-                <img
-                  src="@/assets/img/medals/third_place_medal.png"
-                  style="max-width: 60px; height: auto"
-                  alt="3rd place medal"
-                />
-              </div>
-              <div class="ml-3">
-                <div class="h4 font-weight-bold text-purple mb-1">
-                 123
-                </div>
-                <div class="h6 text-gray-300">
-                  123 123
-                </div>
-                <p class="text-gray-300">123</p>
-              </div>
-            </div>
-          </div>
         </div>
+    </div>
 
-        </div>
-      </div>
 
       <div class="row">
   <div class="col-3">
@@ -156,4 +122,19 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
+.card {
+  overflow: hidden; /* 카드가 내부 내용을 벗어나지 않도록 설정 */
+  border-radius: 0.35rem; /* 카드의 모서리 라운드 설정 */
+}
+
+.text-overlay {
+  /* position: absolute; */
+  z-index: 1; /* 텍스트가 이미지 위에 표시되도록 설정 */
+  text-align: left; /* 왼쪽 정렬 */
+  font-weight: 600;
+}
+.text-purple {
+  color: #fca3b9;
+}
 </style>
