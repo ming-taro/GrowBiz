@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #f6f4f9">
+  <div>
     <div class="container mw-screen-xl">
       <div class="row">
           <div class="col-6 mt-6">

@@ -269,9 +269,6 @@ onMounted(fetchReportData);
   padding: 5px 0px;
 }
 
-.loan-section {
-  background-color: #f6f4f9; /* 배경색을 이곳에 적용 */
-}
 
 
 
