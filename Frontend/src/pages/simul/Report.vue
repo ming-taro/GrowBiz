@@ -6,7 +6,7 @@
 
     <div class="container mw-screen-xl">
       <!-- 추천 위치 -->
-      <Location v-if="location != null" v-bind:location=location />
+      <Location v-if="report != null" v-bind:location=location :plno_list=report.plno_list />
     </div>
 
     <!-- 그래프 -->
@@ -31,8 +31,8 @@ import Bar from '@/components/report/Bar.vue';
 import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
 import { onMounted, ref } from 'vue';
-import { fetchReportById } from '@/services/ReportAPI';
-import { findLocation } from '@/services/SimulationAPI';
+import { fetchReportById } from '@/services/simulation/ReportAPI';
+import { findLocation } from '@/services/simulation/SimulationAPI';
 
 const report = ref(null);
 const location = ref(null);
@@ -46,8 +46,6 @@ const storeReport = async () => {
   let query = window.location.search;
   let param = new URLSearchParams(query);
   let reportId = param.get('id');
-
-  console.log("리포트 아이디:", reportId);
   report.value = await fetchReportById(reportId);
 }
 
