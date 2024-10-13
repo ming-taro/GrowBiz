@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="title-sm">
+    <div class="title">
       <div class="custom-line" />
-      추천 위치
+        추천 위치
       <div class="custom-line" />
     </div>
     <div class="row">
@@ -10,10 +10,15 @@
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="col-5 d-flex justify-content-center align-content-center">
+        
         <div style="display: flex; flex-direction: column; overflow: auto; height: 400px">
-          <div v-for="(plno, index) in props.plno_list" v-bind:key="index">
-            <Property v-bind:plno="plno"/>
+          <div class="pl-3 pr-3" style="font-size: 20px">
+            조회 결과 {{ props.plno_list.length }}건
             <hr />
+          </div>
+
+          <div v-for="(plno, index) in props.plno_list" v-bind:key="index">
+            <Property v-bind:plno="plno" :map="map"/>
           </div>
         </div>
       </div>
@@ -22,14 +27,16 @@
 </template>
 
 <script setup>
-import { onMounted, defineProps } from 'vue';
+import { onMounted, defineProps, ref } from 'vue';
 import { findLocationByAddress } from '@/services/simulation/LocationAPI';
 import Property from '@/components/report/Property.vue'
 
 const props = defineProps(["location", "plno_list"]);
+const map = ref(null);
 
 const setLocation = async () => {
-  const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
+  // const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
+  const location = {y: 37.49606, x: 127.040995}; // 임시 위치 -> 위의 데이터로 교체 필요
   const script = document.createElement('script');
   script.src = import.meta.env.VITE_KAKAO_API_URL;
   script.onload = () => {
@@ -40,7 +47,7 @@ const setLocation = async () => {
         level: 5,
       };
 
-      var map = new kakao.maps.Map(container, options);
+      map.value = new kakao.maps.Map(container, options);
     });
   };
   document.head.appendChild(script);
@@ -63,9 +70,7 @@ onMounted(async() => {
   font-size: 25px;
   font-weight: bold;
 }
-.mainblue {
-  color: #6184c6;
-}
+
 .weight {
   font-weight: 100;
 }
