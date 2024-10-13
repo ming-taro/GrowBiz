@@ -193,7 +193,7 @@ onMounted(() => {
 // 서버에서 가게 정보를 가져오는 함수
 const fetchStoreData = async () => {
   try {
-    const id = '1234';
+    const id = mno;
 
     const response = await axios.get(`/api/kmap/member/${id}`); // 사용자 가게 정보 불러오기
     const data = response.data;

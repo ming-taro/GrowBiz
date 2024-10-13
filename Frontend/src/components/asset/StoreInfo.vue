@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between gap-2">
         <div style="display: flex; width: 60%">
           <h2 class="title mb-2">내 가게</h2>
-          <div style="margin: 0.5% 0% 0% 1%">
+          <div style="margin: 0.5% 0% 0% 1%" id="disable">
             해당 내용은 견본 데이터 입니다. 회원님의 가게를 등록해 보세요.
           </div>
         </div>
@@ -36,9 +36,9 @@
             <div class="card-body pb-5 flex-grow-1">
               <div class="d-flex justify-content-between align-items-center">
                 <img
-                  :src="store.imageUrl"
+                  :src="'/src/assets/img/upload/' + store.imageUrl"
                   class="card-img-top rounded"
-                  style="width: 546px; height: 307px"
+                  style="width: 546px; height: 307px; object-fit: cover"
                 />
               </div>
             </div>
@@ -113,7 +113,6 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import defaultImage from '@/assets/img/infoplaza/house.png';
 
 const authStore = useAuthStore();
 
@@ -133,6 +132,10 @@ export default {
         let response = await axios.get(`/api/kmap/member/${mno}`); // mno를 사용하여 사용자 데이터를 가져옴
 
         if (response.data.length == 0) {
+          const disable = document.getElementById('disable');
+
+          disable.style.display = 'none';
+          disable.style.display = '';
           const id = '1234';
           response = await axios.get(`/api/kmap/member/${id}`);
         }
@@ -151,7 +154,7 @@ export default {
             store.value.otherExpenses);
 
         if (store.value.imageUrl == null) {
-          store.value.imageUrl = defaultImage;
+          store.value.imageUrl = 'house.png';
         }
 
         console.log(store.value);

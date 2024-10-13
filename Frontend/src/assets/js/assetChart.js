@@ -99,6 +99,17 @@ export const mixed_options = {
   scales: {
     y: {
       beginAtZero: true,
+      grid: {
+        display: false, // y축 가로선(그리드 라인)을 숨김
+      },
+    },
+  },
+  plugins: {
+    datalabels: {
+      display: false, // 막대 위의 숫자를 숨김
+    },
+    tooltip: {
+      enabled: true, // 마우스 오버 시 툴팁은 여전히 표시
     },
   },
 };

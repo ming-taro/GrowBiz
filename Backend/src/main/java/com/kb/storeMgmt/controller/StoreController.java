@@ -41,11 +41,11 @@ public class StoreController {
             // 이미지가 있으면 파일 시스템에 저장
             if (image != null && !image.isEmpty()) {
                 String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-                Path filePath = Paths.get("c:/upload/directory/", fileName); // 실제 저장 경로로 수정
+                Path filePath = Paths.get("C:/Users/student/Documents/GitHub/Frontend/src/assets/img/upload", fileName); // 실제 저장 경로로 수정
                 Files.copy(image.getInputStream(), filePath);
                 image.getInputStream().close();  // 스트림을 명확하게 닫기
 
-                imageUrl = filePath.toString(); // 저장 경로를 imageUrl로 설정
+                imageUrl = fileName; // 저장 경로를 imageUrl로 설정
             }
 
 
