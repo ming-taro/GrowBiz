@@ -99,6 +99,7 @@ onMounted(async() => {
   border-radius: 40px; /* 모서리 둥글게 */
   z-index: 1; /* 이미지 아래에 위치하도록 설정 */
   box-sizing: border-box; /* 패딩을 포함하여 전체 너비를 계산 */
+  
 }
 .overlay-text {
   color: black; /* 텍스트 색상 */
@@ -119,13 +120,13 @@ onMounted(async() => {
 .question {
   color: black; /* 텍스트 색상 */
   font-size: 20px; /* 텍스트 크기 조정 */
-  font-weight: 600;
+  font-weight: 700;
   margin-right: 0.5rem;
 }
 .answer {
   color: black; /* 텍스트 색상 */
   font-size: 20px; /* 텍스트 크기 조정 */
-  font-weight: 100;
+  font-weight: 400;
   margin-right: 1rem;
 }
 </style>
