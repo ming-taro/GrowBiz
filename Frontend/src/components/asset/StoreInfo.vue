@@ -9,14 +9,13 @@
           <button type="button" class="btn btn-sm btn-neutral mb-3 mt-3">
             수정
           </button>
-          <router-link to="/asset/storereg"
-            ><button
-              type="button"
-              class="btn btn-sm btn-primary mb-3 mt-3 ms-0"
-            >
-              가게 등록
-            </button>
-          </router-link>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary mb-3 mt-3 ms-0"
+            @click="goToStoreReg"
+          >
+            가게 등록
+          </button>
         </div>
       </div>
 
@@ -115,6 +114,7 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
 
@@ -123,6 +123,7 @@ const mno = authStore.state.mno;
 export default {
   name: 'StoreInfo',
   setup() {
+    const router = useRouter();
     const store = {
       stNo: 1,
       apNo: 'AP12345',
@@ -160,6 +161,14 @@ export default {
       return rate * 100 + '%';
     };
 
+    const goToStoreReg = () => {
+      if (mno == undefined) {
+        router.push('/login');
+      } else {
+        router.push('/asset/storereg');
+      }
+    };
+
     // 페이지 로딩 시 로그인 상태 확인하는 함수
     const checkUserId = () => {
       const blur_overlay = document.getElementById('blur-overlay');
@@ -181,6 +190,7 @@ export default {
       formatMoney,
       formatRate,
       checkUserId,
+      goToStoreReg,
     };
   },
   mounted() {

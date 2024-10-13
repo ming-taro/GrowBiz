@@ -38,7 +38,26 @@
               />
             </div>
           </div>
+
+          <!-- 옵션 추가 섹션 -->
+          <div class="option">
+            <select
+              class="form-select round-corner"
+              @change="onStoreChange"
+              v-model="selectedStore"
+            >
+              <option value="" selected disabled>업종을 선택해 주세요</option>
+              <option
+                v-for="(Store, index) in store"
+                :key="index"
+                :value="Store"
+              >
+                {{ Store }}
+              </option>
+            </select>
+          </div>
         </div>
+
         <!-- 사진 업로드 섹션 -->
         <div style="width: 40%">
           <div class="photo-area" @click="triggerFileInput">
@@ -58,6 +77,7 @@
           />
         </div>
       </div>
+
       <!-- 종합 정보 섹션 -->
       <div class="mb-8">
         <div class="d-flex mb-3 align-items-end">
@@ -123,13 +143,15 @@ const mno = authStore.state.mno; // 사용자 번호
 
 // 데이터 관련 변수들
 const imageUrl = ref(defaultImage);
-const fileInput = ref(null); // 파일 입력 필드를 참조하는 ref
+const fileInput = ref(defaultImage); // 파일 입력 필드를 참조하는 ref
 const address = ref('');
 const detailAddress = ref('');
 const rent = ref('');
 const utilityExpenses = ref('');
 const laborCost = ref('');
 const otherExpenses = ref('');
+const store = ref([]); // 서버에서 가져온 은행 리스트
+const selectedStore = ref(''); // 선택된 은행
 
 // 파일 선택을 트리거하는 함수
 const triggerFileInput = () => {
@@ -180,6 +202,7 @@ const submitForm = () => {
   formDataToSend.append('utilityExpenses', utilityExpenses.value);
   formDataToSend.append('laborCost', laborCost.value);
   formDataToSend.append('otherExpenses', otherExpenses.value);
+  formDataToSend.append('svcIndutyCdNm', selectedStore.value); // 선택된 은행명 추가
 
   console.log(imageFile.value + 'imageFile.value');
 
@@ -204,6 +227,20 @@ const submitForm = () => {
       console.error('데이터 전송 오류:', error);
     });
 };
+
+// 서버에서 가게 리스트 가져오기
+const fetchStoreList = async () => {
+  try {
+    const response = await axios.get('/api/store/list');
+    store.value = response.data; // 은행 리스트 저장
+  } catch (error) {
+    console.error('은행 목록을 불러오는 중 오류가 발생했습니다.', error);
+  }
+};
+
+onMounted(() => {
+  fetchStoreList();
+});
 </script>
 
 <style scoped>
@@ -245,5 +282,9 @@ p {
   height: 100%;
   object-fit: cover; /* 이미지를 영역에 맞춰서 자르거나 맞춤 */
   aspect-ratio: 1 / 1; /* 이미지를 정사각형 비율로 맞춤 */
+}
+
+.option {
+  width: 70.6%;
 }
 </style>

@@ -9,4 +9,8 @@
         VALUES (#{address}, #{id}, #{addressname}, #{dongname}, #{svcIndutyCdNm}, #{rent}, #{utilityExpenses}, #{laborCost}, #{otherExpenses}, #{detailAddress}, #{imageUrl})
     </insert>
 
+    <select id="getstoreList" resultType="string">
+        SELECT SVC_INDUTY_CD_NM
+        FROM service_sales where stdr_yyqu_cd='20242' group by SVC_INDUTY_CD_NM order by SVC_INDUTY_CD_NM;
+    </select>
 </mapper>
