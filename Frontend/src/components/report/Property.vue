@@ -2,6 +2,7 @@
   <div
     class="d-flex justify-content-between m-3 align-items-stretch"
     v-if="property != null"
+    @click="moveMapCenter" style="cursor: pointer;"
   >
     <!-- 왼쪽 텍스트 -->
     <div
@@ -39,6 +40,11 @@ import { fetchPropertyById } from '@/services/simulation/PropertyAPI';
 
 const props = defineProps(["plno", "map"]);
 const property = ref(null);
+
+const moveMapCenter = () => {
+  const newLatLng = new kakao.maps.LatLng(property.value.laCrd, property.value.loCrd);
+  props.map.setCenter(newLatLng);
+}
 
 const setMarker = (lat, lon) => {
   var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 

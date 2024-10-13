@@ -12,7 +12,7 @@
       <div class="col-5 d-flex justify-content-center align-content-center">
         
         <div style="display: flex; flex-direction: column; overflow: auto; height: 400px">
-          <div class="pl-3 pr-3" style="font-size: 20px">
+          <div v-if="plno_list" class="pl-3 pr-3" style="font-size: 20px">
             조회 결과 {{ props.plno_list.length }}건
             <hr />
           </div>
