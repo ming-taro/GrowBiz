@@ -1,4 +1,5 @@
 <template>
+    <div class="container pd">
     <div class="row">
       <div class="col card">
         <span>업종 브랜드 평균 매출</span>
@@ -17,6 +18,7 @@
         <h2>{{ formatNumber(recommended_brand_average_sales_per_area) }}만원</h2>
       </div>
     </div>
+</div>
   </template>
   
   <script setup>
@@ -62,5 +64,9 @@ const formatNumber = (num) => {
   margin: 10px; /* 카드 간의 외부 여백 */
 }
 
+.pd{
+    padding-left: 120px;
+    padding-right: 120px;
+}
   </style>
   

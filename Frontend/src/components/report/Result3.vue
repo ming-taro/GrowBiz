@@ -1,6 +1,7 @@
 <template>
 
     <!-- 개업률, 폐업률, 유동인구 -->
+     <div class="container mb-5">
     <div class="row">
         <div class="col-6 d-flex align-items-center">
             <div class="chart-container">
@@ -58,10 +59,12 @@
             </div>
         </div>
     </div>
-
+</div>
 
      <!-- 추가 추천 브랜드 -->
-     <div class="row mt-4 d-flex align-items-center justify-content-center">
+      <div style="background-color: #f6f4f9; padding: 20px" class="mb-3">
+        <div class="container">
+     <div class="row  mt-4 d-flex align-items-center justify-content-center">
         <div class="col-3 d-flex flex-column align-items-center">
       <h2 class="text-center">추가 추천<br/>브랜드<br /></h2>
     </div>
@@ -76,8 +79,9 @@
       <h2 class="mb-3">{{ secondBrandName }}</h2>
       <h5 class="mb-2 fw-light">추천 점수</h5>
       <h2>{{ secondBrandScore }}점</h2>
-    </div>
+    </div></div>
   </div>
+</div>
 </template>
 
 <script setup>
