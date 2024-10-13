@@ -60,36 +60,24 @@
     </div>
 
 
-      <div class="row">
-  <div class="col-3">
-    <img src="" alt="">
-    <span>추가<br/>추천<br/>브랜드</span>
-  </div>
-  <div class="col-3">
-    <div class="d-flex flex-column align-items-center">
-      <div class="d-flex justify-content-center">
-        <span>추천 브랜드</span>
-        <span class="mx-3">추천 점수</span>
-      </div>
-      <div class="d-flex justify-content-center">
-        <h2>뭐시기</h2>
-        <h2 class="mx-3">00점</h2>
-      </div>
+     <!-- 추가 추천 브랜드 -->
+     <div class="row mt-4 d-flex align-items-center justify-content-center">
+        <div class="col-3 d-flex flex-column align-items-center">
+      <h2 class="text-center">추가 추천<br/>브랜드<br /></h2>
+    </div>
+    <div class="col-4 d-flex flex-column align-items-center add_card">
+      <h5 class="mb-2 fw-light">추천 브랜드</h5>
+      <h2 class="mb-3">{{ firstBrandName }}</h2>
+      <h5 class="mb-2 fw-light">추천 점수</h5>
+      <h2>{{ firstBrandScore }}점</h2>
+    </div>
+    <div class="col-4 d-flex flex-column align-items-center add_card">
+      <h5 class="mb-2 fw-light">추천 브랜드</h5>
+      <h2 class="mb-3">{{ secondBrandName }}</h2>
+      <h5 class="mb-2 fw-light">추천 점수</h5>
+      <h2>{{ secondBrandScore }}점</h2>
     </div>
   </div>
-  <div class="col-3">
-    <div class="d-flex flex-column align-items-center">
-      <div class="d-flex justify-content-center">
-        <span>추천 브랜드</span>
-        <span class="mx-3">추천 점수</span>
-      </div>
-      <div class="d-flex justify-content-center">
-        <h2>뭐시기</h2>
-        <h2 class="mx-3">00점</h2>
-      </div>
-    </div>
-  </div>
-</div>
 </template>
 
 <script setup>
@@ -103,6 +91,12 @@ import axios from 'axios';
 
 let barChartInstance2 = ref(null);
 const data = ref({});
+const firstBrandName = ref(''); // 빈 배열로 초기화
+const firstBrandScore = ref(''); // 빈 배열로 초기화
+const secondBrandName = ref(''); // 빈 배열로 초기화
+const secondBrandScore = ref(''); // 빈 배열로 초기화
+
+
 
 // 역 데이터
 const firstStation = ref('');
@@ -134,6 +128,11 @@ onMounted(async () => {
   thirdPeople.value = data.value.top_3_nearby_stations[2].people;
   thirdDate.value = data.value.top_3_nearby_stations[2].date;
 
+
+  firstBrandName.value = data.value.additional_recommended_brands[0].brand_name;
+firstBrandScore.value = data.value.additional_recommended_brands[0].franchise_score;
+secondBrandName.value = data.value.additional_recommended_brands[1].brand_name;
+secondBrandScore.value = data.value.additional_recommended_brands[1].franchise_score;
   // 데이터 바 차트에 추가
   const barCtx2 = document.getElementById('bar-chart2').getContext('2d');
   barChartInstance2.value = new Chart(barCtx2, {
@@ -165,4 +164,16 @@ onMounted(async () => {
 .text-purple {
   color: #fca3b9;
 }
+
+
+
+
+.add_card {
+  border: 1px solid #F6A8B8; /* 카드 테두리 색상 */
+  border-radius: 10px; /* 둥근 모서리 */
+  padding: 20px; /* 내부 여백 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  margin: 10px; /* 카드 간의 외부 여백 */
+}
+
 </style>
