@@ -62,19 +62,20 @@ onMounted(async() => {
 .result-text {
   position: absolute; /* 절대 위치 설정 */
   top: 25%; /* 컨테이너의 중간 */
-  left: 14.2%; /* 컨테이너의 중간 */
+  left: 18.5%; /* 컨테이너의 중간 */
   transform: translate(-50%, -50%); /* 중앙 정렬 */
   color: white; /* 텍스트 색상 */
   padding: 10px; /* 여백 추가 */
   border-radius: 5px; /* 모서리 둥글게 */
   z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
   font-size: 30px;
+  font-weight: 600;
 }
 
 .result-text2-container {
   position: absolute; /* 절대 위치 설정 */
   top: 25%; /* 컨테이너의 중간 */
-  left: 9.3%; /* 고정 위치 */
+  left: 14%; /* 고정 위치 */
   z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
   display: flex; /* 플렉스 박스 사용 */
 }
@@ -85,6 +86,7 @@ onMounted(async() => {
   font-size: 50px;
   flex-grow: 1; /* 오른쪽 영역이 늘어나도록 설정 */
   margin-left: 10px; /* 텍스트 간격 */
+  font-weight: 800;
 }
 
 .overlay {
@@ -92,7 +94,7 @@ onMounted(async() => {
   top: 50%; /* user-info의 하단에 위치 */
   left: 50%; /* 가운데 정렬을 위해 left를 50%로 설정 */
   transform: translateX(-50%); /* 가운데 정렬 조정 */
-  width: 80%; /* 너비를 60%로 설정하여 양쪽 20% 여백을 만듭니다 */
+  width: 70%; /* 너비를 60%로 설정하여 양쪽 20% 여백을 만듭니다 */
   background-color: rgba(255, 255, 255); /* 흰색 반투명 배경 */
   border-radius: 40px; /* 모서리 둥글게 */
   z-index: 1; /* 이미지 아래에 위치하도록 설정 */
