@@ -2,16 +2,23 @@
   <div>
     <div style="position: relative; overflow: hidden">
       <div class="d-flex justify-content-between gap-2">
-        <div>
+        <div style="display: flex; width: 60%">
           <h2 class="title mb-2">내 가게</h2>
+          <div style="margin: 0.5% 0% 0% 1%" id="disable">
+            해당 내용은 견본 데이터 입니다. 회원님의 가게를 등록해 보세요.
+          </div>
         </div>
         <div class="d-flex align-items-center gap-2">
-          <button type="button" class="btn btn-sm btn-neutral mb-3 mt-3">
+          <button
+            type="button"
+            @click="goToUpdate"
+            class="btn btn-sm btn-neutral mb-3"
+          >
             수정
           </button>
           <button
             type="button"
-            class="btn btn-sm btn-primary mb-3 mt-3 ms-0"
+            class="btn btn-sm btn-primary mb-3"
             @click="goToStoreReg"
           >
             가게 등록
@@ -29,8 +36,9 @@
             <div class="card-body pb-5 flex-grow-1">
               <div class="d-flex justify-content-between align-items-center">
                 <img
-                  src="https://www.jumpoline.com/_file/jumpo/jumpoline_202406121654211156.jpg"
+                  :src="'/src/assets/img/upload/' + store.imageUrl"
                   class="card-img-top rounded"
+                  style="width: 546px; height: 307px; object-fit: cover"
                 />
               </div>
             </div>
@@ -44,63 +52,51 @@
             <div class="card-body pb-5 flex-grow-1">
               <div class="">
                 <div class="d-block stretched-link h4 mb-2 fw-bold fs-1">
-                  {{ store.storeName }}
+                  {{ store.svcIndutyCdNm }}
                 </div>
                 <div class="d-block stretched-link h5 mb-2 fs-3">
-                  {{ store.location }}
+                  {{ store.address }}&nbsp;{{ store.detailAddress }}
                 </div>
                 <div class="d-flex justify-content-between gap-4">
                   <div class="">
                     <span class="d-block text-sm text-heading fw-bold"
-                      >권리금</span
-                    >
-                    <span class="d-block text-sm text-heading fw-bold"
-                      >총 투자액</span
-                    >
-                    <span class="d-block text-sm text-heading fw-bold"
                       >월매출</span
                     >
                     <span class="d-block text-sm text-heading fw-bold"
-                      >마진율</span
+                      >월세</span
                     >
                     <span class="d-block text-sm text-heading fw-bold"
-                      >매출이익</span
+                      >공과금</span
                     >
                     <span class="d-block text-sm text-heading fw-bold"
-                      >경비 합계</span
+                      >인건비</span
                     >
                     <span class="d-block text-sm text-heading fw-bold"
-                      >월수익</span
+                      >기타비용</span
                     >
                     <span class="d-block text-sm text-heading fw-bold"
-                      >권리금 회수기간</span
+                      >순이익</span
                     >
                   </div>
                   <div class="text-end">
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.keyMoney)
+                      formatMoney(amount)
                     }}</span>
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.totalInvestment)
+                      formatMoney(store.rent)
                     }}</span>
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.monthlySales)
+                      formatMoney(store.utilityExpenses)
                     }}</span>
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatRate(store.marginRate)
+                      formatMoney(store.laborCost)
                     }}</span>
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.salesProfit)
+                      formatMoney(store.otherExpenses)
                     }}</span>
                     <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.totalExpenses)
+                      formatMoney(total)
                     }}</span>
-                    <span class="d-block text-sm text-heading fw-bold">{{
-                      formatMoney(store.monthlyProfit)
-                    }}</span>
-                    <span class="d-block text-sm text-heading fw-bold"
-                      >{{ store.depositRecoveryPeriod }}개월</span
-                    >
                   </div>
                 </div>
               </div>
@@ -113,8 +109,10 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 
 const authStore = useAuthStore();
 
@@ -124,25 +122,52 @@ export default {
   name: 'StoreInfo',
   setup() {
     const router = useRouter();
-    const store = {
-      stNo: 1,
-      apNo: 'AP12345',
-      userId: 'user01',
-      storeName: 'CU 성남점',
-      location: '경기남부 성남시 수정구 태평동 1층',
-      keyMoney: 50000000,
-      totalInvestment: 105000000,
-      monthlySales: 20000000,
-      marginRate: 0.25,
-      salesProfit: 5000000,
-      monthlyProfit: 3000000,
-      storeEntryFee: 1000000,
-      totalExpenses: 15000000,
-      depositRecoveryPeriod: 12,
-      breakEvenPoint: 20,
+
+    const store = ref({});
+    const amount = ref();
+    const total = ref();
+
+    const fetchStoreData = async () => {
+      try {
+        let response = await axios.get(`/api/kmap/member/${mno}`); // mno를 사용하여 사용자 데이터를 가져옴
+
+        disable.style.display = 'none';
+        if (response.data.length == 0) {
+          const disable = document.getElementById('disable');
+
+          disable.style.display = '';
+          const id = '1234';
+          response = await axios.get(`/api/kmap/member/${id}`);
+        }
+
+        const sum = await axios.get(`/api/chart/sum`);
+
+        amount.value = sum.data.amount;
+
+        store.value = response.data;
+
+        total.value =
+          amount.value -
+          (store.value.rent +
+            store.value.utilityExpenses +
+            store.value.laborCost +
+            store.value.otherExpenses);
+
+        if (store.value.imageUrl == null) {
+          store.value.imageUrl = 'house.png';
+        }
+
+        console.log(store.value);
+      } catch (error) {
+        console.error('데이터를 가져오는 중 오류 발생:', error);
+      }
     };
 
     const formatMoney = (amount) => {
+      if (amount === null || amount === undefined) {
+        return '-'; // 값이 없을 때 기본값 설정
+      }
+
       const 억 = Math.floor(amount / 100000000);
       const 만 = Math.floor((amount % 100000000) / 10000);
 
@@ -157,15 +182,23 @@ export default {
       return result || amount.toString();
     };
 
-    const formatRate = (rate) => {
-      return rate * 100 + '%';
-    };
+    // const formatRate = (rate) => {
+    //   return rate * 100 + '%';
+    // };
 
     const goToStoreReg = () => {
       if (mno == undefined) {
         router.push('/login');
       } else {
         router.push('/asset/storereg');
+      }
+    };
+
+    const goToUpdate = () => {
+      if (mno == undefined) {
+        router.push('/asset/storereg');
+      } else {
+        router.push('/asset/storeupdate');
       }
     };
 
@@ -185,12 +218,20 @@ export default {
       }
     };
 
+    onMounted(() => {
+      checkUserId(); // 페이지가 로드될 때 checkUserId 함수 호출
+      fetchStoreData(); // 페이지가 로드될 때 데이터 가져오기
+    });
+
     return {
       store,
       formatMoney,
-      formatRate,
+      amount,
+      total,
+      // formatRate,
       checkUserId,
       goToStoreReg,
+      goToUpdate,
     };
   },
   mounted() {

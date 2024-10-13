@@ -46,4 +46,9 @@ public class ChartController {
     public List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO) {
         return chartService.getmcsecend(categoriesDTO);
     }
+
+    @GetMapping("sum")
+    public CategoriesDTO getsum(CategoriesDTO categoriesDTO) {
+        return chartService.getsum(categoriesDTO);
+    }
 }

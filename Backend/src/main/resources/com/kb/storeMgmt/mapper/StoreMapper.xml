@@ -13,4 +13,21 @@
         SELECT SVC_INDUTY_CD_NM
         FROM service_sales where stdr_yyqu_cd='20242' group by SVC_INDUTY_CD_NM order by SVC_INDUTY_CD_NM;
     </select>
+
+    <update id="updateStore" parameterType="com.kb.storeMgmt.dto.NeighborhoodDTO">
+        UPDATE mystore
+        SET
+            address = #{address},
+            addressname = #{addressname},
+            dongname = #{dongname},
+            svc_induty_cd_nm = #{svcIndutyCdNm},
+            rent = #{rent},
+            utility_expenses = #{utilityExpenses},
+            labor_cost = #{laborCost},
+            other_expenses = #{otherExpenses},
+            detailAddress = #{detailAddress},
+            imageUrl = #{imageUrl}
+        WHERE
+            id = #{id}
+    </update>
 </mapper>

@@ -13,4 +13,6 @@ public interface StoreMapper {
     void insertStore(NeighborhoodDTO neighborhoodDTO);
 
     List<String> getstoreList();
+
+    void updateStore(NeighborhoodDTO neighborhoodDTO);
 }

@@ -4,18 +4,18 @@ const id = '1234';
 
 // 혼합 차트 데이터
 export let mixed_data = {
-  labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4'], // 라벨 설정
+  labels: [], // 라벨 설정
   datasets: [
     {
       type: 'bar',
-      label: '일주일 전 판매량',
+      label: '나의 매출',
       data: [],
       borderColor: 'rgb(255, 9, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
     },
     {
       type: 'bar', // 첫 번째 라인 데이터셋
-      label: '금일 판매량',
+      label: '지역별 평균 매출',
       data: [],
       fill: false,
       borderColor: 'rgb(54, 162, 235)',
@@ -30,23 +30,34 @@ export const mixed_options = {
   scales: {
     y: {
       beginAtZero: true,
+      grid: {
+        display: false, // y축 가로선(그리드 라인)을 숨김
+      },
+    },
+  },
+  plugins: {
+    datalabels: {
+      display: false, // 막대 위의 숫자를 숨김
+    },
+    tooltip: {
+      enabled: true, // 마우스 오버 시 툴팁은 여전히 표시
     },
   },
 };
 
 export let mixed_data2 = {
-  labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4'], // 라벨 설정
+  labels: [], // 라벨 설정
   datasets: [
     {
       type: 'bar',
-      label: '일주일 전 판매량',
+      label: '나의 매출',
       data: [],
       borderColor: 'rgb(255, 9, 132)',
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
     },
     {
       type: 'bar', // 첫 번째 라인 데이터셋
-      label: '금일 판매량',
+      label: '지역별 평균 매출',
       data: [],
       fill: false,
       borderColor: 'rgb(54, 162, 235)',
@@ -61,6 +72,17 @@ export const mixed_options2 = {
   scales: {
     y: {
       beginAtZero: true,
+      grid: {
+        display: false, // y축 가로선(그리드 라인)을 숨김
+      },
+    },
+  },
+  plugins: {
+    datalabels: {
+      display: false, // 막대 위의 숫자를 숨김
+    },
+    tooltip: {
+      enabled: true, // 마우스 오버 시 툴팁은 여전히 표시
     },
   },
 };
@@ -79,38 +101,45 @@ export async function fetchChartData(loanRepaymentStatus) {
   const mcfirstdata = mcfirst.data;
 
   const mcsecenddata = mcsecend.data.reduce(
-    (sum, item) => sum + item.amount * 1000,
+    (sum, item) => sum + item.amount,
     0
   );
 
   mixed_data2.labels = mcfirstdata.map((item) => item.adstrdCdNm);
-  mixed_data2.datasets[0].data = mcfirstdata.map((item) => item.mdwkSelngAmt);
-  mixed_data2.datasets[1].data = Array(
-    mixed_data2.datasets[0].data.length
-  ).fill(mcsecenddata);
+  // 먼저 mcfirstdata의 길이를 기반으로 datasets[0].data를 설정
+  mixed_data2.datasets[0].data = Array(mcfirstdata.length).fill(mcsecenddata);
 
-  const mixchart = await axios.get(`/api/chart/mixchart`);
+  // 그 후 datasets[1].data에 mcfirstdata의 값을 설정
+  mixed_data2.datasets[1].data = mcfirstdata.map(
+    (item) => item.mdwkSelngAmt / 1000
+  );
 
-  const firstData = [];
-  const secondData = [];
+  // const mixchart = await axios.get(`/api/chart/mixchart`);
 
-  const categorizedData = mixchart.data.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
+  // const firstData = [];
+  // const secondData = [];
 
-    if (acc[item.category].length === 0) {
-      acc[item.category].push(item);
-      firstData.push(item); // 첫 번째 데이터를 firstData에 추가
-    } else if (acc[item.category].length === 1) {
-      acc[item.category].push(item);
-      secondData.push(item); // 두 번째 데이터를 secondData에 추가
-    }
-    return acc;
-  }, {});
+  // const categorizedData = mixchart.data.reduce((acc, item) => {
+  //   if (!acc[item.category]) {
+  //     acc[item.category] = [];
+  //   }
 
-  mixed_data.labels = firstData.map((item) => item.categoryName);
+  //   if (acc[item.category].length === 0) {
+  //     acc[item.category].push(item);
+  //     firstData.push(item); // 첫 번째 데이터를 firstData에 추가
+  //   } else if (acc[item.category].length === 1) {
+  //     acc[item.category].push(item);
+  //     secondData.push(item); // 두 번째 데이터를 secondData에 추가
+  //   }
+  //   return acc;
+  // }, {});
 
-  mixed_data.datasets[0].data = firstData.map((item) => item.amount);
-  mixed_data.datasets[1].data = secondData.map((item) => item.amount);
+  const sum = await axios.get(`/api/chart/sum`);
+
+  mixed_data.labels = mcfirstdata.map((item) => item.adstrdCdNm);
+
+  mixed_data.datasets[0].data = Array(mcfirstdata.length).fill(sum.data.amount);
+  mixed_data.datasets[1].data = mcfirstdata.map(
+    (item) => item.thsmonSelngAmt / 700
+  );
 }
