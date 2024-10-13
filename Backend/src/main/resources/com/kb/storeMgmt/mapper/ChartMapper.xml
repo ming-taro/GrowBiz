@@ -34,6 +34,12 @@
         WHERE insert_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE();
     </select>
 
-
+    <select id="getsum" resultType="com.kb.storeMgmt.dto.CategoriesDTO">
+        SELECT sum(amount) as amount
+        FROM categories
+        WHERE insert_date BETWEEN
+                  DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND
+                  LAST_DAY(DATE_SUB(CURDATE(), INTERVAL 1 MONTH));
+    </select>
 
 </mapper>

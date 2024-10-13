@@ -1,5 +1,6 @@
 package com.kb.storeMgmt.service;
 
+import com.kb.storeMgmt.mapper.NeighborhoodMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.kb.storeMgmt.dto.NeighborhoodDTO;
@@ -27,6 +28,8 @@ public class StoreService {
 
     private final NeighborhoodService neighborhoodService; // 주변 동이름을 가져오는 서비스 추가
 
+    private final NeighborhoodMapper neighborhoodMapper;
+
     // 가게 저장 로직
     public void saveStore(NeighborhoodDTO neighborhoodDTO) {
         // 주소를 기반으로 좌표 정보 획득
@@ -50,10 +53,12 @@ public class StoreService {
 
         neighborhoodDTO.setAddressname(addressname);
 
-        System.out.println(neighborhoodDTO);
+        if (neighborhoodMapper.findAddressById(neighborhoodDTO.getId()) != null) {
+            storeMapper.updateStore(neighborhoodDTO); // 기존 정보가 있으면 업데이트
+        } else {
+            storeMapper.insertStore(neighborhoodDTO); // 새로운 정보 삽입
+        }
 
-        // 저장 로직 실행
-        storeMapper.insertStore(neighborhoodDTO);
     }
 
     // 주소 -> 좌표 변환

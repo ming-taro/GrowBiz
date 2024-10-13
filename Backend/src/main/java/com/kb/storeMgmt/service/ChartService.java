@@ -30,4 +30,8 @@ public class ChartService {
         return chartMapper.getmcsecend(categoriesDTO);
     }
 
+    public CategoriesDTO getsum (CategoriesDTO categoriesDTO){
+        return chartMapper.getsum(categoriesDTO);
+    }
+
 }

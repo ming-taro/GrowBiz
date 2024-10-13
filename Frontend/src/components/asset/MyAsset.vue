@@ -75,7 +75,13 @@ export default {
         this.nonActive = false;
       }
       try {
-        const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+        let response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+
+        if (response.data.length == 0) {
+          id = '1234';
+          response = await axios.get(`/api/kmap/member/${id}`);
+        }
+
         this.address = response.data.address; // 응답 데이터에서 주소를 가져와서 설정
 
         this.searchAddress(); // 주소를 사용하여 검색 실행

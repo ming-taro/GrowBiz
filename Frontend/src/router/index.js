@@ -49,6 +49,7 @@ const Welcome = () => import('@/pages/register/Welcome.vue');
 const Login = () => import('@/pages/auth/Login.vue');
 const MypageUpdate = () => import('@/components/mypage/MypageUpdate.vue');
 const MypageReport = () => import('@/components/mypage/MypageReport.vue');
+const StoreUpdate = () => import('@/pages/asset/StoreUpdate.vue');
 
 const router = createRouter({
   history: createWebHistory(),
@@ -184,12 +185,12 @@ const router = createRouter({
       name: 'CategoryList',
       component: CategoryList,
     },
-//    { path: '/infoPlaza/news', name: 'news', component: news },
-      {
-        path: '/infoplaza/news/:category', // :category를 동적으로 받아옴
-        name: 'news',
-        component: news, // 해당 컴포넌트에서 뉴스 카테고리를 처리
-      },
+    //    { path: '/infoPlaza/news', name: 'news', component: news },
+    {
+      path: '/infoplaza/news/:category', // :category를 동적으로 받아옴
+      name: 'news',
+      component: news, // 해당 컴포넌트에서 뉴스 카테고리를 처리
+    },
     // { path: '/infoPlaza/education/video', name: 'video', component: Video },
     { path: '/simul/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },
@@ -205,6 +206,7 @@ const router = createRouter({
     { path: '/login', name: 'Login', component: Login },
     { path: '/mypageupdate', name: 'MypageUpdate', component: MypageUpdate },
     { path: '/mypagereport', name: 'MypageReport', component: MypageReport },
+    { path: '/asset/storeupdate', name: 'StoreUpdate', component: StoreUpdate },
     // { path: '/input', name: "Input", component: Input },
     // { path: '/input2', name: "Input2", component: Input2 },
     // { path: '/update', name: "Update", component: Update },
