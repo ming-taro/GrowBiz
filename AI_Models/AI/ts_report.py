@@ -14,9 +14,22 @@ from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
+from pymongo import MongoClient
+import uuid  # UUID 생성용
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
+
+MONGO_URI = os.getenv("MONGO_URI")
+DB_NAME = os.getenv("DB_NAME")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+
+# MongoDB 클라이언트 설정
+client = MongoClient(MONGO_URI)
+db = client[DB_NAME]
+collection = db[COLLECTION_NAME]
+
+
 
 KAKAO_API_KEY = os.getenv("KAKAO_API_KEY")
 DB_HOST = os.getenv("DB_HOST")
@@ -54,6 +67,73 @@ user_data = {
     'closure_rate_concern': '매우 그렇다', #10 폐업률
     'competition_confidence': '매우 아니다' #11 경쟁 할 자신? 
 }
+
+# 새로 생성할 simulation_response_id
+simulation_response_id = str(uuid.uuid4())  # UUID 생성
+
+# 삽입할 데이터를 정의 (주어진 임시 JSON 데이터)
+simulation_data = {
+    "user_id": "test123",
+    "simulation_response_id": simulation_response_id,
+    "created_at": "2024-10-11T08:20:48.680Z",
+    "_class": "com.kb.simulation.dto.report.ResponseReport",
+    "plno_list": [43577, 43588, 43608],
+    "brand_name": "청년치킨",
+    "franchise_score": 85.25,
+    "average_brand_score": 30.32,
+    "industry_density_average": 2.05,
+    "recommended_brand_density": 1.02,
+    "industry_initial_cost": 5000,
+    "recommended_brand_initial_cost": 4500,
+    "industry_total_interior_cost": 12000,
+    "recommended_brand_total_interior_cost": 10000,
+    "industry_opening_rate_average": 3.77,
+    "industry_closing_rate_average": 1.73,
+    "recommended_brand_opening_rate_average": 4.23,
+    "recommended_brand_closing_rate_average": 1.13,
+    "top_3_nearby_stations": [
+        {
+            "station_name": "강남역",
+            "people": 55000,
+            "date": "2024-09-28"
+        },
+        {
+            "station_name": "역삼역",
+            "people": 43000,
+            "date": "2024-09-28"
+        },
+        {
+            "station_name": "선릉역",
+            "people": 75000,
+            "date": "2024-09-28"
+        }
+    ],
+    "recommended_brand_average_sales_per_area": 1800,
+    "recommended_brand_average_sales": 120000,
+    "industry_average_sales_per_area": 1500,
+    "industry_average_sales": 100000,
+    "contract_period": {
+        "initial_contract": 5,
+        "renewal_contract": 3
+    },
+    "additional_recommended_brands": [
+        {
+            "brand_name": "기영이숯불두마리치킨",
+            "franchise_score": 80.5
+        },
+        {
+            "brand_name": "교촌치킨",
+            "franchise_score": 78.2
+        }
+    ],
+    "excluded_brand_due_to_capital": {
+        "brand_name": "구도로통닭",
+        "franchise_score": 75.3,
+        "insufficient_funds": 2500
+    }
+}
+
+
 
 # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
 gu = user_data['region'].split(', ')[1]  # '강남구'
