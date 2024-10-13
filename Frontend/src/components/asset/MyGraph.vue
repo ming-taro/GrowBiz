@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div style="height: 400px; display: flex">
+  <div class="mb-10">
+    <div class="row">
       <div class="wid-half">
         <div>
           <h4 class="mb-2">금일 매출정보: {{ loanRepaymentStatus }}</h4>
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="wid-half" style="margin-right: 15px">
+      <div class="wid-half">
         <div style="position: relative">
           <div :class="{ blur_text: isActive, disnon: nonActive }">
             로그인 후 이용하실 수 있습니다.

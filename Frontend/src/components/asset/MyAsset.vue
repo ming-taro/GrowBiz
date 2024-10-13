@@ -75,22 +75,23 @@ export default {
         this.nonActive = false;
       }
       try {
-        const response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+        let response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+
+        if (response.data.length == 0) {
+          id = '1234';
+          response = await axios.get(`/api/kmap/member/${id}`);
+        }
+
         this.address = response.data.address; // 응답 데이터에서 주소를 가져와서 설정
 
         this.searchAddress(); // 주소를 사용하여 검색 실행
       } catch (error) {
         console.error('Error fetching address:', error);
-        alert('주소를 가져오는 중 오류가 발생했습니다.');
       }
     },
     async searchAddress() {
       try {
         const address = this.address;
-        if (!address) {
-          alert('주소를 입력하세요.');
-          return;
-        }
 
         // 입력된 주소에 마커를 표시
         this.geocoder.addressSearch(address, (result, status) => {
@@ -109,13 +110,10 @@ export default {
 
             // 동 이름을 서버에서 가져옴
             this.getNearbyInfo(address);
-          } else {
-            alert('주소를 찾을 수 없습니다.');
           }
         });
       } catch (error) {
         console.error('Error:', error);
-        alert('주소 검색 중 오류가 발생했습니다.');
       }
     },
     async getNearbyInfo(address) {
@@ -141,10 +139,6 @@ export default {
         console.error(
           'Error:',
           error.response ? error.response.data : error.message
-        );
-        alert(
-          '주변 정보 검색 중 오류가 발생했습니다: ' +
-            (error.response ? error.response.data.message : error.message)
         );
       }
     },

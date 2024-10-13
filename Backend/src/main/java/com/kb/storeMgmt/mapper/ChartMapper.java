@@ -14,4 +14,6 @@ public interface ChartMapper {
 
     List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO);
 
+    CategoriesDTO getsum(CategoriesDTO categoriesDTO);
+
 }

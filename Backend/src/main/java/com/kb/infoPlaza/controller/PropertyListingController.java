@@ -79,4 +79,12 @@ public class PropertyListingController {
         return ResponseEntity.ok(populationData);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PropertyListingDTO> findPropertyById(@PathVariable String id) {
+        PropertyListingDTO property = propertyService.findPropertyById(id);
+        if (property == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(property);
+    }
 }

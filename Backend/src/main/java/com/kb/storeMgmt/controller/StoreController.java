@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/store")
@@ -29,21 +31,23 @@ public class StoreController {
             @RequestParam("utilityExpenses") int utilityExpenses,
             @RequestParam("laborCost") int laborCost,
             @RequestParam("otherExpenses") int otherExpenses,
-            @RequestParam("image") MultipartFile image
+            @RequestParam("svcIndutyCdNm") String svcIndutyCdNm,
+            @RequestParam(value = "image", required = false) MultipartFile image
     ) {
-
-        System.out.println("START" + image);
 
         String imageUrl = null;  // 이미지가 있을 경우 저장할 URL
 
         try {
             // 이미지가 있으면 파일 시스템에 저장
             if (image != null && !image.isEmpty()) {
-                String fileName = image.getOriginalFilename();
-                Path filePath = Paths.get("c:/upload/directory/", fileName); // 실제 저장 경로로 수정
+                String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                Path filePath = Paths.get("C:/Users/student/Documents/GitHub/Frontend/src/assets/img/upload", fileName); // 실제 저장 경로로 수정
                 Files.copy(image.getInputStream(), filePath);
-                imageUrl = filePath.toString(); // 저장 경로를 imageUrl로 설정
+                image.getInputStream().close();  // 스트림을 명확하게 닫기
+
+                imageUrl = fileName; // 저장 경로를 imageUrl로 설정
             }
+
 
             // DTO 생성 및 데이터 설정
             NeighborhoodDTO neighborhoodDTO = NeighborhoodDTO.builder()
@@ -55,6 +59,7 @@ public class StoreController {
                     .laborCost(laborCost)
                     .otherExpenses(otherExpenses)
                     .imageUrl(imageUrl)  // 이미지 경로 설정
+                    .svcIndutyCdNm(svcIndutyCdNm)
                     .build();
 
 
@@ -68,4 +73,11 @@ public class StoreController {
             return ResponseEntity.status(500).body("가게 등록 중 오류 발생");
         }
     }
+
+    @GetMapping("/list")
+    public List<String> getstoreList() {
+        return storeService.getstoreList();
+    }
+
+
 }

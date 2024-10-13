@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <!-- 옵션 추가 섹션 -->
+          <!-- 업종 선택 섹션 -->
           <div class="option">
             <select
               class="form-select round-corner"
@@ -48,11 +48,11 @@
             >
               <option value="" selected disabled>업종을 선택해 주세요</option>
               <option
-                v-for="(Store, index) in store"
+                v-for="(store, index) in storeList"
                 :key="index"
-                :value="Store"
+                :value="store"
               >
-                {{ Store }}
+                {{ store }}
               </option>
             </select>
           </div>
@@ -78,7 +78,7 @@
         </div>
       </div>
 
-      <!-- 종합 정보 섹션 -->
+      <!-- 지출 정보 섹션 -->
       <div class="mb-8">
         <div class="d-flex mb-3 align-items-end">
           <h3 class="fw-bolder me-3">지출 정보</h3>
@@ -122,7 +122,7 @@
     <!-- 등록하기 버튼 -->
     <div class="d-flex justify-content-center">
       <button class="btn btn-primary streg-btn" @click="submitForm">
-        등록하기
+        수정하기
       </button>
     </div>
   </div>
@@ -143,15 +143,15 @@ const mno = authStore.state.mno; // 사용자 번호
 
 // 데이터 관련 변수들
 const imageUrl = ref(defaultImage);
-const fileInput = ref(defaultImage); // 파일 입력 필드를 참조하는 ref
+const fileInput = ref(null); // 파일 입력 필드를 참조하는 ref
 const address = ref('');
 const detailAddress = ref('');
 const rent = ref('');
 const utilityExpenses = ref('');
 const laborCost = ref('');
 const otherExpenses = ref('');
-const store = ref([]); // 서버에서 가져온 은행 리스트
-const selectedStore = ref(''); // 선택된 은행
+const storeList = ref([]); // 서버에서 가져온 업종 리스트
+const selectedStore = ref(''); // 선택된 업종
 
 // 파일 선택을 트리거하는 함수
 const triggerFileInput = () => {
@@ -190,6 +190,40 @@ onMounted(() => {
   document.body.appendChild(script);
 });
 
+// 서버에서 가게 정보를 가져오는 함수
+const fetchStoreData = async () => {
+  try {
+    const id = mno;
+
+    const response = await axios.get(`/api/kmap/member/${id}`); // 사용자 가게 정보 불러오기
+    const data = response.data;
+
+    console.log(data);
+
+    // 가져온 데이터를 폼에 기본값으로 채움
+    address.value = data.address;
+    detailAddress.value = data.detailAddress;
+    rent.value = data.rent;
+    utilityExpenses.value = data.utilityExpenses;
+    laborCost.value = data.laborCost;
+    otherExpenses.value = data.otherExpenses;
+    selectedStore.value = data.svcIndutyCdNm;
+    imageUrl.value = data.imageUrl || defaultImage; // 이미지가 없을 경우 기본 이미지 사용
+  } catch (error) {
+    console.error('가게 정보를 불러오는 중 오류 발생:', error);
+  }
+};
+
+// 서버에서 업종 리스트를 가져오는 함수
+const fetchStoreList = async () => {
+  try {
+    const response = await axios.get('/api/store/list');
+    storeList.value = response.data; // 업종 리스트 저장
+  } catch (error) {
+    console.error('업종 목록을 불러오는 중 오류가 발생했습니다.', error);
+  }
+};
+
 // 폼 데이터를 서버로 전송하는 함수
 const router = useRouter();
 
@@ -202,7 +236,7 @@ const submitForm = () => {
   formDataToSend.append('utilityExpenses', utilityExpenses.value);
   formDataToSend.append('laborCost', laborCost.value);
   formDataToSend.append('otherExpenses', otherExpenses.value);
-  formDataToSend.append('svcIndutyCdNm', selectedStore.value); // 선택된 은행명 추가
+  formDataToSend.append('svcIndutyCdNm', selectedStore.value); // 선택된 업종 추가
 
   console.log(imageFile.value + 'imageFile.value');
 
@@ -228,18 +262,10 @@ const submitForm = () => {
     });
 };
 
-// 서버에서 가게 리스트 가져오기
-const fetchStoreList = async () => {
-  try {
-    const response = await axios.get('/api/store/list');
-    store.value = response.data; // 은행 리스트 저장
-  } catch (error) {
-    console.error('은행 목록을 불러오는 중 오류가 발생했습니다.', error);
-  }
-};
-
+// 페이지가 로드될 때 업종 목록 및 가게 정보 가져오기
 onMounted(() => {
   fetchStoreList();
+  fetchStoreData();
 });
 </script>
 
