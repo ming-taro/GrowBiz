@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -59,10 +60,11 @@ public class MemberService{
         // 아바타 업로드
         if (avatar != null && !avatar.isEmpty()) {
             // 실제 파일을 저장할 경로 설정
-            String baseDir = "uploads/profileImg/"; // 이 경로는 src/main/resources/uploads/profileImg/로 매핑되게 할 것
+            String baseDir = getClass().getClassLoader().getResource("/uploads/profileImg/").getPath(); // 리소스 가져오기
 
+            System.out.println("@@@@@@@@@@@@@@@@@@@" + baseDir);
             // 프로젝트 루트 경로에 기반한 절대 경로를 설정
-            File dir = new File(System.getProperty("user.dir") + "/" + baseDir);
+            File dir = new File(baseDir);
 
             // 디렉토리가 없으면 생성
             if (!dir.exists()) {
@@ -79,6 +81,7 @@ public class MemberService{
             }
 
             try {
+                System.out.println("저장 경로 : " + dest.getAbsolutePath());
                 avatar.transferTo(dest); // 파일 전송
                 System.out.println("파일 전송! ");
             } catch (IOException e) {
