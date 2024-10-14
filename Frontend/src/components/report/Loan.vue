@@ -6,8 +6,8 @@
         <!-- Row to contain 4 cards in a single row -->
         <div class="row">
           <div
-            class="col-3 d-flex flex-column align-items-center justify-content-center add_card"
-            style="height: 100%"
+            class="col-3 me-3 d-flex flex-column align-items-center justify-content-center add_card"
+            style="height: 100%; width:23%;"
           >
             <img
               src="@/assets/img/report/cry.png"
