@@ -41,11 +41,11 @@
                       href="#edit-section"
                       ><i class="fa-regular fa-pen-to-square me-3"></i>회원정보
                       수정</a
-                    ><a
+                    ><RouterLink
                       class="nav-link fw-semibold py-2 px-0"
-                      href="account-billing.html"
+                      to="/mypage/myreport"
                       ><i class="fa-regular fa-folder-open me-3"></i
-                      >마이리포트</a
+                      >마이리포트</RouterLink
                     >
                   </nav>
                   <nav class="nav flex-column">
