@@ -101,7 +101,15 @@ const total = ref();
 
 const fetchStoreData = async () => {
   try {
-    let response = await axios.get(`/api/kmap/member/${mno}`);
+    var id = '';
+
+    if (mno == undefined) {
+      id = '1234';
+    } else {
+      id = mno;
+    }
+
+    let response = await axios.get(`/api/kmap/member/${id}`);
     const sum = await axios.get(`/api/chart/sum`);
 
     amount.value = sum.data.amount;
