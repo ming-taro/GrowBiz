@@ -110,6 +110,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const alertMessage = ref('');
+
   const changePassword = async (passwordInfo) => {
     try {
       console.log('Sending data:', {
@@ -127,12 +129,14 @@ export const useAuthStore = defineStore('auth', () => {
       );
       console.log(data);
       alert('성공적으로 비밀번호가 변경되었습니다.');
+      alertMessage.value = '';
       state.value.password = data.newPassword;
       localStorage.setItem('auth', JSON.stringify(state.value));
     } catch (error) {
       console.error('에러 객체:', error); // 에러 정보를 콘솔에 출력
       if (error.response) {
-        alert(error.response.data); // 서버에서 보낸 에러 메시지
+        console.log(error.response.data);
+        alertMessage.value = '현재 비밀번호가 일치하지 않습니다.'; // 서버에서 보낸 에러 메시지
       } else {
         alert('네트워크 오류 또는 요청 오류 발생'); // 다른 오류 처리
       }
@@ -160,6 +164,7 @@ export const useAuthStore = defineStore('auth', () => {
     email,
     phone,
     isLogin,
+    alertMessage,
     changeProfile,
     changeProfileName,
     changePassword,

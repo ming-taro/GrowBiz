@@ -277,14 +277,8 @@
                     <input
                       class="form-control"
                       type="password"
-                      value="hidden@password"
-                      id="current-pass"
+                      v-model="oldPassword"
                     />
-                    <label
-                      class="password-toggle-btn"
-                      aria-label="Show/hide password"
-                    >
-                    </label>
                   </div>
                 </div>
                 <div class="col-sm-6"></div>
@@ -293,12 +287,11 @@
                     >새로운 비밀번호</label
                   >
                   <div class="password-toggle">
-                    <input class="form-control" type="password" id="new-pass" />
-                    <label
-                      class="password-toggle-btn"
-                      aria-label="Show/hide password"
-                    >
-                    </label>
+                    <input
+                      class="form-control"
+                      type="password"
+                      v-model="newPassword1"
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
@@ -309,26 +302,27 @@
                     <input
                       class="form-control"
                       type="password"
-                      id="confirm-pass"
+                      v-model="newPassword2"
                     />
-                    <label
-                      class="password-toggle-btn"
-                      aria-label="Show/hide password"
-                    >
-                    </label>
                   </div>
                 </div>
               </div>
-              <div class="alert alert-info d-flex my-3 my-sm-4">
+              <div
+                class="alert alert-info d-flex my-3 my-sm-4"
+                v-if="authStore.alertMessage"
+              >
                 <i class="ai-circle-info fs-xl me-2"></i>
                 <p class="mb-0">
-                  Password must be minimum 8 characters long - the more, the
-                  better.
+                  {{ authStore.alertMessage }}
                 </p>
               </div>
               <div class="d-flex justify-content-end pt-3">
                 <button class="btn btn-dark" type="button">취소하기</button>
-                <button class="btn btn-primary ms-3" type="button">
+                <button
+                  class="btn btn-primary ms-3"
+                  type="button"
+                  @click="changePassword"
+                >
                   저장하기
                 </button>
               </div>
@@ -336,67 +330,6 @@
           </section>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="container mw-screen-sm">
-    <div>
-      <h3 class="mb-5 mt-10">개인정보 변경</h3>
-      <div class="custom-line mb-5" />
-      <h4 class="mb-6">닉네임 변경</h4>
-
-      <div class="row mb-4">
-        <label for="inputNickname" class="col-sm-3 col-form-label"
-          >새로운 닉네임</label
-        >
-        <div class="col-sm-9">
-          <input type="text" class="form-control" v-model="newNickname" />
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary rounded-pill btn-custom mt-10"
-        @click="changeNickname"
-        :disabled="!newNickname"
-      >
-        닉네임 변경하기
-      </button>
-
-      <h4 class="mb-6 mt-6">비밀번호 변경</h4>
-
-      <div class="row mb-3">
-        <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >현재 비밀번호를 입력하세요.</label
-        >
-        <div class="col-sm-9">
-          <input type="text" class="form-control" v-model="oldPassword" />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >새로운 비밀번호를 입력하세요.</label
-        >
-        <div class="col-sm-9">
-          <input type="password" class="form-control" v-model="newPassword1" />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label for="inputEmail3" class="col-sm-3 col-form-label"
-          >새로운 비밀번호 확인를 입력하세요.</label
-        >
-        <div class="col-sm-9">
-          <input type="password" class="form-control" v-model="newPassword2" />
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary rounded-pill btn-custom mt-10"
-        @click="changePassword"
-      >
-        비밀번호 변경하기
-      </button>
     </div>
   </div>
 </template>
@@ -436,9 +369,12 @@ const memberEdit = ref({
   gender: '남자',
 });
 
+const oldPassword = ref('');
+const newPassword1 = ref('');
+const newPassword2 = ref('');
+
 // 프로필 이미지 URL을 동적으로 설정하는 computed 속성
 const profileImageUrl = computed(() => {
-  console.log(authStore.id);
   return authStore.id
     ? `http://localhost:8080/api/member/${authStore.id}/avatar`
     : 'src/assets/img/people/img-1.jpg'; // 기본 이미지 경로
@@ -457,7 +393,8 @@ const getMemberData = async () => {
       `http://localhost:8080/api/member/${authStore.id}`
     );
     member.value = response.data; // 응답 데이터를 member에 저장
-    console.log(member.value);
+    memberEdit.value = response.data;
+    memberEdit.value = { ...response.data };
   } catch (error) {
     console.error('회원 정보를 불러오는 중 오류가 발생했습니다.', error);
   }
@@ -481,8 +418,6 @@ const handleFileUpload = (event) => {
 // 프로필 저장 함수
 const saveProfile = async () => {
   const formData = new FormData();
-  console.log(authStore.mno);
-  console.log(authStore.id);
   formData.append('mno', authStore.mno);
   formData.append('id', authStore.id);
   formData.append('name', memberEdit.value.name);
@@ -493,29 +428,28 @@ const saveProfile = async () => {
   formData.append('gender', '남자'); // gender 추가
   formData.append('avatar', memberEdit.value.avatarFile); // 파일 추가
 
+  const confirmUpdate = window.confirm('정말 수정하시겠습니까?');
   try {
-    // ID를 가져오는 부분은 사용자의 고유 ID로 수정해야 합니다.
-    const id = authStore.id; // 예시로 회원 고유 번호를 사용
-    const response = await axios.put(
-      `http://localhost:8080/api/member/${id}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-    console.log('Profile updated:', response.data);
-    window.location.reload();
+    if (confirmUpdate) {
+      // ID를 가져오는 부분은 사용자의 고유 ID로 수정해야 합니다.
+      const id = authStore.id; // 예시로 회원 고유 번호를 사용
+      const response = await axios.put(
+        `http://localhost:8080/api/member/${id}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      window.location.reload();
+    }
   } catch (error) {
     console.error('Error updating profile:', error);
   }
 };
 
 const newNickname = ref('');
-const oldPassword = ref('');
-const newPassword1 = ref('');
-const newPassword2 = ref('');
 
 const changeNickname = () => {
   if (newNickname.value) {
@@ -533,6 +467,7 @@ const changeNickname = () => {
 };
 const changePassword = () => {
   // oldPassword, newPassword1, newPassword2가 모두 존재하고 newPassword1과 newPassword2가 같을 때
+
   if (
     oldPassword.value &&
     newPassword1.value &&
@@ -546,15 +481,23 @@ const changePassword = () => {
     };
 
     // 비밀번호 변경 로직 호출
-    authStore.changePassword(passwordInfo);
+    authStore
+      .changePassword(passwordInfo)
+      .then(() => {
+        // 비밀번호 변경이 성공했을 때, 입력 필드 초기화
+        oldPassword.value = '';
+        newPassword1.value = '';
+        newPassword2.value = '';
+      })
+      .catch((error) => {});
   } else {
     // 조건을 만족하지 않는 경우의 알림 메시지
     if (!oldPassword.value) {
-      alert('현재 비밀번호를 입력해주세요.');
+      authStore.alertMessage = '현재 비밀번호를 입력해주세요.';
     } else if (!newPassword1.value || !newPassword2.value) {
-      alert('새 비밀번호를 입력해주세요.');
+      authStore.alertMessage = '새 비밀번호를 입력해주세요.';
     } else if (newPassword1.value !== newPassword2.value) {
-      alert('새 비밀번호가 일치하지 않습니다.');
+      authStore.alertMessage = '새 비밀번호가 일치하지 않습니다.';
     }
   }
 };
