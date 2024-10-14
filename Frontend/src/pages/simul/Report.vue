@@ -5,19 +5,22 @@
       :brand_name=report.brand_name />
 
 
-    <!-- 그래프 -->
+    <!-- 추천브랜드 및 그래프 -->
     <Bar />
 
-    <div style="background-color: #f6f4f9;" class="pt-7 pb-7">
+    <AddBrand></AddBrand>
+
+
+    <div class="">
       <AvgCard></AvgCard>
     </div>
 
     <!-- 추천 위치 -->
-    <div class="container mw-screen-xl mb-8 mt-8">
+    <div class="container mw-screen-xl mb-8 ">
       <Location v-if="location != null" v-bind:location=location :plno_list=report.plno_list />
     </div>
 
-    <!-- 그래프 및 유동인구-->
+    <!-- 유동인구-->
     <div class="">
       <Result3></Result3>
     </div>
@@ -44,6 +47,7 @@ import Education from '@/components/report/Education.vue';
 import Loan from '@/components/report/Loan.vue';
 import AvgCard from '@/components/report/AvgCard.vue';
 import Result3 from '@/components/report/Result3.vue';
+import AddBrand from '@/components/report/AddBrand.vue';
 
 import { onMounted, ref } from 'vue';
 import { fetchReportById } from '@/services/simulation/ReportAPI';
