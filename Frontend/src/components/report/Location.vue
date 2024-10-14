@@ -2,7 +2,7 @@
   <div>
     <div class="title">
       <div class="custom-line" />
-        추천 위치
+      추천 위치
       <div class="custom-line" />
     </div>
     <div class="row">
@@ -10,7 +10,7 @@
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="col-5 d-flex justify-content-center align-content-center">
-        
+
         <div style="display: flex; flex-direction: column; overflow: auto; height: 400px">
           <div v-if="plno_list" class="pl-3 pr-3" style="font-size: 20px">
             조회 결과 {{ props.plno_list.length }}건
@@ -18,14 +18,14 @@
           </div>
 
           <div v-for="(plno, index) in props.plno_list" v-bind:key="index">
-            <Property v-bind:plno="plno" :map="map" @property-clicked="handlePropertyClick(plno)"
-            @click="openModal" />
+            <Property v-bind:plno="plno" :map="map" @property-clicked="handlePropertyClick(plno)" @click="openModal" />
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div v-if="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1"
+      aria-labelledby="exampleModalLabel">
       <PropertyDetail :property=property :closeModal=closeModal />
     </div>
   </div>
@@ -61,7 +61,7 @@ const handlePropertyClick = async (plno) => {
 
 const setLocation = async () => {
   // const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
-  const location = {y: 37.49606, x: 127.040995}; // 임시 위치 -> 위의 데이터로 교체 필요
+  const location = { y: 37.49606, x: 127.040995 }; // 임시 위치 -> 위의 데이터로 교체 필요
   const script = document.createElement('script');
   script.src = import.meta.env.VITE_KAKAO_API_URL;
   script.onload = () => {
@@ -78,7 +78,7 @@ const setLocation = async () => {
   document.head.appendChild(script);
 }
 
-onMounted(async() => {
+onMounted(async () => {
   await setLocation();
 })
 </script>
