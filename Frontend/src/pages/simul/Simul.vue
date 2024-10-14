@@ -154,14 +154,16 @@ const isLastQuestion = () => {
 const moveReportPage = async () => {
   try {
     const simulationResponse = await createSimulationAnswer(authStore.id, userAnswers);
-    const report = await createReport(authStore.id, simulationResponse.id);
-    console.log("만들어진 리포트:", report);
+    console.log("만들어진 응답:", simulationResponse);
+    // const report = await createReport(authStore.id, simulationResponse.id);
+    // console.log("만들어진 리포트:", report);
 
     isLoading.value = true;
     let startTime = performance.now();
 
-    let response = await executeFranchiseAnalyze(report.id);
-    // let response = await executeFranchiseAnalyze("test_id");
+    // let response = await executeFranchiseAnalyze(report.id);
+
+    let response = await executeFranchiseAnalyze(simulationResponse.id);
     console.log("실행 코드:", response);
 
     let endTime = performance.now();
@@ -170,7 +172,7 @@ const moveReportPage = async () => {
     let timeTaken = endTime - startTime;
     isLoading.value = false;
     console.log("소요 시간", timeTaken / 1000, "초");
-    location.href = `/simul/report?id=${report.id}`; // 리포트 페이지로 이동
+    // location.href = `/simul/report?id=${report.id}`; // 리포트 페이지로 이동
   } catch (error) {
     console.error("Error during saving simulation answer:", error);
   }
