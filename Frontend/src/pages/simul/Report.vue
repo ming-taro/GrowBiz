@@ -17,7 +17,7 @@
 
     <!-- 추천 위치 -->
     <div class="container mw-screen-xl mb-8 ">
-      <Location v-if="location != null" v-bind:location=location :plno_list=report.plno_list />
+      <Location v-if="location != null" v-bind:location=location :plno_list=getPropertyId() />
     </div>
 
     <!-- 유동인구-->
@@ -55,6 +55,18 @@ import { findLocation } from '@/services/simulation/SimulationAPI';
 
 const report = ref(null);
 const location = ref(null);
+
+const getPropertyId = () => {
+  console.log("보고서:", report.value);
+  const data = report.value.additional_recommended_brands;
+  let propertyId = [];
+
+  for (let index = 0; index < data.length; index++) {
+    propertyId.push(data[index].property_id);
+  }
+
+  return propertyId;
+}
 
 const storeLocation = async () => {
   const id = report.value.simulation_response_id;

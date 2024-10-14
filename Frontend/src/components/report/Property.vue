@@ -27,7 +27,7 @@
     <!-- 오른쪽 이미지 -->
     <div style="width: 30%; height: 100%; border-radius: 10px; overflow: hidden;">
       <img
-        :src="property.imageData"
+        :src="property.imageData ? property.imageData : defaultImage"
         alt=""
         style="width: 100%; height: 100%; object-fit: cover;"
       />
@@ -39,6 +39,7 @@
 <script setup>
 import { onMounted, defineProps, defineEmits, ref } from 'vue';
 import { fetchPropertyById } from '@/services/simulation/PropertyAPI';
+import defaultImage from '@/assets/img/report/default-property.jpg';
 
 const props = defineProps(["plno", "map"]);
 const property = ref(null);

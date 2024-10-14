@@ -60,8 +60,8 @@ const handlePropertyClick = async (plno) => {
 };
 
 const setLocation = async () => {
-  // const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
-  const location = { y: 37.49606, x: 127.040995 }; // 임시 위치 -> 위의 데이터로 교체 필요
+  const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
+  // const location = { y: 37.49606, x: 127.040995 }; // 임시 위치 -> 위의 데이터로 교체 필요
   const script = document.createElement('script');
   script.src = import.meta.env.VITE_KAKAO_API_URL;
   script.onload = () => {
@@ -80,6 +80,7 @@ const setLocation = async () => {
 
 onMounted(async () => {
   await setLocation();
+  console.log(props.plno_list);
 })
 </script>
 
