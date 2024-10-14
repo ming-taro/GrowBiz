@@ -259,7 +259,7 @@ const fetchReportData = async () => {
     // Update state with fetched data
     if (excludedBrand) {
       // excludedBrandName.value = excludedBrand.brand_name;
-      excludedBrandName.value = 'CU';
+      excludedBrandName.value = 'BHC치킨';
       excludedBrandScore.value = excludedBrand.franchise_score;
       excludedFunds.value = excludedBrand.insufficient_funds;
     }
