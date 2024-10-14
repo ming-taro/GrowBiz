@@ -1,0 +1,63 @@
+{
+    "user_id": "test123",
+    "simulation_response_id": "670c78ddc9263c1f31d2089b",
+    "created_at": "",
+    "_class": "com.kb.simulation.dto.report.ResponseReport",
+    "brand_name": "굽네치킨",
+    "franchise_score": 53.03316285966481,
+    "recommended_brand_density": 7.428571428571429,
+    "industry_density_average": 2.5142857142857142,
+    "recommended_brand_initial_cost": "5770.00 만원",
+    "recommended_brand_total_interior_cost": "3500.00 만원",
+    "recommended_brand_average_sales": "77438.50 만원",
+    "recommended_brand_average_sales_per_area": "7168.80 만원",
+    "industry_opening_rate_average": 2.5142857142857142,
+    "industry_closing_rate_average": 2.579247372161639,
+    "recommended_brand_opening_rate_average": "14.90%",
+    "recommended_brand_closing_rate_average": "2.15%",
+    "top_3_nearby_stations": [
+        {
+            "station_name": "강남",
+            "people": 177121
+        },
+        {
+            "station_name": "역삼",
+            "people": 126189
+        },
+        {
+            "station_name": "언주",
+            "people": 26749
+        }
+    ],
+    "additional_recommended_brands": [
+        {
+            "franchise_name": "굽네치킨",
+            "property_id": 44163,
+            "property_address": "서울시 강남구 역삼동  ",
+            "monthly_rent": 250,
+            "deposit": 1000,
+            "area": 33.1
+        },
+        {
+            "franchise_name": "굽네치킨",
+            "property_id": 43891,
+            "property_address": "서울특별시 강남구 역삼동  ",
+            "monthly_rent": 110,
+            "deposit": 1500,
+            "area": 38.3
+        },
+        {
+            "franchise_name": "굽네치킨",
+            "property_id": 44183,
+            "property_address": "서울시 강남구 역삼동  ",
+            "monthly_rent": 130,
+            "deposit": 2000,
+            "area": 39.66
+        }
+    ],
+    "excluded_brand_due_to_capital": {
+        "brand_name": "비에이치씨(BHC)",
+        "franchise_score": "69.27",
+        "insufficient_funds": 395.60000000000036
+    }
+}

@@ -26,6 +26,7 @@ client = MongoClient(MONGO_URI)
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
 simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
+report_collection=db['report']
 
 def fetch_simulation_response_by_id(simulation_response_id):
     query = {"_id": ObjectId(simulation_response_id)}
@@ -33,7 +34,11 @@ def fetch_simulation_response_by_id(simulation_response_id):
     response = simulation_response_collection.find_one(query)
 
     if response:
-        print(f"User ID: {response['user_id']}")
+        user_id = response.get('user_id', None)  # user_id 추출
+        if user_id:
+            print(f"User ID: {user_id}")
+        else:
+            print(f"No user_id found for simulation response ID: {simulation_response_id}")
         
         # 'answer' 필드에서 데이터 추출
         answers = response.get('answer', {})
@@ -195,66 +200,172 @@ kakao_api_key = os.getenv('KAKAO_API_KEY')
 
 
 # 삽입할 데이터를 정의 (주어진 임시 JSON 데이터)
-simulation_data = {
-    "user_id": "test123",
-    "simulation_response_id": "",
-    "created_at": "",
-    "_class": "com.kb.simulation.dto.report.ResponseReport",
-    "plno_list": [43577, 43588, 43608],
-    "brand_name": "청년치킨",
-    "franchise_score": 85.25,
-    "average_brand_score": 30.32,
-    "industry_density_average": 2.05,
-    "recommended_brand_density": 1.02,
-    "industry_initial_cost": 5000,
-    "recommended_brand_initial_cost": 4500,
-    "industry_total_interior_cost": 12000,
-    "recommended_brand_total_interior_cost": 10000,
-    "industry_opening_rate_average": 3.77,
-    "industry_closing_rate_average": 1.73,
-    "recommended_brand_opening_rate_average": 4.23,
-    "recommended_brand_closing_rate_average": 1.13,
-    "top_3_nearby_stations": [
-        {
-            "station_name": "강남역",
-            "people": 55000,
-            "date": "2024-09-28"
-        },
-        {
-            "station_name": "역삼역",
-            "people": 43000,
-            "date": "2024-09-28"
-        },
-        {
-            "station_name": "선릉역",
-            "people": 75000,
-            "date": "2024-09-28"
-        }
-    ],
-    "recommended_brand_average_sales_per_area": 1800,
-    "recommended_brand_average_sales": 120000,
-    "industry_average_sales_per_area": 1500,
-    "industry_average_sales": 100000,
-    "contract_period": {
-        "initial_contract": 5,
-        "renewal_contract": 3
-    },
-    "additional_recommended_brands": [
-        {
-            "brand_name": "기영이숯불두마리치킨",
-            "franchise_score": 80.5
-        },
-        {
-            "brand_name": "교촌치킨",
-            "franchise_score": 78.2
-        }
-    ],
-    "excluded_brand_due_to_capital": {
-        "brand_name": "구도로통닭",
-        "franchise_score": 75.3,
-        "insufficient_funds": 2500
+# simulation_data = {
+#     "user_id": "test123",
+#     "simulation_response_id": "",
+#     "created_at": "",
+#     "_class": "com.kb.simulation.dto.report.ResponseReport",
+#     "plno_list": [43577, 43588, 43608],
+#     "brand_name": "청년치킨",
+#     "franchise_score": 85.25,
+#     "average_brand_score": 30.32,
+#     "industry_density_average": 2.05,
+#     "recommended_brand_density": 1.02,
+#     "industry_initial_cost": 5000,
+#     "recommended_brand_initial_cost": 4500,
+#     "industry_total_interior_cost": 12000,
+#     "recommended_brand_total_interior_cost": 10000,
+#     "industry_opening_rate_average": 3.77,
+#     "industry_closing_rate_average": 1.73,
+#     "recommended_brand_opening_rate_average": 4.23,
+#     "recommended_brand_closing_rate_average": 1.13,
+#     "top_3_nearby_stations": [
+#         {
+#             "station_name": "강남역",
+#             "people": 55000,
+#             "date": "2024-09-28"
+#         },
+#         {
+#             "station_name": "역삼역",
+#             "people": 43000,
+#             "date": "2024-09-28"
+#         },
+#         {
+#             "station_name": "선릉역",
+#             "people": 75000,
+#             "date": "2024-09-28"
+#         }
+#     ],
+#     "recommended_brand_average_sales_per_area": 1800,
+#     "recommended_brand_average_sales": 120000,
+#     "industry_average_sales_per_area": 1500,
+#     "industry_average_sales": 100000,
+#     "contract_period": {
+#         "initial_contract": 5,
+#         "renewal_contract": 3
+#     },
+#     "additional_recommended_brands": [
+#         {
+#             "brand_name": "기영이숯불두마리치킨",
+#             "franchise_score": 80.5
+#         },
+#         {
+#             "brand_name": "교촌치킨",
+#             "franchise_score": 78.2
+#         }
+#     ],
+#     "excluded_brand_due_to_capital": {
+#         "brand_name": "구도로통닭",
+#         "franchise_score": 75.3,
+#         "insufficient_funds": 2500
+#     }
+# }
+
+def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_listings):
+    # 1. 사용자 입력 및 처리된 데이터를 기반으로 한 실제 데이터 준비
+    simulation_data = {
+        "user_id": str(user_id),  # 사용자 ID
+        "simulation_response_id": str(simulation_response['_id']),  # MongoDB에서 가져온 simulation_response_id 사용
+        "created_at": "",                 # 나중에 채워질 생성 시간
+        "_class": "com.kb.simulation.dto.report.ResponseReport",  # 클래스 이름
+        "brand_name": top_franchises[0][0],  # 상위 1위 프랜차이즈 이름
+        "franchise_score": top_franchises[0][1],  # 해당 프랜차이즈의 점수
+        "recommended_brand_density": densities[0],  # 계산된 밀도
+        "industry_density_average": mean_density,  # 전체 밀도 평균
+
+        # 여기서는 filtered_franchises에서 가져와야 함
+        "recommended_brand_initial_cost": filtered_franchises[0]['initial_cost'],  # 프랜차이즈 초기 비용
+        "recommended_brand_total_interior_cost": filtered_franchises[0]['interior_cost'],  # 인테리어 비용
+        "recommended_brand_average_sales": filtered_franchises[0]['average_sales'],  # 평균 매출
+        "recommended_brand_average_sales_per_area": filtered_franchises[0]['average_sales_per_area'],  # 평당 매출
+
+        "industry_opening_rate_average": mean_density,  # 산업의 평균 개업률
+        "industry_closing_rate_average": std_density,  # 산업의 평균 폐업률
+        "recommended_brand_opening_rate_average": filtered_franchises[0]['opening_rate'],  # 추천 브랜드 개업률
+        "recommended_brand_closing_rate_average": filtered_franchises[0]['closure_rate'],  # 추천 브랜드 폐업률
+        # "recommended_brand_closing_rate_average":"31.3",  # 추천 브랜드 폐업률
+
+
+
+        "top_3_nearby_stations": [         # 가까운 3개의 역 정보
+            {"station_name": stations, "people": passengers} 
+            for stations, passengers in zip(stations, passenger_results)
+        ],
+
+        # top_listings에서 매물 정보 가져오기
+        "additional_recommended_brands": [
+            {
+                "franchise_name": recommendation['franchise_name'], 
+                "property_id": recommendation['property_id'], 
+                "property_address": recommendation['property_address'], 
+                "monthly_rent": recommendation['property_rent'], 
+                "deposit": recommendation['property_deposit'], 
+                "area": recommendation['property_area']
+            }
+            for recommendation in top_listings[:3]  # 최대 3개의 추천 매물 정보
+        ],
+
+        # "excluded_brand_due_to_capital": {
+        #     "brand_name": excluded_franchises_sorted[0]['store_name'],
+        #     "franchise_score": excluded_franchises_sorted[0]['score'],
+        #     "insufficient_funds": excluded_franchises_sorted[0]['initial_cost'] + excluded_franchises_sorted[0]['business_fee'] + excluded_franchises_sorted[0]['interior_cost'] - user_data['initial_capital']
+        # }
     }
-}
+    # excluded_franchises_sorted가 비어 있지 않은지 확인
+    if excluded_franchises_sorted:
+        # 문자열을 float로 변환하여 계산
+        excluded_brand = {
+            "brand_name": excluded_franchises_sorted[0]['store_name'],
+            "franchise_score": excluded_franchises_sorted[0]['score'],
+            "insufficient_funds": (
+                float(excluded_franchises_sorted[0]['initial_cost'].replace('만원', '').replace(',', '')) +
+                float(excluded_franchises_sorted[0]['business_fee'].replace('만원', '').replace(',', '')) +
+                float(excluded_franchises_sorted[0]['interior_cost'].replace('만원', '').replace(',', ''))
+            ) - user_data['initial_capital']
+        }
+        simulation_data["excluded_brand_due_to_capital"] = excluded_brand
+    else:
+        simulation_data["excluded_brand_due_to_capital"] = "No excluded franchises due to capital"
+
+    # 데이터 출력 확인
+    print("\n=== Simulation Data ===")
+    for key, value in simulation_data.items():
+        print(f"{key}: {value}")
+    
+    print("\nTop 3 Nearby Stations:")
+    for station in simulation_data['top_3_nearby_stations']:
+        print(f"Station Name: {station['station_name']}, People: {station['people']}")
+
+    print("\nAdditional Recommended Brands:")
+    for brand in simulation_data['additional_recommended_brands']:
+        print(f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
+
+    print("\nExcluded Brand Due to Capital:")
+    excluded_brand = simulation_data['excluded_brand_due_to_capital']
+    # print(f"Brand Name: {excluded_brand['brand_name']}, Franchise Score: {excluded_brand['franchise_score']}, Insufficient Funds: {excluded_brand['insufficient_funds']}")
+
+
+    # 2. 데이터를 JSON 파일로 저장
+    json_file_path = 'simulation_data.json'
+    with open(json_file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(simulation_data, json_file, ensure_ascii=False, indent=4)
+
+    print(f"Data saved to '{json_file_path}' for verification.")
+
+    # 생성 시간 추가
+    simulation_data['created_at'] = datetime.utcnow().isoformat()
+    
+    # UUID 생성
+    simulation_data['simulation_response_id'] = str(ObjectId())
+    
+    # MongoDB에 데이터 삽입
+    result = report_collection.insert_one(simulation_data)
+    
+    if result.inserted_id:
+        print(f"Inserted document with ID: {result.inserted_id}")
+    else:
+        print("Error inserting document")
+
 
 
 
@@ -366,6 +477,22 @@ def process_csv_file(df_filtered, category):
     # 상위 30개의 데이터 선택
     top_franchises = df_filtered.sort_values(by='normalized_score', ascending=False).head(30)
 
+
+    #여기에 상위 30개의 브랜드에서 폐업률 평균이랑, 개업률 평균치 , 평균 매출액,initial_cost의 평균 인테리어 평균 도 가져와줘.
+    # 상위 30개의 브랜드에서 평균값 계산
+    avg_closure_rate = top_franchises['closure_rate'].mean()
+    avg_opening_rate = top_franchises['opening_rate'].mean()
+    avg_average_sales = top_franchises['average_sales'].mean()
+    avg_initial_cost = top_franchises['initial_cost'].mean()
+    avg_interior_cost = top_franchises['interior_cost'].mean()
+
+    print("\n=== 상위 30개의 브랜드 평균 ===")
+    print(f"폐업률 평균: {avg_closure_rate * 100:.2f}%")
+    print(f"개업률 평균: {avg_opening_rate * 100:.2f}%")
+    print(f"평균 매출액: {avg_average_sales:.2f} 만원")
+    print(f"초기 비용 평균: {avg_initial_cost:.2f} 만원")
+    print(f"인테리어 비용 평균: {avg_interior_cost:.2f} 만원")
+    
     # 결과 출력
     for idx, row in enumerate(top_franchises.itertuples(index=False), 1):
         print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate * 100:.2f}%, 개업률: {row.opening_rate * 100:.2f}%, "
@@ -586,9 +713,10 @@ def filter_franchises_by_cost(initial_capital):
     for store in franchise_data:
         initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
         business_fee = float(store['business_fee'].replace('만원', '').replace(',', ''))  # 가맹비 변환
+        interior_cost = float(store['interior_cost'].replace('만원', '').replace(',', ''))  # 인테리어 비용 변환
         
-        # 조건: 초기 비용 + 가맹비 <= 사용자가 입력한 자본금
-        total_initial_cost = initial_cost + business_fee
+        # 조건: 초기 비용 + 가맹비 + 인테리어 비용 <= 사용자가 입력한 자본금
+        total_initial_cost = initial_cost + business_fee + interior_cost
         
         if total_initial_cost <= initial_capital:
             filtered_franchises.append(store)  # 조건 만족
@@ -744,12 +872,17 @@ async def fetch_all_data(page_size):
         # 결과 출력
         for station, total_passengers in zip(stations, passenger_results):
             print(f"{station}역: {total_passengers}명, 날짜 {use_ymd}")
+        # stations와 passenger_results 반환
+        return stations, passenger_results
 
 
 # 메인 실행 함수
 if __name__ == "__main__":
     simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b")
     user_data=update_user_data_from_response(simulation_response)
+
+    if simulation_response:
+        user_id = simulation_response.get('user_id')
 
     # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
     if 'region' in user_data and len(user_data['region'].split(', ')) >= 3:
@@ -798,7 +931,7 @@ if __name__ == "__main__":
 
     page_size = 500  # 한 번에 가져올 데이터 수 (500개씩 요청)
     # 비동기 실행
-    asyncio.run(fetch_all_data(page_size))
+    stations, passenger_results = asyncio.run(fetch_all_data(page_size))  # 비동기 함수 호출 후 반환 값 받기
 
     if densities:
         # 3. 밀도의 평균과 표준편차 계산 및 밀도 점수 조정
@@ -819,16 +952,24 @@ if __name__ == "__main__":
 
             
         # 7. 제외된 프랜차이즈 3개를 출력
-        print("\n=== 가맹비가 비싸서 제외된 프랜차이즈 3개 ===")
+        print("\n=== 초기 자본금이 부족해서 제외된 프랜차이즈 3개 ===")
         excluded_franchises_sorted = sorted(
             excluded_franchises, 
             key=lambda x: (
                 float(x['initial_cost'].replace('만원', '').replace(',', '').strip()), 
-                float(x['business_fee'].replace('만원', '').replace(',', '').strip())
+                float(x['business_fee'].replace('만원', '').replace(',', '').strip()),
+                float(x['interior_cost'].replace('만원', '').replace(',', '').strip())
             )
         )[:3]
         for franchise in excluded_franchises_sorted:
-            print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, 초기 비용: {franchise['initial_cost']}만원, 점수: {franchise['score']}")
+            total_cost = (
+                float(franchise['initial_cost'].replace('만원', '').replace(',', '').strip()) +
+                float(franchise['business_fee'].replace('만원', '').replace(',', '').strip()) +
+                float(franchise['interior_cost'].replace('만원', '').replace(',', '').strip())
+            )
+            print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, "
+                f"초기 비용: {franchise['initial_cost']}만원, 인테리어 비용: {franchise['interior_cost']}만원, "
+                f"총 비용: {total_cost}만원, 점수: {franchise['score']}")
 
         # 8. 추천된 프랜차이즈 중에서 매물 필터링 (청년치킨에 해당하는 매물만)
         top_franchise_name = top_franchises[0][0]  # 상위 1개의 프랜차이즈 이름 (청년치킨)
@@ -844,4 +985,6 @@ if __name__ == "__main__":
                 print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
+
+        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_listings)
 
