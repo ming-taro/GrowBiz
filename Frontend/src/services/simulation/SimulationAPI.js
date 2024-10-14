@@ -37,10 +37,7 @@ export const createSimulationAnswer = async (userID, answer) => {
 
 export const fetchResponseById = async (id) => {
   try {
-    const response = await axios.get(BASE_URL + `/start`, {
-      params: {
-        id: id,
-      },
+    const response = await axios.get(BASE_URL + `/answer/${id}`, {
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -67,7 +64,6 @@ export const executeFranchiseAnalyze = async (id) => {
       }
     );
 
-    console.log("초기응답:", response);
     return response.data;
   } catch (error) {
     console.error("Error saving data:", error);
