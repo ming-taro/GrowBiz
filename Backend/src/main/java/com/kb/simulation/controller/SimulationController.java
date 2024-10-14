@@ -29,6 +29,9 @@ public class SimulationController {
     @GetMapping("/question")
     public ResponseEntity<List<Question>> findQuestions() {
         List<Question> storeQuestions = service.findQuestions();
+
+        storeQuestions.sort((o1, o2) -> o1.getInd() - o2.getInd());
+
         if (storeQuestions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
