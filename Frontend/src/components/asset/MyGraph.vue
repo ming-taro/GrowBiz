@@ -86,6 +86,7 @@ const authStore = useAuthStore();
 const mno = authStore.state.mno;
 
 let id = '1234';
+
 export default {
   data() {
     return {
@@ -98,7 +99,7 @@ export default {
   },
   methods: {
     loadpage() {
-      if (mno != undefined) {
+      if (mno != '') {
         this.isActive = false;
         id = mno;
       } else {
