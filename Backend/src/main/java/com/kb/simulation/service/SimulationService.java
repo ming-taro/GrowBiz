@@ -45,13 +45,11 @@ public class SimulationService {
         return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
     }
 
-
-
     public int executeSimulation(String id) {
         StringBuilder result = new StringBuilder();
         try {
             File workingDirectory = new File("C:/Users/student/Desktop/final/self-employed/AI_Models/AI/");
-            String scriptPath = "ts_report.py";
+            String scriptPath = "simulation_test_file.py";
 
             ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
             processBuilder.directory(workingDirectory);
