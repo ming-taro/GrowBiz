@@ -4,7 +4,7 @@
     "created_at": "",
     "_class": "com.kb.simulation.dto.report.ResponseReport",
     "brand_name": "굽네치킨",
-    "franchise_score": 53.03316285966481,
+    "franchise_score": 53.04316285966481,
     "recommended_brand_density": 7.428571428571429,
     "industry_density_average": 2.5142857142857142,
     "recommended_brand_initial_cost": "5770.00 만원",
@@ -57,7 +57,7 @@
     ],
     "excluded_brand_due_to_capital": {
         "brand_name": "비에이치씨(BHC)",
-        "franchise_score": "69.27",
+        "franchise_score": "69.52",
         "insufficient_funds": 395.60000000000036
     }
 }
