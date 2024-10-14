@@ -117,9 +117,9 @@ export const mixed_options = {
 // 데이터 가져오는 함수
 export async function fetchChartData(loanRepaymentStatus) {
   const response = await axios.get(`/api/kmap/member/${id}`);
-  const dongname = response.data.dongname;
+  const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
-  const doughnut = await axios.get(`/api/chart/doughnut`);
+  const doughnut = await axios.get(`/api/chart/doughnut/${svcIndutyCdNm}`);
 
   const sortedData = doughnut.data.sort((a, b) => b.amount - a.amount);
 
@@ -132,7 +132,7 @@ export async function fetchChartData(loanRepaymentStatus) {
     .reduce((acc, item) => acc + item.amount, 0)
     .toLocaleString();
 
-  const mixchart = await axios.get(`/api/chart/mixchart`);
+  const mixchart = await axios.get(`/api/chart/mixchart/${svcIndutyCdNm}`);
 
   const firstData = [];
   const secondData = [];
@@ -152,7 +152,7 @@ export async function fetchChartData(loanRepaymentStatus) {
     return acc;
   }, {});
 
-  const firstAndSecondData = Object.values(categorizedData).flat();
+  console.log(firstData + 'ASDF');
 
   mixed_data.labels = firstData.map((item) => item.categoryName);
 

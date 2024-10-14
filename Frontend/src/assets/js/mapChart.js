@@ -96,7 +96,7 @@ export async function fetchChartData(loanRepaymentStatus) {
   const mcfirst = await axios.get(`/api/chart/mcfirst/${svcIndutyCdNm}`, {
     params: { dongname },
   });
-  const mcsecend = await axios.get(`/api/chart/mcsecend`);
+  const mcsecend = await axios.get(`/api/chart/mcsecend/${svcIndutyCdNm}`);
 
   const mcfirstdata = mcfirst.data;
 
@@ -134,7 +134,7 @@ export async function fetchChartData(loanRepaymentStatus) {
   //   return acc;
   // }, {});
 
-  const sum = await axios.get(`/api/chart/sum`);
+  const sum = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
 
   mixed_data.labels = mcfirstdata.map((item) => item.adstrdCdNm);
 
