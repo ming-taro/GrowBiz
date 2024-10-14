@@ -27,14 +27,11 @@ export const createReport = async (userId, simulationResponseId) => {
 
 export const fetchReportById = async (id) => {
   try {
-    const response = await axios.get(
-      BASE_URL + `/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
-      }
-    );
+    const response = await axios.get(BASE_URL + `/${id}`, {
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    });
 
     return response.data;
   } catch (error) {

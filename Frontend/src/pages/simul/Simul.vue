@@ -1,42 +1,49 @@
 <template>
-  <div class="animation-container">
-    <!-- 진행도 바 -->
-    <div class="progress-container">
-      <div class="progress-bar" :style="{ width: progressBarWidth }"></div>
-    </div>
+  <div v-if="isLoading == false">
+    <div class="animation-container">
+      <div class="progress-container">
+        <div class="progress-bar" :style="{ width: progressBarWidth }"></div>
+      </div>
+      <img src="@/assets/img/simul/sumul_cut.jpg" alt="Background Image" class="background-image" />
+      <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation1" />
+      <img src="@/assets/img/simul/leaf2.png" alt="Leaf" class="leaf-animation2" />
+      <img src="@/assets/img/simul/leaf3.png" alt="Leaf" class="leaf-animation3" />
+      <img src="@/assets/img/simul/leaf4.png" alt="Leaf" class="leaf-animation4" />
+      <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation5" />
 
-    <img src="@/assets/img/simul/sumul_cut.jpg" alt="Background Image" class="background-image" />
-    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation1" />
-    <img src="@/assets/img/simul/leaf2.png" alt="Leaf" class="leaf-animation2" />
-    <img src="@/assets/img/simul/leaf3.png" alt="Leaf" class="leaf-animation3" />
-    <img src="@/assets/img/simul/leaf4.png" alt="Leaf" class="leaf-animation4" />
-    <img src="@/assets/img/simul/leaf1.png" alt="Leaf" class="leaf-animation5" />
-
-    <div v-if="showSpeechBubble">
-      <img src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble" class="speech-bubble" />
-      <div class="answer-box">
-        <div v-if="showChoices" class="choices_2">
-          <div v-for="(choice, index) in choices" :key="index">
-            <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
-              @click="updateChoice(choice.text, index)">
-              <span class="arrow">{{
-                isHovered === choice.text ? '▶' : ''
-              }}</span>
-              <span class="text">{{ choice.text }}</span>
-            </button>
+      <div v-if="showSpeechBubble">
+        <img src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble" class="speech-bubble" />
+        <div class="answer-box">
+          <div v-if="showChoices" class="choices_2">
+            <div v-for="(choice, index) in choices" :key="index">
+              <button @mouseover="isHovered = choice.text" @mouseleave="isHovered = ''"
+                @click="updateChoice(choice.text, index)">
+                <span class="arrow">{{
+                  isHovered === choice.text ? '▶' : ''
+                }}</span>
+                <span class="text">{{ choice.text }}</span>
+              </button>
+            </div>
+          </div>
+          <div v-if="questionID == 0" class="button-container">
+            <button class="retry-button" @click="retry()">다시 선택하기</button>
           </div>
         </div>
-        <div v-if="questionID == 0" class="button-container">
-          <button class="retry-button" @click="retry()">다시 선택하기</button>
-        </div>
+      </div>
+      <img v-else src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble No" class="speech-bubble" />
+
+      <div class="main_text_animation">
+        <p class="text-line" v-html="typedTextLine1"></p>
+        <p class="text-line" v-html="typedTextLine2" v-show="typedTextLine2.length > 0"></p>
       </div>
     </div>
-    <img v-else src="@/assets/img/simul/speech_bubble_no.png" alt="Speech Bubble No" class="speech-bubble" />
+  </div>
 
-    <!-- 텍스트 고정 -->
-    <div class="main_text_animation">
-      <p class="text-line" v-html="typedTextLine1"></p>
-      <p class="text-line" v-html="typedTextLine2" v-show="typedTextLine2.length > 0"></p>
+  <div v-else>
+    <div class="animation-container">
+      <img src="@/assets/img/simul/report_loading.jpg" alt="Background Image" class="background-image" />
+      <div class="loading-text">리포트를 분석중입니다</div>
+      <div class="loader"></div>
     </div>
   </div>
 </template>
@@ -44,7 +51,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { createReport } from '@/services/simulation/ReportAPI';
-import { getQuestions, createSimulationAnswer } from '@/services/simulation/SimulationAPI';
+import { getQuestions, createSimulationAnswer, executeFranchiseAnalyze } from '@/services/simulation/SimulationAPI';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
@@ -68,6 +75,8 @@ const showChoices = ref(false);
 const isHovered = ref('');
 
 const totalSteps = ref(10); // 총 단계
+
+const isLoading = ref(false);
 
 // 진행도 비율 계산
 const progressBarWidth = computed(() => {
@@ -146,6 +155,21 @@ const moveReportPage = async () => {
   try {
     const simulationResponse = await createSimulationAnswer(authStore.id, userAnswers);
     const report = await createReport(authStore.id, simulationResponse.id);
+    console.log("만들어진 리포트:", report);
+
+    isLoading.value = true;
+    let startTime = performance.now();
+
+    let response = await executeFranchiseAnalyze(report.id);
+    // let response = await executeFranchiseAnalyze("test_id");
+    console.log("실행 코드:", response);
+
+    let endTime = performance.now();
+
+    // 시간 차이 계산 (밀리초 단위)
+    let timeTaken = endTime - startTime;
+    isLoading.value = false;
+    console.log("소요 시간", timeTaken / 1000, "초");
     location.href = `/simul/report?id=${report.id}`; // 리포트 페이지로 이동
   } catch (error) {
     console.error("Error during saving simulation answer:", error);
@@ -236,6 +260,38 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.loading-text {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 2s linear infinite;
+  z-index: 9999;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* 타자 애니메이션 스타일 */
 .main_text_animation {
   position: absolute;
@@ -275,7 +331,6 @@ onMounted(async () => {
   position: relative;
   width: 100%;
   height: 712px;
-  overflow: hidden;
 }
 
 .background-image {

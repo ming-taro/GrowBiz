@@ -37,8 +37,29 @@ export const createSimulationAnswer = async (userID, answer) => {
 
 export const fetchResponseById = async (id) => {
   try {
-    const response = await axios.get(
-      BASE_URL + `/answer/${id}`,
+    const response = await axios.get(BASE_URL + `/start`, {
+      params: {
+        id: id,
+      },
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    });
+
+    return response.data.answer;
+  } catch (error) {
+    console.error("Error saving data:", error);
+    throw error;
+  }
+};
+
+export const executeFranchiseAnalyze = async (id) => {
+  try {
+    const response = await axios.post(
+      BASE_URL + `/start`,
+      {
+        id: id, // params 대신 body로 전송
+      },
       {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
@@ -46,7 +67,8 @@ export const fetchResponseById = async (id) => {
       }
     );
 
-    return response.data.answer;
+    console.log("초기응답:", response);
+    return response.data;
   } catch (error) {
     console.error("Error saving data:", error);
     throw error;
@@ -56,4 +78,4 @@ export const fetchResponseById = async (id) => {
 export const findLocation = async (id) => {
   const data = await fetchResponseById(id);
   return data[0].district + " " + data[0].neighborhoods;
-}
+};
