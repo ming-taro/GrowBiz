@@ -47,7 +47,7 @@ const Simul = () => import('@/pages/simul/Simul.vue');
 const Register = () => import('@/pages/register/Register.vue');
 const Welcome = () => import('@/pages/register/Welcome.vue');
 const Login = () => import('@/pages/auth/Login.vue');
-const MypageUpdate = () => import('@/components/mypage/MypageUpdate.vue');
+const MypageInfo = () => import('@/pages/mypage/MypageInfo.vue');
 const MypageReport = () => import('@/components/mypage/MypageReport.vue');
 const StoreUpdate = () => import('@/pages/asset/StoreUpdate.vue');
 
@@ -204,7 +204,7 @@ const router = createRouter({
     { path: '/register', name: 'Register', component: Register },
     { path: '/welcome', name: 'Welcome', component: Welcome },
     { path: '/login', name: 'Login', component: Login },
-    { path: '/mypageupdate', name: 'MypageUpdate', component: MypageUpdate },
+    { path: '/mypageInfo', name: 'MypageInfo', component: MypageInfo },
     { path: '/mypagereport', name: 'MypageReport', component: MypageReport },
     { path: '/asset/storeupdate', name: 'StoreUpdate', component: StoreUpdate },
     // { path: '/input', name: "Input", component: Input },
