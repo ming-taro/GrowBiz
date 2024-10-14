@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between gap-2">
         <div style="display: flex; width: 60%">
           <h2 class="title mb-2">내 가게</h2>
-          <div style="margin: 0.5% 0% 0% 1%" id="disable">
+          <div style="margin: 1% 0% 0% 1%" id="disable">
             해당 내용은 견본 데이터 입니다. 회원님의 가게를 등록해 보세요.
           </div>
         </div>

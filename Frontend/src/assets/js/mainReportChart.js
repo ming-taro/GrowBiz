@@ -46,6 +46,9 @@ export const barOptions = {
         },
       },
     },
+    tooltip: {
+      enabled: false, // 툴팁 비활성화
+    },
     datalabels: {
       display: true, // 데이터 라벨 표시
       anchor: 'center', // 텍스트를 막대의 끝에 붙임

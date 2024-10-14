@@ -69,17 +69,9 @@ export const barOptions2 = {
           weight: 'light', // 글자 두께
         },
       },
-      tooltip: {
-        titleFont: {
-          size: 16, // 툴팁 제목 글자 크기
-          family: 'Pretendard', // 원하는 폰트 패밀리
-          weight: 'light', // 글자 두께
-        },
-        bodyFont: {
-          size: 14, // 툴팁 본문 글자 크기
-          family: 'light', // 원하는 폰트 패밀리
-        },
-      },
+    },
+    tooltip: {
+      enabled: false, // 툴팁 비활성화
     },
   },
 };
