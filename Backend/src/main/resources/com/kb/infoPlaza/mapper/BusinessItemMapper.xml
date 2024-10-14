@@ -40,13 +40,13 @@
     <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         SELECT *
         FROM commercial_sales3
-        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore) limit 5;
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1) limit 5;
     </select>
 
     <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         SELECT *
         FROM commercial_sales3
-        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore);
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1);
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
@@ -89,7 +89,7 @@
 
     <select id="getFilteredPortionList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         SELECT * FROM commercial_sales3
-        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore)
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1)
         <if test="service != '전체'">
             AND SVC_INDUTY_CD_NM = #{service}
         </if>

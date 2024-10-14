@@ -404,10 +404,12 @@
 <script setup>
 import MypageHeader from '@/components/mypage/MypageHeader.vue';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 // 회원 정보를 저장할 변수 선언
 const member = ref({
@@ -472,10 +474,15 @@ const handleFileUpload = (event) => {
     console.error('No file selected or file is invalid.');
   }
 };
+// const goToMyPage = () => {
+//   router.push('MypageInfo');
+// };
 
 // 프로필 저장 함수
 const saveProfile = async () => {
   const formData = new FormData();
+  console.log(authStore.mno);
+  console.log(authStore.id);
   formData.append('mno', authStore.mno);
   formData.append('id', authStore.id);
   formData.append('name', memberEdit.value.name);
@@ -499,6 +506,7 @@ const saveProfile = async () => {
       }
     );
     console.log('Profile updated:', response.data);
+    window.location.reload();
   } catch (error) {
     console.error('Error updating profile:', error);
   }
