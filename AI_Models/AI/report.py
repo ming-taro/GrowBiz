@@ -17,6 +17,9 @@ import pandas as pd
 from pymongo import MongoClient
 import uuid  # UUID 생성용
 from bson.objectid import ObjectId
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
@@ -261,7 +264,7 @@ kakao_api_key = os.getenv('KAKAO_API_KEY')
 #     }
 # }
 
-def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_listings):
+def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_listings, simulation_response_id):
     # 1. 사용자 입력 및 처리된 데이터를 기반으로 한 실제 데이터 준비
     simulation_data = {
         "user_id": str(user_id),  # 사용자 ID
@@ -356,7 +359,7 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     simulation_data['created_at'] = datetime.utcnow().isoformat()
     
     # UUID 생성
-    simulation_data['simulation_response_id'] = str(ObjectId())
+    simulation_data['simulation_response_id'] = simulation_response_id
     
     # MongoDB에 데이터 삽입
     result = report_collection.insert_one(simulation_data)
@@ -848,7 +851,8 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
-    simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b")
+    print("받은값: ", sys.argv[1])
+    simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
     user_data=update_user_data_from_response(simulation_response)
 
     if simulation_response:
@@ -956,5 +960,5 @@ if __name__ == "__main__":
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_listings)
+        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_listings, sys.argv[1])
 

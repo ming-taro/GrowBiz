@@ -55,7 +55,7 @@ public class SimulationService {
         StringBuilder result = new StringBuilder();
         try {
             File workingDirectory = new File(aiAnalysisPath);
-            String scriptPath = "simulation_test_file.py";
+            String scriptPath = "report.py";
 
             ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
             processBuilder.directory(workingDirectory);
