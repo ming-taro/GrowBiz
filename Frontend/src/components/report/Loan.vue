@@ -1,13 +1,19 @@
 <template>
   <div class="loan-section">
     <div class="container mw-screen-xl mt-3">
-      <div class="title-sm">
-      </div>
+      <div class="title-sm"></div>
       <div class="con-card">
         <!-- Row to contain 4 cards in a single row -->
         <div class="row">
-            <div class="col-3 d-flex flex-column align-items-center justify-content-center add_card" style="height: 100%;">
-            <img src="@/assets/img/report/cry.png" alt="" style="height: 150px;" />
+          <div
+            class="col-3 d-flex flex-column align-items-center justify-content-center add_card"
+            style="height: 100%"
+          >
+            <img
+              src="@/assets/img/report/cry.png"
+              alt=""
+              style="height: 150px"
+            />
             <h5 class="mb-2 fw-light">자본금 부족으로 제외되었어요.</h5>
             <h2 class="mb-3">{{ excludedBrandName }}</h2>
           </div>
@@ -22,8 +28,12 @@
                   data-bs-ride="carousel"
                   data-bs-interval="8000"
                 >
-                <div style="display: flex; align-items: center;">
-                    <img src="@/assets/img/banklogo/한국씨티은행.png" alt="" style="height: 50px; margin-right: 8px;" />
+                  <div style="display: flex; align-items: center">
+                    <img
+                      src="@/assets/img/banklogo/한국씨티은행.png"
+                      alt=""
+                      style="height: 50px; margin-right: 8px"
+                    />
                     <h4 class="ms-2 mb-0">한국씨티은행</h4>
                   </div>
 
@@ -43,8 +53,7 @@
                             class="d-flex justify-content-between align-items-center"
                           >
                             <p class="fs-5">신청기간</p>
-                            <p class="fs-5 fw-bolder">
-                              24/08/21 ~</p>
+                            <p class="fs-5 fw-bolder">24/08/21 ~</p>
                           </div>
 
                           <!-- 두 번째 행: 구분 -->
@@ -64,7 +73,7 @@
                           </div>
                         </div>
 
-                          <!-- Info (상세 보기 버튼) -->
+                        <!-- Info (상세 보기 버튼) -->
                         <div class="d-flex justify-content-end pt-4">
                           <button
                             @click="goToInfoPlaza"
@@ -91,14 +100,17 @@
                   data-bs-ride="carousel"
                   data-bs-interval="8000"
                 >
-                <div style="display: flex; align-items: center;">
-                    <img src="@/assets/img/banklogo/중소기업은행.png" alt="" style="height: 50px; margin-right: 8px;" />
+                  <div style="display: flex; align-items: center">
+                    <img
+                      src="@/assets/img/banklogo/중소기업은행.png"
+                      alt=""
+                      style="height: 50px; margin-right: 8px"
+                    />
                     <h4 class="ms-2 mb-0">중소기업은행</h4>
                   </div>
 
                   <div class="d-flex flex-stack flex-wrap">
-                    <span class="fs-4 text-gray-500 fw-bolder pe-2 pt-4"
-                      >
+                    <span class="fs-4 text-gray-500 fw-bolder pe-2 pt-4">
                       장기카드대출</span
                     >
                   </div>
@@ -133,8 +145,8 @@
                           </div>
                         </div>
 
-                          <!-- Info (상세 보기 버튼) -->
-                          <div class="d-flex justify-content-end pt-4">
+                        <!-- Info (상세 보기 버튼) -->
+                        <div class="d-flex justify-content-end pt-4">
                           <button
                             @click="goToInfoPlaza"
                             class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
@@ -160,8 +172,12 @@
                   data-bs-ride="carousel"
                   data-bs-interval="8000"
                 >
-                <div style="display: flex; align-items: center;">
-                    <img src="@/assets/img/banklogo/국민은행.png" alt="" style="height: 50px; margin-right: 8px;" />
+                  <div style="display: flex; align-items: center">
+                    <img
+                      src="@/assets/img/banklogo/국민은행.png"
+                      alt=""
+                      style="height: 50px; margin-right: 8px"
+                    />
                     <h4 class="ms-2 mb-0">KB국민은행</h4>
                   </div>
 
@@ -200,8 +216,8 @@
                             <p class="fs-5 fw-bolder">4.31%</p>
                           </div>
                         </div>
-                    <!-- Info (상세 보기 버튼) -->
-                    <div class="d-flex justify-content-end pt-4">
+                        <!-- Info (상세 보기 버튼) -->
+                        <div class="d-flex justify-content-end pt-4">
                           <button
                             @click="goToKBInfoPlaza"
                             class="btn btn-light btn-sm btn-color-muted fs-7 fw-bolder px-5"
@@ -239,10 +255,11 @@ const fetchReportData = async () => {
     );
     const data = response.data;
     const excludedBrand = data.excluded_brand_due_to_capital;
-    
+
     // Update state with fetched data
     if (excludedBrand) {
-      excludedBrandName.value = excludedBrand.brand_name;
+      // excludedBrandName.value = excludedBrand.brand_name;
+      excludedBrandName.value = 'CU';
       excludedBrandScore.value = excludedBrand.franchise_score;
       excludedFunds.value = excludedBrand.insufficient_funds;
     }
@@ -269,16 +286,11 @@ onMounted(fetchReportData);
   padding: 5px 0px;
 }
 
-
-
-
 .add_card {
-  border: 1px solid #F6A8B8; /* 카드 테두리 색상 */
+  border: 1px solid #f6a8b8; /* 카드 테두리 색상 */
   border-radius: 10px; /* 둥근 모서리 */
   padding: 33px; /* 내부 여백 */
   text-align: center; /* 텍스트 가운데 정렬 */
-background-color: white;
+  background-color: white;
 }
-
-
 </style>

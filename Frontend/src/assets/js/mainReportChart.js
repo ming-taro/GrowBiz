@@ -1,4 +1,4 @@
-// 가계관리 데이터
+// 가게관리 데이터
 export const asset_data_bar = {
   labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
   datasets: [
