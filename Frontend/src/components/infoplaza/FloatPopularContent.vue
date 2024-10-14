@@ -118,6 +118,7 @@ const loadKakaoMap = () => {
       const options = {
         center: new window.kakao.maps.LatLng(37.5465421, 127.0713152),
         level: 5,
+        maxLevel: 7
       };
       kakaoMap = new window.kakao.maps.Map(mapContainer.value, options);
       resolve(kakaoMap);
@@ -131,6 +132,7 @@ const loadKakaoMap = () => {
             const options = {
               center: new window.kakao.maps.LatLng(37.5465421, 127.0713152),
               level: 5,
+              maxLevel: 7
             };
             kakaoMap = new window.kakao.maps.Map(mapContainer.value, options);
             resolve(kakaoMap);

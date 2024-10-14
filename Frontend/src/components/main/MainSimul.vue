@@ -33,7 +33,7 @@
                   class="d-flex justify-content-center align-items-center mb-4 mt-4"
                 >
                   <!-- 수직, 수평 중앙 정렬 -->
-                  <h1 style="font-weight: bold">강남구 유통업</h1>
+                  <h1 style="font-weight: bold">강남구 외식업</h1>
                 </div>
                 <div class="align-self-end">
                   <div class="d-flex justify-content-between align-items-end">
@@ -61,7 +61,7 @@
                     class="d-flex justify-content-between align-items-center"
                   >
                     <h3 class="mb-2 fw-light">중분류</h3>
-                    <h3 class="mb-2 me-5">편의점</h3>
+                    <h3 class="mb-2 me-5">치킨</h3>
                   </div>
 
                   <div
@@ -95,9 +95,9 @@
               </div>
             </div>
           </div>
-          <div class="col-6" style="display: flex; align-items: stretch">
+          <div class="col-6" style="display: flex; align-items: stretch;">
             <img
-              src="@/assets/img/report/gs25.jpg"
+              src="@/assets/img/report/kyochon.jpg"
               alt=""
               class="full-image"
             />

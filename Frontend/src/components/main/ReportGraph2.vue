@@ -2,7 +2,7 @@
   <div>
     <div class="title-sm">
       <div class="custom-line" />
-      상권의 특성
+      개업/폐업률
       <div class="custom-line" />
     </div>
     <div class="p-5">

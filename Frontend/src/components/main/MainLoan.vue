@@ -23,15 +23,15 @@
             >
               <!--begin::Heading-->
 
-              <div class="row mb-3" style="height: 20px">
-                <div class="col-3 d-flex align-items-center">
+              <div class="row mb-3 mt-1" style="height: 20px">
+                <div class="col-2 ps-3 me-3 pe-0 d-flex align-items-center">
                   <img
                     :src="'/images/banklogo/한국씨티은행.png'"
                     alt=""
                     style="width: 35px"
                   />
                 </div>
-                <div class="col-8 d-flex align-items-center">
+                <div class="col-8 p-0 d-flex align-items-center">
                   <!-- Change align-items to center -->
                   <span class="fs-3 text-gray-500 fw-bolder pe-2 text-left">
                     장기카드대출
@@ -65,7 +65,7 @@
 
                       <!-- 세 번째 행: 금리 -->
                       <div
-                        class="d-flex justify-content-between align-items-center"
+                        class="d-flex justify-content-between align-items-center mb-2"
                       >
                         <p class="fs-5 text-gray-600 fw-bolder">금리</p>
                         <p class="fs-5 text-gray-600">5.2%</p>
@@ -94,18 +94,18 @@
             >
               <!--begin::Heading-->
 
-              <div class="row mb-3" style="height: 20px">
-                <div class="col-3 d-flex align-items-center">
+              <div class="row mb-3 mt-1" style="height: 20px">
+                <div class="col-2 ps-3 me-3 pe-0 d-flex align-items-center">
                   <img
                     :src="'/images/banklogo/우리은행.png'"
                     alt=""
                     style="width: 35px"
                   />
                 </div>
-                <div class="col-8 d-flex align-items-center">
+                <div class="col-9 ps-0 d-flex align-items-center">
                   <!-- Change align-items to center -->
                   <span
-                    class="fs-3 text-gray-500 fw-bolder pe-2 text-left text-truncate"
+                    class="fs-3 text-gray-500 fw-bolder text-left"
                   >
                     개인신용대출 우대고객
                   </span>
@@ -138,7 +138,7 @@
 
                       <!-- 세 번째 행: 금리 -->
                       <div
-                        class="d-flex justify-content-between align-items-center"
+                        class="d-flex justify-content-between align-items-center  mb-2"
                       >
                         <p class="fs-5 text-gray-600 fw-bolder">금리</p>
                         <p class="fs-5 text-gray-600">5.24%</p>
@@ -183,9 +183,5 @@ bringBest4List();
 </script>
 
 <style scoped>
-.text-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 </style>

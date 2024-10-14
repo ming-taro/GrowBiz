@@ -1,4 +1,3 @@
-
 // 밑에 그래프 개업률, 폐업률
 export const data_bar2 = (data) => ({
   labels: ['개업률', '폐업률'],
@@ -9,7 +8,6 @@ export const data_bar2 = (data) => ({
       data: [
         data.industry_opening_rate_average, // 업종 평균 개업률
         data.industry_closing_rate_average, // 업종 평균 폐업률 recommended_brand_opening_rate_average
-
       ],
     },
     {
@@ -71,17 +69,9 @@ export const barOptions2 = {
           weight: 'light', // 글자 두께
         },
       },
-      tooltip: {
-        titleFont: {
-          size: 16, // 툴팁 제목 글자 크기
-          family: 'Pretendard', // 원하는 폰트 패밀리
-          weight: 'light', // 글자 두께
-        },
-        bodyFont: {
-          size: 14, // 툴팁 본문 글자 크기
-          family: 'light', // 원하는 폰트 패밀리
-        },
-      },
+    },
+    tooltip: {
+      enabled: false, // 툴팁 비활성화
     },
   },
 };

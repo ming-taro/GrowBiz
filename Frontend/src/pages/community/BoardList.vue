@@ -321,7 +321,19 @@ const createPost = () => {
 
 <style scoped>
 
-
+/* 타이틀 부분 글자 크기 조정 */
+.table thead th {
+  font-size: 16px; /* 원하는 크기로 조정 */
+  font-weight: bold; /* 글자 두께 조정 */
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.table tbody td {
+  font-size: 14px; /* 원하는 크기로 조정 */
+  font-weight: light; /* 글자 두께 조정 */
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
 
 /* nav 아래 hr 같은 선 제거 */
 .nav {
@@ -354,4 +366,14 @@ const createPost = () => {
   color: #007bff !important; /* 호버 시 파란색 */
   text-decoration: none !important; /* 호버 시 밑줄 제거 */
 }
+
+
+/* 모든 <a> 태그 색상 변경 */
+  a {
+    color: #6184c6; /* 변경하고 싶은 기본 링크 색상 */
+    font-weight: 500;
+    text-decoration: none; /* 밑줄 제거 */
+  }
+  
+  
 </style>
