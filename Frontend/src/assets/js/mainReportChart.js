@@ -1,28 +1,8 @@
-// 가게관리 데이터
-export const asset_data_bar = {
-  labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: '#fcd752',
-      data: [40, 20, 12, 39, 10, 120], // 'data_bar' 대신 'data'
-    },
-  ],
-};
-
-export const asset_data_doughnut = {
-  labels: ['대출금', '상환금'],
-  datasets: [
-    {
-      backgroundColor: ['#f6f4f9', '#fca3b9'],
-      data: [40, 20],
-    },
-  ],
-};
-
-export const asset_barOptions = {
+// 위에 그래프 업종 밀도 평균, 업종 평균 가맹비, 업종 인테리어 총 비용  
+export const barOptions = {
   responsive: true,
-  maintainAspectRatio: false, // CSS 높이 사용
+  maintainAspectRatio: false,
+  indexAxis: 'y', // 가로 막대 그래프 설정
   scales: {
     x: {
       grid: {
@@ -30,24 +10,85 @@ export const asset_barOptions = {
         lineWidth: 1,
       },
       ticks: {
-        // x축 레이블을 보여주려면 display: true로 설정합니다.
-        display: true, // x축 레이블 보임
-        autoSkip: true, // 레이블 자동 생략
-        maxRotation: 0, // 최대 회전 각도 (0도: 수평)
-        minRotation: 0, // 최소 회전 각도 (0도: 수평)
-        padding: 10, // 레이블과 x축 사이의 간격 (픽셀)
+        beginAtZero: true, // x축이 0에서 시작되도록 설정
+        callback: function(value) {
+          return ''; // 아래 단위 제거
+        },
+        font: {
+          size: 14, // x축 글자 크기
+          family: 'Pretendard', // 원하는 폰트 패밀리
+          weight: 'bold', // 글자 두께
+        },
       },
     },
-  },
-  barThickness: 20,
-  plugins: {
-    legend: {
-      display: false, // 레전드 숨김
+    y: {
+      grid: {
+        color: 'rgba(255, 255, 255, 0.3)',
+        lineWidth: 1,
+      },
+      ticks: {
+          font: {
+            size: 16, // y축 글자 크기
+            family: 'Pretendard', // 원하는 폰트 패밀리
+            weight: 'light', // 글자 두께
+          },
+        },
     },
   },
+  plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        labels: {
+          font: {
+            size: 14, // 범례 글자 크기
+            family: 'Pretendard', // 원하는 폰트 패밀리
+            weight: 'bold', // 글자 두께
+          },
+        },
+        datalabels: {
+          display: true,
+          anchor: 'center', // 텍스트를 막대의 끝에 붙입니다
+          align: 'center',  // 텍스트를 막대의 끝에 맞춥니다
+          color: '#000',
+          formatter: (value, context) => {
+            const originalValue = context.chart.data.datasets[context.datasetIndex].originalData[context.dataIndex];
+            return originalValue; // 원본 값을 그대로 표시
+          },
+        },
+      },
+    },
+  elements: {
+      bar: {
+        // 막대의 두께를 설정
+        barThickness: 50, // 막대의 두께 (픽셀 단위)
+      },
+    },
 };
 
-export const asset_doughnutoptions = {
-  responsive: true,
-  maintainAspectRatio: false,
+
+
+export const data_bar = {
+  labels: ['밀도 (단위 : km²)', '가맹비 (단위 : 만원)','총 인테리어 비용 (단위 : 만원)'],
+  datasets: [
+    {
+      label: '업종 평균',
+      backgroundColor: '#fca3b9',
+      
+      data: [
+      1.05*1000, // 업종 밀도 평균
+      5000, // 업종 평균 가맹비
+      12000 // 업종 총 인테리어 비용
+      ], 
+      },
+    {
+      label: '추천 브랜드 평균',
+      backgroundColor: '#fcd752',
+      data: [2.05*1000, 
+      4500, 
+      10000], // 추천 브랜드 평균 데이터
+      
+    },
+  ],
 };
+
