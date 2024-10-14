@@ -529,36 +529,6 @@ def process_csv_file(df_filtered, category):
 
     print(f"Data saved to '{json_file_path}'")
 
-    # JSON 형식으로 저장할 데이터 구성
-    results = []
-    for idx, row in enumerate(top_franchises.itertuples(index=False)):
-        results.append({
-            "rank": idx + 1,
-            "store_name": row.store_name,
-            "year": row.year,
-            "region": row.region,
-            "opening_rate": f"{row.opening_rate * 100:.2f}%",
-            "closure_rate": f"{row.closure_rate * 100:.2f}%",
-            "average_sales": f"{row.average_sales:.2f} 만원",
-            "average_sales_per_area": f"{row.average_sales_per_area:.2f} 만원",
-            "initial_cost": f"{row.initial_cost:.2f} 만원",
-            "business_fee": f"{row.business_fee:.2f} 만원",
-            "interior_cost": f"{row.interior_cost:.2f} 만원",
-            "standard_store_area": f"{row.standard_store_area} ㎡",
-            "score": f"{row.normalized_score:.2f}"
-        })
-
-    # JSON 파일 경로 설정
-    output_folder = os.path.join('..', 'franchise_rank', 'preprocessing_stage2')
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-    json_file_name = f"{category}_1franchise_ranking.json"
-    json_file_path = os.path.join(output_folder, json_file_name)
-    with open(json_file_path, 'w', encoding='utf-8') as json_file:
-        json.dump(results, json_file, ensure_ascii=False, indent=4)
-
-    print(f"Data saved to '{json_file_path}'")
-
 
 # 치킨 프랜차이즈 데이터를 json 파일에서 읽기
 def load_franchise_data(industry):

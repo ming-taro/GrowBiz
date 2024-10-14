@@ -27,7 +27,7 @@
         "business_fee": "770.00 만원",
         "interior_cost": "3500.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "97.95"
+        "score": "97.59"
     },
     {
         "rank": 3,
@@ -42,7 +42,7 @@
         "business_fee": "770.00 만원",
         "interior_cost": "3520.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "97.32"
+        "score": "97.36"
     },
     {
         "rank": 4,
@@ -57,7 +57,7 @@
         "business_fee": "770.00 만원",
         "interior_cost": "1880.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "95.69"
+        "score": "95.46"
     },
     {
         "rank": 5,
@@ -72,7 +72,7 @@
         "business_fee": "750.00 만원",
         "interior_cost": "3000.00 만원",
         "standard_store_area": "66 ㎡",
-        "score": "95.21"
+        "score": "94.87"
     },
     {
         "rank": 6,
@@ -87,25 +87,10 @@
         "business_fee": "1100.00 만원",
         "interior_cost": "2000.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "94.88"
+        "score": "94.58"
     },
     {
         "rank": 7,
-        "store_name": "60계",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "16.65%",
-        "closure_rate": "5.29%",
-        "average_sales": "55169.20 만원",
-        "average_sales_per_area": "3192.60 만원",
-        "initial_cost": "7285.00 만원",
-        "business_fee": "1430.00 만원",
-        "interior_cost": "3080.00 만원",
-        "standard_store_area": "33 ㎡",
-        "score": "90.93"
-    },
-    {
-        "rank": 8,
         "store_name": "깐부치킨",
         "year": "2020-2023",
         "region": "서울",
@@ -117,25 +102,25 @@
         "business_fee": "1080.00 만원",
         "interior_cost": "7600.00 만원",
         "standard_store_area": "66 ㎡",
-        "score": "90.79"
+        "score": "90.60"
+    },
+    {
+        "rank": 8,
+        "store_name": "60계",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "16.65%",
+        "closure_rate": "5.29%",
+        "average_sales": "55169.20 만원",
+        "average_sales_per_area": "3192.60 만원",
+        "initial_cost": "7285.00 만원",
+        "business_fee": "1430.00 만원",
+        "interior_cost": "3080.00 만원",
+        "standard_store_area": "33 ㎡",
+        "score": "90.43"
     },
     {
         "rank": 9,
-        "store_name": "보드람치킨",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "11.04%",
-        "closure_rate": "5.53%",
-        "average_sales": "34880.90 만원",
-        "average_sales_per_area": "1809.60 만원",
-        "initial_cost": "7590.00 만원",
-        "business_fee": "1650.00 만원",
-        "interior_cost": "4290.00 만원",
-        "standard_store_area": "50 ㎡",
-        "score": "90.37"
-    },
-    {
-        "rank": 10,
         "store_name": "1번지통닭",
         "year": "2020-2023",
         "region": "서울",
@@ -147,7 +132,22 @@
         "business_fee": "330.00 만원",
         "interior_cost": "2750.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "90.36"
+        "score": "90.16"
+    },
+    {
+        "rank": 10,
+        "store_name": "보드람치킨",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "11.04%",
+        "closure_rate": "5.53%",
+        "average_sales": "34880.90 만원",
+        "average_sales_per_area": "1809.60 만원",
+        "initial_cost": "7590.00 만원",
+        "business_fee": "1650.00 만원",
+        "interior_cost": "4290.00 만원",
+        "standard_store_area": "50 ㎡",
+        "score": "90.00"
     },
     {
         "rank": 11,
@@ -162,7 +162,7 @@
         "business_fee": "1080.00 만원",
         "interior_cost": "0.00 만원",
         "standard_store_area": "0 ㎡",
-        "score": "90.16"
+        "score": "89.86"
     },
     {
         "rank": 12,
@@ -177,7 +177,7 @@
         "business_fee": "990.00 만원",
         "interior_cost": "2500.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "89.50"
+        "score": "89.26"
     },
     {
         "rank": 13,
@@ -192,7 +192,7 @@
         "business_fee": "440.00 만원",
         "interior_cost": "2145.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "87.71"
+        "score": "87.26"
     },
     {
         "rank": 14,
@@ -207,25 +207,10 @@
         "business_fee": "750.00 만원",
         "interior_cost": "3300.00 만원",
         "standard_store_area": "66 ㎡",
-        "score": "86.17"
+        "score": "86.26"
     },
     {
         "rank": 15,
-        "store_name": "계림원누릉지통닭구이",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "12.20%",
-        "closure_rate": "8.31%",
-        "average_sales": "34653.30 만원",
-        "average_sales_per_area": "1221.70 만원",
-        "initial_cost": "9305.00 만원",
-        "business_fee": "1495.00 만원",
-        "interior_cost": "4400.00 만원",
-        "standard_store_area": "79 ㎡",
-        "score": "83.30"
-    },
-    {
-        "rank": 16,
         "store_name": "지랄닭발",
         "year": "2020-2023",
         "region": "서울",
@@ -237,7 +222,22 @@
         "business_fee": "1650.00 만원",
         "interior_cost": "3630.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "83.30"
+        "score": "83.33"
+    },
+    {
+        "rank": 16,
+        "store_name": "계림원누릉지통닭구이",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "12.20%",
+        "closure_rate": "8.31%",
+        "average_sales": "34653.30 만원",
+        "average_sales_per_area": "1221.70 만원",
+        "initial_cost": "9305.00 만원",
+        "business_fee": "1495.00 만원",
+        "interior_cost": "4400.00 만원",
+        "standard_store_area": "79 ㎡",
+        "score": "82.58"
     },
     {
         "rank": 17,
@@ -252,7 +252,7 @@
         "business_fee": "110.00 만원",
         "interior_cost": "1400.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "82.12"
+        "score": "82.13"
     },
     {
         "rank": 18,
@@ -267,7 +267,7 @@
         "business_fee": "330.00 만원",
         "interior_cost": "1100.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "80.93"
+        "score": "80.76"
     },
     {
         "rank": 19,
@@ -286,51 +286,6 @@
     },
     {
         "rank": 20,
-        "store_name": "노랑통닭",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "24.06%",
-        "closure_rate": "11.03%",
-        "average_sales": "65453.80 만원",
-        "average_sales_per_area": "3135.60 만원",
-        "initial_cost": "6010.00 만원",
-        "business_fee": "760.00 만원",
-        "interior_cost": "3000.00 만원",
-        "standard_store_area": "50 ㎡",
-        "score": "77.27"
-    },
-    {
-        "rank": 21,
-        "store_name": "누구나홀딱반한닭",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "20.84%",
-        "closure_rate": "10.92%",
-        "average_sales": "55419.10 만원",
-        "average_sales_per_area": "1744.10 만원",
-        "initial_cost": "7783.60 만원",
-        "business_fee": "0.00 만원",
-        "interior_cost": "2860.00 만원",
-        "standard_store_area": "66 ㎡",
-        "score": "77.04"
-    },
-    {
-        "rank": 22,
-        "store_name": "인생닭강정",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "36.21%",
-        "closure_rate": "11.30%",
-        "average_sales": "17136.80 만원",
-        "average_sales_per_area": "2698.80 만원",
-        "initial_cost": "4159.00 만원",
-        "business_fee": "980.00 만원",
-        "interior_cost": "1716.00 만원",
-        "standard_store_area": "40 ㎡",
-        "score": "76.58"
-    },
-    {
-        "rank": 23,
         "store_name": "페리카나",
         "year": "2020-2023",
         "region": "서울",
@@ -342,7 +297,52 @@
         "business_fee": "50.00 만원",
         "interior_cost": "2695.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "76.39"
+        "score": "77.19"
+    },
+    {
+        "rank": 21,
+        "store_name": "인생닭강정",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "36.21%",
+        "closure_rate": "11.30%",
+        "average_sales": "17136.80 만원",
+        "average_sales_per_area": "2698.80 만원",
+        "initial_cost": "4159.00 만원",
+        "business_fee": "980.00 만원",
+        "interior_cost": "1716.00 만원",
+        "standard_store_area": "40 ㎡",
+        "score": "76.68"
+    },
+    {
+        "rank": 22,
+        "store_name": "노랑통닭",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "24.06%",
+        "closure_rate": "11.03%",
+        "average_sales": "65453.80 만원",
+        "average_sales_per_area": "3135.60 만원",
+        "initial_cost": "6010.00 만원",
+        "business_fee": "760.00 만원",
+        "interior_cost": "3000.00 만원",
+        "standard_store_area": "50 ㎡",
+        "score": "76.32"
+    },
+    {
+        "rank": 23,
+        "store_name": "누구나홀딱반한닭",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "20.84%",
+        "closure_rate": "10.92%",
+        "average_sales": "55419.10 만원",
+        "average_sales_per_area": "1744.10 만원",
+        "initial_cost": "7783.60 만원",
+        "business_fee": "0.00 만원",
+        "interior_cost": "2860.00 만원",
+        "standard_store_area": "66 ㎡",
+        "score": "76.10"
     },
     {
         "rank": 24,
@@ -357,25 +357,10 @@
         "business_fee": "2018.00 만원",
         "interior_cost": "4213.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "76.02"
+        "score": "76.05"
     },
     {
         "rank": 25,
-        "store_name": "호치킨",
-        "year": "2020-2023",
-        "region": "서울",
-        "opening_rate": "8.19%",
-        "closure_rate": "13.77%",
-        "average_sales": "33277.40 만원",
-        "average_sales_per_area": "1919.70 만원",
-        "initial_cost": "6070.00 만원",
-        "business_fee": "760.00 만원",
-        "interior_cost": "2280.00 만원",
-        "standard_store_area": "40 ㎡",
-        "score": "70.08"
-    },
-    {
-        "rank": 26,
         "store_name": "네네치킨",
         "year": "2020-2023",
         "region": "서울",
@@ -387,7 +372,22 @@
         "business_fee": "630.00 만원",
         "interior_cost": "1980.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "70.03"
+        "score": "70.21"
+    },
+    {
+        "rank": 26,
+        "store_name": "호치킨",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "8.19%",
+        "closure_rate": "13.77%",
+        "average_sales": "33277.40 만원",
+        "average_sales_per_area": "1919.70 만원",
+        "initial_cost": "6070.00 만원",
+        "business_fee": "760.00 만원",
+        "interior_cost": "2280.00 만원",
+        "standard_store_area": "40 ㎡",
+        "score": "70.05"
     },
     {
         "rank": 27,
@@ -402,7 +402,7 @@
         "business_fee": "740.00 만원",
         "interior_cost": "3300.00 만원",
         "standard_store_area": "66 ㎡",
-        "score": "69.96"
+        "score": "69.43"
     },
     {
         "rank": 28,
@@ -417,7 +417,7 @@
         "business_fee": "2342.00 만원",
         "interior_cost": "4510.00 만원",
         "standard_store_area": "66 ㎡",
-        "score": "69.52"
+        "score": "69.22"
     },
     {
         "rank": 29,
@@ -432,7 +432,7 @@
         "business_fee": "1630.00 만원",
         "interior_cost": "2475.00 만원",
         "standard_store_area": "50 ㎡",
-        "score": "69.41"
+        "score": "69.17"
     },
     {
         "rank": 30,
@@ -447,6 +447,6 @@
         "business_fee": "1046.00 만원",
         "interior_cost": "1980.00 만원",
         "standard_store_area": "33 ㎡",
-        "score": "69.19"
+        "score": "68.79"
     }
 ]
