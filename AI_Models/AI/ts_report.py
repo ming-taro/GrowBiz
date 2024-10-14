@@ -16,20 +16,159 @@ from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 from pymongo import MongoClient
 import uuid  # UUID 생성용
+from bson.objectid import ObjectId
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("DB_NAME")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+client = MongoClient(MONGO_URI)
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
+simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
+
+def fetch_simulation_response_by_id(simulation_response_id):
+    query = {"_id": ObjectId(simulation_response_id)}
+
+    response = simulation_response_collection.find_one(query)
+
+    if response:
+        print(f"User ID: {response['user_id']}")
+        
+        # 'answer' 필드에서 데이터 추출
+        answers = response.get('answer', {})
+        if answers:
+            print("User responses:")
+            for key, value in answers.items():
+                print(f"Question {key}: {value}")
+        else:
+            print("No answers found.")
+            
+        return response  # response 객체 반환
+    
+    else:
+        print(f"No simulation response found for ID: {simulation_response_id}")
+
+def update_user_data_from_response(simulation_response):
+    # 기본값 설정
+    user_data = {
+        'region': '',
+        'monthly_rent': 0,  # 만원
+        'deposit': 0,  # 만원 (1억)
+        'industry': '',  # '치킨', '커피' 등 선택
+        'initial_capital': 0,  # 만원 (1억)
+        'preference': '',
+        'franchise_fee_concern': '',  # 가맹비 신경 쓰는 정도
+        'trending_industry_preference': '보통',  # 유행 업종 선호도
+        'sales_importance': '보통',  # 매출액 중요도
+        'closure_rate_concern': '보통',  # 폐업률 신경 정도
+        'competition_confidence': '보통'  # 경쟁 자신감
+    }
+
+    # simulation_response가 None인지 확인
+    if simulation_response is None:
+        print("Error: simulation_response is None.")
+        return user_data
+
+    # simulation_response가 어떤 구조로 넘어오는지 확인
+    print(f"Received simulation_response: {simulation_response}")
+
+    # 'answer' 필드가 simulation_response에 있는지 확인
+    if 'answer' in simulation_response:
+        answer = simulation_response['answer']
+        print(f"Answer found in simulation_response: {answer}")
+    else:
+        print("Error: 'answer' key not found in simulation_response")
+        return user_data
+
+    # 지역 (district + neighborhoods) 처리 부분
+    try:
+        district = answer.get('0', {}).get('district', '알 수 없음')  # 기본값 '알 수 없음' 설정
+        neighborhoods = answer.get('0', {}).get('neighborhoods', '알 수 없음')  # 기본값 '알 수 없음' 설정
+        user_data['region'] = f"서울시, {district}, {neighborhoods}"
+        print(f"Region updated to: {user_data['region']}")
+    except KeyError as e:
+        print(f"KeyError in region update: {e}")
+
+    # 월세
+    try:
+        user_data['monthly_rent'] = int(answer.get('1', {}).get('text', '0'))  # '300' -> 300
+        print(f"Monthly rent updated to: {user_data['monthly_rent']}")
+    except KeyError as e:
+        print(f"KeyError in monthly_rent update: {e}")
+
+    # 보증금
+    try:
+        user_data['deposit'] = int(answer.get('2', {}).get('text', '0'))  # '10000' -> 10000
+        print(f"Deposit updated to: {user_data['deposit']}")
+    except KeyError as e:
+        print(f"KeyError in deposit update: {e}")
+
+    # 업종 (category + subcategories)
+    try:
+        category = answer.get('3', {}).get('category', '')
+        subcategories = answer.get('3', {}).get('subcategories', '')  # 기본값으로 빈 문자열 설정
+        user_data['industry'] = f"{category}, {subcategories}".strip(', ')
+        print(f"Industry updated to: {user_data['industry']}")
+    except KeyError as e:
+        print(f"KeyError in industry update: {e}")
+
+    # 초기 자본금
+    try:
+        user_data['initial_capital'] = int(answer.get('4', {}).get('text', '0'))
+        print(f"Initial capital updated to: {user_data['initial_capital']}")
+    except KeyError as e:
+        print(f"KeyError in initial_capital update: {e}")
+
+    # 프랜차이즈 선호도
+    try:
+        user_data['preference'] = answer.get('5', {}).get('text', '')
+        print(f"Preference updated to: {user_data['preference']}")
+    except KeyError as e:
+        print(f"KeyError in preference update: {e}")
+
+    # 가맹비 신경 정도
+    try:
+        user_data['franchise_fee_concern'] = answer.get('6', {}).get('text', '')
+        print(f"Franchise fee concern updated to: {user_data['franchise_fee_concern']}")
+    except KeyError as e:
+        print(f"KeyError in franchise_fee_concern update: {e}")
+
+    # 유행 업종 선호도
+    try:
+        user_data['trending_industry_preference'] = answer.get('7', {}).get('text', '')
+        print(f"Trending industry preference updated to: {user_data['trending_industry_preference']}")
+    except KeyError as e:
+        print(f"KeyError in trending_industry_preference update: {e}")
+
+    # 매출액 중요도
+    try:
+        user_data['sales_importance'] = answer.get('8', {}).get('text', '')
+        print(f"Sales importance updated to: {user_data['sales_importance']}")
+    except KeyError as e:
+        print(f"KeyError in sales_importance update: {e}")
+
+    # 폐업률 신경 정도
+    try:
+        user_data['closure_rate_concern'] = answer.get('9', {}).get('text', '')
+        print(f"Closure rate concern updated to: {user_data['closure_rate_concern']}")
+    except KeyError as e:
+        print(f"KeyError in closure_rate_concern update: {e}")
+
+    # 경쟁 자신감
+    try:
+        user_data['competition_confidence'] = answer.get('10', {}).get('text', '')
+        print(f"Competition confidence updated to: {user_data['competition_confidence']}")
+    except KeyError as e:
+        print(f"KeyError in competition_confidence update: {e}")
+
+    return user_data
+
+
 
 # MongoDB 클라이언트 설정
 client = MongoClient(MONGO_URI)
-db = client[DB_NAME]
-collection = db[COLLECTION_NAME]
-
-
+db = client[MONGO_DB_NAME]
 
 KAKAO_API_KEY = os.getenv("KAKAO_API_KEY")
 DB_HOST = os.getenv("DB_HOST")
@@ -54,28 +193,12 @@ kakao_api_key = os.getenv('KAKAO_API_KEY')
 # 11. 근처에 같은 브랜드 매장과 경쟁 할 자신 있으신가요?
 # 사용자 입력 데이터
 
-user_data = {
-    'region': '서울시, 강남구, 역삼동',
-    'monthly_rent': 300,  # 만원
-    'deposit': 10000,  # 만원 (1억)
-    'industry': '외식업, 커피',  # '치킨', '커피' 등 선택
-    'initial_capital': 20000,  # 만원 (1억)
-    'preference': '프랜차이즈',
-    'franchise_fee_concern': '매우 아니다', #7 가맹비
-    'trending_industry_preference': '보통', #8 유행업종
-    'sales_importance': '보통', #9 매출액
-    'closure_rate_concern': '매우 그렇다', #10 폐업률
-    'competition_confidence': '매우 아니다' #11 경쟁 할 자신? 
-}
-
-# 새로 생성할 simulation_response_id
-simulation_response_id = str(uuid.uuid4())  # UUID 생성
 
 # 삽입할 데이터를 정의 (주어진 임시 JSON 데이터)
 simulation_data = {
     "user_id": "test123",
-    "simulation_response_id": simulation_response_id,
-    "created_at": "2024-10-11T08:20:48.680Z",
+    "simulation_response_id": "",
+    "created_at": "",
     "_class": "com.kb.simulation.dto.report.ResponseReport",
     "plno_list": [43577, 43588, 43608],
     "brand_name": "청년치킨",
@@ -135,22 +258,22 @@ simulation_data = {
 
 
 
-# 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
-gu = user_data['region'].split(', ')[1]  # '강남구'
-dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
+# # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
+# gu = user_data['region'].split(', ')[1]  # '강남구'
+# dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
 
-# 산업 카테고리에서 필요한 부분만 추출 ('치킨', '커피' 등)
-industry_category = user_data['industry'].split(', ')[1]  # '치킨' 부분만 추출
+# # 산업 카테고리에서 필요한 부분만 추출 ('치킨', '커피' 등)
+# industry_category = user_data['industry'].split(', ')[1]  # '치킨' 부분만 추출
 
-# .csv 파일 경로 설정
-csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1', f'{industry_category}_franchise_data_with_trend_10plus.csv')
+# # .csv 파일 경로 설정
+# csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1', f'{industry_category}_franchise_data_with_trend_10plus.csv')
 
-# .csv 파일이 존재하는지 확인 후 읽기
-if os.path.exists(csv_file_path):
-    df = pd.read_csv(csv_file_path)
-    print(f"{industry_category} 업종에 해당하는 데이터를 성공적으로 불러왔습니다.")
-else:
-    print(f"{csv_file_path} 파일을 찾을 수 없습니다.")
+# # .csv 파일이 존재하는지 확인 후 읽기
+# if os.path.exists(csv_file_path):
+#     df = pd.read_csv(csv_file_path)
+#     print(f"{industry_category} 업종에 해당하는 데이터를 성공적으로 불러왔습니다.")
+# else:
+#     print(f"{csv_file_path} 파일을 찾을 수 없습니다.")
 
 
 def process_csv_file(df_filtered, category):
@@ -158,7 +281,7 @@ def process_csv_file(df_filtered, category):
     columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'average_sales', 'average_sales_per_area', 
                'initial_cost', 'business_fee', 'interior_cost', 'standard_store_area']
 
-    df_filtered = df[columns].copy()
+    df_filtered = df_filtered[columns].copy()
 
     # 스케일링 이전 원래 값 저장 (복원용)
     original_values = df_filtered.copy()
@@ -358,6 +481,7 @@ def get_property_listings():
                 AND addr LIKE %s                  -- 주소 필터 적용 (주소에서 강남구 역삼 포함)
                 AND add_tnth_wunt_amt <= %s       -- 사용자 입력 월세 필터
                 AND bsc_tnth_wunt_amt <= %s       -- 사용자 입력 보증금 필터
+                AND is_first_floor =1
             ORDER BY 
                 atcl_reg_dttm DESC;  -- 정렬
             """
@@ -624,7 +748,29 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
+    simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b")
+    user_data=update_user_data_from_response(simulation_response)
 
+    # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
+    if 'region' in user_data and len(user_data['region'].split(', ')) >= 3:
+        gu = user_data['region'].split(', ')[1].strip()  # '강남구' 공백 제거
+        dong_prefix = user_data['region'].split(', ')[2].strip()[:2]  # '역삼' 공백 제거
+        print(f"구: {gu}, 동: {dong_prefix}")
+    else:
+        print("Error: Invalid region format in user_data['region']")
+
+    # gu = ''  # 기본값 설정
+    # dong_prefix = ''  # 기본값 설정
+
+    # 3. 산업 카테고리에서 필요한 부분만 추출 ('치킨', '커피' 등)
+    if ', ' in user_data['industry']:
+        industry_category = user_data['industry'].split(', ')[1].strip()  # '치킨' 부분만 추출
+    else:
+        industry_category = user_data['industry'].strip()  # 공백 제거 후 industry 그대로 사용
+
+    print(f"Industry category: {industry_category}")
+
+    
     # 0. 사용자 입력에 따른 CSV 파일 처리 (프랜차이즈 랭킹 매기기)
     csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1', f'{industry_category}_franchise_data_with_trend_10plus.csv')
     
