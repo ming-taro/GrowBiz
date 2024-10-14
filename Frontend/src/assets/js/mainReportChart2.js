@@ -8,7 +8,6 @@ export const data_bar2 = (data) => ({
       data: [
         3.77, // 업종 평균 개업률
         1.73, // 업종 평균 폐업률 recommended_brand_opening_rate_average
-
       ],
     },
     {
