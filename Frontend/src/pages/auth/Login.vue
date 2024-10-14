@@ -70,7 +70,7 @@
             </div>
           </div>
         </form>
-        <div class="row g-2">
+        <!-- <div class="row g-2">
           <div class="col-sm-6">
             <a href="#" class="btn btn-neutral w-100"
               ><span class="icon icon-sm pe-2"
@@ -85,7 +85,7 @@
               >Google</a
             >
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -119,6 +119,7 @@ const login = async () => {
     }
   } catch (e) {
     console.log('error', e);
+    alert(e.response.data);
     error.value = e.response.data;
   }
 };

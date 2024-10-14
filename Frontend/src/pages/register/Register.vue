@@ -60,6 +60,9 @@
               <p v-if="isDuplicate" class="text-danger small">
                 해당 아이디는 이미 사용 중입니다.
               </p>
+              <p v-if="isAvailable" class="text-success small">
+                사용 가능한 아이디입니다.
+              </p>
             </div>
             <div class="col-sm-12">
               <label for="password" class="form-label">사용자 비밀번호</label>
@@ -124,7 +127,7 @@
           </div>
         </form>
 
-        <div class="row g-2">
+        <!-- <div class="row g-2">
           <div class="col-sm-6">
             <a href="#" class="btn btn-neutral w-100"
               ><span class="icon icon-sm pe-2"
@@ -139,7 +142,7 @@
               >Google</a
             >
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -159,6 +162,7 @@ const form = ref({
 });
 
 const isDuplicate = ref(false);
+const isAvailable = ref(false);
 const router = useRouter();
 
 const isFormValid = computed(() => {
@@ -179,6 +183,7 @@ const checkDuplicate = async () => {
       `http://localhost:8080/api/member/checkid/${form.value.id}`
     );
     isDuplicate.value = response.data; // 중복 여부 설정
+    isAvailable.value = !isDuplicate.value;
   } catch (error) {
     console.error('중복 확인 실패:', error);
   }

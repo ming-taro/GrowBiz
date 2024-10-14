@@ -4,6 +4,7 @@ import com.kb.common.util.UploadFiles;
 import com.kb.member.dto.ChangePasswordDTO;
 import com.kb.member.dto.Member;
 import com.kb.member.dto.MemberDTO;
+import com.kb.member.dto.RegisterMemberDTO;
 import com.kb.member.service.MemberService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class MemberController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Member> join(MemberDTO memberDTO,
+    public ResponseEntity<Member> join(RegisterMemberDTO memberDTO,
                                        @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
         Member member = memberDTO.toMember();
 

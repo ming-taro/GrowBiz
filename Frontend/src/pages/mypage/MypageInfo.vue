@@ -52,6 +52,7 @@
                     <a
                       class="nav-link fw-semibold py-2 px-0"
                       href="account-signin.html"
+                      @click="logout"
                       ><i class="fa-solid fa-right-from-bracket me-3"></i
                       >로그아웃</a
                     >
@@ -340,6 +341,26 @@
               </div>
             </div>
           </section>
+
+          <h1 class="h2 mt-10">계정 삭제</h1>
+          <section class="card border-0 py-1 p-md-2 p-xl-3 p-xxl-4 mb-4 mt-3">
+            <div class="card-body">
+              <span class="text me-3">
+                <h4>주의할 점</h4>
+                <br />
+                <p>계정을 삭제하면 모든 데이터가 손실됩니다.</p>
+              </span>
+              <span class="d-flex justify-content-end pt-3">
+                <button
+                  class="btn btn-danger ms-3"
+                  type="button"
+                  @click="deleteAccount"
+                >
+                  계정 삭제하기
+                </button>
+              </span>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -465,22 +486,6 @@ const saveProfile = async () => {
   }
 };
 
-const newNickname = ref('');
-
-const changeNickname = () => {
-  if (newNickname.value) {
-    const memberInfo = {
-      id: authStore.state.id, // 기존의 ID 값을 가져오기
-      password: authStore.state.password, // 기존의 비밀번호 값을 가져오기
-      name: newNickname.value,
-      email: authStore.state.email, // 기존의 이메일 값을 가져오기
-    };
-    authStore.changeProfileName(memberInfo);
-    alert('닉네임이 변경되었습니다');
-  } else {
-    alert('닉네임을 입력해주세요.');
-  }
-};
 const changePassword = () => {
   // oldPassword, newPassword1, newPassword2가 모두 존재하고 newPassword1과 newPassword2가 같을 때
 
@@ -526,6 +531,32 @@ const resetPasswordFields = () => {
   oldPassword.value = '';
   newPassword1.value = '';
   newPassword2.value = '';
+};
+const logout = (event) => {
+  event.preventDefault(); // 기본 동작(페이지 리로딩) 막기
+  console.log('logout'); // 로그아웃 클릭 로그 확인
+  authStore.logout();
+  router.push('/');
+};
+const deleteAccount = async () => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/member/${authStore.id}`
+    );
+    // 성공적으로 삭제된 경우의 처리
+    console.log('Account deleted:', response.data);
+    alert('계정이 성공적으로 삭제되었습니다.');
+    router.push('/');
+
+    // 추가적인 후속 작업 (예: 로그아웃, 페이지 리디렉션 등)
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    if (error.response) {
+      alert(`계정 삭제에 실패했습니다: ${error.response.data}`);
+    } else {
+      alert('네트워크 오류 또는 요청 오류 발생');
+    }
+  }
 };
 getMemberData();
 </script>
