@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     loadpage() {
-      if (mno != undefined) {
+      if (mno != '') {
         this.isActive = false;
         id = mno;
       } else {

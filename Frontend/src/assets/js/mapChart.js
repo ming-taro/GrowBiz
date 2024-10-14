@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const id = '1234';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
+
+var id = '1234';
 
 // 혼합 차트 데이터
 export let mixed_data = {
@@ -89,7 +95,16 @@ export const mixed_options2 = {
 
 // 데이터 가져오는 함수
 export async function fetchChartData(loanRepaymentStatus) {
-  const response = await axios.get(`/api/kmap/member/${id}`);
+  if (mno != '') {
+    id = mno;
+  }
+  let response = await axios.get(`/api/kmap/member/${id}`);
+
+  if (response.data.length == 0) {
+    id = mno;
+    response = await axios.get(`/api/kmap/member/${id}`);
+  }
+
   const dongname = response.data.dongname;
   const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
@@ -111,7 +126,7 @@ export async function fetchChartData(loanRepaymentStatus) {
 
   // 그 후 datasets[1].data에 mcfirstdata의 값을 설정
   mixed_data2.datasets[1].data = mcfirstdata.map(
-    (item) => item.mdwkSelngAmt / 1000
+    (item) => item.mdwkSelngAmt / 150
   );
 
   // const mixchart = await axios.get(`/api/chart/mixchart`);
@@ -140,6 +155,6 @@ export async function fetchChartData(loanRepaymentStatus) {
 
   mixed_data.datasets[0].data = Array(mcfirstdata.length).fill(sum.data.amount);
   mixed_data.datasets[1].data = mcfirstdata.map(
-    (item) => item.thsmonSelngAmt / 700
+    (item) => item.thsmonSelngAmt / 100
   );
 }

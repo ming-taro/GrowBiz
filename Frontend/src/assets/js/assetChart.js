@@ -1,8 +1,13 @@
 import axios from 'axios';
 
+import { useAuthStore } from '@/stores/auth';
 // assets/js/assetChart.js
 
-const id = '1234';
+var id = '1234';
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
 
 // 도넛 차트 데이터
 export let asset_data_doughnut = {
@@ -116,7 +121,17 @@ export const mixed_options = {
 
 // 데이터 가져오는 함수
 export async function fetchChartData(loanRepaymentStatus) {
-  const response = await axios.get(`/api/kmap/member/${id}`);
+  if (mno != '') {
+    id = mno;
+  }
+
+  let response = await axios.get(`/api/kmap/member/${id}`);
+
+  if (response.data.length == 0) {
+    id = '1234';
+    response = await axios.get(`/api/kmap/member/${id}`);
+  }
+
   const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
   const doughnut = await axios.get(`/api/chart/doughnut/${svcIndutyCdNm}`);
@@ -151,8 +166,6 @@ export async function fetchChartData(loanRepaymentStatus) {
     }
     return acc;
   }, {});
-
-  console.log(firstData + 'ASDF');
 
   mixed_data.labels = firstData.map((item) => item.categoryName);
 

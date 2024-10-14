@@ -25,7 +25,7 @@ const authStore = useAuthStore();
 
 const mno = authStore.state.mno;
 
-let id = '1234';
+let id = '';
 
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
       this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     },
     async fetchAddress() {
-      if (mno != undefined) {
+      if (mno != '') {
         this.isActive = false;
         id = mno;
       } else {

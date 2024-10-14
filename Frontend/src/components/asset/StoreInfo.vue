@@ -118,6 +118,8 @@ const authStore = useAuthStore();
 
 const mno = authStore.state.mno;
 
+let id = mno;
+
 export default {
   name: 'StoreInfo',
   setup() {
@@ -128,17 +130,25 @@ export default {
     const total = ref();
 
     const fetchStoreData = async () => {
-      try {
-        let response = await axios.get(`/api/kmap/member/${mno}`); // mno를 사용하여 사용자 데이터를 가져옴
+      if (id == '') {
+        id = 0;
+      }
 
-        disable.style.display = 'none';
+      try {
+        let response = await axios.get(`/api/kmap/member/${id}`);
+
+        console.log(response.data);
+
+        disable.style.display = '';
         if (response.data.length == 0) {
           const disable = document.getElementById('disable');
-
-          disable.style.display = '';
-          const id = '1234';
-          response = await axios.get(`/api/kmap/member/${id}`);
+          id = '1234';
+        } else {
+          id = mno;
+          disable.style.display = 'none';
         }
+
+        response = await axios.get(`/api/kmap/member/${id}`);
 
         const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
@@ -189,7 +199,7 @@ export default {
     // };
 
     const goToStoreReg = () => {
-      if (mno == undefined) {
+      if (mno == '') {
         router.push('/login');
       } else {
         router.push('/asset/storereg');
@@ -197,7 +207,9 @@ export default {
     };
 
     const goToUpdate = () => {
-      if (mno == undefined) {
+      if (mno == '') {
+        router.push('login');
+      } else if (id == '1234') {
         router.push('/asset/storereg');
       } else {
         router.push('/asset/storeupdate');
@@ -212,7 +224,7 @@ export default {
 
       blur_text.style.display = 'none';
 
-      if (mno == undefined) {
+      if (mno == '') {
         blur_text.style.display = '';
         blur_overlay.classList.add('blur-overlay');
         blur.classList.add('blur');
