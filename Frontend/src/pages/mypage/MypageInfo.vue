@@ -105,13 +105,15 @@
                   style="max-width: 212px"
                 >
                   <div class="d-flex justify-content-between fs-sm pb-1 mb-2">
-                    목표 월매출 달성<strong class="ms-2">62%</strong>
+                    목표 월매출 달성<strong class="ms-2"
+                      >{{ saleRate }}%</strong
+                    >
                   </div>
                   <div class="progress" style="height: 5px">
                     <div
                       class="progress-bar"
                       role="progressbar"
-                      style="width: 62%"
+                      :style="{ width: `${saleRate}%` }"
                       aria-valuenow="62"
                       aria-valuemin="0"
                       aria-valuemax="100"
@@ -138,7 +140,7 @@
                           월 매출액
                         </td>
                         <td class="border-0 text-dark fw-medium py-1 ps-3 fs-6">
-                          100,000,000 ₩
+                          ₩ {{ formattedSaleAmount }}
                         </td>
                       </tr>
                       <tr>
@@ -237,8 +239,9 @@
                   >
                   <input
                     class="form-control"
-                    type="number"
-                    v-model="memberEdit.goalAmount"
+                    type="text"
+                    v-model="formattedGoalAmount"
+                    @input="updateGoalAmount($event.target.value)"
                   />
                 </div>
                 <div class="col-12">
@@ -558,7 +561,62 @@ const deleteAccount = async () => {
     }
   }
 };
-getMemberData();
+
+const saleAmount = ref(10000000);
+
+// const fetchSaleAmount = async () => {
+//   const id = authStore.id; // ID 가져오기
+
+//   try {
+//     // 첫 번째 API 호출
+//     const response = await axios.get(`/api/kmap/member/${id}`);
+
+//     // 서비스 산업 코드 이름 가져오기
+//     const svcIndutyCdNm = response.data.svcIndutyCdNm;
+
+//     // 두 번째 API 호출
+//     const sumResponse = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
+
+//     // saleAmount 값 설정
+//     saleAmount.value = sumResponse.data.amount;
+
+//     console.log(saleAmount.value); // saleAmount 값 확인
+//   } catch (error) {
+//     console.error('API 요청 중 오류 발생:', error);
+//   }
+// };
+
+// 반점으로 구분된 문자열을 반환하는 computed 속성
+const formattedSaleAmount = computed(() => {
+  return saleAmount.value.toLocaleString(); // 숫자를 반점으로 구분된 문자열로 변환
+});
+
+const formattedGoalAmount = computed(() => {
+  return memberEdit.value.goalAmount.toLocaleString(); // 숫자를 반점으로 구분된 문자열로 변환
+});
+
+const updateGoalAmount = (value) => {
+  // 숫자가 아닌 경우에는 빈 문자열로 설정
+  const numberValue = value.replace(/[^0-9]/g, ''); // 숫자만 남기기
+  memberEdit.value.goalAmount = numberValue ? parseInt(numberValue, 10) : 0; // 변환하여 저장
+};
+
+// saleRate를 computed로 정의
+const saleRate = computed(() => {
+  // goalAmount가 0이 아닐 때만 계산
+  return memberEdit.value.goalAmount > 0
+    ? saleAmount.value / memberEdit.value.goalAmount
+    : 0;
+});
+
+// 호출 순서에 맞게 함수 실행
+const loadData = async () => {
+  await getMemberData(); // 회원 데이터 가져오기
+  // await fetchSaleAmount(); // 판매 금액 가져오기
+};
+
+// loadData 호출
+loadData();
 </script>
 
 <style scoped>
