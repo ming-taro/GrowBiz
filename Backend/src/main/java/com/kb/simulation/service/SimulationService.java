@@ -8,6 +8,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,5 +43,32 @@ public class SimulationService {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
         return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
+    }
+
+
+
+    public int executeSimulation(String id) {
+        StringBuilder result = new StringBuilder();
+        try {
+            File workingDirectory = new File("C:/Users/student/Desktop/final/self-employed/AI_Models/AI/");
+            String scriptPath = "ts_report.py";
+
+            ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
+            processBuilder.directory(workingDirectory);
+            processBuilder.redirectErrorStream(true);
+
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                result.append(line);
+            }
+            return process.waitFor();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
