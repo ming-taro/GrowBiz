@@ -252,7 +252,13 @@
                   ></textarea>
                 </div>
                 <div class="col-12 d-flex justify-content-end pt-3">
-                  <button class="btn btn-dark" type="button">취소하기</button>
+                  <button
+                    class="btn btn-dark"
+                    type="button"
+                    @click="resetMemberEdit"
+                  >
+                    취소하기
+                  </button>
                   <button
                     class="btn btn-primary ms-3"
                     type="button"
@@ -317,7 +323,13 @@
                 </p>
               </div>
               <div class="d-flex justify-content-end pt-3">
-                <button class="btn btn-dark" type="button">취소하기</button>
+                <button
+                  class="btn btn-dark"
+                  type="button"
+                  @click="resetPasswordFields"
+                >
+                  취소하기
+                </button>
                 <button
                   class="btn btn-primary ms-3"
                   type="button"
@@ -500,6 +512,16 @@ const changePassword = () => {
       authStore.alertMessage = '새 비밀번호가 일치하지 않습니다.';
     }
   }
+};
+// 버튼 클릭 시 memberEdit 값을 member 값으로 초기화하는 메서드
+const resetMemberEdit = () => {
+  memberEdit.value = { ...member.value }; // member 값을 memberEdit으로 복사
+};
+// 비밀번호 입력 필드를 초기화하는 메서드
+const resetPasswordFields = () => {
+  oldPassword.value = '';
+  newPassword1.value = '';
+  newPassword2.value = '';
 };
 getMemberData();
 </script>
