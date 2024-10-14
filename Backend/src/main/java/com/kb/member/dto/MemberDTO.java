@@ -29,6 +29,8 @@ public class MemberDTO {
     public Member toMember() {
         Member member = new Member();
         member.setName(this.name);
+        member.setMno(this.mno);
+        member.setId(this.id);
         member.setEmail(this.email);
         member.setPhone(this.phone);
         member.setGoalAmount(this.goalAmount);

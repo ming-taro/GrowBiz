@@ -15,4 +15,5 @@ public class CategoriesDTO {
     private String categoryName;
     private java.sql.Date insertDate;
     private long amount;
+    private String svcIndutyCdNm;
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.Doc;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,6 +30,9 @@ public class SimulationController {
     @GetMapping("/question")
     public ResponseEntity<List<Question>> findQuestions() {
         List<Question> storeQuestions = service.findQuestions();
+
+        storeQuestions.sort((o1, o2) -> o1.getInd() - o2.getInd());
+
         if (storeQuestions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -56,5 +60,18 @@ public class SimulationController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity<Integer> executeSimulation(@RequestBody Map<String, String> requestBody) {
+        String id = requestBody.get("id");
+        System.out.println("확인할값: " + id);
+        int exitCode = simulationService.executeSimulation(id);
+        System.out.println("exit code: " + exitCode);
+
+        if (exitCode != 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(exitCode);
     }
 }

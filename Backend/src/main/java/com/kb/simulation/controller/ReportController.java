@@ -5,8 +5,15 @@ import com.kb.simulation.dto.report.ResponseReport;
 import com.kb.simulation.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

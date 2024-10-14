@@ -49,16 +49,16 @@ export const store_barOptions = {
 export async function fetchChartData(loanRepaymentStatus) {
   try {
     const response = await axios.get(`/api/kmap/member/${id}`);
-    const dongname = response.data.dongname;
+    const svcIndutyCdNm = response.data.svcIndutyCdNm;
 
-    const doughnut = await axios.get(`/api/chart/doughnut`);
+    const doughnut = await axios.get(`/api/chart/doughnut/${svcIndutyCdNm}`);
 
     const sortedData = doughnut.data.sort((a, b) => b.amount - a.amount);
 
     // 데이터 설정
     store_data_bar.labels = sortedData.map((item) => item.categoryName);
 
-    const mixchart = await axios.get(`/api/chart/mixchart`);
+    const mixchart = await axios.get(`/api/chart/mixchart/${svcIndutyCdNm}`);
 
     const firstData = [];
     const secondData = [];

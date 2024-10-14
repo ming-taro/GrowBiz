@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,12 +80,15 @@ public class MemberController {
         service.changePassword(changePassword);
         return ResponseEntity.ok().build();
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<Member> changeProfile(MemberDTO memberDTO,
                 @RequestParam(name = "avatar", required = false) MultipartFile avatar) throws IllegalAccessException {
         Member member = memberDTO.toMember();
         System.out.println(member);
         System.out.println(avatar);
+
+
         return ResponseEntity.ok(service.update(member, avatar));
     }
 //    @PutMapping("/{id}")

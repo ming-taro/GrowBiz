@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 헤더 -->
-    <Result v-if="report != null" v-bind:simulation_response_id=report.simulation_response_id />
+    <Result v-if="report != null" v-bind:simulation_response_id=report.simulation_response_id
+      :brand_name=report.brand_name />
 
 
     <!-- 그래프 -->
@@ -13,7 +14,7 @@
 
     <!-- 추천 위치 -->
     <div class="container mw-screen-xl mb-8 mt-8">
-    <Location v-if="location != null" v-bind:location=location :plno_list=report.plno_list />
+      <Location v-if="location != null" v-bind:location=location :plno_list=report.plno_list />
     </div>
 
     <!-- 그래프 및 유동인구-->

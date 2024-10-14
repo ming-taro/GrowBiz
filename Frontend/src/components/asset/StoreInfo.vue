@@ -140,7 +140,9 @@ export default {
           response = await axios.get(`/api/kmap/member/${id}`);
         }
 
-        const sum = await axios.get(`/api/chart/sum`);
+        const svcIndutyCdNm = response.data.svcIndutyCdNm;
+
+        const sum = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
 
         amount.value = sum.data.amount;
 

@@ -1,68 +1,21 @@
 <template>
-  <footer class="pt-24 pb-10 fo-visible">
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <div class="pe-5">
-            <h3 class="h2 text-heading fw-semibold lh-lg mb-3">
-              KB IT’s Your Life 5기<br />
-            </h3>
-            <a href="mailto:hello@company.com" class="h3 text-primary">
-              자영업자 키우기: T라미숙해
-              <span class="svg-icon svg-align-baseline ms-3">
-                <i class="bi bi-arrow-right"></i>
-              </span>
-            </a>
-          </div>
-          <div class="my-7">
-            <a href="#" class="btn btn-dark">문의하기</a>
-          </div>
-        </div>
+  <footer class="pt-24 pb-10 fo-visible text-muted">
+    <!-- 배경을 약간 밝게 조정 -->
+    <div class="container mx-auto px-4">
+      <!-- 필수 데이터 -->
+      <div class="mb-8">
+        <p class="text-sm">프로젝트명: 자영업자 키우기</p>
+        <p class="text-sm">교육명: KB IT's your life 5기</p>
+        <p class="text-sm">팀명: 티라미숙해</p>
+        <p class="text-sm">
+          깃허브 주소: https://github.com/gunho30811/self-employed.git
+        </p>
+        <p class="text-sm">연락처: jonghyun6123@gmail.com</p>
       </div>
-      <div class="row mt-5 mb-7">
-        <div class="col">
-          <ul class="nav mx-n4">
-            <li class="nav-item">
-              <a
-                href="#"
-                class="nav-link text-lg text-muted text-primary-hover"
-              >
-                <i class="bi bi-twitter"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#"
-                class="nav-link text-lg text-muted text-primary-hover"
-              >
-                <i class="bi bi-dribbble"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#"
-                class="nav-link text-lg text-muted text-primary-hover"
-              >
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="#"
-                class="nav-link text-lg text-muted text-primary-hover"
-              >
-                <i class="bi bi-youtube"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-auto">
-          <p class="text-sm text-muted">
-            &copy; Copyright 2024 KB IT's Your Life 5기 - T라미숙해
-          </p>
-        </div>
+
+      <!-- 저작권 및 기타 정보 -->
+      <div class="border-t border-gray-600 pt-4 text-center">
+        <p class="text-sm">&copy; 2024 자영업자 키우기. All rights reserved.</p>
       </div>
     </div>
   </footer>
