@@ -21,13 +21,14 @@ public class ChartController {
     @Autowired
     private ChartService chartService;
 
-    @GetMapping("/doughnut")
+    @GetMapping("/doughnut/{svcIndutyCdNm}")
     public List<CategoriesDTO> getAddress(CategoriesDTO categoriesDTO) {
         return chartService.getDoughnut(categoriesDTO);
     }
 
-    @GetMapping("/mixchart")
+    @GetMapping("/mixchart/{svcIndutyCdNm}")
     public List<CategoriesDTO> getMixAddress(CategoriesDTO categoriesDTO) {
+
         return chartService.getMixAddress(categoriesDTO);
     }
 
@@ -42,12 +43,12 @@ public class ChartController {
         return chartService.getmcfirst(salesInfoDTO);
     }
 
-    @GetMapping("/mcsecend")
+    @GetMapping("/mcsecend/{svcIndutyCdNm}")
     public List<CategoriesDTO> getmcsecend(CategoriesDTO categoriesDTO) {
         return chartService.getmcsecend(categoriesDTO);
     }
 
-    @GetMapping("sum")
+    @GetMapping("/sum/{svcIndutyCdNm}")
     public CategoriesDTO getsum(CategoriesDTO categoriesDTO) {
         return chartService.getsum(categoriesDTO);
     }
