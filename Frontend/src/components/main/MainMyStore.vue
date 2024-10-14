@@ -1,7 +1,7 @@
 <template lang="">
   <div class="container mb-10">
     <div style="display: flex; align-items: flex-end" class="mb-5">
-      <h2 style="font-weight: bold">가계관리</h2>
+      <h2 style="font-weight: bold">가게관리</h2>
       <p style="margin-left: 20px">회원님의 자산 현황을 확인해 보세요.</p>
     </div>
     <div class="row">
@@ -101,7 +101,15 @@ const total = ref();
 
 const fetchStoreData = async () => {
   try {
-    let response = await axios.get(`/api/kmap/member/${mno}`);
+    var id = '';
+
+    if (mno == undefined) {
+      id = '1234';
+    } else {
+      id = mno;
+    }
+
+    let response = await axios.get(`/api/kmap/member/${id}`);
     const sum = await axios.get(`/api/chart/sum`);
 
     amount.value = sum.data.amount;

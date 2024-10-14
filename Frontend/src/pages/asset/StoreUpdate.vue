@@ -62,7 +62,7 @@
         <div style="width: 40%">
           <div class="photo-area" @click="triggerFileInput">
             <img
-              :src="imageUrl"
+              :src="'/src/assets/img/upload/' + imageUrl"
               alt="미리보기"
               class="photo-preview"
               v-if="imageUrl"

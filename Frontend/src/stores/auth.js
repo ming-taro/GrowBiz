@@ -3,12 +3,23 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 
 const initState = {
+  mno: '',
   id: '',
   name: '',
   email: '',
   roles: [],
   token: '',
 };
+
+const member = ref({
+  mno: '',
+  name: '',
+  email: '',
+  phone: '',
+  goalAmount: 0,
+  message: '',
+  gender: '',
+});
 
 export const useAuthStore = defineStore('auth', () => {
   const state = ref({ ...initState });
@@ -22,9 +33,11 @@ export const useAuthStore = defineStore('auth', () => {
   // 따라서 computed 함수는 사용자가 로그인 상태인지 (id 있는지) 여부를 계산하여
   // isLogin이라는 계산된 속성에 할당
 
+  const mno = computed(() => state.value.mno);
   const id = computed(() => state.value.id);
   const name = computed(() => state.value.name);
   const email = computed(() => state.value.email);
+  const phone = computed(() => state.value.phone);
 
   const load = () => {
     const auth = localStorage.getItem('auth');
@@ -141,9 +154,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     state,
+    mno,
     id,
     name,
     email,
+    phone,
     isLogin,
     changeProfile,
     changeProfileName,

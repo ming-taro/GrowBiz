@@ -19,22 +19,23 @@
                 <div class="pb-2 pb-lg-0 mb-4 mb-lg-5">
                   <img
                     class="d-block rounded-circle mb-2"
-                    src="@/assets/img/people/img-1.jpg"
+                    :src="profileImageUrl"
                     width="80"
                     alt="Isabella Bocouse"
                   />
-                  <h4 class="h4 mb-1 fw-bold">최종현</h4>
-                  <p class="fs-sm text-muted mb-0">wwhdgus112@example.com</p>
+                  <h4 class="h4 mb-1 fw-bold">{{ member.name }}</h4>
+                  <p class="fs-sm text-muted mb-0">{{ member.email }}</p>
                   <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
                     <h4
                       class="fs-xs fw-medium text-muted text-uppercase pb-1 mb-2 mt-10"
                     >
                       Account
                     </h4>
-                    <a
-                      class="nav-link fw-semibold py-2 px-0 active"
-                      href="account-overview.html"
-                      ><i class="fa-regular fa-user me-3"></i> 내 정보</a
+                    <RouterLink
+                      class="nav-link fw-semibold py-2 px-0"
+                      to="/mypageInfo#myInfo"
+                      ><i class="fa-regular fa-user me-3"></i> 내
+                      정보</RouterLink
                     ><a
                       class="nav-link fw-semibold py-2 px-0"
                       href="#edit-section"
@@ -51,8 +52,8 @@
                     <a
                       class="nav-link fw-semibold py-2 px-0"
                       href="account-signin.html"
-                      ><i class="fa-solid fa-right-from-bracket me-3"></i>Sign
-                      out</a
+                      ><i class="fa-solid fa-right-from-bracket me-3"></i
+                      >로그아웃</a
                     >
                   </nav>
                 </div>
@@ -62,7 +63,7 @@
         </aside>
         <!-- Page content-->
         <div class="col-lg-9 pt-1 pb-2 pb-sm-4">
-          <h1 class="h2">내 정보</h1>
+          <h1 class="h2" id="myInfo">내 정보</h1>
           <!-- Basic info-->
           <section class="card mt-3">
             <div class="card-body">
@@ -79,18 +80,18 @@
                 <div class="d-sm-flex align-items-center">
                   <img
                     class="d-block rounded-circle mb-2"
-                    src="@/assets/img/people/img-1.jpg"
+                    :src="profileImageUrl"
                     width="100"
                     alt="Isabella Bocouse"
                   />
                   <div class="pt-3 pt-sm-0 ps-sm-3">
-                    <h3 class="h4 mb-2 fw-bold">최종현</h3>
+                    <h3 class="h4 mb-2 fw-bold">{{ member.name }}</h3>
                     <div
                       class="text-muted fw-medium d-flex flex-wrap flex-sm-nowrap align-iteems-center"
                     >
                       <div class="d-flex align-items-center me-3">
                         <i class="fa-regular fa-envelope me-1"></i
-                        >email@example.com
+                        >{{ member.email }}
                       </div>
                       <div class="d-flex align-items-center text-nowrap">
                         <i class="fa-solid fa-location-dot me-1"></i>KOR
@@ -124,13 +125,16 @@
                       <tr>
                         <td class="border-0 text-muted py-1 px-0 fs-6">번호</td>
                         <td class="border-0 text-dark fw-medium py-1 ps-3 fs-6">
-                          010-5294-4460
+                          <span v-if="member.phone">{{ member.phone }}</span>
+                          <span v-else class="text-muted"
+                            >번호를 등록하세요.</span
+                          >
                         </td>
                       </tr>
 
                       <tr>
                         <td class="border-0 text-muted py-1 px-0 fs-6">
-                          매출액
+                          월 매출액
                         </td>
                         <td class="border-0 text-dark fw-medium py-1 ps-3 fs-6">
                           100,000,000 ₩
@@ -143,7 +147,10 @@
                         <td
                           class="border-0 text-muted fw-medium py-1 ps-3 fs-6"
                         >
-                          우리 동네 일등 음식점 가자!!
+                          <span v-if="member.message">{{
+                            member.message
+                          }}</span>
+                          <span v-else>상태 메세지를 등록하세요.</span>
                         </td>
                       </tr>
                     </tbody>
@@ -164,13 +171,7 @@
                     href="#"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                    style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url(/src/assets/img/people/img-1.jpg);
-                      background-size: cover; /* 이미지가 배경에 꽉 차도록 */
-                      background-position: center; /* 이미지가 가운데에 오도록 */
-                    "
+                    :style="`width: 80px; height: 80px; background-image: url(${computedImageUrl}); background-size: cover; background-position: center;`"
                   >
                     <span
                       class="d-block text-light text-center lh-1 pb-1"
@@ -181,14 +182,14 @@
                   </a>
 
                   <div class="dropdown-menu my-1">
-                    <a class="dropdown-item fw-normal" href="#"
-                      ><i class="ai-camera fs-base opacity-70 me-2"></i>이미지
-                      업로드하기</a
-                    ><a class="dropdown-item text-danger fw-normal" href="#"
-                      ><i class="ai-trash fs-base me-2"></i>이미지 삭제하기</a
-                    >
+                    <input
+                      type="file"
+                      @change="handleFileUpload"
+                      accept="image/png, image/jpeg"
+                    />
                   </div>
                 </div>
+
                 <div class="ps-3">
                   <h3 class="h6 mb-1">프로필 사진</h3>
                   <p class="fs-6 text-muted mb-0">
@@ -200,74 +201,64 @@
               <div class="row g-3 g-sm-4 mt-0 mt-lg-2">
                 <div class="col-sm-6">
                   <label class="form-label" for="fn">닉네임</label>
-                  <input class="form-control" type="text" id="fn" />
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="fn"
+                    v-model="memberEdit.name"
+                  />
                 </div>
 
                 <div class="col-sm-6">
                   <label class="form-label" for="email">이메일 주소</label>
-                  <input class="form-control" type="email" id="email" />
-                </div>
-                <div class="col-sm-6">
-                  <label class="form-label" for="phone">
-                    연락처 <span class="text-muted">(optional)</span>
-                  </label>
                   <input
                     class="form-control"
-                    type="tel"
-                    data-format='{"numericOnly": true, "delimiters": ["-"], "blocks": [3, 4, 4]}'
-                    placeholder="010-xxxx-xxxx"
-                    id="phone"
+                    type="email"
+                    id="email"
+                    v-model="memberEdit.email"
                   />
                 </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="phone"
-                    >목표 매출액
-                    <span class="text-muted">(optional)</span></label
+                    >연락처 <span class="text-muted">(선택)</span></label
                   >
-                  <input class="form-control" type="number" id="phone" />
+                  <input
+                    class="form-control"
+                    type="tel"
+                    placeholder="010-xxxx-xxxx"
+                    v-model="memberEdit.phone"
+                  />
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="goal"
+                    >목표 월 매출액
+                    <span class="text-muted">(선택)</span></label
+                  >
+                  <input
+                    class="form-control"
+                    type="number"
+                    v-model="memberEdit.goalAmount"
+                  />
                 </div>
                 <div class="col-12">
-                  <label class="form-label" for="bio">상태 메세지</label>
+                  <label class="form-label" for="bio"
+                    >상태 메세지 <span class="text-muted">(선택)</span></label
+                  >
                   <textarea
                     class="form-control"
                     rows="5"
+                    v-model="memberEdit.message"
                     placeholder="상태 메세지를 입력하세요."
-                    id="bio"
                   ></textarea>
                 </div>
-                <div
-                  class="col-12 d-sm-flex align-items-center pt-sm-2 pt-md-3"
-                >
-                  <div class="form-label text-muted mb-2 mb-sm-0 me-sm-4">
-                    Gender:
-                  </div>
-                  <div class="form-check form-check-inline mb-0">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="gender"
-                      value="Male"
-                      id="male"
-                    />
-                    <label class="form-check-label" for="male">남자</label>
-                  </div>
-                  <div class="form-check form-check-inline mb-0">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="gender"
-                      value="Female"
-                      checked
-                      id="female"
-                    />
-                    <label class="form-check-label" for="female">여자</label>
-                  </div>
-                </div>
-
                 <div class="col-12 d-flex justify-content-end pt-3">
-                  <button class="btn btn-dark" type="button">Cancel</button>
-                  <button class="btn btn-primary ms-3" type="button">
-                    Save changes
+                  <button class="btn btn-dark" type="button">취소하기</button>
+                  <button
+                    class="btn btn-primary ms-3"
+                    type="button"
+                    @click="saveProfile"
+                  >
+                    저장하기
                   </button>
                 </div>
               </div>
@@ -336,9 +327,9 @@
                 </p>
               </div>
               <div class="d-flex justify-content-end pt-3">
-                <button class="btn btn-dark" type="button">Cancel</button>
+                <button class="btn btn-dark" type="button">취소하기</button>
                 <button class="btn btn-primary ms-3" type="button">
-                  Save changes
+                  저장하기
                 </button>
               </div>
             </div>
@@ -413,9 +404,106 @@
 <script setup>
 import MypageHeader from '@/components/mypage/MypageHeader.vue';
 import { useAuthStore } from '@/stores/auth';
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 
 const authStore = useAuthStore();
+
+// 회원 정보를 저장할 변수 선언
+const member = ref({
+  img: null,
+  id: '',
+  mno: '',
+  name: '',
+  email: '',
+  phone: '',
+  goalAmount: 0,
+  message: '',
+  mno: '', // 회원 고유번호 (mno) 추가
+  gender: '',
+});
+const memberEdit = ref({
+  img: null,
+  id: authStore.id,
+  mno: authStore.mno,
+  name: '',
+  email: '',
+  phone: '',
+  goalAmount: 0,
+  message: '',
+  gender: '남자',
+});
+
+// 프로필 이미지 URL을 동적으로 설정하는 computed 속성
+const profileImageUrl = computed(() => {
+  console.log(authStore.id);
+  return authStore.id
+    ? `http://localhost:8080/api/member/${authStore.id}/avatar`
+    : 'src/assets/img/people/img-1.jpg'; // 기본 이미지 경로
+});
+
+// computed로 이미지 URL 결정
+const computedImageUrl = computed(() => {
+  return memberEdit.value.img || profileImageUrl.value; // 업로드한 이미지가 있으면 그 이미지, 없으면 기본 이미지
+});
+
+// API로부터 회원 데이터를 가져오는 함수
+const getMemberData = async () => {
+  try {
+    // authStore.mno로 회원 고유번호를 사용하여 API 요청
+    const response = await axios.get(
+      `http://localhost:8080/api/member/${authStore.id}`
+    );
+    member.value = response.data; // 응답 데이터를 member에 저장
+    console.log(member.value);
+  } catch (error) {
+    console.error('회원 정보를 불러오는 중 오류가 발생했습니다.', error);
+  }
+};
+
+// 파일 업로드 핸들러
+const handleFileUpload = (event) => {
+  const file = event.target.files[0]; // 선택된 파일
+  if (file) {
+    memberEdit.value.img = URL.createObjectURL(file); // 이미지 미리보기
+
+    memberEdit.value.avatarFile = file; // 파일 객체 저장
+  } else {
+    console.error('No file selected or file is invalid.');
+  }
+};
+
+// 프로필 저장 함수
+const saveProfile = async () => {
+  const formData = new FormData();
+  formData.append('mno', authStore.mno);
+  formData.append('id', authStore.id);
+  formData.append('name', memberEdit.value.name);
+  formData.append('email', memberEdit.value.email);
+  formData.append('phone', memberEdit.value.phone);
+  formData.append('goalAmount', memberEdit.value.goalAmount);
+  formData.append('message', memberEdit.value.message);
+  formData.append('gender', '남자'); // gender 추가
+  formData.append('avatar', memberEdit.value.avatarFile); // 파일 추가
+
+  try {
+    // ID를 가져오는 부분은 사용자의 고유 ID로 수정해야 합니다.
+    const id = authStore.id; // 예시로 회원 고유 번호를 사용
+    const response = await axios.put(
+      `http://localhost:8080/api/member/${id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    console.log('Profile updated:', response.data);
+  } catch (error) {
+    console.error('Error updating profile:', error);
+  }
+};
+
 const newNickname = ref('');
 const oldPassword = ref('');
 const newPassword1 = ref('');
@@ -462,6 +550,7 @@ const changePassword = () => {
     }
   }
 };
+getMemberData();
 </script>
 
 <style scoped>

@@ -21,11 +21,11 @@ from bson.objectid import ObjectId
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URI")
-client = MongoClient(MONGO_URI)
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
-db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
-simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
+# MONGO_URI = os.getenv("MONGO_URI")
+# client = MongoClient(MONGO_URI)
+# MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+# db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
+# simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
 
 def fetch_simulation_response_by_id(simulation_response_id):
     query = {"_id": ObjectId(simulation_response_id)}

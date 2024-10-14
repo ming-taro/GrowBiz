@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="title">
-      <div class="custom-line" />
-      추천 위치
-      <div class="custom-line" />
+    <div class="title-sm mt-5 mb-2 title-location">
+      <div class="custom-line"></div> <!-- Change here -->
+      <span class="title">추천 위치</span>
+      <div class="custom-line"></div> <!-- Change here -->
     </div>
     <div class="row">
       <div class="col-7">
@@ -11,13 +11,13 @@
       </div>
       <div class="col-5 d-flex justify-content-center align-content-center">
 
-        <div style="display: flex; flex-direction: column; overflow: auto; height: 400px">
-          <div v-if="plno_list" class="pl-3 pr-3" style="font-size: 20px">
+        <div style="display: flex; flex-direction: column; overflow: auto; height: 400px" class="scrollBar">
+          <div v-if="plno_list" class="pl-3 pr-3 pe-5" style="font-size: 20px">
             조회 결과 {{ props.plno_list.length }}건
             <hr />
           </div>
 
-          <div v-for="(plno, index) in props.plno_list" v-bind:key="index">
+          <div v-for="(plno, index) in props.plno_list" v-bind:key="index" class="pe-5">
             <Property v-bind:plno="plno" :map="map" @property-clicked="handlePropertyClick(plno)" @click="openModal" />
           </div>
         </div>
@@ -89,14 +89,66 @@ onMounted(async () => {
 }
 
 .title {
-  margin: -14px 0px -14px 0px;
   position: relative;
-  top: -18px;
   font-size: 25px;
   font-weight: bold;
 }
 
+.title-location {
+  font-weight: 600;
+  font-size: larger;
+
+}
+
 .weight {
   font-weight: 100;
+}
+
+
+/* Custom Scrollbar */
+.scrollBar::-webkit-scrollbar {
+  width: 8px;
+  /* Scrollbar width */
+}
+
+.scrollBar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Track color */
+  border-radius: 10px;
+  /* Round edges of the track */
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background: #6184c6;
+  /* Scrollbar color */
+  border-radius: 10px;
+  /* Round edges of the thumb */
+}
+
+.scrollBar::-webkit-scrollbar-thumb:hover {
+  background: #466AAD;
+  /* Darker color on hover */
+}
+
+.scrollBar::-moz-scrollbar {
+  width: 8px;
+  /* Scrollbar width for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-track {
+  background: #f1f1f1;
+  /* Track color for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-thumb {
+  background: #007bff;
+  /* Scrollbar color for Firefox */
+  border-radius: 10px;
+  /* Round edges of the thumb for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-thumb:hover {
+  background: #0056b3;
+  /* Darker color on hover for Firefox */
 }
 </style>

@@ -91,7 +91,7 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a class="fw-bold nav-link rounded-pill" href="/mypageupdate">
+                  <a class="fw-bold nav-link rounded-pill" href="/mypageInfo">
                     마이페이지
                   </a>
                 </li>
