@@ -2,7 +2,7 @@
   <div>
     <div class="container mw-screen-xl">
       <div class="row">
-          <div class="col-6 mt-6">
+          <div class="col-3 mt-6">
             <div class="mb-5">
           <h4 class="mb-1 fw-normal">추천 브랜드</h4>
           <h2 class="fw-bold">{{ recommendedBrand }}</h2>
@@ -14,15 +14,19 @@
 
         </div>
         <div class="mb-5">
-          <h4 class="mb-1 fw-normal">저희가 추천한 브랜드로 창업하실 경우</h4>
+          <h5 class="mb-1 fw-normal">저희가 추천한 브랜드로 창업하실 경우</h5>
           <h2 class="mb-1 fw-bold">{{ formatNumber(recommendedCost) }} 만원</h2> 
-          <h4 class="fw-normal">만큼 아낄 수 있어요.</h4>
+          <h5 class="fw-normal">만큼 아낄 수 있어요.</h5>
         </div>
       </div>
 
-    <div class="col-6">
+      <div class="col-4 mt-10">
+        <OpenGraph> </OpenGraph>
+      </div>
+
+    <div class="col-5">
       <div class="chart-container">
-            <div class="p-5">
+            <div class="p-2 ms-5">
               <canvas id="bar-chart" style="height: 300px"></canvas>
             </div>
           </div>
@@ -39,6 +43,7 @@ import {
 } from '@/assets/js/reportChart1.js';
 import axios from 'axios';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import OpenGraph from '@/components/report/OpenGraph.vue';
 let barChartInstance1 = ref(null);
 const recommendedBrand = ref('');
 const recommendedScore = ref('');
