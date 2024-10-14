@@ -102,10 +102,10 @@
                     style="width: 35px"
                   />
                 </div>
-                <div class="col-8 ps-0 d-flex align-items-center">
+                <div class="col-9 ps-0 d-flex align-items-center">
                   <!-- Change align-items to center -->
                   <span
-                    class="fs-3 text-gray-500 fw-bolder pe-2 text-left text-truncate"
+                    class="fs-3 text-gray-500 fw-bolder text-left"
                   >
                     개인신용대출 우대고객
                   </span>
@@ -183,9 +183,5 @@ bringBest4List();
 </script>
 
 <style scoped>
-.text-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 </style>
