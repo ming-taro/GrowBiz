@@ -104,8 +104,10 @@
           </div>
         </div>
         <Location class="mt-10" />
-        <ReportGraph class="mt-10" />
-      </div>
+        <div class="row">
+        <ReportGraph class="mt-10 col-6" />
+        <ReportGraph2 class="mt-10 col-6" />
+      </div></div>
       <Loan class="mb-10" />
     </div>
   </div>
@@ -114,6 +116,7 @@
 <script setup>
 import Location from '@/components/report/Location.vue';
 import ReportGraph from '@/components/main/ReportGraph.vue';
+import ReportGraph2 from '@/components/main/ReportGraph2.vue';
 import Loan from '@/components/report/Loan.vue';
 </script>
 
