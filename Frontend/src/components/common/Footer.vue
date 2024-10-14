@@ -1,5 +1,5 @@
 <template>
-  <footer class="pt-24 pb-10 fo-visible text-muted">
+  <footer class="pt-24 pb-10 fo-visible text-muted ms-40">
     <!-- 배경을 약간 밝게 조정 -->
     <div class="container mx-auto px-4">
       <!-- 필수 데이터 -->
