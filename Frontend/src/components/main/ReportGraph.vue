@@ -2,7 +2,7 @@
   <div>
         <div class="title-sm">
           <div class="custom-line" />
-          밀집도
+          밀도 및 비용
           <div class="custom-line" />
         </div>
         <div></div>
