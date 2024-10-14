@@ -164,13 +164,17 @@ const updateFirstChoice = () => {
 
   choices.value = [];
   for (let i = 0; i < currentChoices.value.length; i++) {
-    choices.value.push({ text: currentChoices.value[i][dataType], value: i });
+    choices.value.push({ text: currentChoices.value[i][dataType], value: currentChoices.value[i].value });
   }
 }
 
 const updateChoice = async (choice, index) => {
   let dataType = choiceType.value[currentChoiceType.value];
-  userChoice[dataType] = choice;
+  if (dataType == 'text') {
+    userChoice[dataType] = choices.value[index].value;
+  } else {
+    userChoice[dataType] = choice;
+  }
 
   if (isLastChoice()) {
     userAnswers[questionID.value] = userChoice;
