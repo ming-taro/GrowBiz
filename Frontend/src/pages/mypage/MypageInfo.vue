@@ -356,6 +356,10 @@ import axios from 'axios';
 const authStore = useAuthStore();
 const router = useRouter();
 
+if (!authStore.isLogin) {
+  router.push('/login');
+}
+
 // 회원 정보를 저장할 변수 선언
 const member = ref({
   img: null,
