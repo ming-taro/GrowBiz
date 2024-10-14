@@ -62,10 +62,11 @@
         <div style="width: 40%">
           <div class="photo-area" @click="triggerFileInput">
             <img
-              :src="'/src/assets/img/upload/' + imageUrl"
+              :src="imageUrl"
               alt="미리보기"
               class="photo-preview"
               v-if="imageUrl"
+              id="image"
             />
             <p v-else>이미지를 선택하세요</p>
           </div>
@@ -142,7 +143,7 @@ const authStore = useAuthStore();
 const mno = authStore.state.mno; // 사용자 번호
 
 // 데이터 관련 변수들
-const imageUrl = ref(defaultImage);
+const imageUrl = ref('house.png');
 const fileInput = ref(null); // 파일 입력 필드를 참조하는 ref
 const address = ref('');
 const detailAddress = ref('');
@@ -184,9 +185,7 @@ onMounted(() => {
   const script = document.createElement('script');
   script.src =
     'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
-  script.onload = () => {
-    console.log('Daum Postcode script loaded.');
-  };
+
   document.body.appendChild(script);
 });
 
@@ -198,8 +197,6 @@ const fetchStoreData = async () => {
     const response = await axios.get(`/api/kmap/member/${id}`); // 사용자 가게 정보 불러오기
     const data = response.data;
 
-    console.log(data);
-
     // 가져온 데이터를 폼에 기본값으로 채움
     address.value = data.address;
     detailAddress.value = data.detailAddress;
@@ -208,7 +205,14 @@ const fetchStoreData = async () => {
     laborCost.value = data.laborCost;
     otherExpenses.value = data.otherExpenses;
     selectedStore.value = data.svcIndutyCdNm;
-    imageUrl.value = data.imageUrl || defaultImage; // 이미지가 없을 경우 기본 이미지 사용
+
+    if (data.imageUrl == null) {
+      imageUrl.value = defaultImage;
+    } else {
+      imageUrl.value = '/src/assets/img/upload/' + data.imageUrl;
+    }
+
+    // 이미지가 없을 경우 기본 이미지 사용
   } catch (error) {
     console.error('가게 정보를 불러오는 중 오류 발생:', error);
   }
@@ -238,12 +242,14 @@ const submitForm = () => {
   formDataToSend.append('otherExpenses', otherExpenses.value);
   formDataToSend.append('svcIndutyCdNm', selectedStore.value); // 선택된 업종 추가
 
-  console.log(imageFile.value + 'imageFile.value');
-
   // 이미지 파일 추가
-  if (imageFile.value) {
+  if (imageFile.value == null) {
+    const fileName = imageUrl.value.match(/[^/]+$/)[0];
+    console.log('Using existing image file name:', fileName);
+    formDataToSend.append('existingImage', fileName);
+  } else {
+    console.log(imageFile.value);
     formDataToSend.append('image', imageFile.value); // 선택된 파일 추가
-    console.log(imageFile.value); // 선택된 파일 확인 로그 추가
   }
 
   // 서버로 데이터를 전송
