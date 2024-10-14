@@ -3,6 +3,8 @@ package com.kb.simulation.service;
 import com.kb.simulation.dto.question.Question;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,7 +18,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@PropertySource({"classpath:/application.properties"})
 public class SimulationService {
+    @Value("${ai.analysis.path}")
+    private String aiAnalysisPath;
+
     private final MongoTemplate mongoTemplate;
     private final String QUESTION_ID = "ind";
     private final String SIMULATION_RESPONSE_COLLECTION = "simulation_response";
@@ -48,7 +54,7 @@ public class SimulationService {
     public int executeSimulation(String id) {
         StringBuilder result = new StringBuilder();
         try {
-            File workingDirectory = new File("C:/Users/student/Desktop/final/self-employed/AI_Models/AI/");
+            File workingDirectory = new File(aiAnalysisPath);
             String scriptPath = "simulation_test_file.py";
 
             ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
