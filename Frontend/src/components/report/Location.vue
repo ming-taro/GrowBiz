@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="title">
-      <div class="custom-line" />
-        추천 위치
-      <div class="custom-line" />
+    <div class="title-sm mt-5 mb-2 title-location">
+      <div class="custom-line"></div>  <!-- Change here -->
+      <span class="title">추천 위치</span>
+      <div class="custom-line"></div>  <!-- Change here -->
     </div>
     <div class="row">
       <div class="col-7">
@@ -84,16 +84,20 @@ onMounted(async() => {
 </script>
 
 <style scoped>
+
 .container {
   padding: 0px 80px 15px 80px;
 }
 
 .title {
-  margin: -14px 0px -14px 0px;
   position: relative;
-  top: -18px;
   font-size: 25px;
   font-weight: bold;
+}
+.title-location{
+  font-weight: 600;
+  font-size: larger;
+
 }
 
 .weight {

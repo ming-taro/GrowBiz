@@ -134,7 +134,6 @@ import Loan from '@/components/report/Loan.vue';
 }
 .title {
   margin: 30px 0px;
-  padding: 20px;
 }
 .title-sm {
   font-size: 25px;
