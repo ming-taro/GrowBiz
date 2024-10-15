@@ -59,7 +59,6 @@ const location = ref(null);
 const reportId = ref("670a117bf2faf8abef449573");
 
 const getPropertyId = () => {
-  console.log("보고서:", report.value);
   const data = report.value.top_property_listings;
   let propertyId = [];
 

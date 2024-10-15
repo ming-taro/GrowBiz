@@ -38,8 +38,6 @@ const secondBrandScore = ref(''); // 빈 배열로 초기화
 
 const brandImageSrc = ref(''); // 이미지 경로를 저장할 변수
 
-
-
 onMounted(async () => {
   try {
     const reportId = route.query.id;
@@ -58,10 +56,8 @@ onMounted(async () => {
 
     const response2 = await axios.get(`http://localhost:8080/api/simulation/answer/${simulationId}`);
     const simulationData = response2.data;
-    console.log(simulationData);
     // 카테고리 확인 및 이미지 경로 설정
     const category = simulationData.answer[4].subcategories;
-    console.log(category);
 
     if (category === '제과제빵') {
       brandImageSrc.value = 'bread.png';
@@ -77,7 +73,6 @@ onMounted(async () => {
     } else {
       brandImageSrc.value = 'chicken.png';
     }
-    console.log(brandImageSrc);
   } catch (error) {
     console.error("API 호출 중 오류 발생:", error);
   }
