@@ -283,7 +283,7 @@ const fetchPropertyDetails = async (dongCode) => {
     propertys.value = response.data; // 매물 정보를 저장
     // 이전 마커 삭제
     removeMarkers();
-
+    console.log(propertys);
     // 매물 정보로 마커 표시
     propertys.value.forEach((property) => {
       // atclSfeCn가 있는 경우에만 마커 추가
@@ -312,6 +312,7 @@ const fetchPropertyDetails = async (dongCode) => {
                                 ${imageContent}
                                 <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
                                 <p>${property.dealKindCdNm} | ${property.ctgryCd2Nm}</p>
+                                <p>${property.mdiatBzestNm} ${property.mdiatBzestRepTelno}</p>
                             </div>`;
 
           // 새로운 커스텀 오버레이를 생성합니다
@@ -322,7 +323,7 @@ const fetchPropertyDetails = async (dongCode) => {
             yAnchor: 1, // 오버레이의 위치 조정
           });
         });
-
+        
         markers.push(marker); // 마커 배열에 저장
       }
     });
