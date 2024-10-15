@@ -44,6 +44,9 @@ import {
 import axios from 'axios';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import OpenGraph from '@/components/report/OpenGraph.vue';
+
+const props = defineProps(["reportId"]);
+
 let barChartInstance1 = ref(null);
 const recommendedBrand = ref('');
 const recommendedScore = ref('');
@@ -54,7 +57,7 @@ const formatNumber = (num) => {
   return new Intl.NumberFormat('ko-KR').format(num);
 };
 onMounted(async () => {
-  const response = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
+  const response = await axios.get(`http://localhost:8080/api/report/${props.reportId}`);
   const data = response.data;
  // 데이터를 차트에 넣기
  const data_bar = {

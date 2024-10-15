@@ -6,9 +6,9 @@
 
 
     <!-- 추천브랜드 및 그래프 -->
-    <Bar />
+    <Bar v-bind:reportId=reportId />
 
-    <AddBrand></AddBrand>
+    <AddBrand v-bind:reportId=reportId />
 
 
     <div class="">
@@ -22,7 +22,7 @@
 
     <!-- 유동인구-->
     <div class="">
-      <Result3></Result3>
+      <Result3 v-bind:reportId=reportId />
     </div>
 
     <!-- 대출 -->
@@ -55,6 +55,7 @@ import { findLocation } from '@/services/simulation/SimulationAPI';
 
 const report = ref(null);
 const location = ref(null);
+const reportId = ref("670a117bf2faf8abef449573");
 
 const getPropertyId = () => {
   console.log("보고서:", report.value);
@@ -76,9 +77,9 @@ const storeLocation = async () => {
 const storeReport = async () => {
   let query = window.location.search;
   let param = new URLSearchParams(query);
-  let reportId = param.get('id');
-
-  report.value = await fetchReportById(reportId);
+  // let reportId = param.get('id');
+  reportId.value = param.get('id');
+  report.value = await fetchReportById(reportId.value);
 }
 
 onMounted(async () => {

@@ -56,8 +56,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, defineProps } from 'vue';
 import axios from 'axios';
+
+const props = defineProps(["reportId"]);
 
 const data = ref({});
 
@@ -74,7 +76,8 @@ const thirdDate = ref('');
 
 onMounted(async () => {
   // API 호출
-  const response = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
+  const response = await axios.get(`http://localhost:8080/api/report/${props.reportId}`);
+  console.log("제바:", props.reportId);
   data.value = response.data;
 
 
