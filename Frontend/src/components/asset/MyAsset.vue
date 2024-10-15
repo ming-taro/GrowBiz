@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title">주변 동종업체</div>
+    <div class="title mb-2">주변 동종업체</div>
     <div class="row" style="position: relative">
       <div :class="{ blur_text: isActive, disnon: nonActive }">
         로그인 후 이용하실 수 있습니다.
@@ -156,8 +156,6 @@ import MyMapGraph from '@/components/asset/MyMapGraph.vue';
 }
 
 .title {
-  margin: -14px 0px -14px 0px;
-  position: relative;
   top: -18px;
   font-size: 25px;
   font-weight: bold;

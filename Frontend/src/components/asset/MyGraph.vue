@@ -1,9 +1,9 @@
 <template>
-  <div class="mb-10">
+  <div>
     <div class="row">
       <div class="wid-half">
         <div>
-          <h4 class="mb-2">금일 매출정보: {{ loanRepaymentStatus }}</h4>
+          <h4 class="mb-5">금일 매출정보: {{ loanRepaymentStatus }}</h4>
         </div>
         <div style="position: relative">
           <div :class="{ blur_text: isActive, disnon: nonActive }">
@@ -21,7 +21,7 @@
             로그인 후 이용하실 수 있습니다.
           </div>
           <div>
-            <h4 class="mb-2">전주 매출 비교</h4>
+            <h4 class="mb-10">전주 매출 비교</h4>
           </div>
           <div :class="{ blur: isActive }">
             <div :class="{ blur_overlay: isActive }"></div>

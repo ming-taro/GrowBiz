@@ -1,8 +1,8 @@
 <template lang="">
   <AssetHeader />
   <div class="container mw-screen-xl">
-    <StoreInfo class="mb-5" />
-    <MyGraph />
+    <StoreInfo class="mb-12" />
+    <MyGraph class="mb-12" />
     <MyAsset class="mb-5" />
   </div>
 </template>
