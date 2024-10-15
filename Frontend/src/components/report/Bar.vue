@@ -10,7 +10,6 @@
           <div class="mb-5">
             <h4 class="mb-1 fw-normal">추천 점수</h4>
             <h2 class="mb-1 fw-bold">{{ recommendedScore }} 점</h2>
-            <span>/ 지역 평균 {{ industryAverageScore }}</span>
 
           </div>
           <div class="mb-5">
@@ -53,21 +52,15 @@ const recommendedScore = ref('');
 const industryAverageScore = ref('');
 const recommendedCost = ref('');
 
-const calcRecomendedCost = () => {
-  const data = props.report;
-  let total = (Number(data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', '')) + Number(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')))
-
-  recommendedCost.value = Number(total).toLocaleString();
-}
-
-
 const formatNumber = (num) => {
   return new Intl.NumberFormat('ko-KR').format(num);
 };
 
 onMounted(async () => {
   const data = props.report;
-  calcRecomendedCost();
+
+  console.log("바 차트 내용");
+  console.log(data);
 
   // 데이터를 차트에 넣기
   const data_bar = {
@@ -76,15 +69,14 @@ onMounted(async () => {
       {
         label: '업종 평균',
         backgroundColor: '#fca3b9',
-
         originalData: [ // 원본 데이터 추가
           data.industry_density_average.toFixed(2), // 원본 업종 밀도 평균
-          data.industry_initial_cost, // 원본 업종 평균 가맹비
-          data.industry_total_interior_cost // 원본 업종 총 인테리어 비용
+          (parseInt(parseFloat(data.industry_initial_cost.toFixed(0)))).toLocaleString(), // 원본 업종 평균 가맹비
+          (parseInt(parseFloat(data.industry_total_interior_cost.toFixed(0)))).toLocaleString() // 원본 업종 총 인테리어 비용
         ],
         data: [
-          data.industry_density_average * 30000, // 업종 밀도 평균
-          data.industry_initial_cost, // 업종 평균 가맹비
+          data.industry_density_average * 500, // 업종 밀도 평균
+          data.industry_initial_cost / 2, // 업종 평균 가맹비
           data.industry_total_interior_cost // 업종 총 인테리어 비용
         ],
       },
@@ -93,13 +85,13 @@ onMounted(async () => {
         backgroundColor: '#fcd752',
         originalData: [ // 원본 데이터 추가
           Number(data.recommended_brand_density.toFixed(2)).toLocaleString(), // 원본 추천 브랜드 밀도 평균
-          Number(data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', '')).toLocaleString(), // 원본 추천 브랜드 평균 가맹비
-          Number(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')).toLocaleString() // 원본 추천 브랜드 총 인테리어 비용
+          parseFloat(data.recommended_brand_initial_cost.replace(' 만원', '').replace(',', '')).toLocaleString(), // 원본 추천 브랜드 평균 가맹비
+          parseFloat(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace(',', '')).toLocaleString() // 원본 추천 브랜드 총 인테리어 비용
         ],
-        data: [data.recommended_brand_density * 30000,
-        data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', ''),
-        data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')], // 추천 브랜드 평균 데이터
-
+        data: [data.recommended_brand_density * 500,
+        (parseFloat(data.recommended_brand_initial_cost.replace(' 만원', '').replace(',', ''))), // 원본 추천 브랜드 평균 가맹비
+        parseFloat(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace(',', ''))
+        ] // 원본 추천 브랜드 총 인테리어 비용
       },
     ],
   };
@@ -113,10 +105,12 @@ onMounted(async () => {
     options: barOptions,
   });
 
+  console.log("확인:", data.recommended_cost);
+
   // 브랜드와 점수 데이터 업데이트
   recommendedBrand.value = data.brand_name; // 추천 브랜드 이름 추가
   recommendedScore.value = data.franchise_score.toFixed(2); // 추천 점수 추가
-  industryAverageScore.value = data.average_brand_score; // 지역 평균 점수 추가
+  recommendedCost.value = (data.recommended_cost).toLocaleString();
 });
 Chart.register(ChartDataLabels);
 

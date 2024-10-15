@@ -5,19 +5,24 @@
       <div class="con-card">
         <!-- Row to contain 4 cards in a single row -->
         <div class="row">
-          <div class="col-3 me-3 d-flex flex-column align-items-center justify-content-center add_card"
+          <div v-if="excludedBrandName"
+            class="col-3 me-3 d-flex flex-column align-items-center justify-content-center add_card"
             style="height: 100%; width:23%;">
             <img src="@/assets/img/report/cry.png" alt="" style="height: 150px" />
-            <div v-if="excludedBrandName.brand_name">
-              <h5 class="mb-2 fw-light">자본금 부족으로 제외되었어요.</h5>
-              <h2 class="mb-3">{{ excludedBrandName }}</h2>
-            </div>
-            <div v-else>
-              <h5 class="mb-2 fw-light">
-                추가 대출 상품을 알아보세요.
-              </h5>
-              <h2 class="mb-3">----→</h2>
-            </div>
+            <!-- <div v-if="excludedBrandName.brand_name"> -->
+            <h5 class="mb-2 fw-light">자본금 부족으로 제외되었어요.</h5>
+            <h2 class="mb-3">{{ excludedBrandName }}</h2>
+          </div>
+          <div v-else
+            class="col-3 pb-12 pt-12 me-3 d-flex flex-column align-items-center justify-content-center add_card"
+            style="height: 100%; width:23%;">
+            <img src="@/assets/img/report/think.png" alt="" style="height: 50px" class="mb-6" />
+            <h2 class="mb-2 ">
+              추가 대출 상품을 <br /> 알아보세요.
+            </h2>
+            <h2 class="mb-2 fw-light">
+              ->
+            </h2>
           </div>
 
           <!-- 카드 1개 -->
@@ -209,14 +214,11 @@ const fetchReportData = async () => {
       // excludedBrandName.value = 'BHC치킨';
       excludedBrandScore.value = excludedBrand.franchise_score;
       excludedFunds.value = excludedBrand.insufficient_funds;
-    } else {
-      excludedBrandName.value = "추가 대출 상품을 알아보세요";
-      excludedBrandScore.value = "";
-      excludedFunds.value = "";
     }
   } catch (error) {
     console.error('Error fetching report data:', error);
   }
+  console.log(excludedBrandName.value);
 };
 // Method to handle the button click
 const goToInfoPlaza = () => {

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col card">
         <span>업종 브랜드 평균 매출</span>
-        <h2>{{ industry_average_sales }}</h2>
+        <h2>{{ industry_average_sales }} 원</h2>
       </div>
       <div class="col card">
         <span>추천 브랜드 평균 매출</span>
@@ -11,7 +11,7 @@
       </div>
       <div class="col card">
         <span>업종 브랜드 평당 평균 매출</span>
-        <h2>{{ industry_average_sales_per_area }}</h2>
+        <h2>{{ industry_average_sales_per_area }} 원</h2>
       </div>
       <div class="col card">
         <span>추천 브랜드 평당 평균 매출</span>
@@ -45,21 +45,12 @@ function formatNumber(amountString) {
 const props = defineProps(["report"]);
 
 onMounted(async () => {
-  try {
-    // API 호출
-    // const response = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
-    const report = props.report;
-    console.log("리포트:", report);
+  const report = props.report;
 
-    // 데이터 할당
-    // industry_average_sales.value = formatNumber(report.industry_average_sales); // 업종 브랜드 평균 매출
-    recommended_brand_average_sales.value = formatNumber(report.recommended_brand_average_sales); // 추천 브랜드 평균 매출
-    // industry_average_sales_per_area.value = formatNumber(report.industry_average_sales_per_area); // 업종 브랜드 평당 평균 매출
-    recommended_brand_average_sales_per_area.value = formatNumber(report.recommended_brand_average_sales_per_area); // 추천 브랜드 평당 평균 매출
-    console.log("====", report);
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-  }
+  industry_average_sales.value = (parseInt(parseFloat(report.industry_average_sales.toFixed(2)) * 10000)).toLocaleString(); // 업종 브랜드 평균 매출
+  recommended_brand_average_sales.value = formatNumber(report.recommended_brand_average_sales); // 추천 브랜드 평균 매출
+  industry_average_sales_per_area.value = (parseInt(parseFloat(report.industry_average_sales_per_area.toFixed(2)) * 10000)).toLocaleString(); // 업종 브랜드 평당 평균 매출
+  recommended_brand_average_sales_per_area.value = formatNumber(report.recommended_brand_average_sales_per_area); // 추천 브랜드 평당 평균 매출
 });
 </script>
 
