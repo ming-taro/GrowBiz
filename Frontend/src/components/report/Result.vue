@@ -1,6 +1,6 @@
 <template>
   <div class="result-container">
-    <img src="@/assets/img/report/bread_image.jpg" class="result-image mb-10" />
+    <img :src=headerImage class="result-image mb-10" />
     <div class="container mw-screen-xl">
       <div class="result-text">분석 결과</div>
       <div class="result-text2-container">
@@ -38,6 +38,29 @@ import { fetchResponseById } from '@/services/simulation/SimulationAPI';
 
 const props = defineProps(["simulation_response_id", "brand_name"]);
 const simulationResponse = ref([]);
+const headerImage = ref(new URL('@/assets/img/report/hotel_image.jpg', import.meta.url).href);
+
+const setHeaderImage = (subcategories) => {
+  switch (subcategories) {
+    case "치킨":
+      headerImage.value = new URL('@/assets/img/report/chicken_image.jpg', import.meta.url).href;
+      break;
+    case "카페":
+      headerImage.value = new URL('@/assets/img/report/cafe_image.jpg', import.meta.url).href;
+      break;
+    case "아이스크림":
+      headerImage.value = new URL('@/assets/img/report/icecream_image.jpg', import.meta.url).href;
+      break;
+    case "제과제빵":
+      headerImage.value = new URL('@/assets/img/report/bread_image.jpg', import.meta.url).href;
+      break;
+    case "편의점":
+      headerImage.value = new URL('@/assets/img/report/cvs_image.jpg', import.meta.url).href;
+      break;
+    default:
+      headerImage.value = new URL('@/assets/img/report/hotel_image.jpg', import.meta.url).href;
+  }
+}
 
 const formatPrice = (value) => {
   if (value >= 10000) {
@@ -57,6 +80,7 @@ const formatPrice = (value) => {
 onMounted(async () => {
   simulationResponse.value = await fetchResponseById(props.simulation_response_id);
   console.log(simulationResponse.value);
+  setHeaderImage(simulationResponse.value[3].subcategories);
 })
 </script>
 
