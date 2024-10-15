@@ -42,7 +42,7 @@
   <div v-else>
     <div class="animation-container">
       <img src="@/assets/img/simul/report_loading.jpg" alt="Background Image" class="background-image" />
-      <div class="loading-text">리포트를 분석중입니다</div>
+      <div class="loading-text">시뮬레이션 결과를 준비 중입니다...</div>
       <div class="loader"></div>
     </div>
   </div>
@@ -50,9 +50,9 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { createReport } from '@/services/simulation/ReportAPI';
 import { getQuestions, createSimulationAnswer, executeFranchiseAnalyze } from '@/services/simulation/SimulationAPI';
 import { useAuthStore } from '@/stores/auth';
+import { findReportIdByResponseId } from '@/services/simulation/ReportAPI';
 
 const authStore = useAuthStore();
 
@@ -103,8 +103,8 @@ const typeQuestion = (fullText) => {
 }
 
 const typeText = (text, typedText, nextText, delay = 0) => {
-  // showSpeechBubble.value = false; 주석 처리
-  // showChoices.value = false;
+  showSpeechBubble.value = false;
+  showChoices.value = false;
   const letters = text.split('');
   let index = 0;
 
@@ -163,16 +163,19 @@ const moveReportPage = async () => {
 
     // let response = await executeFranchiseAnalyze(report.id);
 
-    let response = await executeFranchiseAnalyze(simulationResponse.id);
-    console.log("실행 코드:", response);
-
+    let reportId = await executeFranchiseAnalyze(simulationResponse.id);
     let endTime = performance.now();
 
     // 시간 차이 계산 (밀리초 단위)
     let timeTaken = endTime - startTime;
     isLoading.value = false;
-    console.log("소요 시간", timeTaken / 1000, "초");
-    // location.href = `/simul/report?id=${report.id}`; // 리포트 페이지로 이동
+
+    // const reportId = await findReportIdByResponseId(simulationResponse.id);
+
+    // console.log("소요 시간", timeTaken / 1000, "초");
+    location.href = `/simul/report?id=${reportId}`; // 리포트 페이지로 이동
+    // console.log("응답 아이디:", simulationResponse.id);
+    // console.log("리포트 아이디:", reportId);
   } catch (error) {
     console.error("Error during saving simulation answer:", error);
   }
@@ -265,9 +268,17 @@ onMounted(async () => {
 .loading-text {
   position: absolute;
   top: 30%;
-  left: 50%;
+  left: 48%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .loader {
