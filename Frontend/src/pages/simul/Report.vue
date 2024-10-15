@@ -23,7 +23,7 @@
     <!-- 대출 -->
     <div style="background-color: #f6f4f9; padding: 20px" class="mb-8 pt-8 pb-5">
       <!-- 배경색과 패딩 추가 -->
-      <Loan />
+      <Loan v-bind:report=report />
     </div>
 
     <!-- 유동인구-->

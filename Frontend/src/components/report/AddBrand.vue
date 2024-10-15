@@ -57,7 +57,7 @@ onMounted(async () => {
     const response2 = await axios.get(`http://localhost:8080/api/simulation/answer/${simulationId}`);
     const simulationData = response2.data;
     // 카테고리 확인 및 이미지 경로 설정
-    const category = simulationData.answer[4].subcategories;
+    const category = simulationData.answer[3].subcategories;
 
     if (category === '제과제빵') {
       brandImageSrc.value = 'bread.png';

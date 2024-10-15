@@ -22,11 +22,11 @@
                             </div>
                             <div class="row no-gutters align-items-center justify-content-center">
                                 <div class="col text-center">
-                                    <div class="h3 mt-5 mb-2 font-weight-bold text-purple">{{ firstStation }}</div>
+                                    <div class="h3 mt-5 mb-2 font-weight-bold text-purple">{{ firstStation }}역</div>
                                     <div class="h4 mb-1 text-gray-300">
-                                        <h4>{{ firstPeople }}명</h4>
+                                        <h4>{{ firstPeople.toLocaleString() }}명</h4>
                                     </div>
-                                    <p>{{ firstDate }} 기준</p>
+                                    <p>{{ getTodayDate() }} 기준</p>
                                 </div>
                             </div>
                         </div>
@@ -43,8 +43,8 @@
                                     style="max-width: 60px; height: auto" alt="2등 메달" />
                             </div>
                             <div>
-                                <div class="h4 font-weight-bold text-purple mb-1">{{ secondStation }}</div>
-                                <div class="h6 text-gray-300">{{ secondPeople }}명</div>
+                                <div class="h4 font-weight-bold text-purple mb-1">{{ secondStation }}역</div>
+                                <div class="h6 text-gray-300">{{ secondPeople.toLocaleString() }}명</div>
                             </div>
                         </div>
                     </div>
@@ -57,8 +57,8 @@
                                     style="max-width: 60px; height: auto" alt="3등 메달" />
                             </div>
                             <div>
-                                <div class="h4 font-weight-bold text-purple mb-1">{{ thirdStation }}</div>
-                                <div class="h6 text-gray-300">{{ thirdPeople }}명</div>
+                                <div class="h4 font-weight-bold text-purple mb-1">{{ thirdStation }}역</div>
+                                <div class="h6 text-gray-300">{{ thirdPeople.toLocaleString() }}명</div>
                             </div>
                         </div>
                     </div>
@@ -86,6 +86,16 @@ const thirdPeople = ref(0);
 const firstDate = ref('');
 const secondDate = ref('');
 const thirdDate = ref('');
+
+const getTodayDate = () => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1을 해줘야 합니다.
+    const day = String(today.getDate()).padStart(2, '0'); // 날짜도 두 자릿수로 포맷
+
+    return `${year}-${month}-${day}`;
+}
 
 onMounted(async () => {
     // API 호출

@@ -45,7 +45,7 @@ const setHeaderImage = (subcategories) => {
     case "치킨":
       headerImage.value = new URL('@/assets/img/report/chicken_image.jpg', import.meta.url).href;
       break;
-    case "카페":
+    case "커피":
       headerImage.value = new URL('@/assets/img/report/cafe_image.jpg', import.meta.url).href;
       break;
     case "아이스크림":
