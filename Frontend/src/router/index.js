@@ -50,6 +50,7 @@ const Login = () => import('@/pages/auth/Login.vue');
 const MypageInfo = () => import('@/pages/mypage/MypageInfo.vue');
 const MypageReport = () => import('@/components/mypage/MypageReport.vue');
 const StoreUpdate = () => import('@/pages/asset/StoreUpdate.vue');
+const Myreport = () => import('@/pages/mypage/Myreport.vue');
 
 const router = createRouter({
   history: createWebHistory(),
@@ -207,6 +208,7 @@ const router = createRouter({
     { path: '/mypageInfo', name: 'MypageInfo', component: MypageInfo },
     { path: '/mypagereport', name: 'MypageReport', component: MypageReport },
     { path: '/asset/storeupdate', name: 'StoreUpdate', component: StoreUpdate },
+    { path: '/mypage/myreport', name: 'Myreport', component: Myreport },
     // { path: '/input', name: "Input", component: Input },
     // { path: '/input2', name: "Input2", component: Input2 },
     // { path: '/update', name: "Update", component: Update },

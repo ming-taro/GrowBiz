@@ -41,17 +41,18 @@
                       href="#edit-section"
                       ><i class="fa-regular fa-pen-to-square me-3"></i>회원정보
                       수정</a
-                    ><a
+                    ><RouterLink
                       class="nav-link fw-semibold py-2 px-0"
-                      href="account-billing.html"
+                      to="/mypage/myreport"
                       ><i class="fa-regular fa-folder-open me-3"></i
-                      >마이리포트</a
+                      >마이리포트</RouterLink
                     >
                   </nav>
                   <nav class="nav flex-column">
                     <a
                       class="nav-link fw-semibold py-2 px-0"
                       href="account-signin.html"
+                      @click="logout"
                       ><i class="fa-solid fa-right-from-bracket me-3"></i
                       >로그아웃</a
                     >
@@ -104,13 +105,15 @@
                   style="max-width: 212px"
                 >
                   <div class="d-flex justify-content-between fs-sm pb-1 mb-2">
-                    목표 월매출 달성<strong class="ms-2">62%</strong>
+                    목표 월매출 달성<strong class="ms-2"
+                      >{{ saleRate }}%</strong
+                    >
                   </div>
                   <div class="progress" style="height: 5px">
                     <div
                       class="progress-bar"
                       role="progressbar"
-                      style="width: 62%"
+                      :style="{ width: `${saleRate}%` }"
                       aria-valuenow="62"
                       aria-valuemin="0"
                       aria-valuemax="100"
@@ -137,7 +140,7 @@
                           월 매출액
                         </td>
                         <td class="border-0 text-dark fw-medium py-1 ps-3 fs-6">
-                          100,000,000 ₩
+                          ₩ {{ formattedSaleAmount }}
                         </td>
                       </tr>
                       <tr>
@@ -236,8 +239,9 @@
                   >
                   <input
                     class="form-control"
-                    type="number"
-                    v-model="memberEdit.goalAmount"
+                    type="text"
+                    v-model="formattedGoalAmount"
+                    @input="updateGoalAmount($event.target.value)"
                   />
                 </div>
                 <div class="col-12">
@@ -338,6 +342,26 @@
                   저장하기
                 </button>
               </div>
+            </div>
+          </section>
+
+          <h1 class="h2 mt-10">계정 삭제</h1>
+          <section class="card border-0 py-1 p-md-2 p-xl-3 p-xxl-4 mb-4 mt-3">
+            <div class="card-body">
+              <span class="text me-3">
+                <h4>주의할 점</h4>
+                <br />
+                <p>계정을 삭제하면 모든 데이터가 손실됩니다.</p>
+              </span>
+              <span class="d-flex justify-content-end pt-3">
+                <button
+                  class="btn btn-danger ms-3"
+                  type="button"
+                  @click="deleteAccount"
+                >
+                  계정 삭제하기
+                </button>
+              </span>
             </div>
           </section>
         </div>
@@ -465,22 +489,6 @@ const saveProfile = async () => {
   }
 };
 
-const newNickname = ref('');
-
-const changeNickname = () => {
-  if (newNickname.value) {
-    const memberInfo = {
-      id: authStore.state.id, // 기존의 ID 값을 가져오기
-      password: authStore.state.password, // 기존의 비밀번호 값을 가져오기
-      name: newNickname.value,
-      email: authStore.state.email, // 기존의 이메일 값을 가져오기
-    };
-    authStore.changeProfileName(memberInfo);
-    alert('닉네임이 변경되었습니다');
-  } else {
-    alert('닉네임을 입력해주세요.');
-  }
-};
 const changePassword = () => {
   // oldPassword, newPassword1, newPassword2가 모두 존재하고 newPassword1과 newPassword2가 같을 때
 
@@ -527,7 +535,88 @@ const resetPasswordFields = () => {
   newPassword1.value = '';
   newPassword2.value = '';
 };
-getMemberData();
+const logout = (event) => {
+  event.preventDefault(); // 기본 동작(페이지 리로딩) 막기
+  console.log('logout'); // 로그아웃 클릭 로그 확인
+  authStore.logout();
+  router.push('/');
+};
+const deleteAccount = async () => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/member/${authStore.id}`
+    );
+    // 성공적으로 삭제된 경우의 처리
+    console.log('Account deleted:', response.data);
+    alert('계정이 성공적으로 삭제되었습니다.');
+    router.push('/');
+
+    // 추가적인 후속 작업 (예: 로그아웃, 페이지 리디렉션 등)
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    if (error.response) {
+      alert(`계정 삭제에 실패했습니다: ${error.response.data}`);
+    } else {
+      alert('네트워크 오류 또는 요청 오류 발생');
+    }
+  }
+};
+
+const saleAmount = ref(10000000);
+
+// const fetchSaleAmount = async () => {
+//   const id = authStore.id; // ID 가져오기
+
+//   try {
+//     // 첫 번째 API 호출
+//     const response = await axios.get(`/api/kmap/member/${id}`);
+
+//     // 서비스 산업 코드 이름 가져오기
+//     const svcIndutyCdNm = response.data.svcIndutyCdNm;
+
+//     // 두 번째 API 호출
+//     const sumResponse = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
+
+//     // saleAmount 값 설정
+//     saleAmount.value = sumResponse.data.amount;
+
+//     console.log(saleAmount.value); // saleAmount 값 확인
+//   } catch (error) {
+//     console.error('API 요청 중 오류 발생:', error);
+//   }
+// };
+
+// 반점으로 구분된 문자열을 반환하는 computed 속성
+const formattedSaleAmount = computed(() => {
+  return saleAmount.value.toLocaleString(); // 숫자를 반점으로 구분된 문자열로 변환
+});
+
+const formattedGoalAmount = computed(() => {
+  return memberEdit.value.goalAmount.toLocaleString(); // 숫자를 반점으로 구분된 문자열로 변환
+});
+
+const updateGoalAmount = (value) => {
+  // 숫자가 아닌 경우에는 빈 문자열로 설정
+  const numberValue = value.replace(/[^0-9]/g, ''); // 숫자만 남기기
+  memberEdit.value.goalAmount = numberValue ? parseInt(numberValue, 10) : 0; // 변환하여 저장
+};
+
+// saleRate를 computed로 정의
+const saleRate = computed(() => {
+  // goalAmount가 0이 아닐 때만 계산
+  return memberEdit.value.goalAmount > 0
+    ? saleAmount.value / memberEdit.value.goalAmount
+    : 0;
+});
+
+// 호출 순서에 맞게 함수 실행
+const loadData = async () => {
+  await getMemberData(); // 회원 데이터 가져오기
+  // await fetchSaleAmount(); // 판매 금액 가져오기
+};
+
+// loadData 호출
+loadData();
 </script>
 
 <style scoped>
