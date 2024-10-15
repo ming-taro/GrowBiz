@@ -12,7 +12,7 @@
 
 
     <div style="background-color: #f6f4f9; padding-bottom: 20px">
-      <AvgCard></AvgCard>
+      <AvgCard v-bind:report=report></AvgCard>
     </div>
 
     <!-- 추천 위치 -->

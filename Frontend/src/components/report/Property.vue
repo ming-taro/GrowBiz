@@ -56,14 +56,15 @@ const moveMapCenter = () => {
 }
 
 const setMarker = (lat, lon) => {
-  var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-  var imageSize = new kakao.maps.Size(24, 35); 
-  var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-  
+  // var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+  var imageSrc = new URL('@/assets/img/report/map-marker.png', import.meta.url).href
+  var imageSize = new kakao.maps.Size(40, 40);
+  var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
   var marker = new kakao.maps.Marker({
-      map: props.map,
-      position: new kakao.maps.LatLng(lat, lon),
-      image : markerImage
+    map: props.map,
+    position: new kakao.maps.LatLng(lat, lon),
+    image: markerImage
   });
 }
 
@@ -82,7 +83,7 @@ const formatPrice = (value) => {
   }
 }
 
-onMounted(async() => {
+onMounted(async () => {
   property.value = await fetchPropertyById(props.plno);
   setMarker(property.value.laCrd, property.value.loCrd);
 })
@@ -90,10 +91,14 @@ onMounted(async() => {
 <style scoped>
 .title {
   font-size: 15px;
-  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
-  overflow: hidden; /* 넘치는 텍스트 숨기기 */
-  text-overflow: ellipsis; /* 넘치는 부분을 "..."으로 표시 */
-  max-width: 100%; /* 너비 제한 */
+  white-space: nowrap;
+  /* 줄 바꿈 없이 한 줄로 표시 */
+  overflow: hidden;
+  /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis;
+  /* 넘치는 부분을 "..."으로 표시 */
+  max-width: 100%;
+  /* 너비 제한 */
 }
 
 .price {
