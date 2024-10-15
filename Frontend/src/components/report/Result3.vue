@@ -3,7 +3,7 @@
     <!-- 개업률, 폐업률, 유동인구 -->
      <div class="container mb-5">
     <div class="row">
-        <div class="col-12 d-flex ">
+        <div class="col-12 d-flex ms-8 ">
             <!-- 1등 카드 -->
             <div class="col-7 me-3">
                 <div class="card border-left-primary shadow h-100 py-2">
