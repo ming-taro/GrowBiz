@@ -44,7 +44,7 @@ export const barOptions2 = {
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,
-        padding: 15,
+        padding: 25,
         font: {
           size: 14, // x축 글자 크기
           family: 'Pretendard', // 원하는 폰트 패밀리

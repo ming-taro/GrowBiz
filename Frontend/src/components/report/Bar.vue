@@ -21,7 +21,7 @@
       </div>
 
       <div class="col-4 d-flex align-items-center"> <!-- d-flex align-items-center 추가 -->
-        <OpenGraph class=""> </OpenGraph>
+        <OpenGraph class="opengraph-adjust" /> <!-- 클래스 추가 -->
       </div>
 
       <div class="col-5 mt-3 d-flex align-items-end"> <!-- d-flex align-items-center 추가 -->
@@ -142,5 +142,8 @@ canvas {
   word-break: break-all; /* 모든 단어를 줄바꿈 */
   white-space: normal; /* 연속된 공백을 줄바꿈으로 처리 */
   height: 78px;
+}
+.opengraph-adjust {
+  margin-top: -4px; /* 1px 위로 올리기 */
 }
 </style>
