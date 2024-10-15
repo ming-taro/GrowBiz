@@ -33,7 +33,7 @@
                   class="d-flex justify-content-center align-items-center mb-4 mt-4"
                 >
                   <!-- 수직, 수평 중앙 정렬 -->
-                  <h1 style="font-weight: bold">강남구 외식업</h1>
+                  <h2 style="font-weight: bold">강남구 외식업</h2>
                 </div>
                 <div class="align-self-end">
                   <div class="d-flex justify-content-between align-items-end">
@@ -41,15 +41,15 @@
                     <div
                       class="circle d-flex flex-column justify-content-center align-items-center"
                     >
-                      <h3 style="font-weight: 400">보증금</h3>
-                      <h1 style="font-weight: 600">1억</h1>
+                      <h4 style="font-weight: 400">보증금</h4>
+                      <h2 style="font-weight: 600">1억</h2>
                     </div>
                     <!-- 월세 -->
                     <div
                       class="circle d-flex flex-column justify-content-center align-items-center"
                     >
-                      <h3 style="font-weight: 400">월세</h3>
-                      <h1 style="font-weight: 600">600만</h1>
+                      <h4 style="font-weight: 400">월세</h4>
+                      <h2 style="font-weight: 600">600만</h2>
                     </div>
                   </div>
                 </div>
@@ -60,36 +60,36 @@
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h3 class="mb-2 fw-light">중분류</h3>
-                    <h3 class="mb-2 me-5">치킨</h3>
+                    <h4 class="mb-2 fw-light">중분류</h4>
+                    <h4 class="mb-2 me-5">치킨</h4>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h3 class="mb-2 fw-light">유형</h3>
-                    <h3 class="mb-2 me-5">프랜차이즈</h3>
+                    <h4 class="mb-2 fw-light">유형</h4>
+                    <h4 class="mb-2 me-5">프랜차이즈</h4>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h3 class="mb-2 fw-light">거주지</h3>
-                    <h3 class="mb-2 me-5">인근 30km</h3>
+                    <h4 class="mb-2 fw-light">거주지</h4>
+                    <h4 class="mb-2 me-5">인근 30km</h4>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h3 class="mb-2 fw-light">교육</h3>
-                    <h3 class="mb-2 me-5">필요</h3>
+                    <h4 class="mb-2 fw-light">교육</h4>
+                    <h4 class="mb-2 me-5">필요</h4>
                   </div>
 
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
-                    <h3 class="fw-light">대출 계획</h3>
-                    <h3 class="me-5">있음</h3>
+                    <h4 class="fw-light">대출 계획</h4>
+                    <h4 class="me-5">있음</h4>
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
         <ReportGraph class="mt-10 col-6" />
         <ReportGraph2 class="mt-10 col-6" />
       </div></div>
-      <Loan class="mb-10" />
+      <Loan class="mb-10 ms-4" />
     </div>
   </div>
 </template>
