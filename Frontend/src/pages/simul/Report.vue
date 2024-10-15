@@ -16,18 +16,18 @@
     </div>
 
     <!-- 추천 위치 -->
-    <div class="container mw-screen-xl mb-8 ">
+    <div class="container mw-screen-xl mb-8">
       <Location v-if="location != null" v-bind:location=location :plno_list=getPropertyId() />
     </div>
 
     <!-- 대출 -->
-    <div>
+    <div style="background-color: #f6f4f9; padding: 20px" class="mb-8 pt-8 pb-5">
       <!-- 배경색과 패딩 추가 -->
       <Loan />
     </div>
 
     <!-- 유동인구-->
-    <div class="">
+    <div class="mb-8">
       <Result3 v-bind:reportId=reportId />
     </div>
 
