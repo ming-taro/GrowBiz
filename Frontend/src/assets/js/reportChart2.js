@@ -24,7 +24,16 @@ export const data_bar2 = (data) => ({
 export const barOptions2 = {
   responsive: true,
   maintainAspectRatio: false,
+  layout: {
+    padding: {
+      left: 20, // 왼쪽 여백 추가
+      right: 20,
+      top: 20,
+      bottom: 20
+    },
+  },
   scales: {
+    
     x: {
       grid: {
         color: 'rgba(255, 255, 255, 0.3)',
@@ -35,7 +44,7 @@ export const barOptions2 = {
         autoSkip: true,
         maxRotation: 0,
         minRotation: 0,
-        padding: 10,
+        padding: 15,
         font: {
           size: 14, // x축 글자 크기
           family: 'Pretendard', // 원하는 폰트 패밀리

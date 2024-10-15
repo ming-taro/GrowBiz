@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="container mw-screen-xl">
-      <div class="row">
-          <div class="col-3 mt-6">
+    <div class="container mw-screen-xl pb-5">
+      <div class="row align-items-start"> <!-- align-items-start 추가 -->
+        <div class="col-3 mt-2">
             <div class="mb-5">
           <h4 class="mb-1 fw-normal">추천 브랜드</h4>
           <h2 class="fw-bold">{{ recommendedBrand }}</h2>
@@ -20,13 +20,13 @@
         </div>
       </div>
 
-      <div class="col-4 mt-10">
-        <OpenGraph> </OpenGraph>
+      <div class="col-4 d-flex align-items-center"> <!-- d-flex align-items-center 추가 -->
+        <OpenGraph class=""> </OpenGraph>
       </div>
 
-    <div class="col-5">
-      <div class="chart-container">
-            <div class="p-2 ms-5">
+      <div class="col-5 mt-3 d-flex align-items-end"> <!-- d-flex align-items-center 추가 -->
+        <div class="chart-container w-100">
+            <div class="">
               <canvas id="bar-chart" style="height: 300px"></canvas>
             </div>
           </div>
