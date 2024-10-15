@@ -59,7 +59,7 @@ const reportId = ref("670a117bf2faf8abef449573");
 
 const getPropertyId = () => {
   console.log("보고서:", report.value);
-  const data = report.value.additional_recommended_brands;
+  const data = report.value.top_property_listings;
   let propertyId = [];
 
   for (let index = 0; index < data.length; index++) {

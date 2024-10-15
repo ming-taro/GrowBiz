@@ -55,7 +55,7 @@ export const executeFranchiseAnalyze = async (id) => {
     const response = await axios.post(
       BASE_URL + `/start`,
       {
-        id: id, // params 대신 body로 전송
+        id: id,
       },
       {
         headers: {
