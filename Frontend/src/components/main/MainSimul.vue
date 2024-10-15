@@ -80,7 +80,9 @@
             <img src="@/assets/img/report/kyochon.jpg" alt="" class="full-image" />
           </div>
         </div>
-        <Location class="mt-10" v-bind:location=location :plno_list=plno_list />
+        <div>
+        <img src="@/assets/img/main/location.png" alt="" />
+      </div>
         <div class="row">
           <ReportGraph class="mt-10 col-6" />
           <ReportGraph2 class="mt-10 col-6" />
@@ -92,14 +94,10 @@
 </template>
 
 <script setup>
-import Location from '@/components/report/Location.vue';
 import ReportGraph from '@/components/main/ReportGraph.vue';
 import ReportGraph2 from '@/components/main/ReportGraph2.vue';
 import Loan from '@/components/report/Loan.vue';
-import { ref } from 'vue';
 
-const plno_list = ref([44182, 43821, 43888]);
-const location = ref("강남구 역삼1동");
 
 </script>
 
