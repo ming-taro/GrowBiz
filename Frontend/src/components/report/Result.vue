@@ -1,6 +1,6 @@
 <template>
   <div class="result-container">
-    <img src="@/assets/img/report/clothes.png" class="result-image mb-10" />
+    <img src="@/assets/img/report/bread_image.jpg" class="result-image mb-10" />
     <div class="container mw-screen-xl">
       <div class="result-text">분석 결과</div>
       <div class="result-text2-container">
