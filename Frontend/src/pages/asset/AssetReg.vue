@@ -96,8 +96,6 @@ const assets = ref([
   { name: '기업은행', icon: 'bank' },
   { name: 'SC제일은행', icon: 'bank' },
   { name: '한국씨티은행', icon: 'bank' },
-  { name: '제주은행', icon: 'bank' },
-  { name: '부산은행', icon: 'bank' },
 ]);
 
 const certificates = ref([
