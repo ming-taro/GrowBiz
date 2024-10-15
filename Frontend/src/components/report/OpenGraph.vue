@@ -1,9 +1,9 @@
 <template>
     <!-- 개업률, 폐업률, 유동인구 -->
         <div class=" d-flex align-items-center">
-            <div class="chart-container">
-            <div class="p-2 ">
-              <canvas id="bar-chart2" style="height: 200px"></canvas>
+            <div class="chart-container w-100 ms-5 ">
+            <div class="">
+              <canvas id="bar-chart2" style="height: 320px; width:100%;"></canvas>
             </div>
           </div>
         </div>

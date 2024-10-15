@@ -564,27 +564,23 @@ const deleteAccount = async () => {
 
 const saleAmount = ref(10000000);
 
-// const fetchSaleAmount = async () => {
-//   const id = authStore.id; // ID 가져오기
+const fetchSaleAmount = async () => {
+  try {
+    // 첫 번째 API 호출
+    const response = await axios.get(`/api/kmap/member/1234`);
 
-//   try {
-//     // 첫 번째 API 호출
-//     const response = await axios.get(`/api/kmap/member/${id}`);
-
-//     // 서비스 산업 코드 이름 가져오기
-//     const svcIndutyCdNm = response.data.svcIndutyCdNm;
-
-//     // 두 번째 API 호출
-//     const sumResponse = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
-
-//     // saleAmount 값 설정
-//     saleAmount.value = sumResponse.data.amount;
-
-//     console.log(saleAmount.value); // saleAmount 값 확인
-//   } catch (error) {
-//     console.error('API 요청 중 오류 발생:', error);
-//   }
-// };
+    // 서비스 산업 코드 이름 가져오기
+    const svcIndutyCdNm = response.data.svcIndutyCdNm;
+    console.log(response);
+    // 두 번째 API 호출
+    const sumResponse = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
+    // saleAmount 값 설정
+    saleAmount.value = sumResponse.data.amount;
+    console.log(saleAmount.value); // saleAmount 값 확인
+  } catch (error) {
+    console.error('API 요청 중 오류 발생:', error);
+  }
+};
 
 // 반점으로 구분된 문자열을 반환하는 computed 속성
 const formattedSaleAmount = computed(() => {
@@ -605,14 +601,14 @@ const updateGoalAmount = (value) => {
 const saleRate = computed(() => {
   // goalAmount가 0이 아닐 때만 계산
   return memberEdit.value.goalAmount > 0
-    ? saleAmount.value / memberEdit.value.goalAmount
-    : 0;
+    ? (saleAmount.value / memberEdit.value.goalAmount).toFixed(2)
+    : '0.00';
 });
 
 // 호출 순서에 맞게 함수 실행
 const loadData = async () => {
   await getMemberData(); // 회원 데이터 가져오기
-  // await fetchSaleAmount(); // 판매 금액 가져오기
+  await fetchSaleAmount(); // 판매 금액 가져오기
 };
 
 // loadData 호출
