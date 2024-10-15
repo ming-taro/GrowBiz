@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title">추천 위치</div>
+    <div class="title">주변 동종업체</div>
     <div class="row" style="position: relative">
       <div :class="{ blur_text: isActive, disnon: nonActive }">
         로그인 후 이용하실 수 있습니다.

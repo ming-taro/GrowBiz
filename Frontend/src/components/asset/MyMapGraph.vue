@@ -3,7 +3,7 @@
     <div style="height: 400px">
       <div>
         <div>
-          <h4 class="mb-2">주변 상권 별 주간 매출 데이터 비교</h4>
+          <h4 class="mb-2">주간 매출 데이터 비교</h4>
         </div>
         <div style="position: relative">
           <div :class="{ blur_text: isActive, disnon: nonActive }">
@@ -17,7 +17,7 @@
       </div>
       <div>
         <div>
-          <h4>주변 상권 별 월간 매출 데이터 비교</h4>
+          <h4>월간 매출 데이터 비교</h4>
         </div>
         <div style="position: relative">
           <div :class="{ blur_text: isActive, disnon: nonActive }">
