@@ -99,9 +99,9 @@ const assets = ref([
 ]);
 
 const certificates = ref([
-  { title: '뱅크샐러드 인증서', name: '이름1', expirationDate: '2027-07-29' },
-  { title: 'KB국민은행 인증서', name: '이름2', expirationDate: '2028-07-29' },
-  { title: '신한은행 인증서', name: '이름3', expirationDate: '2029-07-29' },
+  { title: '뱅크샐러드 인증서', name: '임종민', expirationDate: '2027-07-29' },
+  { title: 'KB국민은행 인증서', name: '임종민', expirationDate: '2028-07-29' },
+  { title: '신한은행 인증서', name: '임종민', expirationDate: '2029-07-29' },
 ]);
 </script>
 
