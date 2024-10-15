@@ -3,9 +3,17 @@
     <!-- 개업률, 폐업률, 유동인구 -->
      <div class="container mb-5">
     <div class="row">
-        <div class="col-12 d-flex ms-8 ">
+        <div class="col-12 d-flex ms-8 align-items-center">
+
+          <div class="col-3 text-center ms-8 me-10">
+            <img src="@/assets/img/report/popular.png" style="width:50px; height:50px;" alt="" class="mb-5">
+            <span class="h3"><br/>선택하신 지역의<br/></span>
+            <span class="h3"> 근처 유동인구 <br/></span>
+            <span class="h3">상위 3개 역 정보입니다.</span>
+          </div>
+
             <!-- 1등 카드 -->
-            <div class="col-7 me-3">
+            <div class="col-4 me-3">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body d-flex flex-column justify-content-center align-items-center">
                         <div class="text-center">
@@ -23,9 +31,9 @@
             </div>
 
             <!-- 2등, 3등 카드 -->
-            <div class="col-4 d-flex flex-column justify-content-between">
+            <div class="col-3 d-flex flex-column justify-content-between">
                 <!-- 2등 카드 -->
-                <div class="card border-left-primary shadow py-2 mb-2">
+                <div class="card border-left-primary shadow py-2 mb-5">
                     <div class="card-body d-flex align-items-center">
                         <div class="text-left me-2">
                             <img src="@/assets/img/medals/second_place_medal.png" style="max-width: 60px; height: auto" alt="2등 메달" />

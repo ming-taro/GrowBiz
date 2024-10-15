@@ -20,16 +20,17 @@
       <Location v-if="location != null" v-bind:location=location :plno_list=getPropertyId() />
     </div>
 
-    <!-- 유동인구-->
-    <div class="">
-      <Result3 v-bind:reportId=reportId />
-    </div>
-
     <!-- 대출 -->
     <div>
       <!-- 배경색과 패딩 추가 -->
       <Loan />
     </div>
+
+    <!-- 유동인구-->
+    <div class="">
+      <Result3 v-bind:reportId=reportId />
+    </div>
+
 
     <!-- 교육정보 -->
     <div style="background-color: #f6f4f9;" class="pt-5 pb-5">
