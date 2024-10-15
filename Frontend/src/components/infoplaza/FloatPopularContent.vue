@@ -300,12 +300,12 @@ const displayMarkers = (populationData) => {
 
   // 저장된 동 이름에 대해 마커 표시
   markerMap.forEach((data) => {
-    const { adstrdCdNm } = data;
+    const { adstrdCdNm, totFlpopCo } = data;
 
     geocoder.addressSearch(adstrdCdNm, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
         const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-        const markerColor = getMarkerColor(data.totFlpopCo); // 인구수에 따른 마커 색상 결정
+        const markerColor = getMarkerColor(totFlpopCo); // 인구수에 따른 마커 색상 결정
 
         const marker = new window.kakao.maps.Marker({
           map: kakaoMap,
@@ -315,6 +315,33 @@ const displayMarkers = (populationData) => {
             `/src/assets/img/infoplaza/marker_${markerColor}.png`,
             new window.kakao.maps.Size(50, 50)
           ),
+        });
+        // 인구 수 포맷팅
+        const formattedPopulation = totFlpopCo.toLocaleString();
+        // 커스텀 오버레이 내용 생성
+        const overlayContent = `
+          <div class="customoverlay" style="width: 170px; padding-left:15px">
+            <div>
+              <h5>${adstrdCdNm}</h5>
+              <p>인구 수: ${formattedPopulation}명</p>
+            </div>
+          </div>
+        `;
+
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: coords,
+          content: overlayContent,
+          yAnchor: 1.5,
+          zIndex: 3
+        });
+
+        // 마커에 마우스 이벤트 추가
+        window.kakao.maps.event.addListener(marker, 'mouseover', function() {
+          customOverlay.setMap(kakaoMap);
+        });
+
+        window.kakao.maps.event.addListener(marker, 'mouseout', function() {
+          customOverlay.setMap(null);
         });
 
         // 마커 배열에 저장
