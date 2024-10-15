@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
   <!-- 추가 추천 브랜드 -->
   <div style="background-color: #f6f4f9; padding: 20px" class="mb-3">
     <div class="container">
@@ -19,6 +20,15 @@
           <h2>{{ secondBrandScore }}점</h2>
         </div>
       </div>
+=======
+     <!-- 추가 추천 브랜드 -->
+<div style="background-color: #f6f4f9; padding: 20px" class="mb-3">
+        <div class="container">
+     <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-3 d-flex flex-column align-items-center">
+          <img :src="'/src/assets/img/report/'+brandImageSrc" style="width:50px; height:50px" class="mb-2" />
+      <h2 class="text-center">추가 추천<br/>브랜드<br /></h2>
+>>>>>>> Stashed changes
     </div>
   </div>
 </template>
@@ -35,6 +45,7 @@ const firstBrandScore = ref(''); // 빈 배열로 초기화
 const secondBrandName = ref(''); // 빈 배열로 초기화
 const secondBrandScore = ref(''); // 빈 배열로 초기화
 
+<<<<<<< Updated upstream
 onMounted(async () => {
   // API 호출
   // const response = await axios.get(`http://localhost:8080/api/report/670a117bf2faf8abef449573/${props.reportId}`); -> 수정할 부분
@@ -45,6 +56,49 @@ onMounted(async () => {
   firstBrandScore.value = data.value.additional_recommended_brands[0].franchise_score;
   secondBrandName.value = data.value.additional_recommended_brands[1].brand_name;
   secondBrandScore.value = data.value.additional_recommended_brands[1].franchise_score;
+=======
+const brandImageSrc = ref(''); // 이미지 경로를 저장할 변수
+
+
+
+onMounted(async () => {
+  try {
+    // 첫 번째 API 호출
+    const response1 = await axios.get('http://localhost:8080/api/report/670a117bf2faf8abef449573');
+    data.value = response1.data;
+
+    firstBrandName.value = data.value.additional_recommended_brands[0].brand_name;
+    firstBrandScore.value = data.value.additional_recommended_brands[0].franchise_score;
+    secondBrandName.value = data.value.additional_recommended_brands[1].brand_name;
+    secondBrandScore.value = data.value.additional_recommended_brands[1].franchise_score;
+
+    // 두 번째 API 호출
+    const response2 = await axios.get('http://localhost:8080/api/simulation/answer/6708b9cddd81be36cf0d089f');
+    const simulationData = response2.data;
+    console.log(simulationData);
+    // 카테고리 확인 및 이미지 경로 설정
+    const category = simulationData.answer[4].subcategories;
+    console.log(category);
+    
+    if (category === '제과제빵') {
+      brandImageSrc.value = 'bread.png';
+    } 
+    else if (category === '커피') {
+      brandImageSrc.value = 'cafe.png';
+    } 
+    else if (category === '아이스크림') {
+      brandImageSrc.value = 'icecream.png';
+    }  
+    else if (category === '숙박') {
+      brandImageSrc.value = 'hotel.png';
+    }  else {
+      brandImageSrc.value = 'chicken.png';
+    }
+    console.log(brandImageSrc);
+  } catch (error) {
+    console.error("API 호출 중 오류 발생:", error);
+  }
+>>>>>>> Stashed changes
 });
 
 </script>
