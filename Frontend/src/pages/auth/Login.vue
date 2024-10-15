@@ -5,14 +5,15 @@
     <div
       class="col-md-6 col-lg-5 col-xl-5 position-absolute start-0 vh-100 overflow-y-hidden d-none d-lg-flex flex-lg-column back-img"
     >
-      <div class="p-12 py-xl-10 px-xl-20">
-        <div class="mt-16">
+      <div class="p-10 py-xl-10 px-xl-20">
+        <div class="mt-20">
           <h1 class="ls-tight fw-bolder display-6 text-white mb-5">
-            Trade the world’s top assets and cryptos
+            로그인 페이지입니다.
           </h1>
           <p class="text-white text-opacity-75 pe-xl-24">
-            Create beautiful websites that are supported by rock-solid design
-            principles.
+            오늘도 자영업자 키우기에 접속하시고,
+            <BR /> 가게관리 및 시뮬레이션을 완료해보세요. <br />
+            또한, 커뮤니티 활동을 통해 다른 사장님과 소통해보세요.
           </p>
         </div>
       </div>
@@ -31,8 +32,8 @@
           /></a>
           <h1 class="ls-tight fw-bolder h3">로그인</h1>
           <div class="mt-3 text-sm text-muted">
-            <span>회원이 아닌 경우 </span>
-            <a href="/register" class="fw-semibold">회원가입 </a>페이지
+            <span>아직 회원이 아니라면 </span>
+            <a href="/register" class="fw-semibold">회원가입하기 </a>
           </div>
         </div>
         <form @submit.prevent="login">
