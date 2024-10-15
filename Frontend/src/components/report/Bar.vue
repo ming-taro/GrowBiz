@@ -15,7 +15,7 @@
           </div>
           <div class="mb-5">
             <h5 class="mb-1 fw-normal">저희가 추천한 브랜드로 창업하실 경우</h5>
-            <h2 class="mb-1 fw-bold">{{ formatNumber(recommendedCost) }} 만원</h2>
+            <h2 class="mb-1 fw-bold">{{ recommendedCost }} 만원</h2>
             <h5 class="fw-normal">만큼 아낄 수 있어요.</h5>
           </div>
         </div>
@@ -53,13 +53,22 @@ const recommendedScore = ref('');
 const industryAverageScore = ref('');
 const recommendedCost = ref('');
 
+const calcRecomendedCost = () => {
+  const data = props.report;
+  let total = (Number(data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', '')) + Number(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')))
+
+  recommendedCost.value = Number(total).toLocaleString();
+}
+
+
 const formatNumber = (num) => {
   return new Intl.NumberFormat('ko-KR').format(num);
 };
+
 onMounted(async () => {
   const data = props.report;
+  calcRecomendedCost();
 
-  console.log("보여줘야 할 데이터:", data);
   // 데이터를 차트에 넣기
   const data_bar = {
     labels: ['밀도 (단위 : km²)', '가맹비 (단위 : 만원)', '총 인테리어 비용 (단위 : 만원)'],
@@ -108,10 +117,6 @@ onMounted(async () => {
   recommendedBrand.value = data.brand_name; // 추천 브랜드 이름 추가
   recommendedScore.value = data.franchise_score.toFixed(2); // 추천 점수 추가
   industryAverageScore.value = data.average_brand_score; // 지역 평균 점수 추가
-  recommendedCost.value = data.recommended_brand_initial_cost; // 추천 비용 추가
-
-  console.log("브랜드 이름: ", recommendedBrand.value);
-
 });
 Chart.register(ChartDataLabels);
 
