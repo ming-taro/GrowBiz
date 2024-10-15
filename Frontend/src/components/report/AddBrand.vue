@@ -1,6 +1,6 @@
 <template>
       <!-- 추가 추천 브랜드 -->
-    <div style="background-color: #f6f4f9; padding: 20px" class="mb-3">
+    <div style="background-color: #f6f4f9; padding: 20px" class="">
         <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="col-3 d-flex flex-column align-items-center">
