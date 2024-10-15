@@ -40,4 +40,19 @@ public class ReportService {
 
         return mongoTemplate.save(responseReport);
     }
+
+    public String findReportByResponseId(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("simulation_response_id").is(id));
+        Document result =  mongoTemplate.findOne(query, Document.class, REPORT_COLLECTION);
+        System.out.println(">>id:" + id);
+        System.out.println(result);
+        if (result != null) {
+            Object reportId = result.get("_id");
+            System.out.println("reportId:" + reportId);
+            return reportId.toString();
+        }
+
+        return "";
+    }
 }

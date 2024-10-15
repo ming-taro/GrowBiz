@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -51,8 +52,8 @@ public class SimulationService {
         return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
     }
 
-    public int executeSimulation(String id) {
-        StringBuilder result = new StringBuilder();
+    public String executeSimulation(String id) {
+        List<String> result = new ArrayList<>();
         try {
             File workingDirectory = new File(aiAnalysisPath);
             String scriptPath = "report.py";
@@ -67,12 +68,16 @@ public class SimulationService {
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
-                result.append(line);
+                result.add(line);
             }
-            return process.waitFor();
+
+            String[] text =  result.get(result.size() - 1).split(" ");
+            String reportId = text[text.length - 1];
+
+            return reportId;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return null;
     }
 }

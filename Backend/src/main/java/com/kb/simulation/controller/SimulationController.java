@@ -63,15 +63,13 @@ public class SimulationController {
     }
 
     @PostMapping("/start")
-    public ResponseEntity<Integer> executeSimulation(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<String> executeSimulation(@RequestBody Map<String, String> requestBody) {
         String id = requestBody.get("id");
-        System.out.println("확인할값: " + id);
-        int exitCode = simulationService.executeSimulation(id);
-        System.out.println("exit code: " + exitCode);
+        String reportId = simulationService.executeSimulation(id);
 
-        if (exitCode != 0) {
+        if (reportId == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(exitCode);
+        return ResponseEntity.ok(reportId);
     }
 }

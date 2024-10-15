@@ -39,4 +39,14 @@ public class ReportController {
         }
         return ResponseEntity.ok(report);
     }
+
+    @GetMapping("/response-id/{id}")
+    public ResponseEntity<String> findReportByResponseId(@PathVariable("id") String id) {
+        String result = reportService.findReportByResponseId(id);
+
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
+    }
 }
