@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-8 p-0 d-flex align-items-center">
                   <!-- Change align-items to center -->
-                  <span class="fs-3 text-gray-500 fw-bolder pe-2 text-left">
+                  <span class="fs-4 text-gray-500 fw-bolder pe-2 text-left">
                     장기카드대출
                   </span>
                 </div>
@@ -105,7 +105,7 @@
                 <div class="col-9 ps-0 d-flex align-items-center">
                   <!-- Change align-items to center -->
                   <span
-                    class="fs-3 text-gray-500 fw-bolder text-left"
+                    class="fs-4 text-gray-500 fw-bolder text-left"
                   >
                     개인신용대출 우대고객
                   </span>
