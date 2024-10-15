@@ -55,6 +55,7 @@ import { fetchReportById } from '@/services/simulation/ReportAPI';
 import { findLocation } from '@/services/simulation/SimulationAPI';
 
 const report = ref(null);
+
 const location = ref(null);
 const reportId = ref("670a117bf2faf8abef449573");
 
@@ -65,7 +66,6 @@ const getPropertyId = () => {
   for (let index = 0; index < data.length; index++) {
     propertyId.push(data[index].property_id);
   }
-
   return propertyId;
 }
 
