@@ -50,7 +50,7 @@ public class StoreController {
                 // 새로운 이미지가 없으면 기존 이미지 사용
                 imageUrl = existingImage;
             }
-            
+
             // DTO 생성 및 데이터 설정
             NeighborhoodDTO neighborhoodDTO = NeighborhoodDTO.builder()
                     .address(address)

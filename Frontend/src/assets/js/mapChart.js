@@ -101,7 +101,7 @@ export async function fetchChartData(loanRepaymentStatus) {
   let response = await axios.get(`/api/kmap/member/${id}`);
 
   if (response.data.length == 0) {
-    id = mno;
+    id = 1234;
     response = await axios.get(`/api/kmap/member/${id}`);
   }
 

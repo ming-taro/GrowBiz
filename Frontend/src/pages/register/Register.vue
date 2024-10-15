@@ -34,7 +34,7 @@
           <h1 class="ls-tight fw-bolder h3 mt-7">회원가입</h1>
           <div class="mt-3 text-sm text-muted">
             <span>이미 회원이라면</span>
-            <a href="/login" class="fw-semibold"> 로그인 </a>페이지
+            <a href="/login" class="fw-semibold"> 로그인 </a>페이지로 이동
           </div>
         </div>
         <form @submit.prevent="submitForm">

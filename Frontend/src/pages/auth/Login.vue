@@ -5,24 +5,24 @@
     <div
       class="col-md-6 col-lg-5 col-xl-5 position-absolute start-0 vh-100 overflow-y-hidden d-none d-lg-flex flex-lg-column back-img"
     >
-      <div class="p-12 py-xl-10 px-xl-20">
-        <div class="mt-16">
+      <div class="p-10 py-xl-10 px-xl-20">
+        <div class="mt-20">
           <h1 class="ls-tight fw-bolder display-6 text-white mb-5">
-            Trade the world’s top assets and cryptos
+            로그인 페이지입니다.
           </h1>
           <p class="text-white text-opacity-75 pe-xl-24">
-            Create beautiful websites that are supported by rock-solid design
-            principles.
+            오늘도 자영업자 키우기에 접속하시고,
+            <BR /> 가게관리 및 시뮬레이션을 완료해보세요. <br />
+            또한, 커뮤니티 활동을 통해 다른 사장님과 소통해보세요.
           </p>
         </div>
       </div>
     </div>
     <div
-      class="col-12 col-md-12 col-lg-7 offset-lg-5 min-vh-100 d-flex flex-column mt-20 position-relative bg-body border-start-lg shadow-soft-5"
-      style="height: 100vh"
+      class="col-12 col-md-12 col-lg-7 offset-lg-5 vh-100 d-flex justify-content-center align-items-center border-start-lg shadow-soft-5"
     >
       <div class="w-md-50 mx-auto px-10 px-md-0 py-10">
-        <div class="mb-10">
+        <div class="mb-10 text-center">
           <a class="d-inline-block d-lg-none mb-10" href="/pages/dashboard.html"
             ><img
               src="../../img/logos/logo-dark.svg"
@@ -31,8 +31,8 @@
           /></a>
           <h1 class="ls-tight fw-bolder h3">로그인</h1>
           <div class="mt-3 text-sm text-muted">
-            <span>회원이 아닌 경우 </span>
-            <a href="/register" class="fw-semibold">회원가입 </a>페이지
+            <span>아직 회원이 아니라면 </span>
+            <a href="/register" class="fw-semibold">회원가입하기 </a>
           </div>
         </div>
         <form @submit.prevent="login">
@@ -63,29 +63,13 @@
               <button
                 href="#"
                 class="btn btn-dark w-100 mb-5"
-                :disableSubmit="disableSubmit"
+                :disabled="disableSubmit"
               >
                 Login
               </button>
             </div>
           </div>
         </form>
-        <!-- <div class="row g-2">
-          <div class="col-sm-6">
-            <a href="#" class="btn btn-neutral w-100"
-              ><span class="icon icon-sm pe-2"
-                ><img src="../../img/social/github.svg" alt="..." /> </span
-              >Github</a
-            >
-          </div>
-          <div class="col-sm-6">
-            <a href="#" class="btn btn-neutral w-100"
-              ><span class="icon icon-sm pe-2"
-                ><img src="../../img/social/google.svg" alt="..." /> </span
-              >Google</a
-            >
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -128,8 +112,7 @@ const login = async () => {
 <style>
 .back-img {
   background-image: url('@/assets/img/register/register.jpg');
-  background-size: cover; /* 이미지가 div를 채우도록 설정 */
-  background-position: center; /* 이미지를 중앙에 위치시킴 */
-  height: 50vh; /* 왼쪽 이미지 div의 높이 설정 */
+  background-size: cover;
+  background-position: center;
 }
 </style>
