@@ -27,12 +27,12 @@
                   <a class="fw-bold nav-link rounded-pill" href="/simul">
                     시뮬레이션
                   </a>
-                  <div class="header-info-dropdown">
+                  <!-- <div class="header-info-dropdown">
                     <RouterLink to="/simul"><span>시작하기</span></RouterLink>
                     <RouterLink to="/simul/report"
                       ><span>결과보기</span></RouterLink
-                    >
-                  </div>
+                    > 
+                  </div> -->
                 </li>
 
                 <li class="nav-item">
