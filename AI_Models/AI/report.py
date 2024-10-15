@@ -264,7 +264,8 @@ kakao_api_key = os.getenv('KAKAO_API_KEY')
 #     }
 # }
 
-def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_listings, simulation_response_id):
+def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_property_listings, simulation_response_id):
+    print("====================additional_recommended_brands==============================");
     # 1. 사용자 입력 및 처리된 데이터를 기반으로 한 실제 데이터 준비
     simulation_data = {
         "user_id": str(user_id),  # 사용자 ID
@@ -296,7 +297,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         ],
 
         # top_listings에서 매물 정보 가져오기
-        "additional_recommended_brands": [
+        # "additional_recommended_brands": [ # 수정한 부분
+        "top_property_listings": [
             {
                 "franchise_name": recommendation['franchise_name'], 
                 "property_id": recommendation['property_id'], 
@@ -305,8 +307,15 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
                 "deposit": recommendation['property_deposit'], 
                 "area": recommendation['property_area']
             }
-            for recommendation in top_listings[:3]  # 최대 3개의 추천 매물 정보
+            for recommendation in top_property_listings[:3]  # 최대 3개의 추천 매물 정보
         ],
+
+        # ====================additional_recommended_brands==============================
+        "additional_recommended_brands": [         # 가까운 3개의 역 정보
+            {"brand_name": brand_name, "franchise_score": score}
+            for brand_name, score in top_franchises[1:]
+        ]
+        # ====================additional_recommended_brands==============================
 
         # "excluded_brand_due_to_capital": {
         #     "brand_name": excluded_franchises_sorted[0]['store_name'],
@@ -339,8 +348,10 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     for station in simulation_data['top_3_nearby_stations']:
         print(f"Station Name: {station['station_name']}, People: {station['people']}")
 
-    print("\nAdditional Recommended Brands:")
-    for brand in simulation_data['additional_recommended_brands']:
+    # print("\nAdditional Recommended Brands:")
+    print("\nTop Listings:")
+    # for brand in simulation_data['additional_recommended_brands']:
+    for brand in simulation_data['top_property_listings']:
         print(f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
 
     print("\nExcluded Brand Due to Capital:")
@@ -853,6 +864,7 @@ async def fetch_all_data(page_size):
 if __name__ == "__main__":
     print("받은값: ", sys.argv[1])
     simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
+    # simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b") # 테스트 케이스
     user_data=update_user_data_from_response(simulation_response)
 
     if simulation_response:
@@ -924,7 +936,6 @@ if __name__ == "__main__":
         for franchise, score in top_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
 
-            
         # 7. 제외된 프랜차이즈 3개를 출력
         print("\n=== 초기 자본금이 부족해서 제외된 프랜차이즈 3개 ===")
         excluded_franchises_sorted = sorted(
@@ -950,15 +961,16 @@ if __name__ == "__main__":
         valid_recommendations = filter_listings_by_franchise_area(property_listings, [store for store in filtered_franchises if store['store_name'] == top_franchise_name])
 
         # 9. 보증금과 월세가 적은 매물 3개 선택
-        top_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
+        top_property_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
 
         print("\n=== 추천 가능한 매물 (청년치킨에 해당하는 상위 3개) ===")
-        if top_listings:
-            for recommendation in top_listings:
+        if top_property_listings:
+            for recommendation in top_property_listings:
                 print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
                 print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_listings, sys.argv[1])
+process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
+# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670c78ddc9263c1f31d2089b")
 
