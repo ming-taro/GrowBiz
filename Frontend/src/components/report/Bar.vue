@@ -3,35 +3,35 @@
     <div class="container mw-screen-xl pb-5">
       <div class="row align-items-start"> <!-- align-items-start 추가 -->
         <div class="col-3 mt-2">
-            <div class="mb-5">
-          <h4 class="mb-1 fw-normal">추천 브랜드</h4>
-          <h2 class="fw-bold">{{ recommendedBrand }}</h2>
-        </div>
-        <div class="mb-5">
-          <h4 class="mb-1 fw-normal">추천 점수</h4>
-          <h2 class="mb-1 fw-bold">{{ recommendedScore }} 점</h2>
-          <span>/ 지역 평균 {{ industryAverageScore }}</span>
+          <div class="mb-5">
+            <h4 class="mb-1 fw-normal">추천 브랜드</h4>
+            <h2 class="fw-bold">{{ recommendedBrand }}</h2>
+          </div>
+          <div class="mb-5">
+            <h4 class="mb-1 fw-normal">추천 점수</h4>
+            <h2 class="mb-1 fw-bold">{{ recommendedScore }} 점</h2>
+            <span>/ 지역 평균 {{ industryAverageScore }}</span>
 
+          </div>
+          <div class="mb-5">
+            <h5 class="mb-1 fw-normal">저희가 추천한 브랜드로 창업하실 경우</h5>
+            <h2 class="mb-1 fw-bold">{{ formatNumber(recommendedCost) }} 만원</h2>
+            <h5 class="fw-normal">만큼 아낄 수 있어요.</h5>
+          </div>
         </div>
-        <div class="mb-5">
-          <h5 class="mb-1 fw-normal">저희가 추천한 브랜드로 창업하실 경우</h5>
-          <h2 class="mb-1 fw-bold">{{ formatNumber(recommendedCost) }} 만원</h2> 
-          <h5 class="fw-normal">만큼 아낄 수 있어요.</h5>
+
+        <div class="col-4 d-flex align-items-center"> <!-- d-flex align-items-center 추가 -->
+          <OpenGraph class="opengraph-adjust" v-bind:report=props.report /> <!-- 클래스 추가 -->
         </div>
-      </div>
 
-      <div class="col-4 d-flex align-items-center"> <!-- d-flex align-items-center 추가 -->
-        <OpenGraph class="opengraph-adjust" /> <!-- 클래스 추가 -->
-      </div>
-
-      <div class="col-5 mt-3 d-flex align-items-end"> <!-- d-flex align-items-center 추가 -->
-        <div class="chart-container w-100">
+        <div class="col-5 mt-3 d-flex align-items-end"> <!-- d-flex align-items-center 추가 -->
+          <div class="chart-container w-100">
             <div class="">
               <canvas id="bar-chart" style="height: 300px"></canvas>
             </div>
           </div>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@ import axios from 'axios';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import OpenGraph from '@/components/report/OpenGraph.vue';
 
-const props = defineProps(["reportId"]);
+const props = defineProps(["report"]);
 
 let barChartInstance1 = ref(null);
 const recommendedBrand = ref('');
@@ -57,42 +57,43 @@ const formatNumber = (num) => {
   return new Intl.NumberFormat('ko-KR').format(num);
 };
 onMounted(async () => {
-  const response = await axios.get(`http://localhost:8080/api/report/${props.reportId}`);
-  const data = response.data;
- // 데이터를 차트에 넣기
- const data_bar = {
-      labels: ['밀도 (단위 : km²)', '가맹비 (단위 : 만원)','총 인테리어 비용 (단위 : 만원)'],
-      datasets: [
-        {
-          label: '업종 평균',
-          backgroundColor: '#fca3b9',
-          
-          originalData: [ // 원본 데이터 추가
-            data.industry_density_average, // 원본 업종 밀도 평균
-            data.industry_initial_cost, // 원본 업종 평균 가맹비
-            data.industry_total_interior_cost // 원본 업종 총 인테리어 비용
-          ],
-          data: [
-        data.industry_density_average*1000, // 업종 밀도 평균
-        data.industry_initial_cost, // 업종 평균 가맹비
-        data.industry_total_interior_cost // 업종 총 인테리어 비용
-      ], 
-          },
-        {
-          label: '추천 브랜드 평균',
-          backgroundColor: '#fcd752',
-          originalData: [ // 원본 데이터 추가
-            data.recommended_brand_density, // 원본 추천 브랜드 밀도 평균
-            data.recommended_brand_initial_cost, // 원본 추천 브랜드 평균 가맹비
-            data.recommended_brand_total_interior_cost // 원본 추천 브랜드 총 인테리어 비용
-          ],
-          data: [data.recommended_brand_density*1000, 
-          data.recommended_brand_initial_cost, 
-          data.recommended_brand_total_interior_cost], // 추천 브랜드 평균 데이터
-          
-        },
-      ],
-    };
+  const data = props.report;
+
+  console.log("보여줘야 할 데이터:", data);
+  // 데이터를 차트에 넣기
+  const data_bar = {
+    labels: ['밀도 (단위 : km²)', '가맹비 (단위 : 만원)', '총 인테리어 비용 (단위 : 만원)'],
+    datasets: [
+      {
+        label: '업종 평균',
+        backgroundColor: '#fca3b9',
+
+        originalData: [ // 원본 데이터 추가
+          data.industry_density_average.toFixed(2), // 원본 업종 밀도 평균
+          data.industry_initial_cost, // 원본 업종 평균 가맹비
+          data.industry_total_interior_cost // 원본 업종 총 인테리어 비용
+        ],
+        data: [
+          data.industry_density_average * 30000, // 업종 밀도 평균
+          data.industry_initial_cost, // 업종 평균 가맹비
+          data.industry_total_interior_cost // 업종 총 인테리어 비용
+        ],
+      },
+      {
+        label: '추천 브랜드 평균',
+        backgroundColor: '#fcd752',
+        originalData: [ // 원본 데이터 추가
+          Number(data.recommended_brand_density.toFixed(2)).toLocaleString(), // 원본 추천 브랜드 밀도 평균
+          Number(data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', '')).toLocaleString(), // 원본 추천 브랜드 평균 가맹비
+          Number(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')).toLocaleString() // 원본 추천 브랜드 총 인테리어 비용
+        ],
+        data: [data.recommended_brand_density * 30000,
+        data.recommended_brand_initial_cost.replace(' 만원', '').replace('.', ''),
+        data.recommended_brand_total_interior_cost.replace(' 만원', '').replace('.', '')], // 추천 브랜드 평균 데이터
+
+      },
+    ],
+  };
 
   const barCtx = document.getElementById('bar-chart').getContext('2d');
 
@@ -101,15 +102,15 @@ onMounted(async () => {
     type: 'bar',
     data: data_bar,
     options: barOptions,
-  }); 
+  });
 
-   // 브랜드와 점수 데이터 업데이트
-    recommendedBrand.value = data.brand_name; // 추천 브랜드 이름 추가
-    recommendedScore.value = data.franchise_score; // 추천 점수 추가
-    industryAverageScore.value = data.average_brand_score; // 지역 평균 점수 추가
-    recommendedCost.value = data.recommended_brand_initial_cost; // 추천 비용 추가
+  // 브랜드와 점수 데이터 업데이트
+  recommendedBrand.value = data.brand_name; // 추천 브랜드 이름 추가
+  recommendedScore.value = data.franchise_score.toFixed(2); // 추천 점수 추가
+  industryAverageScore.value = data.average_brand_score; // 지역 평균 점수 추가
+  recommendedCost.value = data.recommended_brand_initial_cost; // 추천 비용 추가
 
-
+  console.log("브랜드 이름: ", recommendedBrand.value);
 
 });
 Chart.register(ChartDataLabels);
@@ -130,20 +131,28 @@ canvas {
 .container {
   padding: 0px 80px;
 }
+
 .chart-container {
   background-color: white;
   margin: 5px;
 }
+
 .text-cont {
   padding: 4% 15% 0%;
 }
+
 .chart-text {
-  overflow-wrap: break-word; /* 단어가 길 경우 줄바꿈 */
-  word-break: break-all; /* 모든 단어를 줄바꿈 */
-  white-space: normal; /* 연속된 공백을 줄바꿈으로 처리 */
+  overflow-wrap: break-word;
+  /* 단어가 길 경우 줄바꿈 */
+  word-break: break-all;
+  /* 모든 단어를 줄바꿈 */
+  white-space: normal;
+  /* 연속된 공백을 줄바꿈으로 처리 */
   height: 78px;
 }
+
 .opengraph-adjust {
-  margin-top: -4px; /* 1px 위로 올리기 */
+  margin-top: -4px;
+  /* 1px 위로 올리기 */
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="report">
     <!-- 헤더 -->
     <Result v-if="report != null" v-bind:simulation_response_id=report.simulation_response_id
       :brand_name=report.brand_name />
 
 
     <!-- 추천브랜드 및 그래프 -->
-    <Bar v-bind:reportId=reportId />
+    <Bar v-bind:report=report />
 
     <AddBrand v-bind:reportId=reportId />
 
