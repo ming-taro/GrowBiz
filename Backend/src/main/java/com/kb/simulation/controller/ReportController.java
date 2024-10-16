@@ -61,21 +61,8 @@ public class ReportController {
     public ResponseEntity<List<ReportInfo>> findAllReports(@PathVariable String userId) {
         List<ReportInfo> reports = reportService.findAllReports(userId);
 
-        // SimpleDateFormat을 사용해 문자열을 Date 객체로 변환
-//        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-
-//        // createdAt 필드를 기준으로 최신 순 정렬
-//        reports.sort((report1, report2) -> {
-//            try {
-//                Date date1 = sdf.parse(report1.getCreatedAt());
-//                Date date2 = sdf.parse(report2.getCreatedAt());
-//                return date2.compareTo(date1);  // 최신순으로 정렬
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);  // 날짜 파싱 오류 처리
-//            }
-//        });
-
         // 정렬된 결과 출력
+        System.out.println("크기:" + reports.size());
         reports.forEach(System.out::println);
 
         return ResponseEntity.ok(reports);
