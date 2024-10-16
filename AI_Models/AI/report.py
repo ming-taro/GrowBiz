@@ -273,6 +273,14 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         except (ValueError, AttributeError):
             return 0.0  # 변환에 실패하면 0.0 반환
 
+    def convert_to_float1(value):
+        try:
+            # '만원' 또는 ',' 등의 문자를 제거하고 float로 변환
+            return float(value.replace('%', '').replace(',', ''))
+        except (ValueError, AttributeError):
+            return 0.0  # 변환에 실패하면 0.0 반환
+
+
     # 업종 평균값을 계산하기 위한 리스트 생성 (문자열을 float로 변환)
     average_sales_list = [convert_to_float(franchise['average_sales']) for franchise in filtered_franchises]
     average_sales_per_area_list = [convert_to_float(franchise['average_sales_per_area']) for franchise in filtered_franchises]
@@ -283,6 +291,17 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     industry_average_sales_per_area = sum(average_sales_per_area_list) / len(average_sales_per_area_list)
     industry_initial_cost = sum(initial_cost_list) / len(initial_cost_list)
     industry_total_interior_cost = sum(interior_cost_list) / len(interior_cost_list)
+
+    # 개업률과 폐업률의 평균 계산 추가
+    # 폐업률과 개업률의 평균을 계산
+    opening_rate_list = [convert_to_float1(franchise['opening_rate']) for franchise in filtered_franchises]
+    closure_rate_list = [convert_to_float1(franchise['closure_rate']) for franchise in filtered_franchises]
+    industry_opening_rate_average = sum(opening_rate_list) / len(opening_rate_list)
+    industry_closing_rate_average = sum(closure_rate_list) / len(closure_rate_list)
+
+    formatted_industry_opening_rate = f"{industry_opening_rate_average:.2f}%"
+    formatted_industry_closing_rate = f"{industry_closing_rate_average:.2f}%"
+
 
     simulation_data = {
         "user_id": str(user_id),  # 사용자 ID
@@ -300,8 +319,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         "recommended_brand_average_sales": filtered_franchises[0]['average_sales'],  # 평균 매출
         "recommended_brand_average_sales_per_area": filtered_franchises[0]['average_sales_per_area'],  # 평당 매출
 
-        "industry_opening_rate_average": mean_density,  # 산업의 평균 개업률
-        "industry_closing_rate_average": std_density,  # 산업의 평균 폐업률
+        "industry_opening_rate_average": formatted_industry_opening_rate,  # 산업의 평균 개업률
+        "industry_closing_rate_average": formatted_industry_closing_rate,  # 산업의 평균 폐업률
         "recommended_brand_opening_rate_average": filtered_franchises[0]['opening_rate'],  # 추천 브랜드 개업률
         "recommended_brand_closing_rate_average": filtered_franchises[0]['closure_rate'],  # 추천 브랜드 폐업률
 
@@ -398,26 +417,6 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         print(f"Inserted document with ID: {result.inserted_id}")
     else:
         print("Error inserting document")
-
-
-
-
-# # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
-# gu = user_data['region'].split(', ')[1]  # '강남구'
-# dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
-
-# # 산업 카테고리에서 필요한 부분만 추출 ('치킨', '커피' 등)
-# industry_category = user_data['industry'].split(', ')[1]  # '치킨' 부분만 추출
-
-# # .csv 파일 경로 설정
-# csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1', f'{industry_category}_franchise_data_with_trend_10plus.csv')
-
-# # .csv 파일이 존재하는지 확인 후 읽기
-# if os.path.exists(csv_file_path):
-#     df = pd.read_csv(csv_file_path)
-#     print(f"{industry_category} 업종에 해당하는 데이터를 성공적으로 불러왔습니다.")
-# else:
-#     print(f"{csv_file_path} 파일을 찾을 수 없습니다.")
 
 
 def process_csv_file(df_filtered, category):
@@ -755,7 +754,7 @@ def calculate_final_scores(franchise_data, adjusted_density_scores):
         density_score = adjusted_density_scores[i] * 5  # 밀도 점수 (5점 만점)
         
         # 기존 랭킹 점수와 밀도 점수의 가중치를 5:5로 반영
-        final_score = (rank_score * 5 + density_score * 5) / 10
+        final_score = ((rank_score * 7 + density_score * 3) / 10)+(20)
         final_scores.append((store['store_name'], final_score))
     
     return final_scores
@@ -881,9 +880,9 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
-    print("받은값: ", sys.argv[1])
-    simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
-    # simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b") # 테스트 케이스
+    # print("받은값: ", sys.argv[1])
+    # simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
+    simulation_response=fetch_simulation_response_by_id("670f168612fcd26045bb6570") # 테스트 케이스
     user_data=update_user_data_from_response(simulation_response)
 
     if simulation_response:
@@ -990,6 +989,6 @@ if __name__ == "__main__":
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
-# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670c78ddc9263c1f31d2089b")
+# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
+process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670f168612fcd26045bb6570")
 

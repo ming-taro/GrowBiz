@@ -1,41 +1,41 @@
 {
     "user_id": "test123",
-    "simulation_response_id": "670c78ddc9263c1f31d2089b",
+    "simulation_response_id": "670f168612fcd26045bb6570",
     "created_at": "",
     "_class": "com.kb.simulation.dto.report.ResponseReport",
-    "brand_name": "굽네치킨",
-    "franchise_score": 53.323162859664805,
-    "recommended_brand_density": 7.428571428571429,
-    "industry_density_average": 2.5142857142857142,
-    "recommended_brand_initial_cost": "5770.00 만원",
-    "recommended_brand_total_interior_cost": "3500.00 만원",
-    "recommended_brand_average_sales": "77438.50 만원",
-    "recommended_brand_average_sales_per_area": "7168.80 만원",
-    "industry_opening_rate_average": 2.5142857142857142,
-    "industry_closing_rate_average": 2.579247372161639,
-    "recommended_brand_opening_rate_average": "14.90%",
-    "recommended_brand_closing_rate_average": "2.15%",
-    "industry_average_sales": 35999.68,
-    "industry_average_sales_per_area": 2276.46,
-    "industry_initial_cost": 5772.356,
-    "industry_total_interior_cost": 2468.04,
+    "brand_name": "처갓집양념치킨",
+    "franchise_score": 74.71485492018817,
+    "recommended_brand_density": 0.5714285714285714,
+    "industry_density_average": 2.40952380952381,
+    "recommended_brand_initial_cost": "2685.00 만원",
+    "recommended_brand_total_interior_cost": "1320.00 만원",
+    "recommended_brand_average_sales": "44633.20 만원",
+    "recommended_brand_average_sales_per_area": "3855.60 만원",
+    "industry_opening_rate_average": "21.54%",
+    "industry_closing_rate_average": "15.59%",
+    "recommended_brand_opening_rate_average": "19.43%",
+    "recommended_brand_closing_rate_average": "18.98%",
+    "industry_average_sales": 31552.26666666667,
+    "industry_average_sales_per_area": 2256.0833333333335,
+    "industry_initial_cost": 4507.25,
+    "industry_total_interior_cost": 1875.6666666666667,
     "top_3_nearby_stations": [
         {
             "station_name": "강남",
-            "people": 95120
+            "people": 177511
         },
         {
             "station_name": "역삼",
-            "people": 36244
+            "people": 123385
         },
         {
             "station_name": "언주",
-            "people": 11053
+            "people": 26761
         }
     ],
-    "additional_recommended_brands": [
+    "top_property_listings": [
         {
-            "franchise_name": "굽네치킨",
+            "franchise_name": "처갓집양념치킨",
             "property_id": 44163,
             "property_address": "서울시 강남구 역삼동  ",
             "monthly_rent": 250,
@@ -43,7 +43,7 @@
             "area": 33.1
         },
         {
-            "franchise_name": "굽네치킨",
+            "franchise_name": "처갓집양념치킨",
             "property_id": 43891,
             "property_address": "서울특별시 강남구 역삼동  ",
             "monthly_rent": 110,
@@ -51,7 +51,7 @@
             "area": 38.3
         },
         {
-            "franchise_name": "굽네치킨",
+            "franchise_name": "처갓집양념치킨",
             "property_id": 44183,
             "property_address": "서울시 강남구 역삼동  ",
             "monthly_rent": 130,
@@ -59,10 +59,20 @@
             "area": 39.66
         }
     ],
-    "recommended_cost": 5730.0,
+    "additional_recommended_brands": [
+        {
+            "brand_name": "지코바양념치킨",
+            "franchise_score": 65.76242570906501
+        },
+        {
+            "brand_name": "노랑통닭",
+            "franchise_score": 65.4598542312863
+        }
+    ],
+    "recommended_cost": 5995.0,
     "excluded_brand_due_to_capital": {
-        "brand_name": "비에이치씨(BHC)",
-        "franchise_score": "69.79",
-        "insufficient_funds": 395.60000000000036
+        "brand_name": "청년치킨",
+        "franchise_score": "100.00",
+        "insufficient_funds": 40.0
     }
 }
