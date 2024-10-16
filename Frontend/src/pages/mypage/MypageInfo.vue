@@ -562,20 +562,31 @@ const deleteAccount = async () => {
   }
 };
 
-const saleAmount = ref(10000000);
+const saleAmount = ref(0);
 
 const fetchSaleAmount = async () => {
   try {
+    const mno = authStore.mno;
+
+    const id = mno;
+
     // 첫 번째 API 호출
-    const response = await axios.get(`/api/kmap/member/1234`);
+    const response = await axios.get(`/api/kmap/member/${id}`);
 
     // 서비스 산업 코드 이름 가져오기
     const svcIndutyCdNm = response.data.svcIndutyCdNm;
+
     console.log(response);
     // 두 번째 API 호출
     const sumResponse = await axios.get(`/api/chart/sum/${svcIndutyCdNm}`);
     // saleAmount 값 설정
-    saleAmount.value = sumResponse.data.amount;
+
+    if (svcIndutyCdNm == 0) {
+      saleAmount.value = 0;
+    } else {
+      saleAmount.value = sumResponse.data.amount;
+    }
+
     console.log(saleAmount.value); // saleAmount 값 확인
   } catch (error) {
     console.error('API 요청 중 오류 발생:', error);

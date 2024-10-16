@@ -161,7 +161,6 @@ const fetchDistinctDistricts = async () => {
     );
     districts.value = response.data;
 
-    
     await fetchTowns(selectedDistrict.value); // 동 데이터 불러오기
   } catch (error) {
     console.error('Error fetching distinct district names:', error);
@@ -309,12 +308,12 @@ const fetchPropertyDetails = async (dongCode) => {
             : `<img src="/src/assets/img/infoplaza/house.png" alt="Property Image" class="none-img" />`; // 이미지가 없을 경우 기본 이미지
 
           var content = `<div class="customoverlay">
-                                ${imageContent}
-                                <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
-                                <p>${property.dealKindCdNm} | ${property.ctgryCd2Nm}</p>
-                                <p>${property.mdiatBzestNm} ${property.mdiatBzestRepTelno}</p>
-                            </div>`;
-
+                  ${imageContent}
+                  <button class="close-overlay" onclick="closeOverlay()">x</button>
+                  <h5 title="${property.atclSfeCn}">${property.atclSfeCn}</h5>
+                  <p>${property.dealKindCdNm} | ${property.ctgryCd2Nm}</p>
+                  <p>${property.mdiatBzestNm} ${property.mdiatBzestRepTelno}</p>
+                </div>`;
           // 새로운 커스텀 오버레이를 생성합니다
           infowindow = new kakao.maps.CustomOverlay({
             map: kakaoMap,
@@ -322,8 +321,15 @@ const fetchPropertyDetails = async (dongCode) => {
             content: content,
             yAnchor: 1, // 오버레이의 위치 조정
           });
+
+          window.closeOverlay = () => {
+            if (infowindow) {
+              infowindow.setMap(null); // 현재 열려있는 오버레이 닫기
+              infowindow = null; // infowindow 초기화
+            }
+          };
         });
-        
+
         markers.push(marker); // 마커 배열에 저장
       }
     });
@@ -401,5 +407,16 @@ p {
   overflow-wrap: break-word; /* 단어가 넘어가면 줄바꿈 */
   white-space: normal; /* 기본 줄바꿈 처리 */
   text-align: left; /* 텍스트 정렬 */
+}
+.customoverlay .close-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10; /* 버튼이 오버레이 내부에서 가장 위에 표시되도록 설정 */
 }
 </style>

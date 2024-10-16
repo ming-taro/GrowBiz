@@ -128,7 +128,7 @@ const typeText = (text, typedText, nextText, delay = 0) => {
         }, 500);
       }
     }
-  }, 100);
+  }, 40);
 };
 
 const findChoiceType = (choice) => {

@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div>
-      <h4 class="mb-2">매출추이</h4>
-    </div>
     <div class="">
       <canvas id="bar-chart2" style="height: 328px"></canvas>
     </div>

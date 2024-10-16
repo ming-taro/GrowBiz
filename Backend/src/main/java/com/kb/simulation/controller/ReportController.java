@@ -1,5 +1,6 @@
 package com.kb.simulation.controller;
 
+import com.kb.simulation.dto.ReportInfo;
 import com.kb.simulation.dto.report.RequestReport;
 import com.kb.simulation.dto.report.ResponseReport;
 import com.kb.simulation.service.ReportService;
@@ -13,7 +14,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,5 +55,16 @@ public class ReportController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ReportInfo>> findAllReports(@PathVariable String userId) {
+        List<ReportInfo> reports = reportService.findAllReports(userId);
+
+        // 정렬된 결과 출력
+        System.out.println("크기:" + reports.size());
+        reports.forEach(System.out::println);
+
+        return ResponseEntity.ok(reports);
     }
 }

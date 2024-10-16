@@ -5,14 +5,14 @@
       <p style="margin-left: 20px">회원님의 자산 현황을 확인해 보세요.</p>
     </div>
     <div class="row">
-      <div class="row g-3 g-xl-6" style="width: 66%">
+      <div class="row" style="width: 66%">
         <div class="col-xl-6 col-sm-6 d-flex">
           <div class="card image-card w-100 d-flex flex-column">
-            <div class="card-body pb-5 flex-grow-1">
+            <div class="card-body pb-5 flex-grow-1 mt-3">
               <div class="d-flex justify-content-between align-items-center">
                 <img
                   :src="'/src/assets/img/upload/' + store.imageUrl"
-                  class="card-img-top rounded"
+                  class="card-img-top rounded p-2"
                   style="width: 546px; height: 307px; object-fit: cover"
                 />
               </div>
@@ -22,7 +22,7 @@
 
         <div class="col-xl-6 col-sm-6 d-flex">
           <div class="card w-100 d-flex flex-column">
-            <div class="card-body pb-5 flex-grow-1">
+            <div class="card-body pb-5 flex-grow-1 mt-5">
               <div class="">
                 <div class="d-block stretched-link h4 mb-2 fw-bold fs-1">
                   {{ store.svcIndutyCdNm }}

@@ -9,53 +9,27 @@
           <div class="position-lg-sticky top-0">
             <div class="d-none d-lg-block"></div>
             <div class="offcanvas-lg offcanvas-start" id="sidebarAccount">
-              <button
-                class="btn-close position-absolute top-0 end-0 mt-3 me-3 d-lg-none"
-                type="button"
-                data-bs-dismiss="offcanvas"
-                data-bs-target="#sidebarAccount"
-              ></button>
+              <button class="btn-close position-absolute top-0 end-0 mt-3 me-3 d-lg-none" type="button"
+                data-bs-dismiss="offcanvas" data-bs-target="#sidebarAccount"></button>
               <div class="offcanvas-body">
                 <div class="pb-2 pb-lg-0 mb-4 mb-lg-5">
-                  <img
-                    class="d-block rounded-circle mb-2"
-                    :src="profileImageUrl"
-                    width="80"
-                    alt="Isabella Bocouse"
-                  />
+                  <img class="d-block rounded-circle mb-2" :src="profileImageUrl" width="80" alt="Isabella Bocouse" />
                   <h4 class="h4 mb-1 fw-bold">{{ member.name }}</h4>
                   <p class="fs-sm text-muted mb-0">{{ member.email }}</p>
                   <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
-                    <h4
-                      class="fs-xs fw-medium text-muted text-uppercase pb-1 mb-2 mt-10"
-                    >
+                    <h4 class="fs-xs fw-medium text-muted text-uppercase pb-1 mb-2 mt-10">
                       Account
                     </h4>
-                    <RouterLink
-                      class="nav-link fw-semibold py-2 px-0"
-                      to="/mypageInfo#myInfo"
-                      ><i class="fa-regular fa-user me-3"></i> 내
-                      정보</RouterLink
-                    ><a
-                      class="nav-link fw-semibold py-2 px-0"
-                      href="#edit-section"
-                      ><i class="fa-regular fa-pen-to-square me-3"></i>회원정보
-                      수정</a
-                    ><a
-                      class="nav-link fw-semibold py-2 px-0"
-                      href="account-billing.html"
-                      ><i class="fa-regular fa-folder-open me-3"></i
-                      >마이리포트</a
-                    >
+                    <RouterLink class="nav-link fw-semibold py-2 px-0" to="/mypageInfo#myInfo"><i
+                        class="fa-regular fa-user me-3"></i> 내
+                      정보</RouterLink><a class="nav-link fw-semibold py-2 px-0" href="#edit-section"><i
+                        class="fa-regular fa-pen-to-square me-3"></i>회원정보
+                      수정</a><a class="nav-link fw-semibold py-2 px-0" href="account-billing.html"><i
+                        class="fa-regular fa-folder-open me-3"></i>마이리포트</a>
                   </nav>
                   <nav class="nav flex-column">
-                    <a
-                      class="nav-link fw-semibold py-2 px-0"
-                      href="account-signin.html"
-                      @click="logout"
-                      ><i class="fa-solid fa-right-from-bracket me-3"></i
-                      >로그아웃</a
-                    >
+                    <a class="nav-link fw-semibold py-2 px-0" href="account-signin.html" @click="logout"><i
+                        class="fa-solid fa-right-from-bracket me-3"></i>로그아웃</a>
                   </nav>
                 </div>
               </div>
@@ -77,61 +51,63 @@
                           <input class="form-check-input" type="checkbox" />
                         </div>
                       </div>
-                      <span><h4>목록</h4></span>
+                      <span>
+                        <h4>브랜드</h4>
+                      </span>
                     </div>
                   </th>
-                  <th scope="col"><h4>자본</h4></th>
-                  <th scope="col"><h4>분류</h4></th>
-                  <th scope="col"><h4>추천위치</h4></th>
-                  <th scope="col"><h4>날짜</h4></th>
+                  <th scope="col">
+                    <h4>자본</h4>
+                  </th>
+                  <th scope="col">
+                    <h4>업종</h4>
+                  </th>
+                  <th scope="col">
+                    <h4>추천위치</h4>
+                  </th>
+                  <th scope="col">
+                    <h4>날짜</h4>
+                  </th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="report in reports" :key="report.id">
+                <tr v-for="report in reports" :key="report.reportId" @click=showReport(report.reportId)
+                  style="cursor: pointer">
                   <td>
-                    <div class="d-flex align-items-center gap-3 ps-1">
+                    <div class=" d-flex align-items-center gap-3 ps-1">
                       <div class="text-base">
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" />
                         </div>
                       </div>
                       <div
-                        class="icon icon-shape w-rem-10 h-rem-10 rounded-circle text-sm bg-primary bg-opacity-25 text-tertiary"
-                      >
+                        class="icon icon-shape w-rem-10 h-rem-10 rounded-circle text-sm bg-primary bg-opacity-25 text-tertiary">
                         <i class="bi bi-file-fill"></i>
                       </div>
                       <div>
-                        <span class="d-block text-heading fw-bold">{{
-                          report.title
-                        }}</span>
+                        <span class="d-block text-heading fw-bold">
+                          {{ report.brandName }}
+                        </span>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <a class="text-current" href="#">{{ report.capital }}</a>
+                    <a class="text-current">{{ report.capital }}</a>
                   </td>
                   <td>{{ report.category }}</td>
                   <td>{{ report.location }}</td>
-                  <td>{{ report.date }}</td>
+                  <td>{{ formatCreatedDate(report.createdAt) }}</td>
                   <td class="text-end">
                     <div class="dropdown">
-                      <a
-                        class="text-muted"
-                        href="#"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
+                      <a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </a>
                       <div class="dropdown-menu dropdown-menu-end">
                         <a href="#!" class="dropdown-item">Action</a>
                         <a href="#!" class="dropdown-item">Another action</a>
-                        <a href="#!" class="dropdown-item"
-                          >Something else here</a
-                        >
+                        <a href="#!" class="dropdown-item">Something else here</a>
                       </div>
                     </div>
                   </td>
@@ -151,6 +127,8 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
+import { findAllReports } from '@/services/simulation/ReportAPI';
+import { fetchResponseById } from '@/services/simulation/SimulationAPI';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -189,81 +167,73 @@ const getMemberData = async () => {
   }
 };
 
-const reports = ref([
-  {
-    id: 1,
-    title: '7번째 리포트',
-    capital: '5억',
-    category: '편의점',
-    location: '강남',
-    date: '2024-09-13',
-  },
-  {
-    id: 'id2',
-    title: '6번째 리포트',
-    capital: '3억',
-    category: '카페',
-    location: '신촌',
-    date: '2024-08-12',
-    status: '',
-  },
-  {
-    id: 'id3',
-    title: '5번째 리포트',
-    capital: '4억',
-    category: '식당',
-    location: '이태원',
-    date: '2024-08-25',
-    status: '',
-  },
-  {
-    id: 'id4',
-    title: '4번째 리포트',
-    capital: '6억',
-    category: '헬스장',
-    location: '홍대',
-    date: '2024-09-01',
-    status: '',
-  },
-  {
-    id: 'id5',
-    title: '3번째 리포트',
-    capital: '2억',
-    category: '서점',
-    location: '여의도',
-    date: '2024-09-05',
-    status: '',
-  },
-  {
-    id: 'id6',
-    title: '2번째 리포트',
-    capital: '7억',
-    category: '영화관',
-    location: '종로',
-    date: '2024-09-10',
-    status: '',
-  },
-  {
-    id: 'id6',
-    title: '1번째 리포트',
-    capital: '7억',
-    category: '영화관',
-    location: '종로',
-    date: '2024-09-10',
-    status: '',
-  },
-]);
-getMemberData();
+const answers = ref([]);
+const reports = ref([]);
+
+const formatCreatedDate = (createdAt) => {
+  const inputDate = new Date(createdAt);
+
+  const formattedDate = inputDate.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+  });
+
+  const result = formattedDate.replace(/(\d{4})\.\s(\d{1,2})\.\s(\d{1,2})/, "$1년 $2월 $3일").replace(/\.$/, ''); // 마지막 점 제거;
+
+  return result;
+}
+
+const showReport = (reportId) => {
+  location.href = `/simul/report?id=${reportId}`; // 리포트 페이지로 이동
+}
+
+const fetchResponse = async (responseId) => {
+  return await fetchResponseById(responseId);
+}
+
+const formatPrice = (value) => {
+  if (value >= 10000) {
+    const eok = Math.floor(value / 10000);
+    const man = value % 10000;
+
+    if (man === 0) {
+      return new Intl.NumberFormat().format(eok) + '억';
+    } else {
+      return new Intl.NumberFormat().format(eok) + '억 ' + new Intl.NumberFormat().format(man) + '만원';
+    }
+  } else {
+    return new Intl.NumberFormat().format(value) + '만원';
+  }
+}
+
+onMounted(async () => {
+  reports.value = await findAllReports(authStore.id);
+
+  for (let index = 0; index < reports.value.length; index++) {
+    const response = await fetchResponse(reports.value[index].simulationResponseId);
+    reports.value[index]["category"] = response[3].subcategories;
+    reports.value[index]["location"] = response[0].district + " " + response[0].neighborhoods;
+    reports.value[index]["capital"] = formatPrice(response[4].text);
+  }
+
+  console.log(reports.value);
+  getMemberData();
+})
 </script>
 
 <style scoped>
 .app {
   background-color: rgb(246, 249, 252);
-  min-height: 100vh; /* 최소 높이를 100vh로 설정하여 화면을 다 채우도록 함 */
+  min-height: 100vh;
+  /* 최소 높이를 100vh로 설정하여 화면을 다 채우도록 함 */
 }
+
 .card {
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1); /* 얇은 그림자 */
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  /* 얇은 그림자 */
 }
+
 .page-loading {
   position: fixed;
   top: 0;
@@ -279,13 +249,16 @@ getMemberData();
   visibility: hidden;
   z-index: 9999;
 }
+
 .dark-mode .page-loading {
   background-color: #121519;
 }
+
 .page-loading.active {
   opacity: 1;
   visibility: visible;
 }
+
 .page-loading-inner {
   position: absolute;
   top: 50%;
@@ -298,20 +271,24 @@ getMemberData();
   transition: opacity 0.2s ease-in-out;
   opacity: 0;
 }
-.page-loading.active > .page-loading-inner {
+
+.page-loading.active>.page-loading-inner {
   opacity: 1;
 }
-.page-loading-inner > span {
+
+.page-loading-inner>span {
   display: block;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: normal;
   color: #6f788b;
 }
-.dark-mode .page-loading-inner > span {
+
+.dark-mode .page-loading-inner>span {
   color: #fff;
   opacity: 0.6;
 }
+
 .page-spinner {
   display: inline-block;
   width: 2.75rem;
@@ -324,53 +301,69 @@ getMemberData();
   -webkit-animation: spinner 0.75s linear infinite;
   animation: spinner 0.75s linear infinite;
 }
+
 .dark-mode .page-spinner {
   background-color: rgba(255, 255, 255, 0.25);
 }
+
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
   }
+
   50% {
     opacity: 1;
     -webkit-transform: none;
     transform: none;
   }
 }
+
 @keyframes spinner {
   0% {
     -webkit-transform: scale(0);
     transform: scale(0);
   }
+
   50% {
     opacity: 1;
     -webkit-transform: none;
     transform: none;
   }
 }
+
 .custom-line {
-  width: 100%; /* 선의 길이 설정 */
-  height: 1px; /* 선의 굵기 설정 */
-  background-color: #6184c6; /* 선의 색상 설정 */
-  margin: 0px 0; /* 원하는 여백 설정 */
+  width: 100%;
+  /* 선의 길이 설정 */
+  height: 1px;
+  /* 선의 굵기 설정 */
+  background-color: #6184c6;
+  /* 선의 색상 설정 */
+  margin: 0px 0;
+  /* 원하는 여백 설정 */
 }
 
 .btn-custom {
   display: block;
 
-  margin: 0 auto; /* 화면 가운데 정렬 */
-  width: 100%; /* 버튼을 가로로 길게 설정 */
-  max-width: 200px; /* 최대 너비 설정 */
-  padding: 10px 0; /* 버튼 세로 크기 조절 */
+  margin: 0 auto;
+  /* 화면 가운데 정렬 */
+  width: 100%;
+  /* 버튼을 가로로 길게 설정 */
+  max-width: 200px;
+  /* 최대 너비 설정 */
+  padding: 10px 0;
+  /* 버튼 세로 크기 조절 */
 }
 
 .table {
-  border-collapse: collapse; /* 경계선 제거 */
+  border-collapse: collapse;
+  /* 경계선 제거 */
 }
 
 .table td,
 .table th {
-  border: none; /* 셀 경계선 제거 */
+  border: none;
+  /* 셀 경계선 제거 */
 }
 </style>
