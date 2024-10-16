@@ -358,7 +358,7 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     }
 
     # 추천 비용(recommended_cost) 계산: 사용자 자금에서 인테리어비와 가맹비를 뺀 값
-    recommended_cost = user_data['initial_capital'] - convert_to_float(filtered_franchises[0]['initial_cost']) - convert_to_float(filtered_franchises[0]['interior_cost'])
+    recommended_cost = convert_to_float(filtered_franchises[0]['initial_cost']) + convert_to_float(filtered_franchises[0]['interior_cost'])
     simulation_data["recommended_cost"] = recommended_cost
 
     # excluded_franchises_sorted가 비어 있지 않은지 확인
