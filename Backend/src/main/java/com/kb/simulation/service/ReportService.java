@@ -1,5 +1,6 @@
 package com.kb.simulation.service;
 
+import com.kb.simulation.dto.ReportInfo;
 import com.kb.simulation.dto.report.RequestReport;
 import com.kb.simulation.dto.report.ResponseReport;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -54,5 +56,12 @@ public class ReportService {
         }
 
         return "";
+    }
+
+    public List<ReportInfo> findAllReports(String userId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("user_id").is(userId));
+
+        return mongoTemplate.find(query, ReportInfo.class, REPORT_COLLECTION);
     }
 }
