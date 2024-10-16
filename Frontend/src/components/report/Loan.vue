@@ -10,8 +10,8 @@
             style="height: 100%; width:23%;">
             <img src="@/assets/img/report/cry.png" alt="" style="height: 150px" />
             <!-- <div v-if="excludedBrandName.brand_name"> -->
-            <h5 class="mb-2 fw-light">자본금 부족으로 제외되었어요.</h5>
-            <h2 class="mb-3">{{ excludedBrandName }}</h2>
+            <h5 class="mb-4 fw-light">자본금 부족으로 제외되었어요.</h5>
+            <h3 class="mb-3">{{ excludedBrandName }}</h3>
           </div>
           <div v-else
             class="col-3 pb-12 pt-12 me-3 d-flex flex-column align-items-center justify-content-center add_card"

@@ -362,7 +362,9 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     print("\n=== Simulation Data ===")
     for key, value in simulation_data.items():
         print(f"{key}: {value}")
-    
+
+    simulation_data['top_3_nearby_stations'] = sorted(simulation_data['top_3_nearby_stations'], key=lambda x: x['people'], reverse=True)
+
     print("\nTop 3 Nearby Stations:")
     for station in simulation_data['top_3_nearby_stations']:
         print(f"Station Name: {station['station_name']}, People: {station['people']}")
