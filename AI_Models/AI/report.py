@@ -299,8 +299,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     industry_opening_rate_average = sum(opening_rate_list) / len(opening_rate_list)
     industry_closing_rate_average = sum(closure_rate_list) / len(closure_rate_list)
 
-    formatted_industry_opening_rate = f"{industry_opening_rate_average:.2f}%"
-    formatted_industry_closing_rate = f"{industry_closing_rate_average:.2f}%"
+    # formatted_industry_opening_rate = f"{industry_opening_rate_average:.2f}%"
+    # formatted_industry_closing_rate = f"{industry_closing_rate_average:.2f}%"
 
 
     simulation_data = {
@@ -319,8 +319,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         "recommended_brand_average_sales": filtered_franchises[0]['average_sales'],  # 평균 매출
         "recommended_brand_average_sales_per_area": filtered_franchises[0]['average_sales_per_area'],  # 평당 매출
 
-        "industry_opening_rate_average": formatted_industry_opening_rate,  # 산업의 평균 개업률
-        "industry_closing_rate_average": formatted_industry_closing_rate,  # 산업의 평균 폐업률
+        "industry_opening_rate_average": industry_opening_rate_average,  # 산업의 평균 개업률
+        "industry_closing_rate_average": industry_closing_rate_average,  # 산업의 평균 폐업률
         "recommended_brand_opening_rate_average": filtered_franchises[0]['opening_rate'],  # 추천 브랜드 개업률
         "recommended_brand_closing_rate_average": filtered_franchises[0]['closure_rate'],  # 추천 브랜드 폐업률
 
