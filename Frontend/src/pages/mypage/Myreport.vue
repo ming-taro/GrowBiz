@@ -72,9 +72,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="report in reports" :key="report.reportId" @click=showReport(report.reportId)>
+                <tr v-for="report in reports" :key="report.reportId" @click=showReport(report.reportId)
+                  style="cursor: pointer">
                   <td>
-                    <div class="d-flex align-items-center gap-3 ps-1">
+                    <div class=" d-flex align-items-center gap-3 ps-1">
                       <div class="text-base">
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" />
@@ -92,14 +93,11 @@
                     </div>
                   </td>
                   <td>
-                    <a class="text-current" href="#">{{ report.capital }}</a>
+                    <a class="text-current">{{ report.capital }}</a>
                   </td>
-                  <td>샘플</td>
-                  <!-- <td>샘플 // {{ report.category }}</td> -->
-                  <td>샘플</td>
-                  <!-- <td>샘플 // {{ report.location }}</td> -->
+                  <td>{{ report.category }}</td>
+                  <td>{{ report.location }}</td>
                   <td>{{ formatCreatedDate(report.createdAt) }}</td>
-                  <!-- <td>{{ report.date }}</td> -->
                   <td class="text-end">
                     <div class="dropdown">
                       <a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -173,7 +171,6 @@ const answers = ref([]);
 const reports = ref([]);
 
 const formatCreatedDate = (createdAt) => {
-  console.log("전:", createdAt);
   const inputDate = new Date(createdAt);
 
   const formattedDate = inputDate.toLocaleDateString('ko-KR', {
@@ -195,13 +192,29 @@ const fetchResponse = async (responseId) => {
   return await fetchResponseById(responseId);
 }
 
+const formatPrice = (value) => {
+  if (value >= 10000) {
+    const eok = Math.floor(value / 10000);
+    const man = value % 10000;
+
+    if (man === 0) {
+      return new Intl.NumberFormat().format(eok) + '억';
+    } else {
+      return new Intl.NumberFormat().format(eok) + '억 ' + new Intl.NumberFormat().format(man) + '만원';
+    }
+  } else {
+    return new Intl.NumberFormat().format(value) + '만원';
+  }
+}
+
 onMounted(async () => {
   reports.value = await findAllReports(authStore.id);
 
   for (let index = 0; index < reports.value.length; index++) {
-    const response = fetchResponse(reports[index].simulationResponseId);
-
-    // reports[index]["category"] = response.
+    const response = await fetchResponse(reports.value[index].simulationResponseId);
+    reports.value[index]["category"] = response[3].subcategories;
+    reports.value[index]["location"] = response[0].district + " " + response[0].neighborhoods;
+    reports.value[index]["capital"] = formatPrice(response[4].text);
   }
 
   console.log(reports.value);
