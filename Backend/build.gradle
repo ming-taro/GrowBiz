@@ -25,6 +25,9 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
+  implementation 'org.jsoup:jsoup:1.15.4'
+
+  implementation 'org.json:json:20210307'
   // 스프링
   implementation ("org.springframework:spring-context:${springVersion}")
           { exclude group: 'commons-logging', module: 'commons-logging' }
@@ -98,10 +101,16 @@ dependencies {
   // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
   implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 
+  // mongo db
+  implementation 'org.springframework.data:spring-data-mongodb:2.1.5.RELEASE'
+  implementation 'org.mongodb:mongo-java-driver:3.10.1'
+  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
+  // python
+  implementation 'org.python:jython-slim:2.7.4'
 }
 
 
 test {
   useJUnitPlatform()
 }
-

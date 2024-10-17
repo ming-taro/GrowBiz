@@ -10,11 +10,53 @@
         <select id="selectIndividualEduById" parameterType="int" resultType="IndividualEduDTO">
             SELECT * FROM individual_edu WHERE vno = #{vno}
         </select>
-    <!-- 제목 또는 해시태그로 검색하는 SQL 쿼리 -->
-    <select id="searchIndividualEduByKeyword" resultType="IndividualEduDTO">
-        SELECT * FROM individual_edu
-        WHERE title LIKE CONCAT('%', #{keyword}, '%')
-           OR hashtag LIKE CONCAT('%', #{keyword}, '%')
+
+
+    <select id="searchIndividualEduByOption" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
+        <![CDATA[
+    SELECT * FROM individual_edu
+    WHERE 1=1
+    ]]>
+        <!-- Option 배열이 있을 경우 category에서 해당 값들이 있는지 검색 -->
+        <if test="option != null and option.size() > 0">
+            AND (
+            <foreach item="item" collection="option" open="(" separator="OR" close=")">
+                category LIKE CONCAT('%', #{item}, '%')
+            </foreach>
+            )
+        </if>
+    </select>
+    <select id="searchIndividualEdu" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
     </select>
 
+    <select id="searchIndividualEduByTitle" parameterType="IndividualEduParam" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
+
+    <select id="searchIndividualEduByContent" parameterType="IndividualEduParam" resultType="com.kb.infoPlaza.dto.IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
+    <select id="searchIndividualEduByKeyword" parameterType="IndividualEduParam" resultType="IndividualEduDTO">
+        SELECT *
+        FROM individual_edu
+        WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR content LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR brief_introduction LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR learning_goal LIKE CONCAT('%', #{searchKeyword}, '%')
+           OR category LIKE CONCAT('%', #{searchKeyword}, '%')
+    </select>
 </mapper>

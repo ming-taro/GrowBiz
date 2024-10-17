@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.community.mapper.CommunityMapper">
+    <select id="getPostsByCategory" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category}
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="selectPostById" parameterType="long" resultType="com.kb.community.dto.PostDTO">
+        SELECT * FROM community_post WHERE post_id = #{postId}
+    </select>
+
+    <insert id="createPost" parameterType="map">
+        INSERT INTO community_post (user_id, title, content, created_at, category, view, recommend, no_recommend)
+        VALUES (#{post.userId}, #{post.title}, #{post.content}, NOW(), #{category}, 0, 0, 0)
+    </insert>
+
+    <delete id="deletePost" parameterType="Long">
+        DELETE FROM community_post WHERE post_id = #{postId}
+    </delete>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="com.kb.community.dto.PostDTO">
+        UPDATE community_post
+        SET title = #{title}, content = #{content}
+        WHERE post_id = #{postId} and user_id = #{userId}
+    </update>
+
+    <!-- 조회수 증가 -->
+    <update id="incrementViewCount" parameterType="long">
+        UPDATE community_post
+        SET view = view + 1
+        WHERE post_id = #{postId}
+    </update>
+
+    <update id="incrementLikes" parameterType="long">
+        UPDATE community_post
+        SET recommend = recommend + 1
+        WHERE post_id = #{postId}
+    </update>
+
+    <update id="incrementDislikes" parameterType="long">
+        UPDATE community_post
+        SET no_recommend = no_recommend + 1
+        WHERE post_id = #{postId}
+    </update>
+
+    <select id="searchPostsByTitle" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPostsByContent" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND content LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPostsByUserId" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND user_id LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY post_id DESC
+    </select>
+
+    <select id="searchPosts" parameterType="map" resultType="com.kb.community.dto.PostDTO">
+        SELECT *
+        FROM community_post
+        WHERE category = #{category} AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') OR user_id LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY post_id DESC
+    </select>
+</mapper>

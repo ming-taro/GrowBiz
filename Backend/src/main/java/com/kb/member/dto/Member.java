@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Member implements UserDetails {
     private long mno;			// PK
     private String id; 			// id=username
@@ -24,6 +25,10 @@ public class Member implements UserDetails {
     private String status; 		// 활성화 여부, Y, N
     private Date createDate;    // 생성일
     private Date modifyDate;    // 수정일
+    private String phone;
+    private long goalAmount;
+    private String message;
+    private String gender;
 
     private String token; // JWT 토큰값, DB로는 저장하지 않음
 

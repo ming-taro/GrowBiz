@@ -1,41 +1,153 @@
 <template>
   <div>
-    <div class="title">추천 위치</div>
-    <div class="row">
-      <div class="wid-half">
+    <div class="title mb-2">주변 동종업체</div>
+    <div class="row" style="position: relative">
+      <div :class="{ blur_text: isActive, disnon: nonActive }">
+        로그인 후 이용하실 수 있습니다.
+      </div>
+      <div class="wid-half" :class="{ blur: isActive }">
+        <div :class="{ blur_overlay: isActive }"></div>
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="wid-half">
-        <MyGraph />
+        <MyMapGraph />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  mounted() {
-    const script = document.createElement('script');
-    script.src =
-      '//dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false';
-    script.onload = () => {
-      kakao.maps.load(() => {
-        var container = document.getElementById('map');
-        var options = {
-          center: new kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        };
+import axios from 'axios';
 
-        var map = new kakao.maps.Map(container, options);
-      });
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+
+const mno = authStore.state.mno;
+
+let id = '';
+
+export default {
+  data() {
+    return {
+      map: null,
+      address: '', // 초기 주소를 설정할 수 있습니다.
+      geocoder: null, // Geocoder 추가
+      markerImage: 'null', // 커스텀 마커 이미지
+      isActive: true,
+      nonActive: true,
     };
-    document.head.appendChild(script);
+  },
+  mounted() {
+    this.loadKakaoMapsScript();
+  },
+  methods: {
+    loadKakaoMapsScript() {
+      const script = document.createElement('script');
+      script.src = import.meta.env.VITE_KAKAO_API_URL;
+      script.onload = () => {
+        kakao.maps.load(() => {
+          this.initMap();
+          this.geocoder = new kakao.maps.services.Geocoder(); // Geocoder 초기화
+          this.fetchAddress(); // 초기 주소를 가져오는 함수 호출
+        });
+      };
+      document.head.appendChild(script);
+    },
+    initMap() {
+      const container = document.getElementById('map');
+      const options = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567),
+        level: 5,
+      };
+      this.map = new kakao.maps.Map(container, options);
+
+      // 여기서 마커 이미지를 생성
+      const imageSrc = 'src/assets/img/mystore/marker.jpg';
+      const imageSize = new kakao.maps.Size(100, 90); // 마커 이미지의 크기
+      this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+    },
+    async fetchAddress() {
+      if (mno != '') {
+        this.isActive = false;
+        id = mno;
+      } else {
+        this.nonActive = false;
+      }
+      try {
+        let response = await axios.get(`/api/kmap/member/${id}`); // ID에 해당하는 주소를 가져옴
+
+        if (response.data.length == 0) {
+          id = '1234';
+          response = await axios.get(`/api/kmap/member/${id}`);
+        }
+
+        this.address = response.data.address; // 응답 데이터에서 주소를 가져와서 설정
+
+        this.searchAddress(); // 주소를 사용하여 검색 실행
+      } catch (error) {
+        console.error('Error fetching address:', error);
+      }
+    },
+    async searchAddress() {
+      try {
+        const address = this.address;
+
+        // 입력된 주소에 마커를 표시
+        this.geocoder.addressSearch(address, (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 지도 중심을 주소의 좌표로 이동
+            this.map.setCenter(coords);
+
+            // 입력된 주소에 마커 표시
+            new kakao.maps.Marker({
+              map: this.map,
+              position: coords,
+              image: this.markerImage, // 커스텀 마커 이미지 적용
+            });
+
+            // 동 이름을 서버에서 가져옴
+            this.getNearbyInfo(address);
+          }
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
+    async getNearbyInfo(address) {
+      try {
+        const response = await axios.get(`/api/kmap/nearby/${address}`);
+        const { center, nearbyDongs, convenienceStores } = response.data;
+
+        // 중심 마커 표시
+        new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(center.y, center.x),
+          map: this.map,
+          image: this.markerImage, // 커스텀 마커 이미지 적용
+        });
+
+        // 편의점 마커 표시
+        convenienceStores.forEach((store) => {
+          new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(store.y, store.x),
+            map: this.map,
+          });
+        });
+      } catch (error) {
+        console.error(
+          'Error:',
+          error.response ? error.response.data : error.message
+        );
+      }
+    },
   },
 };
 </script>
 
 <script setup>
-import MyGraph from '@/components/asset/MyGraph.vue';
+import MyMapGraph from '@/components/asset/MyMapGraph.vue';
 </script>
 
 <style scoped>
@@ -44,8 +156,6 @@ import MyGraph from '@/components/asset/MyGraph.vue';
 }
 
 .title {
-  margin: -14px 0px -14px 0px;
-  position: relative;
   top: -18px;
   font-size: 25px;
   font-weight: bold;
@@ -58,5 +168,38 @@ import MyGraph from '@/components/asset/MyGraph.vue';
 }
 .wid-half {
   width: 50%;
+}
+
+.blur {
+  background-size: cover;
+  filter: blur(5px);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.blur_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.5);
+  z-index: 2;
+}
+
+.blur_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-37%, -80%);
+  z-index: 3;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.disnon {
+  display: none;
 }
 </style>

@@ -6,7 +6,7 @@
 <mapper namespace="com.kb.infoPlaza.mapper.BusinessItemMapper">
     <select id="getBest3List" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
         SELECT SIGNGU_CD_NM, ADSTRD_CD_NM, TRDAR_SE_CD_NM, SVC_INDUTY_CD_NM
-        FROM commercial_sales
+        FROM commercial_sales3
         ORDER BY
         <if test="age == null or age == ''">
             THSMON_SELNG_AMT DESC
@@ -38,41 +38,98 @@
     </select>
 
     <select id="getPortion5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
-        LIMIT 5
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1) limit 5;
     </select>
 
     <select id="getPortion" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        SELECT * FROM commercial_sales
-        WHERE ADSTRD_CD_NM =
-        <if test="location != null">
-            #{location}
-        </if>
-        <if test="location == null">
-            '군자동'
-        </if>
+        SELECT *
+        FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1);
     </select>
 
     <select id="getRate5" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures limit 5
+        select * from business_closures4 limit 5
     </select>
 
     <select id="getRate" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
-        select * from business_closures
+        select * from business_closures4
     </select>
 
     <select id="getTotal5" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        select * from commercial_sales limit 5
+        select * from commercial_sales3 limit 5
     </select>
 
     <select id="getTotal" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
-        select * from commercial_sales
+        select * from commercial_sales3
+    </select>
+
+    <select id="getFilteredList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales3
+        WHERE 1=1
+        <if test="gu != '전체'">
+            AND SIGNGU_CD_NM = #{gu}
+        </if>
+        <if test="dong != '전체'">
+            AND ADSTRD_CD_NM = #{dong}
+        </if>
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getFilteredPortionList" resultType="com.kb.infoPlaza.dto.BusinessItemDTO">
+        SELECT * FROM commercial_sales3
+        WHERE ADSTRD_CD_NM = (SELECT addressname FROM mystore limit 1)
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_SE_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getFilteredCloseList" resultType="com.kb.infoPlaza.dto.BusinessClosureDTO">
+        SELECT * FROM business_closures4
+        WHERE 1=1
+        <if test="gu != '전체'">
+            AND SIGNGU_CD_NM = #{gu}
+        </if>
+        <if test="dong != '전체'">
+            AND ADSTRD_CD_NM = #{dong}
+        </if>
+        <if test="service != '전체'">
+            AND SVC_INDUTY_CD_NM = #{service}
+        </if>
+        <if test="input != null and input != ''">
+            AND (
+            TRDAR_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SVC_INDUTY_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR SIGNGU_CD_NM LIKE CONCAT('%', #{input}, '%')
+            OR ADSTRD_CD_NM LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getDong" resultType="java.lang.String">
+        SELECT DISTINCT ADSTRD_CD_NM FROM commercial_sales3
+        WHERE SIGNGU_CD_NM = #{gu}
+    </select>
+
+    <select id="getDongClose" resultType="java.lang.String">
+        SELECT DISTINCT ADSTRD_CD_NM FROM business_closures4
+        WHERE SIGNGU_CD_NM = #{gu}
     </select>
 </mapper>

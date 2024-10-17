@@ -1,116 +1,87 @@
 <template>
   <div>
-    <div class="title-sm">
-      <div class="custom-line" />
-      추천 위치
-      <div class="custom-line" />
+    <div class="title-sm mt-5 mb-2 title-location">
+      <div class="custom-line"></div> <!-- Change here -->
+      <span class="title">추천 위치</span>
+      <div class="custom-line"></div> <!-- Change here -->
     </div>
     <div class="row">
       <div class="col-7">
         <div id="map" style="height: 400px"></div>
       </div>
       <div class="col-5 d-flex justify-content-center align-content-center">
-        <div style="display: flex; flex-direction: column; height: 95%">
-          <div
-            class="d-flex justify-content-between m-4 align-items-stretch"
-            style="height: 50%"
-          >
-            <!-- 왼쪽 텍스트 -->
-            <div
-              class="d-flex flex-column justify-content-between"
-              style="width: 60%"
-            >
-              <div>
-                <h2 class="fw-bolder">신한넥스텔</h2>
-                <h4 class="mainblue mt-1">매매 9,800 ~ 2억 1,000 원</h4>
-                <div class="align-content-center">
-                  <h6 class="mt-2" style="font-weight: 300">
-                    오피스텔·280세대·총1동
-                  </h6>
-                  <h6 style="font-weight: 300">
-                    1998.10.26·36.49㎡ ~ 103.66㎡
-                  </h6>
-                </div>
-              </div>
-              <h5 class="mt-auto align-content-end">
-                매매 9 | 전세 0 | 월세 14
-              </h5>
-            </div>
 
-            <!-- 오른쪽 이미지 -->
-            <div class="d-flex align-items-end" style="width: 36%">
-              <img
-                src="../../assets/img/report/sapmle.jpg"
-                alt=""
-                style="width: 100%; height: auto"
-              />
-            </div>
+        <div style="display: flex; flex-direction: column; overflow: auto; height: 400px" class="scrollBar">
+          <div v-if="plno_list" class="pl-3 pr-3 pe-5" style="font-size: 20px">
+            조회 결과 {{ props.plno_list.length }}건
+            <hr />
           </div>
 
-          <hr />
-          <!-- 가로선 추가 -->
-
-          <div
-            class="d-flex justify-content-between mt-0 m-4 align-items-stretch"
-            style="height: 50%"
-          >
-            <!-- 왼쪽 텍스트 -->
-            <div
-              class="d-flex flex-column justify-content-between"
-              style="width: 60%"
-            >
-              <div>
-                <h2 class="fw-bolder">신한넥스텔</h2>
-                <h4 class="mainblue mt-1">매매 9,800 ~ 2억 1,000</h4>
-                <div class="align-content-center">
-                  <h6 class="mt-2" style="font-weight: 300">
-                    오피스텔·280세대·총1동
-                  </h6>
-                  <h6 style="font-weight: 300">
-                    1998.10.26·36.49㎡ ~ 103.66㎡
-                  </h6>
-                </div>
-              </div>
-              <h5 class="mt-auto align-content-end">
-                매매 9 | 전세 0 | 월세 14
-              </h5>
-            </div>
-
-            <!-- 오른쪽 이미지 -->
-            <div class="d-flex align-items-end" style="width: 36%">
-              <img
-                src="../../assets/img/report/sapmle.jpg"
-                alt=""
-                style="width: 100%; height: auto"
-              />
-            </div>
+          <div v-for="(plno, index) in props.plno_list" v-bind:key="index" class="pe-5">
+            <Property v-bind:plno="plno" :map="map" @property-clicked="handlePropertyClick(plno)" @click="openModal" />
           </div>
         </div>
       </div>
     </div>
+
+    <div v-if="isModalOpen" class="modal fade show" style="display: block;" tabindex="-1"
+      aria-labelledby="exampleModalLabel">
+      <PropertyDetail :property=property :closeModal=closeModal />
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  mounted() {
-    const script = document.createElement('script');
-    script.src =
-      '//dapi.kakao.com/v2/maps/sdk.js?appkey=09118387dc78b55b2c58f3876095c5d2&autoload=false';
-    script.onload = () => {
-      kakao.maps.load(() => {
-        var container = document.getElementById('map');
-        var options = {
-          center: new kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        };
+<script setup>
+import { onMounted, defineProps, ref } from 'vue';
+import { findLocationByAddress } from '@/services/simulation/LocationAPI';
+import Property from '@/components/report/Property.vue'
+import { fetchPropertyById } from '@/services/simulation/PropertyAPI';
+import PropertyDetail from '@/components/report/PropertyDetail.vue';
 
-        var map = new kakao.maps.Map(container, options);
-      });
-    };
-    document.head.appendChild(script);
-  },
+const props = defineProps(["location", "plno_list"]);
+const map = ref(null);
+
+const isModalOpen = ref(false);
+const selectedPropertyIndex = ref(null);
+const property = ref(null);
+
+const openModal = () => {
+  isModalOpen.value = true;
 };
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+const handlePropertyClick = async (plno) => {
+  selectedPropertyIndex.value = plno;
+  property.value = await fetchPropertyById(plno);
+  openModal();
+};
+
+const setLocation = async () => {
+  const location = props.location ? await findLocationByAddress(props.location) : await findLocationByAddress("광진구 군자동");
+  // const location = { y: 37.49606, x: 127.040995 }; // 임시 위치 -> 위의 데이터로 교체 필요
+  const script = document.createElement('script');
+  script.src = import.meta.env.VITE_KAKAO_API_URL;
+  script.onload = () => {
+    kakao.maps.load(() => {
+      var container = document.getElementById('map');
+      var options = {
+        center: new kakao.maps.LatLng(location.y, location.x),
+        level: 5,
+      };
+
+      map.value = new kakao.maps.Map(container, options);
+    });
+  };
+  document.head.appendChild(script);
+}
+
+onMounted(async () => {
+  await setLocation();
+  console.log(props.plno_list);
+})
 </script>
 
 <style scoped>
@@ -119,16 +90,66 @@ export default {
 }
 
 .title {
-  margin: -14px 0px -14px 0px;
   position: relative;
-  top: -18px;
   font-size: 25px;
   font-weight: bold;
 }
-.mainblue {
-  color: #6184c6;
+
+.title-location {
+  font-weight: 600;
+  font-size: larger;
+
 }
+
 .weight {
   font-weight: 100;
+}
+
+
+/* Custom Scrollbar */
+.scrollBar::-webkit-scrollbar {
+  width: 8px;
+  /* Scrollbar width */
+}
+
+.scrollBar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Track color */
+  border-radius: 10px;
+  /* Round edges of the track */
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background: #6184c6;
+  /* Scrollbar color */
+  border-radius: 10px;
+  /* Round edges of the thumb */
+}
+
+.scrollBar::-webkit-scrollbar-thumb:hover {
+  background: #466AAD;
+  /* Darker color on hover */
+}
+
+.scrollBar::-moz-scrollbar {
+  width: 8px;
+  /* Scrollbar width for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-track {
+  background: #f1f1f1;
+  /* Track color for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-thumb {
+  background: #007bff;
+  /* Scrollbar color for Firefox */
+  border-radius: 10px;
+  /* Round edges of the thumb for Firefox */
+}
+
+.scrollBar::-moz-scrollbar-thumb:hover {
+  background: #0056b3;
+  /* Darker color on hover for Firefox */
 }
 </style>

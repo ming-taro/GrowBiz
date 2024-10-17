@@ -1,31 +1,47 @@
 <template>
   <InfoPlazaHeader />
   <div class="container mw-screen-xl">
-    <button @click="goBack" class="btn ms-3">뒤로가기</button>
+    <div
+      class="position-relative mb-8 d-flex align-items-end justify-content-center"
+    >
+      <h2 class="fw-bold m-0">영상 정보</h2>
+      <button
+        @click="goBack"
+        class="btn btn-sm btn-link position-absolute end-0 mt-6"
+      >
+        뒤로가기
+      </button>
+    </div>
     <div class="card m-3">
       <div class="row g-0">
         <div class="col-md-4">
           <img
-            src="@/assets/img/media/img-1.jpg"
+            :src="video.thumbnail"
             class="img-fluid rounded-start m-3"
             alt="..."
           />
         </div>
         <div class="col-md-8">
           <div class="card-body m-3">
-            <h6 class="card-title mb-2">카테고리 > 클릭 가능하도록??</h6>
+            <h6 class="card-title mb-2" style="color: #6184c6">
+              <span v-html="formattedCategories"></span>
+            </h6>
             <h3 class="card-title mb-0">
-              [카페창업] 다같이 자영업!! 영상 제목입니다 #영상 #제목
+              {{ video.title }}
             </h3>
 
             <p class="card-text mt-2 me-5" style="max-width: 90%">
-              한줄 소개입니다. 영상을 한줄으로 소개합니다. 딱히 한줄은 아니어도
-              됩니다. 자세한 소개는 아래에 있습니다. 이 영상만 있으면 나도
-              카페왕!!! 카페 메뉴 추천 - 콜드브루라떼에 오트유로변경
+              {{ video.briefIntroduction }}
             </p>
             <p class="card-text">
-              <small class="text-body-secondary">1시간 30분</small>
+              <small class="text-body-secondary">{{ video.eduTime }}</small>
             </p>
+            <button
+              @click="openVideoPopup(video.videoUrl)"
+              class="btn btn-primary mt-2"
+            >
+              시청하기
+            </button>
           </div>
         </div>
       </div>
@@ -35,56 +51,109 @@
       <hr />
       <h4 class="ms-5 mb-2 mt-4">학습 목표</h4>
       <p class="ms-5 mt-3 mb-2" style="width: 75%">
-        영상 목표입니다. 🐦모동숲 비둘기 둥지 카페 구경가기 및 매출 급상승 전략
+        {{ video.learningGoal }}
       </p>
       <h4 class="ms-5 mb-2 mt-4">상세 소개</h4>
       <p class="ms-5 mt-3 mb-2" style="width: 75%">
-        영상 설명입니다. 안녕하세요 peanut asmr입니다. 모두 잘 지내고 계신가요?
-        저는 알고리즘 덕분에 구독자분들이 늘어서 얼떨떨하면서 기쁜 요즘이에요.
-        바쁜 일상과 아이디어 고갈 이슈💬로 업로드가 조금 늦어졌습니다.ㅠ 이번
-        영상은 모동숲 마을 사무소🏡인데요, 폴폴 날리는 먼지들과 빗소리를
-        추가해서 포근함을 더해보았어요. 편안히 즐겨주기를 바라며, 앞으로 더 힐링
-        되는 콘텐츠 굽굽🍞..! 해서 올게요. 감사합니다! 🐦모동숲 비둘기 둥지 카페
-        구경가기 • ASMR 모동숲 갑돌패밀리 티타임🐢☕️ | ⚠️ 금일 보트 투어 쉽
+        {{ video.content }}
       </p>
     </div>
     <hr />
-    <!-- Nav pills -->
-    <ul class="nav nav-pills ms-5">
-      <li class="nav-item">
-        <a href="#" class="nav-link active">Active</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">Link</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">Link</a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link disabled" tabindex="-1" aria-disabled="true"
-          >Disabled</a
-        >
-      </li>
-    </ul>
+    <div class="d-flex flex-wrap ms-5 gap-2">
+      <button
+        v-for="hashtag in formattedHashtags"
+        :key="hashtag"
+        class="btn btn-secondary btn-sm"
+        @click="goToCategory(hashtag.slice(1))"
+        style="border-radius: 20px"
+      >
+        {{ hashtag }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router"; // Import the router
-import InfoPlazaHeader from "@/components/infoplaza/InfoPlazaHeader.vue";
+import { useRoute, useRouter } from 'vue-router'; // Import the router
+import { ref, onMounted, computed } from 'vue';
+import InfoPlazaHeader from '@/components/infoplaza/InfoPlazaHeader.vue';
+import axios from 'axios';
 
-// Function to toggle checkboxes
-function toggleAll(source) {
-  const checkboxes = document.querySelectorAll(
-    ".form-check-input:not(#cycleCheckAll)"
-  );
-  checkboxes.forEach((checkbox) => {
-    checkbox.checked = source.checked;
+const formattedCategories = computed(() => {
+  if (!video.value.category) return '';
+  return video.value.category
+    .split(/\s+/)
+    .map(
+      (word) =>
+        `<span class="category-link" onclick="window.goToCategory('${word.replace(
+          /[,.]$/,
+          ''
+        )}')">${word}</span>`
+    )
+    .join(' ');
+});
+
+const formattedHashtags = computed(() => {
+  if (!video.value.category) return [];
+  return video.value.category
+    .split(/\s+/)
+    .map((word) => '#' + word.replace(/[,.]$/, '').trim())
+    .filter((tag) => tag.length > 1);
+});
+
+// goToCategory 함수를 script 내부로 이동
+const goToCategory = (category) => {
+  router.push({
+    name: 'CategoryList',
+    params: { category: category },
   });
+};
+
+window.goToCategory = (category) => {
+  router.push({
+    name: 'CategoryList',
+    params: { category: category },
+  });
+};
+
+const props = defineProps({
+  vno: {
+    type: String,
+    required: true,
+  },
+});
+
+const router = useRouter();
+const video = ref({});
+
+function openVideoPopup(videoUrl) {
+  if (videoUrl) {
+    window.open(videoUrl, '_blank', 'width=800,height=600');
+  } else {
+    alert('비디오 URL이 없습니다.');
+  }
 }
 
+const fetchVideo = async (vno) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/infoPlaza/education/video/${vno}`
+    );
+    if (response.status === 200) {
+      video.value = response.data; // 받아온 데이터를 video에 저장
+    } else {
+      alert('비디오 정보를 불러오지 못했습니다.');
+    }
+  } catch (error) {
+    alert('에러 발생: ' + error);
+  }
+};
+onMounted(() => {
+  fetchVideo(props.vno);
+});
+
 // Function for navigating back
-const router = useRouter();
+
 function goBack() {
   router.go(-1); // Navigate to the previous page
 }

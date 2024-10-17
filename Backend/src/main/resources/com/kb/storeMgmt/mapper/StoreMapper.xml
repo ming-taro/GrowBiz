@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kb.storeMgmt.mapper.StoreMapper">
+
+    <!-- 가게 정보 삽입 쿼리 -->
+    <insert id="insertStore" parameterType="com.kb.storeMgmt.dto.NeighborhoodDTO">
+        INSERT INTO mystore (address, id, addressname, dongname, svc_induty_cd_nm, rent, utility_expenses, labor_cost, other_expenses, detailAddress, imageUrl)
+        VALUES (#{address}, #{id}, #{addressname}, #{dongname}, #{svcIndutyCdNm}, #{rent}, #{utilityExpenses}, #{laborCost}, #{otherExpenses}, #{detailAddress}, #{imageUrl})
+    </insert>
+
+    <select id="getstoreList" resultType="string">
+        SELECT SVC_INDUTY_CD_NM
+        FROM service_sales where stdr_yyqu_cd='20242' group by SVC_INDUTY_CD_NM order by SVC_INDUTY_CD_NM;
+    </select>
+
+    <update id="updateStore" parameterType="com.kb.storeMgmt.dto.NeighborhoodDTO">
+        UPDATE mystore
+        SET
+            address = #{address},
+            addressname = #{addressname},
+            dongname = #{dongname},
+            svc_induty_cd_nm = #{svcIndutyCdNm},
+            rent = #{rent},
+            utility_expenses = #{utilityExpenses},
+            labor_cost = #{laborCost},
+            other_expenses = #{otherExpenses},
+            detailAddress = #{detailAddress},
+            imageUrl = #{imageUrl}
+        WHERE
+            id = #{id}
+    </update>
+</mapper>

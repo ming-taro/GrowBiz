@@ -8,9 +8,9 @@
             <div class="col-md-12 col-xl-12">
               <input 
                 type="text" 
-                class="form-control" 
-                placeholder="제목을 입력하세요." 
                 v-model="postTitle" 
+                class="form-control"
+                placeholder="제목을 입력하세요." 
               />
             </div>
           </div>
@@ -23,8 +23,10 @@
           </div>
           <hr class="my-6" />
           <div class="d-flex justify-content-end gap-2">
-            <RouterLink to="/community" class="btn btn-sm btn-neutral">취소</RouterLink>            
-            <button type="button" class="btn btn-sm btn-primary" @click="submitPost">등록</button>
+            <RouterLink :to="`/community/${category}`" class="btn btn-sm btn-neutral">취소</RouterLink>            
+            <button type="button" class="btn btn-sm btn-primary" @click="submitPost">
+              {{ isEditMode ? '수정' : '등록' }}
+            </button>
           </div>
         </main>
       </div>
@@ -33,31 +35,76 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Editor from '@/components/editor/Editor.vue';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import Editor from '@/components/editor/Editor.vue'; 
 import CommunityHeader from '@/components/community/CommunityHeader.vue';
+import { useAuthStore } from '@/stores/auth'; // Import your auth store
 
-// Reactive properties for title and content
 const postTitle = ref('');
 const postContent = ref('');
-// Method to handle post submission
-const submitPost = () => {
+const route = useRoute();
+const router = useRouter();
+const category = route.params.category; // URL에서 category를 가져옴
+
+const postId = sessionStorage.getItem('editPostId') || null; // postId가 없으면 null로 초기화
+const isEditMode = ref(!!postId); // postId가 있으면 수정 모드로 설정
+
+const authStore = useAuthStore();
+const userId = authStore.name; // Assuming you have a userId property in your auth store
+
+
+const submitPost = async () => {
   if (postTitle.value.trim() && postContent.value.trim()) {
-    console.log('제목:', postTitle.value);
-    console.log('내용:', postContent.value);
-    // Here you can add functionality to send this data to a server if needed
-    // For now, just reset the fields after submission
-    resetFields();
+    try {
+      if (isEditMode.value) {
+        // 수정 모드일 때 PUT 요청
+        const response = await axios.put(`http://localhost:8080/api/community/${category}/edit`, {
+          postId: postId,
+          title: postTitle.value,
+          content: postContent.value,
+          userId: userId 
+        });
+      } else {
+        // 생성 모드일 때 POST 요청
+        const response = await axios.post(`http://localhost:8080/api/community/${category}/create`, {
+          title: postTitle.value,
+          content: postContent.value,
+          userId: userId 
+        });
+      }
+
+      resetFields();
+      router.push(`/community/${category}`); // 글 작성 또는 수정 후 해당 카테고리로 이동
+    } catch (error) {
+      console.error('글 처리 중 오류 발생:', error);
+    }
   } else {
     alert('제목과 내용을 입력해주세요.');
   }
 };
 
-// Method to reset input fields
 const resetFields = () => {
   postTitle.value = '';
   postContent.value = '';
 };
+
+// onMounted 시점에서 postId가 null인 경우 새 글 작성으로 처리
+onMounted(async () => {
+  if (isEditMode.value) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/community/view/${postId}`);
+      postTitle.value = response.data.title;
+      postContent.value = response.data.content;
+    } catch (error) {
+      console.error('게시글 불러오기 중 오류 발생:', error);
+    }
+  } else {
+    // 수정 모드가 아닐 경우 필드를 초기화합니다.
+    resetFields(); // 새 글 작성 시 필드 초기화
+  }
+});
 </script>
 
 <style scoped>

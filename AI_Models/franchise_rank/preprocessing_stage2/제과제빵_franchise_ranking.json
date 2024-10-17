@@ -1,0 +1,62 @@
+[
+    {
+        "rank": 1,
+        "store_name": "브레댄코(bread&co.DAILY-NEW)",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "15.04%",
+        "closure_rate": "9.40%",
+        "average_sales": "42777.40 만원",
+        "average_sales_per_area": "2631.80 만원",
+        "initial_cost": "10460.00 만원",
+        "business_fee": "1880.00 만원",
+        "interior_cost": "3300.00 만원",
+        "standard_store_area": "33 ㎡",
+        "score": "100.00"
+    },
+    {
+        "rank": 2,
+        "store_name": "던킨/던킨도너츠",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "20.28%",
+        "closure_rate": "12.39%",
+        "average_sales": "42014.70 만원",
+        "average_sales_per_area": "2279.10 만원",
+        "initial_cost": "29150.40 만원",
+        "business_fee": "5045.00 만원",
+        "interior_cost": "9210.00 만원",
+        "standard_store_area": "66 ㎡",
+        "score": "95.08"
+    },
+    {
+        "rank": 3,
+        "store_name": "한스(HANS)",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "4.73%",
+        "closure_rate": "1.19%",
+        "average_sales": "52677.90 만원",
+        "average_sales_per_area": "1278.00 만원",
+        "initial_cost": "32740.00 만원",
+        "business_fee": "4300.00 만원",
+        "interior_cost": "16941.00 만원",
+        "standard_store_area": "99 ㎡",
+        "score": "88.46"
+    },
+    {
+        "rank": 4,
+        "store_name": "코코호도",
+        "year": "2020-2023",
+        "region": "서울",
+        "opening_rate": "9.70%",
+        "closure_rate": "5.29%",
+        "average_sales": "17450.80 만원",
+        "average_sales_per_area": "1859.90 만원",
+        "initial_cost": "11165.00 만원",
+        "business_fee": "935.00 만원",
+        "interior_cost": "2750.00 만원",
+        "standard_store_area": "26 ㎡",
+        "score": "81.11"
+    }
+]

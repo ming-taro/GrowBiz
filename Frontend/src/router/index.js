@@ -1,44 +1,87 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/pages/Home.vue';
-import Shop from '@/pages/Shop.vue';
-import Community from '@/pages/community/Community.vue';
-import FloatPopular from '@/pages/InfoPlaza/FloatPopular.vue';
-import RentalInfo from '@/pages/InfoPlaza/RentalInfo.vue';
-import BoardCreate from '@/pages/community/BoardCreate.vue';
-import BoardView from '@/pages/community/BoardView.vue';
-import PopularIndustry from '@/pages/InfoPlaza/PopularIndustry.vue';
-import TotalTrendingBusinessItems from '@/pages/InfoPlaza/TotalTrendingBusinessItems.vue';
-import MylocationTrending from '@/pages/InfoPlaza/MyLocatinTrending.vue';
-import CloseRatio from '@/pages/InfoPlaza/CloseRatio.vue';
-import StoreInfo from '@/pages/InfoPlaza/StoreInfo.vue';
-import PersonalLoan from '@/pages/Infoplaza/PersonalLoan.vue';
-import LoanDetail from '@/pages/InfoPlaza/LoanDetail.vue';
-import EnterpriseLoan from '@/pages/Infoplaza/EnterpriseLoan.vue';
-import Education from '@/pages/InfoPlaza/Education.vue';
-import Video from '@/pages/InfoPlaza/Video.vue';
-import news from '@/pages/InfoPlaza/news.vue';
-import Report from '@/pages/simul/Report.vue';
-import MyStore from '@/pages/asset/MyStore.vue';
-import Mypage from '@/pages/mypage/Report.vue';
-import StoreReg from '@/pages/asset/StoreReg.vue';
-import InfoAgree from '@/pages/asset/InfoAgree.vue';
-import AssetSelect from '@/pages/asset/AssetSelect.vue';
-import AssetReg from '@/pages/asset/AssetReg.vue';
-import AssetFin from '@/pages/asset/AssetFin.vue';
-import Simul from '@/pages/simul/Simul.vue';
-import Register from '@/pages/register/Register.vue';
-import Login from '@/pages/login/Login.vue';
-import MypageUpdate from '@/components/mypage/MypageUpdate.vue';
-import MypageReport from '@/components/mypage/MypageReport.vue';
+
+const Home = () => import('@/pages/Home.vue');
+const Shop = () => import('@/pages/Shop.vue');
+const Community = () => import('@/pages/community/Community.vue');
+const FloatPopular = () => import('@/pages/InfoPlaza/FloatPopular.vue');
+const RentalInfo = () => import('@/pages/InfoPlaza/RentalInfo.vue');
+const BoardCreate = () => import('@/pages/community/BoardCreate.vue');
+const BoardView = () => import('@/pages/community/BoardView.vue');
+const PopularIndustry = () => import('@/pages/InfoPlaza/PopularIndustry.vue');
+const TotalTrendingBusinessItems = () =>
+  import('@/pages/InfoPlaza/TotalTrendingBusinessItems.vue');
+const PortionTrendingBusinessItems = () =>
+  import('@/pages/InfoPlaza/PortionTrendingBusinessItems.vue');
+const MylocationTrending = () =>
+  import('@/pages/InfoPlaza/MyLocatinTrending.vue');
+const CloseRatio = () => import('@/pages/InfoPlaza/CloseRatio.vue');
+const StoreInfo = () => import('@/pages/InfoPlaza/StoreInfo.vue');
+const GovernmentFund = () => import('@/pages/Infoplaza/GovernmentFund.vue');
+const GovernmentFundDetail = () =>
+  import('@/pages/InfoPlaza/GovernmentFundDetail.vue');
+const PersonalCreditLoan = () =>
+  import('@/pages/Infoplaza/PersonalCreditLoan.vue');
+const PersonalCreditLoanDetail = () =>
+  import('@/pages/Infoplaza/PersonalCreditLoanDetail.vue');
+const EnterpriseLoan = () => import('@/pages/Infoplaza/EnterpriseLoan.vue');
+const KBLoan = () => import('@/pages/Infoplaza/KBLoan.vue');
+const KBLoanDetail = () => import('@/pages/Infoplaza/KBLoanDetail.vue');
+const JeonseLoan = () => import('@/pages/Infoplaza/JeonseLoan.vue');
+const JeonseLoanDetail = () => import('@/pages/Infoplaza/JeonseLoanDetail.vue');
+const MortgageLoan = () => import('@/pages/Infoplaza/MortgageLoan.vue');
+const MortgageLoanDetail = () =>
+  import('@/pages/Infoplaza/MortgageLoanDetail.vue');
+const Education = () => import('@/pages/InfoPlaza/Education.vue');
+const Video = () => import('@/pages/InfoPlaza/Video.vue');
+const CategoryList = () => import('@/pages/InfoPlaza/CategoryList.vue');
+const news = () => import('@/pages/InfoPlaza/news.vue');
+const Report = () => import('@/pages/simul/Report.vue');
+const MyStore = () => import('@/pages/asset/MyStore.vue');
+const Mypage = () => import('@/pages/mypage/Report.vue');
+const StoreReg = () => import('@/pages/asset/StoreReg.vue');
+const InfoAgree = () => import('@/pages/asset/InfoAgree.vue');
+const AssetSelect = () => import('@/pages/asset/AssetSelect.vue');
+const AssetReg = () => import('@/pages/asset/AssetReg.vue');
+const AssetFin = () => import('@/pages/asset/AssetFin.vue');
+const Simul = () => import('@/pages/simul/Simul.vue');
+const Register = () => import('@/pages/register/Register.vue');
+const Welcome = () => import('@/pages/register/Welcome.vue');
+const Login = () => import('@/pages/auth/Login.vue');
+const MypageInfo = () => import('@/pages/mypage/MypageInfo.vue');
+const MypageReport = () => import('@/components/mypage/MypageReport.vue');
+const StoreUpdate = () => import('@/pages/asset/StoreUpdate.vue');
+const Myreport = () => import('@/pages/mypage/Myreport.vue');
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'Home', component: Home },
     { path: '/shop', name: 'Shop', component: Shop },
-    { path: '/community', name: 'Community', component: Community },
-    { path: '/community/create', name: 'BoardCreate', component: BoardCreate },
-    { path: '/community/view', name: 'BoardView', component: BoardView },
+    //    { path: '/community', name: 'Community', component: Community },
+    {
+      path: '/community/:category',
+      name: 'Community',
+      component: Community,
+    },
+    //{ path: '/community/create', name: 'BoardCreate', component: BoardCreate },
+    //{ path: '/community/view', name: 'BoardView', component: BoardView },
+    {
+      path: '/community/:category/view/:postId',
+      name: 'BoardView',
+      component: BoardView,
+    },
+    {
+      path: '/community/:category/edit',
+      name: 'BoardEdit',
+      component: BoardCreate,
+      props: { isEdit: true }, // 수정 모드
+    },
+    {
+      path: '/community/:category/create',
+      name: 'BoardCreate',
+      component: BoardCreate,
+      props: { isEdit: false }, // 등록 모드
+    },
     {
       path: '/infoPlaza/industry',
       name: 'Industry',
@@ -48,6 +91,11 @@ const router = createRouter({
       path: '/infoPlaza/industry/totalTrendingBusinessItems',
       name: 'totalTrendingBusinessItems',
       component: TotalTrendingBusinessItems,
+    },
+    {
+      path: '/infoPlaza/industry/portionTrendingBusinessItems',
+      name: 'portionTrendingBusinessItems',
+      component: PortionTrendingBusinessItems,
     },
     {
       path: '/infoPlaza/industry/mylocationTrending',
@@ -60,9 +108,29 @@ const router = createRouter({
       component: CloseRatio,
     },
     {
-      path: '/infoPlaza/personalLoan',
-      name: 'ersonalLoan',
-      component: PersonalLoan,
+      path: '/infoPlaza/governmentFund',
+      name: 'governmentFund',
+      component: GovernmentFund,
+    },
+    {
+      path: '/infoPlaza/personalCreditLoan',
+      name: 'personalCreditLoan',
+      component: PersonalCreditLoan,
+    },
+    {
+      path: '/infoPlaza/jeonseLoan',
+      name: 'jeonseLoan',
+      component: JeonseLoan,
+    },
+    {
+      path: '/infoPlaza/mortgageLoan',
+      name: 'mortgageLoan',
+      component: MortgageLoan,
+    },
+    {
+      path: '/infoPlaza/KBLoan',
+      name: 'KBLoan',
+      component: KBLoan,
     },
     {
       path: '/infoPlaza/enterpriseLoan',
@@ -70,9 +138,29 @@ const router = createRouter({
       component: EnterpriseLoan,
     },
     {
-      path: '/infoPlaza/personalLoan/loanDetail',
-      name: 'loanDetail',
-      component: LoanDetail,
+      path: '/infoPlaza/governmentFund/governmentFundDetail/:productName',
+      name: 'governmentFundDetail',
+      component: GovernmentFundDetail,
+    },
+    {
+      path: '/infoPlaza/personalCreditLoan/personalCreditLoanDetail/:id',
+      name: 'personalCreditLoanDetail',
+      component: PersonalCreditLoanDetail,
+    },
+    {
+      path: '/infoPlaza/jeonseLoan/jeonseLoanDetail/:id',
+      name: 'jeonseLoanDetail',
+      component: JeonseLoanDetail,
+    },
+    {
+      path: '/infoPlaza/mortgageLoan/mortgageLoanDetail/:id',
+      name: 'mortgageLoanDetail',
+      component: MortgageLoanDetail,
+    },
+    {
+      path: '/infoPlaza/KBLoan/:loanKey',
+      name: 'KBLoanDetail',
+      component: KBLoanDetail,
     },
 
     { path: '/infoPlaza/storeInfo', name: 'storeInfo', component: StoreInfo },
@@ -81,10 +169,30 @@ const router = createRouter({
       name: 'FloatPopular',
       component: FloatPopular,
     },
-    { path: '/infoPlaza/rentalinfo', name: 'RentalInfo', component: RentalInfo },
+    {
+      path: '/infoPlaza/rentalinfo',
+      name: 'RentalInfo',
+      component: RentalInfo,
+    },
     { path: '/infoPlaza/education', name: 'education', component: Education },
-    { path: '/infoPlaza/news', name: 'news', component: news },
-    { path: '/infoPlaza/education/video', name: 'video', component: Video },
+    {
+      path: '/infoplaza/education/video/:vno',
+      name: 'video',
+      component: Video, // 비디오 상세보기 컴포넌트 연결
+      props: true, // route param을 컴포넌트에 props로 전달
+    },
+    {
+      path: '/infoPlaza/education/categoryList/:category',
+      name: 'CategoryList',
+      component: CategoryList,
+    },
+    //    { path: '/infoPlaza/news', name: 'news', component: news },
+    {
+      path: '/infoplaza/news/:category', // :category를 동적으로 받아옴
+      name: 'news',
+      component: news, // 해당 컴포넌트에서 뉴스 카테고리를 처리
+    },
+    // { path: '/infoPlaza/education/video', name: 'video', component: Video },
     { path: '/simul/report', name: 'Report', component: Report },
     { path: '/asset', name: 'MyStore', component: MyStore },
     { path: '/asset/infoagree', name: 'InfoAgree', component: InfoAgree },
@@ -95,9 +203,12 @@ const router = createRouter({
     { path: '/asset/storereg', name: 'StoreReg', component: StoreReg },
     { path: '/simul', name: 'Simul', component: Simul },
     { path: '/register', name: 'Register', component: Register },
+    { path: '/welcome', name: 'Welcome', component: Welcome },
     { path: '/login', name: 'Login', component: Login },
-    { path: '/mypageupdate', name: 'MypageUpdate', component: MypageUpdate },
+    { path: '/mypageInfo', name: 'MypageInfo', component: MypageInfo },
     { path: '/mypagereport', name: 'MypageReport', component: MypageReport },
+    { path: '/asset/storeupdate', name: 'StoreUpdate', component: StoreUpdate },
+    { path: '/mypage/myreport', name: 'Myreport', component: Myreport },
     // { path: '/input', name: "Input", component: Input },
     // { path: '/input2', name: "Input2", component: Input2 },
     // { path: '/update', name: "Update", component: Update },

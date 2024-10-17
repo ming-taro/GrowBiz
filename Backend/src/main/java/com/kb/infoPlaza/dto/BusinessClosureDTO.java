@@ -10,15 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BusinessClosureDTO {
-    private String stdrTrdarSvc;
-    private Long stdrYyquCd;
-    private String trdarSeCdNm;
-    private String adstrdCdNm;
-    private String signguCdNm;
-    private String svcIndutyCdNm;
-    private Long opbizRt;
-    private Long clsbizRt;
-    private Long storCo;
-    private Long similrIndutyStorCo;
-    private String img;
+    private Long stdrYyquCd; // STDR_YYQU_CD
+    private String trdarCdNm; // TRDAR_CD_NM
+    private String svcIndutyCdNm; // SVC_INDUTY_CD_NM
+    private Long storCo; // STOR_CO
+    private Long similrIndutyStorCo; // SIMILR_INDUTY_STOR_CO
+    private Long opbizRt; // OPBIZ_RT
+    private Long opbizStorCo; // OPBIZ_STOR_CO
+    private Long clsbizRt; // CLSBIZ_RT
+    private Long clsbizStorCo; // CLSBIZ_STOR_CO
+    private String signGuCdNm; // SIGNGU_CD_NM
+    private String adstrdCdNm; // ADSTRD_CD_NM
+    private Long ranking; // RANKING
 }

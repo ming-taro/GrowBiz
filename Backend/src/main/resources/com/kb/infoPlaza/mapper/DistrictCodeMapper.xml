@@ -10,4 +10,5 @@
     <select id="selectDistinctDongNames" resultType="DistrictCodeDTO">
         SELECT DISTINCT dong_name FROM all_district where gu_name = #{guName} order by dong_name
     </select>
+
 </mapper>

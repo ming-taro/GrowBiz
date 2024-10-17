@@ -10,118 +10,240 @@
           <div class="mb-8">
             <div class="d-flex mb-3 align-items-end">
               <h3 class="fw-bolder me-3">가게 정보</h3>
-              <p>등록할 가게 주소를 입력해 주세요.</p>
+              <p>등록할 가게 주소와 사진을 등록해 주세요.</p>
             </div>
 
-            <div class="d-inline-flex align-items-center btn-store">
+            <div class="d-inline-flex align-items-center">
               <input
+                v-model="address"
                 type="text"
                 class="form-control me-2 mb-3"
                 placeholder="도로명, 지번, 건물명 검색"
+                readonly
+              />
+              <button
+                class="btn btn-primary me-2 mb-3"
+                style="width: 115px"
+                @click="openDaumPostcode"
+              >
+                주소검색
+              </button>
+            </div>
+            <div style="width: 70.7%">
+              <input
+                v-model="detailAddress"
+                type="text"
+                class="form-control"
+                placeholder="상세주소"
               />
             </div>
-            <button class="btn btn-primary">주소검색</button>
-            <div style="width: 61.7%">
-              <input type="text" class="form-control" placeholder="상세주소" />
-            </div>
           </div>
-        </div>
-        <div style="width: 40%">asd</div>
-      </div>
-      <!-- <div class="mb-8">
-        <div class="d-flex mb-3 align-items-end">
-          <h3 class="fw-bolder me-3">초기 정보</h3>
-          <p>가게 권리금 및 투자액을 입력해 주세요.</p>
-        </div>
-        <div class="d-flex">
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">권리금</h6>
-            <input type="text" class="form-control me-2 mb-3" />
+
+          <!-- 옵션 추가 섹션 -->
+          <div class="option">
+            <select
+              class="form-select round-corner"
+              @change="onStoreChange"
+              v-model="selectedStore"
+            >
+              <option value="" selected disabled>업종을 선택해 주세요</option>
+              <option
+                v-for="(Store, index) in store"
+                :key="index"
+                :value="Store"
+              >
+                {{ Store }}
+              </option>
+            </select>
           </div>
-          <div class="col-sm-2">
-            <h6 class="mb-2">총 투자액</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
-        </div>
-      </div>
-      <div class="mb-8">
-        <div class="d-flex mb-3 align-items-end">
-          <h3 class="fw-bolder me-3">매출 정보</h3>
-          <p>가게 월 매출 정보와 마진율을 입력해 주세요.</p>
         </div>
 
-        <div class="d-flex">
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">마진율</h6>
-            <input type="text" class="form-control me-2 mb-3" />
+        <!-- 사진 업로드 섹션 -->
+        <div style="width: 40%">
+          <div class="photo-area" @click="triggerFileInput">
+            <img
+              :src="imageUrl"
+              alt="미리보기"
+              class="photo-preview"
+              v-if="imageUrl"
+            />
+            <p v-else>이미지를 선택하세요</p>
           </div>
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">손익 분기점</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
+          <input
+            type="file"
+            ref="fileInput"
+            @change="onFileChange"
+            style="display: none"
+          />
         </div>
       </div>
-      <div class="mb-8">
-        <div class="d-flex mb-3 align-items-end">
-          <h3 class="fw-bolder me-3">경비</h3>
-          <p>가게 공과금 및 기타 비용을 입력해 주세요.</p>
-        </div>
 
-        <div class="d-flex">
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">입점 비용</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">월 인건비</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">공과 비용</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
-          <div class="col-sm-2 me-8">
-            <h6 class="mb-2">기타 비용</h6>
-            <input type="text" class="form-control me-2 mb-3" />
-          </div>
-        </div>
-      </div> -->
+      <!-- 종합 정보 섹션 -->
       <div class="mb-8">
         <div class="d-flex mb-3 align-items-end">
-          <h3 class="fw-bolder me-3">종합 정보</h3>
+          <h3 class="fw-bolder me-3">지출 정보</h3>
           <p>상위 입력값을 바탕으로 계산된 정보를 보여드립니다.</p>
         </div>
         <div class="d-flex gap-8">
           <div class="">
-            <h5 class="mb-2">매출 이익</h5>
-            <input type="text" class="form-control me-2 mb-3" />
+            <h5 class="mb-2">월세</h5>
+            <input v-model="rent" type="text" class="form-control me-2 mb-3" />
           </div>
           <div class="">
-            <h5 class="mb-2">경비합계</h5>
-            <input type="text" class="form-control me-2 mb-3" />
+            <h5 class="mb-2">공과금</h5>
+            <input
+              v-model="utilityExpenses"
+              type="text"
+              class="form-control me-2 mb-3"
+            />
           </div>
           <div class="">
-            <h5 class="mb-2">월수익</h5>
-            <input type="text" class="form-control me-2 mb-3" />
+            <h5 class="mb-2">인건비</h5>
+            <input
+              v-model="laborCost"
+              type="text"
+              class="form-control me-2 mb-3"
+            />
           </div>
           <div class="">
-            <h5 class="mb-2">권리금 회수기간</h5>
-            <input type="text" class="form-control me-2 mb-3" />
+            <h5 class="mb-2">기타비용</h5>
+            <input
+              v-model="otherExpenses"
+              type="text"
+              class="form-control me-2 mb-3"
+            />
           </div>
         </div>
       </div>
-      <div class="d-flex justify-content-center">
-        <button class="btn btn-primary streg-btn">등록하기</button>
-      </div>
+    </div>
+
+    <AssetReg />
+
+    <!-- 등록하기 버튼 -->
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary streg-btn" @click="submitForm">
+        등록하기
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 import AssetHeader from '@/components/asset/AssetHeader.vue';
+import AssetReg from '@/pages/asset/AssetReg.vue';
+import defaultImage from '@/assets/img/infoplaza/house.png';
+import { useAuthStore } from '@/stores/auth';
+
+const imageFile = ref(null); // 선택된 파일을 저장
+const authStore = useAuthStore();
+const mno = authStore.state.mno; // 사용자 번호
+
+// 데이터 관련 변수들
+const imageUrl = ref(defaultImage);
+const fileInput = ref(defaultImage); // 파일 입력 필드를 참조하는 ref
+const address = ref('');
+const detailAddress = ref('');
+const rent = ref('');
+const utilityExpenses = ref('');
+const laborCost = ref('');
+const otherExpenses = ref('');
+const store = ref([]); // 서버에서 가져온 은행 리스트
+const selectedStore = ref(''); // 선택된 은행
+
+// 파일 선택을 트리거하는 함수
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+// 파일 변경 시 호출되는 함수
+const onFileChange = (event) => {
+  const file = event.target.files[0];
+
+  if (file) {
+    imageFile.value = file;
+    imageUrl.value = URL.createObjectURL(file); // 선택된 파일의 미리보기 URL 설정
+  }
+};
+
+// Daum 우편번호 검색 창 열기
+const openDaumPostcode = () => {
+  if (window.daum) {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        address.value = data.address;
+      },
+    }).open();
+  }
+};
+
+// Daum 우편번호 API 스크립트를 동적으로 로드
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src =
+    'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+  script.onload = () => {
+    console.log('Daum Postcode script loaded.');
+  };
+  document.body.appendChild(script);
+});
+
+// 폼 데이터를 서버로 전송하는 함수
+const router = useRouter();
+
+const submitForm = () => {
+  const formDataToSend = new FormData();
+  formDataToSend.append('address', address.value);
+  formDataToSend.append('id', mno);
+  formDataToSend.append('detailAddress', detailAddress.value);
+  formDataToSend.append('rent', rent.value);
+  formDataToSend.append('utilityExpenses', utilityExpenses.value);
+  formDataToSend.append('laborCost', laborCost.value);
+  formDataToSend.append('otherExpenses', otherExpenses.value);
+  formDataToSend.append('svcIndutyCdNm', selectedStore.value); // 선택된 은행명 추가
+
+  console.log(imageFile.value + 'imageFile.value');
+
+  // 이미지 파일 추가
+  if (imageFile.value) {
+    formDataToSend.append('image', imageFile.value); // 선택된 파일 추가
+    console.log(imageFile.value); // 선택된 파일 확인 로그 추가
+  }
+
+  // 서버로 데이터를 전송
+  axios
+    .post('/api/store/insert', formDataToSend, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then(() => {
+      // 성공 시 다음 페이지로 이동
+      router.push({ name: 'AssetFin' });
+    })
+    .catch((error) => {
+      console.error('데이터 전송 오류:', error);
+    });
+};
+
+// 서버에서 가게 리스트 가져오기
+const fetchStoreList = async () => {
+  try {
+    const response = await axios.get('/api/store/list');
+    store.value = response.data; // 은행 리스트 저장
+  } catch (error) {
+    console.error('은행 목록을 불러오는 중 오류가 발생했습니다.', error);
+  }
+};
+
+onMounted(() => {
+  fetchStoreList();
+});
 </script>
 
-<style>
+<style scoped>
 .streg-con {
   padding: 0px 150px 0px 150px;
 }
@@ -130,8 +252,8 @@ import AssetHeader from '@/components/asset/AssetHeader.vue';
   margin-bottom: 30px;
 }
 .col-sm-4 {
-  display: inline-flex; /* 인라인 플렉스 박스 */
-  align-items: center; /* 수직 정렬 */
+  display: inline-flex;
+  align-items: center;
 }
 
 .straeg-p {
@@ -144,7 +266,25 @@ p {
 .streg-btn {
   width: 20%;
 }
-.btn-store {
-  width: 49%;
+
+.photo-area {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* 정사각형 비율 */
+  border: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* 클릭 가능하도록 포인터 표시 */
+}
+
+.photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지를 영역에 맞춰서 자르거나 맞춤 */
+  aspect-ratio: 1 / 1; /* 이미지를 정사각형 비율로 맞춤 */
+}
+
+.option {
+  width: 70.6%;
 }
 </style>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.kb.infoPlaza.mapper.LoanMapper">
+
+    <select id="getBest4List" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        SELECT *
+        FROM business_loan_products
+        ORDER BY CAST(REPLACE(total_interest_rate, '%', '') AS DECIMAL(5, 2)) ASC
+        LIMIT 4;
+    </select>
+
+    <select id="getFilteredList" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        SELECT *
+        FROM business_loan_products
+        WHERE 1=1
+        <if test="category != '전체'">
+            <if test="category == '대리대출'">
+                AND category LIKE '%대리대출'
+            </if>
+            <if test="category == '직접대출'">
+                AND category LIKE '%직접대출'
+            </if>
+        </if>
+        <if test="input != null and input != ''">
+            AND (loan_product_name LIKE CONCAT('%', #{input}, '%')
+            OR category LIKE CONCAT('%', #{input}, '%'))
+        </if>
+    </select>
+
+    <select id="getDetailItem" resultType="com.kb.infoPlaza.dto.GovernmentFundDTO">
+        select * from business_loan_products where loan_product_name = #{productName}
+    </select>
+
+    <select id="getBestCreditLoan4List" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        SELECT * FROM credit_loan_product
+                 where crdt_lend_rate_type_nm = '대출금리'
+        ORDER BY crdt_grad_avg ASC LIMIT 4;
+    </select>
+
+    <select id="getFilteredCreditLoanList" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        SELECT *
+        FROM credit_loan_product
+        WHERE 1=1
+        <if test="companyName != '전체'">
+            AND kor_co_nm = #{companyName}
+        </if>
+        <if test="type != '전체'">
+            AND crdt_prdt_type_nm = #{type}
+        </if>
+        AND crdt_lend_rate_type_nm = '대출금리'
+        <if test="input != null and input != ''">
+            AND (
+            fin_prdt_nm LIKE CONCAT('%', #{input}, '%') OR
+            kor_co_nm LIKE CONCAT('%', #{input}, '%') OR
+            crdt_prdt_type_nm LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getDetailItemCreditLoan" resultType="com.kb.infoPlaza.dto.PersonalCreditLoanDTO">
+        select * from credit_loan_product where id = #{id}
+    </select>
+
+    <select id="getBestJeonse4List" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        SELECT *
+        FROM jeonse_loan_product
+        WHERE lend_rate_avg IS NOT NULL
+        order by lend_rate_avg limit 4;
+    </select>
+
+    <select id="getFilteredJeonseList" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        SELECT *
+        FROM jeonse_loan_product
+        WHERE 1=1
+        <if test="bankName != '전체'">
+            AND kor_co_nm = #{bankName}
+        </if>
+        <if test="repayMethod != '전체'">
+            AND rpay_type_nm = #{repayMethod}
+        </if>
+        <if test="type != '전체'">
+            AND lend_rate_type_nm = #{type}
+        </if>
+        AND lend_rate_avg IS NOT NULL
+        <if test="input != null and input != ''">
+            AND (
+            fin_prdt_nm LIKE CONCAT('%', #{input}, '%') OR
+            kor_co_nm LIKE CONCAT('%', #{input}, '%') OR
+            rpay_type_nm LIKE CONCAT('%', #{input}, '%') OR
+            lend_rate_type_nm LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getDetailItemJeonse" resultType="com.kb.infoPlaza.dto.JeonseDTO">
+        select * from jeonse_loan_product where id = #{id}
+    </select>
+
+    <select id="getBestMortgage4List" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE lend_rate_avg IS NOT NULL
+        order by lend_rate_avg limit 4;
+    </select>
+
+    <select id="getFilteredMortgageList" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        SELECT *
+        FROM mortgage_loan_product
+        WHERE 1=1
+        <if test="bankName != '전체'">
+            AND kor_co_nm = #{bankName}
+        </if>
+        <if test="repayMethod != '전체'">
+            AND rpay_type_nm = #{repayMethod}
+        </if>
+        <if test="type != '전체'">
+            AND lend_rate_type_nm = #{type}
+        </if>
+        AND lend_rate_avg IS NOT NULL
+        <if test="input != null and input != ''">
+            AND (
+            fin_prdt_nm LIKE CONCAT('%', #{input}, '%') OR
+            kor_co_nm LIKE CONCAT('%', #{input}, '%') OR
+            rpay_type_nm LIKE CONCAT('%', #{input}, '%') OR
+            lend_rate_type_nm LIKE CONCAT('%', #{input}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="getDetailItemMortgage" resultType="com.kb.infoPlaza.dto.MortgageDTO">
+        select * from mortgage_loan_product where id = #{id}
+    </select>
+
+
+    <select id="getAllKBLoanInfo" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info order by lowestInterestRate desc;
+    </select>
+
+    <select id="getKBLoanInfoByLoanKey" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info
+        WHERE loan_key = #{loanKey};
+    </select>
+
+    <select id="getKBLoanBest4Info" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT loan_key AS loanKey,
+               product_name AS productName,
+               lowest_interest_rate AS lowestInterestRate,
+               loan_eligibility AS loanEligibility,
+               loan_amount AS loanAmount,
+               loan_duration_and_repayment AS loanDurationAndRepayment,
+               available_hours AS availableHours,
+               loan_notice AS loanNotice
+        FROM kb_loan_info where lowest_interest_rate is not null order by lowestInterestRate limit 4;
+    </select>
+
+    <select id="getKBLoanRecommand" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        select * from kb_loan_info where product_name like '%소상공인%';
+    </select>
+
+    <select id="getFilteredKBLoan" resultType="com.kb.infoPlaza.dto.KBLoanDTO">
+        SELECT *
+        FROM kb_loan_info
+        WHERE 1=1
+        <if test="input != null and input != ''">
+            AND product_name LIKE CONCAT('%', #{input}, '%')
+        </if>
+    </select>
+
+
+</mapper>

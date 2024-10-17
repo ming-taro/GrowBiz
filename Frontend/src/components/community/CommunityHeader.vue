@@ -4,39 +4,25 @@
       src="@/assets/img/headers/communityheader.jpg"
       class="result-image mb-10"
     />
-    <div class="container">
-      <div class="result-text">커뮤니티</div>
-      <!-- <div class="overlay">
-        <div class="overlay-text">
-          <div class="text-center d-flex justify-content-center">
-            <div class="d-flex w-100" style="max-width: 1000px">
-              <div
-                class="flex-item"
-                v-for="category in categories"
-                :key="category.name"
-              >
-                <a :href="category.link"
-                  ><h4>{{ category.name }}</h4></a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-const categories = ref([
-  { name: '음식/음료', link: '#' },
-  { name: '유통', link: '#' },
-  { name: '패션/뷰티', link: '#' },
-  { name: '의료', link: '#' },
-  { name: '여가/오락', link: '#' },
-]);
+const categories = ref([]);
+
+onMounted(() => {
+  axios.get('http://localhost:8080/api/community/all-category')
+    .then(response => {
+      categories.value = response.data;
+    })
+    .catch(error => {
+      console.error("카테고리 데이터를 가져오는 중 오류 발생:", error);
+    });
+});
+
 </script>
 
 <style scoped>
@@ -56,7 +42,7 @@ const categories = ref([
   top: 30%; /* 컨테이너의 중간 */
   left: 15%; /* 컨테이너의 중간 */
   transform: translate(-50%, -50%); /* 중앙 정렬 */
-  color: white; /* 텍스트 색상 */
+  color: black; /* 텍스트 색상 */
   padding: 10px; /* 여백 추가 */
   border-radius: 5px; /* 모서리 둥글게 */
   z-index: 2; /* 텍스트가 이미지 위에 위치하도록 설정 */
@@ -98,4 +84,6 @@ const categories = ref([
   flex: 1;
   text-align: center;
 }
+
+
 </style>

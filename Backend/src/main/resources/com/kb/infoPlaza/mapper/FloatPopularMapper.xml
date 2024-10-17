@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kb.infoPlaza.mapper.FloatPopularMapper">
+
+    <select id="selectPopularByDongName" resultType="com.kb.infoPlaza.dto.FloatPopularDTO">
+        SELECT STDR_YYQU_CD, ADSTRD_CD_NM, TOT_FLPOP_CO, ML_FLPOP_CO, FML_FLPOP_CO
+        FROM flow_population
+        WHERE
+        <foreach item="dongName" collection="dongNames" separator=" OR ">
+            ADSTRD_CD_NM LIKE CONCAT(#{dongName}, '%')
+        </foreach>
+        AND STDR_YYQU_CD = #{yearQuarter}
+    </select>
+
+</mapper>

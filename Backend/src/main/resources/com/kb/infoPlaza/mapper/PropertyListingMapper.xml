@@ -5,12 +5,19 @@
     <select id="selectAllPropertyListings" resultType="PropertyListingDTO">
         SELECT * FROM property_listing
     </select>
-    <select id="selectPropertyListingById" parameterType="int" resultType="PropertyListingDTO">
-        SELECT * FROM property_listing WHERE plno = #{plno}
+
+    <!-- 매물동 코드 가져오기 -->
+    <select id="selectDongCodeByDongName" resultType="String">
+        SELECT dong_code FROM district_code WHERE dong_name = #{dongName}
     </select>
 
-    <!-- 중복 제거한 구 이름 가져오기 -->
-    <select id="selectDistinctGuNames" resultType="DistrictCodeDTO">
-        SELECT DISTINCT gu_name FROM district_code
+    <!-- 매물동 코드 기반 매물 가져오기 -->
+    <select id="selectPropertyListingByDongCode" resultType="PropertyListingDTO">
+        SELECT * FROM property_listing WHERE ldong_cd = #{dongCode}
+    </select>
+
+    <!-- 매물 번호(plno)로 매물 정보 조회 -->
+    <select id="findById" resultType="PropertyListingDTO">
+        SELECT * FROM property_listing where plno = #{id}
     </select>
 </mapper>
