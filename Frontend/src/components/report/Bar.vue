@@ -75,7 +75,7 @@ onMounted(async () => {
           (parseInt(parseFloat(data.industry_total_interior_cost.toFixed(0)))).toLocaleString() // 원본 업종 총 인테리어 비용
         ],
         data: [
-          data.industry_density_average * 500, // 업종 밀도 평균
+          data.industry_density_average * 10, // 업종 밀도 평균
           data.industry_initial_cost / 2, // 업종 평균 가맹비
           data.industry_total_interior_cost // 업종 총 인테리어 비용
         ],
@@ -88,7 +88,7 @@ onMounted(async () => {
           parseFloat(data.recommended_brand_initial_cost.replace(' 만원', '').replace(',', '')).toLocaleString(), // 원본 추천 브랜드 평균 가맹비
           parseFloat(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace(',', '')).toLocaleString() // 원본 추천 브랜드 총 인테리어 비용
         ],
-        data: [data.recommended_brand_density * 500,
+        data: [data.recommended_brand_density * 10,
         (parseFloat(data.recommended_brand_initial_cost.replace(' 만원', '').replace(',', ''))), // 원본 추천 브랜드 평균 가맹비
         parseFloat(data.recommended_brand_total_interior_cost.replace(' 만원', '').replace(',', ''))
         ] // 원본 추천 브랜드 총 인테리어 비용

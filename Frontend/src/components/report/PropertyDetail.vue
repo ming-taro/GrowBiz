@@ -3,21 +3,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">상세 정보</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="handleClose"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          @click="handleClose"></button>
       </div>
       <div class="modal-body content">
         <div class="title">
           {{ property.atclSfeCn }}
         </div>
         <div class="mainblue price fw-bolder">
-          {{ property.dealKindCdNm }} | {{ formatPrice(property.bscTnthWuntAmt) }} | {{ formatPrice(property.addTnthWuntAmt) }}
+          {{ property.dealKindCdNm }} | {{ formatPrice(property.bscTnthWuntAmt) }} | {{
+            formatPrice(property.addTnthWuntAmt) }}
         </div>
         <div class="property-image">
-          <img
-            :src="property.imageData"
-            alt=""
-            style="width: 100%; height: 100%; object-fit: cover;"
-          />
+          <img :src="property.imageData ? property.imageData : defaultImage" alt=""
+            style="width: 100%; height: 100%; object-fit: cover;" />
         </div>
 
         <div class="property-info">
@@ -72,6 +71,7 @@
 </template>
 <script setup>
 import { onMounted, defineProps, ref } from 'vue';
+import defaultImage from '@/assets/img/report/default-property.jpg';
 
 const property = ref(null);
 const props = defineProps(['property', 'closeModal']);
@@ -140,25 +140,30 @@ onMounted(() => {
 .property-info {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* 각 줄 사이의 간격 */
+  gap: 10px;
+  /* 각 줄 사이의 간격 */
   padding: 10px;
   font-size: 16px;
 }
 
 .info-row {
   display: flex;
-  justify-content: space-between; /* 좌우 정렬 */
-  align-items: center; /* 수직 정렬 */
+  justify-content: space-between;
+  /* 좌우 정렬 */
+  align-items: center;
+  /* 수직 정렬 */
 }
 
 .info-label {
   font-weight: bold;
-  width: 120px; /* 라벨의 고정 너비 */
+  width: 120px;
+  /* 라벨의 고정 너비 */
   white-space: nowrap;
 }
 
 .info-value {
-  flex: 1; /* 값이 라벨 옆에서 자동 확장됨 */
+  flex: 1;
+  /* 값이 라벨 옆에서 자동 확장됨 */
   text-align: left;
 }
 </style>

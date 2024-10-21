@@ -880,9 +880,9 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
-    # print("받은값: ", sys.argv[1])
-    # simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
-    simulation_response=fetch_simulation_response_by_id("670f168612fcd26045bb6570") # 테스트 케이스
+    print("받은값: ", sys.argv[1])
+    simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
+    # simulation_response=fetch_simulation_response_by_id("670f168612fcd26045bb6570") # 테스트 케이스
     user_data=update_user_data_from_response(simulation_response)
 
     if simulation_response:
@@ -989,6 +989,6 @@ if __name__ == "__main__":
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
-process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670f168612fcd26045bb6570")
+process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
+# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670f168612fcd26045bb6570")
 
