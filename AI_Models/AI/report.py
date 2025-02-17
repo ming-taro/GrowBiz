@@ -36,24 +36,25 @@ def fetch_simulation_response_by_id(simulation_response_id):
 
     response = simulation_response_collection.find_one(query)
 
+    # 응답 정보 출력
     if response:
         user_id = response.get('user_id', None)  # user_id 추출
         if user_id:
             print(f"User ID: {user_id}")
         else:
             print(f"No user_id found for simulation response ID: {simulation_response_id}")
-        
+
         # 'answer' 필드에서 데이터 추출
         answers = response.get('answer', {})
-        if answers:
-            print("User responses:")
-            for key, value in answers.items():
-                print(f"Question {key}: {value}")
-        else:
-            print("No answers found.")
-            
+        # if answers:
+        #     print("User responses:")
+        #     for key, value in answers.items():
+        #         print(f"Question {key}: {value}")
+        # else:
+        #     print("No answers found.")
+
         return response  # response 객체 반환
-    
+
     else:
         print(f"No simulation response found for ID: {simulation_response_id}")
 
@@ -79,12 +80,12 @@ def update_user_data_from_response(simulation_response):
         return user_data
 
     # simulation_response가 어떤 구조로 넘어오는지 확인
-    print(f"Received simulation_response: {simulation_response}")
+    # print(f"Received simulation_response: {simulation_response}")
 
     # 'answer' 필드가 simulation_response에 있는지 확인
     if 'answer' in simulation_response:
         answer = simulation_response['answer']
-        print(f"Answer found in simulation_response: {answer}")
+        # print(f"Answer found in simulation_response: {answer}")
     else:
         print("Error: 'answer' key not found in simulation_response")
         return user_data
@@ -94,21 +95,24 @@ def update_user_data_from_response(simulation_response):
         district = answer.get('0', {}).get('district', '알 수 없음')  # 기본값 '알 수 없음' 설정
         neighborhoods = answer.get('0', {}).get('neighborhoods', '알 수 없음')  # 기본값 '알 수 없음' 설정
         user_data['region'] = f"서울시, {district}, {neighborhoods}"
-        print(f"Region updated to: {user_data['region']}")
+        # 지역 정보 출력
+        # print(f"Region updated to: {user_data['region']}")
     except KeyError as e:
         print(f"KeyError in region update: {e}")
 
     # 월세
     try:
         user_data['monthly_rent'] = int(answer.get('1', {}).get('text', '0'))  # '300' -> 300
-        print(f"Monthly rent updated to: {user_data['monthly_rent']}")
+        # 월세 정보 출력
+        # print(f"Monthly rent updated to: {user_data['monthly_rent']}")
     except KeyError as e:
         print(f"KeyError in monthly_rent update: {e}")
 
     # 보증금
     try:
         user_data['deposit'] = int(answer.get('2', {}).get('text', '0'))  # '10000' -> 10000
-        print(f"Deposit updated to: {user_data['deposit']}")
+        # 보증금 정보 출력
+        # print(f"Deposit updated to: {user_data['deposit']}")
     except KeyError as e:
         print(f"KeyError in deposit update: {e}")
 
@@ -117,56 +121,64 @@ def update_user_data_from_response(simulation_response):
         category = answer.get('3', {}).get('category', '')
         subcategories = answer.get('3', {}).get('subcategories', '')  # 기본값으로 빈 문자열 설정
         user_data['industry'] = f"{category}, {subcategories}".strip(', ')
-        print(f"Industry updated to: {user_data['industry']}")
+        # 업종 정보 출력
+        # print(f"Industry updated to: {user_data['industry']}")
     except KeyError as e:
         print(f"KeyError in industry update: {e}")
 
     # 초기 자본금
     try:
         user_data['initial_capital'] = int(answer.get('4', {}).get('text', '0'))
-        print(f"Initial capital updated to: {user_data['initial_capital']}")
+        # 초기 자본금 정보 출력
+        # print(f"Initial capital updated to: {user_data['initial_capital']}")
     except KeyError as e:
         print(f"KeyError in initial_capital update: {e}")
 
     # 프랜차이즈 선호도
     try:
         user_data['preference'] = answer.get('5', {}).get('text', '')
-        print(f"Preference updated to: {user_data['preference']}")
+        # 프랜차이즈 선호도 출력
+        # print(f"Preference updated to: {user_data['preference']}")
     except KeyError as e:
         print(f"KeyError in preference update: {e}")
 
     # 가맹비 신경 정도
     try:
         user_data['franchise_fee_concern'] = answer.get('6', {}).get('text', '')
-        print(f"Franchise fee concern updated to: {user_data['franchise_fee_concern']}")
+        # 가맹비 신경 정도 출력
+        # print(f"Franchise fee concern updated to: {user_data['franchise_fee_concern']}")
     except KeyError as e:
         print(f"KeyError in franchise_fee_concern update: {e}")
 
     # 유행 업종 선호도
     try:
         user_data['trending_industry_preference'] = answer.get('7', {}).get('text', '')
-        print(f"Trending industry preference updated to: {user_data['trending_industry_preference']}")
+        # 유행 업종 선호도 출력
+        # print(f"Trending industry preference updated to: {user_data['trending_industry_preference']}")
     except KeyError as e:
         print(f"KeyError in trending_industry_preference update: {e}")
 
     # 매출액 중요도
     try:
         user_data['sales_importance'] = answer.get('8', {}).get('text', '')
-        print(f"Sales importance updated to: {user_data['sales_importance']}")
+        # 매출액 중요도 출력
+        # print(f"Sales importance updated to: {user_data['sales_importance']}")
     except KeyError as e:
         print(f"KeyError in sales_importance update: {e}")
 
     # 폐업률 신경 정도
     try:
         user_data['closure_rate_concern'] = answer.get('9', {}).get('text', '')
-        print(f"Closure rate concern updated to: {user_data['closure_rate_concern']}")
+        # 폐업률 신경 정도 출력
+        # print(f"Closure rate concern updated to: {user_data['closure_rate_concern']}")
     except KeyError as e:
         print(f"KeyError in closure_rate_concern update: {e}")
 
     # 경쟁 자신감
     try:
         user_data['competition_confidence'] = answer.get('10', {}).get('text', '')
-        print(f"Competition confidence updated to: {user_data['competition_confidence']}")
+        # 경쟁 자신감 출력
+        # print(f"Competition confidence updated to: {user_data['competition_confidence']}")
     except KeyError as e:
         print(f"KeyError in competition_confidence update: {e}")
 
@@ -378,23 +390,25 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         simulation_data["excluded_brand_due_to_capital"] = "No excluded franchises due to capital"
 
     # 데이터 출력 확인
-    print("\n=== Simulation Data ===")
-    for key, value in simulation_data.items():
-        print(f"{key}: {value}")
+    # print("\n=== Simulation Data ===")
+    # for key, value in simulation_data.items():
+    #     print(f"{key}: {value}")
 
     simulation_data['top_3_nearby_stations'] = sorted(simulation_data['top_3_nearby_stations'], key=lambda x: x['people'], reverse=True)
 
-    print("\nTop 3 Nearby Stations:")
-    for station in simulation_data['top_3_nearby_stations']:
-        print(f"Station Name: {station['station_name']}, People: {station['people']}")
+    # 근처 역 정보 3개 출력
+    # print("\nTop 3 Nearby Stations:")
+    # for station in simulation_data['top_3_nearby_stations']:
+    #     print(f"Station Name: {station['station_name']}, People: {station['people']}")
 
+    # 추가 추천 브랜드 정보 출력
     # print("\nAdditional Recommended Brands:")
-    print("\nTop Listings:")
+    # print("\nTop Listings:")
     # for brand in simulation_data['additional_recommended_brands']:
-    for brand in simulation_data['top_property_listings']:
-        print(f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
+    # for brand in simulation_data['top_property_listings']:
+    #     print(f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
 
-    print("\nExcluded Brand Due to Capital:")
+    # print("\nExcluded Brand Due to Capital:")
     excluded_brand = simulation_data['excluded_brand_due_to_capital']
 
     # 2. 데이터를 JSON 파일로 저장
@@ -464,8 +478,8 @@ def process_csv_file(df_filtered, category):
     df_filtered['initial_cost'] = (1 - df_filtered['initial_cost']) * weights['franchise_fee']
 
     # 스케일링된 X 값 출력 (디버깅용)
-    print("\n=== X values (scaled independent variables) ===")
-    print(df_filtered[['opening_rate', 'closure_rate', 'average_sales_per_area', 'initial_cost']].head())
+    # print("\n=== X values (scaled independent variables) ===")
+    # print(df_filtered[['opening_rate', 'closure_rate', 'average_sales_per_area', 'initial_cost']].head())
 
     # 독립 변수(X)와 종속 변수(y) 설정
     X = df_filtered[['opening_rate', 'closure_rate', 'average_sales_per_area', 'initial_cost']]
@@ -518,19 +532,20 @@ def process_csv_file(df_filtered, category):
     avg_initial_cost = top_franchises['initial_cost'].mean()
     avg_interior_cost = top_franchises['interior_cost'].mean()
 
-    print("\n=== 상위 30개의 브랜드 평균 ===")
-    print(f"폐업률 평균: {avg_closure_rate * 100:.2f}%")
-    print(f"개업률 평균: {avg_opening_rate * 100:.2f}%")
-    print(f"평균 매출액: {avg_average_sales:.2f} 만원")
-    print(f"초기 비용 평균: {avg_initial_cost:.2f} 만원")
-    print(f"인테리어 비용 평균: {avg_interior_cost:.2f} 만원")
+    # 상위 30개 브랜드 정보 출력
+    # print("\n=== 상위 30개의 브랜드 평균 ===")
+    # print(f"폐업률 평균: {avg_closure_rate * 100:.2f}%")
+    # print(f"개업률 평균: {avg_opening_rate * 100:.2f}%")
+    # print(f"평균 매출액: {avg_average_sales:.2f} 만원")
+    # print(f"초기 비용 평균: {avg_initial_cost:.2f} 만원")
+    # print(f"인테리어 비용 평균: {avg_interior_cost:.2f} 만원")
     
     # 결과 출력
-    for idx, row in enumerate(top_franchises.itertuples(index=False), 1):
-        print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate * 100:.2f}%, 개업률: {row.opening_rate * 100:.2f}%, "
-              f"1년 평균 매출액: {row.average_sales:.2f} 만원, 1평당 매출액: {row.average_sales_per_area:.2f} 만원, "
-              f"가맹비: {row.initial_cost:.2f} 만원, 가맹 보험비: {row.business_fee:.2f} 만원, 인테리어 비용: {row.interior_cost:.2f} 만원, "
-              f"표준 스토어 면적: {row.standard_store_area} ㎡, 점수: {row.normalized_score:.2f}")
+    # for idx, row in enumerate(top_franchises.itertuples(index=False), 1):
+    #     print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate * 100:.2f}%, 개업률: {row.opening_rate * 100:.2f}%, "
+    #           f"1년 평균 매출액: {row.average_sales:.2f} 만원, 1평당 매출액: {row.average_sales_per_area:.2f} 만원, "
+    #           f"가맹비: {row.initial_cost:.2f} 만원, 가맹 보험비: {row.business_fee:.2f} 만원, 인테리어 비용: {row.interior_cost:.2f} 만원, "
+    #           f"표준 스토어 면적: {row.standard_store_area} ㎡, 점수: {row.normalized_score:.2f}")
 
     # JSON 파일 저장
     results = []
@@ -686,8 +701,9 @@ def search_brand_in_region():
         print(f"{gu} {dong_prefix}에 대한 면적 정보를 찾을 수 없습니다.")
         return []
 
-    print(f"{gu}의 '{dong_prefix}'로 시작하는 동 목록: {dong_list}")
-    print(f"총 면적은 {total_area} km² 입니다.\n")
+    # 창업 지역 정보 출력
+    # print(f"{gu}의 '{dong_prefix}'로 시작하는 동 목록: {dong_list}")
+    # print(f"총 면적은 {total_area} km² 입니다.\n")
 
     densities = []  # 밀도 리스트를 저장할 배열
 
@@ -698,7 +714,8 @@ def search_brand_in_region():
         if store_count > 0:
             density = store_count / total_area  # 밀도 계산
             densities.append(density)  # 밀도를 리스트에 저장
-            print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 {store_count}개 있습니다. 밀도: {density:.2f} 가게/km²")
+            # 밀도 정보 출력
+            # print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 {store_count}개 있습니다. 밀도: {density:.2f} 가게/km²")
         else:
             densities.append(0)  # 밀도가 없을 경우 0으로 처리
             print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 없습니다.")
@@ -857,12 +874,14 @@ async def fetch_all_data(page_size):
         region = user_data['region']
         stations_task = get_nearby_station(session, region, kakao_api_key)
         stations = await stations_task
-        print(f"주변역: {stations}")
+        # 주변 역 정보 출력
+        # print(f"주변역: {stations}")
 
         # 서울시 상권 데이터 비동기 호출
         sangwon_data_task = fetch_sangwon_data(session, business_api_key, 1, page_size)
         sangwon_data = await sangwon_data_task
-        print(f"1부터 {page_size}까지 데이터 요청 중...")
+        # 상권 데이터 출력
+        # print(f"1부터 {page_size}까지 데이터 요청 중...")
 
         # 서울시 승차 인원 데이터를 가져오기 위한 날짜 설정
         use_ymd = get_date_minus_days(14)
@@ -872,8 +891,8 @@ async def fetch_all_data(page_size):
         passenger_results = await asyncio.gather(*passenger_tasks)
 
         # 결과 출력
-        for station, total_passengers in zip(stations, passenger_results):
-            print(f"{station}역: {total_passengers}명, 날짜 {use_ymd}")
+        # for station, total_passengers in zip(stations, passenger_results):
+        #     print(f"{station}역: {total_passengers}명, 날짜 {use_ymd}")
         # stations와 passenger_results 반환
         return stations, passenger_results
 
@@ -905,7 +924,8 @@ if __name__ == "__main__":
     else:
         industry_category = user_data['industry'].strip()  # 공백 제거 후 industry 그대로 사용
 
-    print(f"Industry category: {industry_category}")
+    # 산업 카테고리 출력
+    # print(f"Industry category: {industry_category}")
 
     
     # 0. 사용자 입력에 따른 CSV 파일 처리 (프랜차이즈 랭킹 매기기)
@@ -926,9 +946,10 @@ if __name__ == "__main__":
 
     # 1. 매물 리스트 가져오기
     property_listings = get_property_listings()
-    print("\n=== 매물 리스트 (plno) ===")
-    for listing in property_listings:
-        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
+    # 매물 리스트 출력
+    # print("\n=== 매물 리스트 (plno) ===")
+    # for listing in property_listings:
+    #     print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
 
     # 2. 프랜차이즈 밀도 계산 후 밀도 리스트 얻기
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
@@ -940,7 +961,8 @@ if __name__ == "__main__":
     if densities:
         # 3. 밀도의 평균과 표준편차 계산 및 밀도 점수 조정
         adjusted_density_scores, mean_density, std_density = adjust_density_scores(densities)
-        print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
+        # 밀도 평균 출력
+        # print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
 
         # 4. 초기 자본금 조건을 만족하는 프랜차이즈 필터링 (제외된 프랜차이즈 포함)
         filtered_franchises, excluded_franchises = filter_franchises_by_cost(user_data['initial_capital'])  
@@ -950,12 +972,13 @@ if __name__ == "__main__":
 
         # 6. 상위 3개의 프랜차이즈 선택 (청년치킨 포함)
         top_franchises = sorted(final_scores, key=lambda x: x[1], reverse=True)[:3]  # 상위 3개의 프랜차이즈 선택
-        print("\n=== 상위 3개 추천 프랜차이즈 ===")
-        for franchise, score in top_franchises:
-            print(f"{franchise} - 최종 점수: {score:.2f}")
+        # 상위 프랜차이즈 출력
+        # print("\n=== 상위 3개 추천 프랜차이즈 ===")
+        # for franchise, score in top_franchises:
+        #     print(f"{franchise} - 최종 점수: {score:.2f}")
 
         # 7. 제외된 프랜차이즈 3개를 출력
-        print("\n=== 초기 자본금이 부족해서 제외된 프랜차이즈 3개 ===")
+        # print("\n=== 초기 자본금이 부족해서 제외된 프랜차이즈 3개 ===")
         excluded_franchises_sorted = sorted(
             excluded_franchises, 
             key=lambda x: (
@@ -970,9 +993,10 @@ if __name__ == "__main__":
                 float(franchise['business_fee'].replace('만원', '').replace(',', '').strip()) +
                 float(franchise['interior_cost'].replace('만원', '').replace(',', '').strip())
             )
-            print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, "
-                f"초기 비용: {franchise['initial_cost']}만원, 인테리어 비용: {franchise['interior_cost']}만원, "
-                f"총 비용: {total_cost}만원, 점수: {franchise['score']}")
+            # 자본금에서 제외된 프랜차이즈 출력
+            # print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, "
+            #     f"초기 비용: {franchise['initial_cost']}만원, 인테리어 비용: {franchise['interior_cost']}만원, "
+            #     f"총 비용: {total_cost}만원, 점수: {franchise['score']}")
 
         # 8. 추천된 프랜차이즈 중에서 매물 필터링 (청년치킨에 해당하는 매물만)
         top_franchise_name = top_franchises[0][0]  # 상위 1개의 프랜차이즈 이름 (청년치킨)

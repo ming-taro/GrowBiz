@@ -26,7 +26,8 @@ client = MongoClient(MONGO_URI)
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
 simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
-report_collection=db['report']
+report_collection = db['report']
+
 
 def fetch_simulation_response_by_id(simulation_response_id):
     query = {"_id": ObjectId(simulation_response_id)}
@@ -39,7 +40,7 @@ def fetch_simulation_response_by_id(simulation_response_id):
             print(f"User ID: {user_id}")
         else:
             print(f"No user_id found for simulation response ID: {simulation_response_id}")
-        
+
         # 'answer' 필드에서 데이터 추출
         answers = response.get('answer', {})
         if answers:
@@ -48,11 +49,12 @@ def fetch_simulation_response_by_id(simulation_response_id):
                 print(f"Question {key}: {value}")
         else:
             print("No answers found.")
-            
+
         return response  # response 객체 반환
-    
+
     else:
         print(f"No simulation response found for ID: {simulation_response_id}")
+
 
 def update_user_data_from_response(simulation_response):
     # 기본값 설정
@@ -170,7 +172,6 @@ def update_user_data_from_response(simulation_response):
     return user_data
 
 
-
 # MongoDB 클라이언트 설정
 client = MongoClient(MONGO_URI)
 db = client[MONGO_DB_NAME]
@@ -185,7 +186,8 @@ business_api_key = os.getenv('BUSINESS_API_KEY')
 passenger_api_key = os.getenv('PASSENGER_API_KEY')
 kakao_api_key = os.getenv('KAKAO_API_KEY')
 
-# 1. 지역을 선택해주세요.    
+
+# 1. 지역을 선택해주세요.
 # 2. 점포 임대 계약 시 수용 가능한 월세    
 # 3. 점포 임대 계약 시 수용 가능한 보증금
 # 4. 업종 중 분류, 대분류 선택
@@ -261,7 +263,9 @@ kakao_api_key = os.getenv('KAKAO_API_KEY')
 #     }
 # }
 
-def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted, user_id, top_listings):
+def process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density,
+                                         std_density, stations, passenger_results, excluded_franchises_sorted, user_id,
+                                         top_listings):
     # 1. 사용자 입력 및 처리된 데이터를 기반으로 한 실제 데이터 준비
     def convert_to_float(value):
         try:
@@ -269,10 +273,11 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
             return float(value.replace('만원', '').replace(',', ''))
         except (ValueError, AttributeError):
             return 0.0  # 변환에 실패하면 0.0 반환
-    
+
     # 업종 평균값을 계산하기 위한 리스트 생성 (문자열을 float로 변환)
     average_sales_list = [convert_to_float(franchise['average_sales']) for franchise in filtered_franchises]
-    average_sales_per_area_list = [convert_to_float(franchise['average_sales_per_area']) for franchise in filtered_franchises]
+    average_sales_per_area_list = [convert_to_float(franchise['average_sales_per_area']) for franchise in
+                                   filtered_franchises]
     initial_cost_list = [convert_to_float(franchise['initial_cost']) for franchise in filtered_franchises]
     interior_cost_list = [convert_to_float(franchise['interior_cost']) for franchise in filtered_franchises]
 
@@ -303,7 +308,7 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         "recommended_brand_opening_rate_average": filtered_franchises[0]['opening_rate'],  # 추천 브랜드 개업률
         "recommended_brand_closing_rate_average": filtered_franchises[0]['closure_rate'],  # 추천 브랜드 폐업률
 
-       # 추가된 업종 평균 데이터
+        # 추가된 업종 평균 데이터
         "industry_average_sales": industry_average_sales,  # 업종 평균 매출
         "industry_average_sales_per_area": industry_average_sales_per_area,  # 업종 평당 매출액
         "industry_initial_cost": industry_initial_cost,  # 업종 초기 비용
@@ -329,7 +334,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
     }
 
     # 추천 비용(recommended_cost) 계산: 사용자 자금에서 인테리어비와 가맹비를 뺀 값
-    recommended_cost = user_data['initial_capital'] - convert_to_float(filtered_franchises[0]['initial_cost']) - convert_to_float(filtered_franchises[0]['interior_cost'])
+    recommended_cost = user_data['initial_capital'] - convert_to_float(
+        filtered_franchises[0]['initial_cost']) - convert_to_float(filtered_franchises[0]['interior_cost'])
     simulation_data["recommended_cost"] = recommended_cost
 
     # excluded_franchises_sorted가 비어 있지 않은지 확인
@@ -339,10 +345,14 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
             "brand_name": excluded_franchises_sorted[0]['store_name'],
             "franchise_score": excluded_franchises_sorted[0]['score'],
             "insufficient_funds": (
-                float(excluded_franchises_sorted[0]['initial_cost'].replace('만원', '').replace(',', '')) +
-                float(excluded_franchises_sorted[0]['business_fee'].replace('만원', '').replace(',', '')) +
-                float(excluded_franchises_sorted[0]['interior_cost'].replace('만원', '').replace(',', ''))
-            ) - user_data['initial_capital']
+                                          float(excluded_franchises_sorted[0]['initial_cost'].replace('만원', '').replace(
+                                              ',', '')) +
+                                          float(excluded_franchises_sorted[0]['business_fee'].replace('만원', '').replace(
+                                              ',', '')) +
+                                          float(
+                                              excluded_franchises_sorted[0]['interior_cost'].replace('만원', '').replace(
+                                                  ',', ''))
+                                  ) - user_data['initial_capital']
         }
         simulation_data["excluded_brand_due_to_capital"] = excluded_brand
     else:
@@ -359,7 +369,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
 
     print("\nAdditional Recommended Brands:")
     for brand in simulation_data['additional_recommended_brands']:
-        print(f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
+        print(
+            f"Franchise Name: {brand['franchise_name']}, Property ID: {brand['property_id']}, Address: {brand['property_address']}, Monthly Rent: {brand['monthly_rent']}, Deposit: {brand['deposit']}, Area: {brand['area']}")
 
     print("\nExcluded Brand Due to Capital:")
     excluded_brand = simulation_data['excluded_brand_due_to_capital']
@@ -386,8 +397,6 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
         print("Error inserting document")
 
 
-
-
 # # 사용자 입력에서 구와 동을 추출 (동을 '역삼'처럼 변환)
 # gu = user_data['region'].split(', ')[1]  # '강남구'
 # dong_prefix = user_data['region'].split(', ')[2][:2]  # '역삼'
@@ -408,7 +417,8 @@ def process_and_insert_simulation_report(user_data, top_franchises, filtered_fra
 
 def process_csv_file(df_filtered, category):
     # 필요한 열 선택
-    columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'average_sales', 'average_sales_per_area', 
+    columns = ['store_name', 'year', 'region', 'opening_rate', 'closure_rate', 'average_sales',
+               'average_sales_per_area',
                'initial_cost', 'business_fee', 'interior_cost', 'standard_store_area']
 
     df_filtered = df_filtered[columns].copy()
@@ -440,13 +450,13 @@ def process_csv_file(df_filtered, category):
 
     # 개업률(opening_rate)은 높을수록 좋으므로 가중치를 더합니다.
     df_filtered['opening_rate'] += weights['trending']
-    
+
     # 폐업률(closure_rate)은 낮을수록 좋으므로 1에서 폐업률을 빼고 가중치를 더해줍니다.
     df_filtered['closure_rate'] = (1 - df_filtered['closure_rate']) * weights['closure_rate']
-    
+
     # 평균 매출액(average_sales_per_area)은 높을수록 좋으므로 가중치를 더합니다.
     df_filtered['average_sales_per_area'] += weights['sales']
-    
+
     # 초기 비용(initial_cost)은 낮을수록 좋으므로, 1에서 초기비용을 빼고 가중치를 더해줍니다.
     df_filtered['initial_cost'] = (1 - df_filtered['initial_cost']) * weights['franchise_fee']
 
@@ -496,8 +506,7 @@ def process_csv_file(df_filtered, category):
     # 상위 30개의 데이터 선택
     top_franchises = df_filtered.sort_values(by='normalized_score', ascending=False).head(30)
 
-
-    #여기에 상위 30개의 브랜드에서 폐업률 평균이랑, 개업률 평균치 , 평균 매출액,initial_cost의 평균 인테리어 평균 도 가져와줘.
+    # 여기에 상위 30개의 브랜드에서 폐업률 평균이랑, 개업률 평균치 , 평균 매출액,initial_cost의 평균 인테리어 평균 도 가져와줘.
     # 상위 30개의 브랜드에서 평균값 계산
     avg_closure_rate = top_franchises['closure_rate'].mean()
     avg_opening_rate = top_franchises['opening_rate'].mean()
@@ -511,7 +520,7 @@ def process_csv_file(df_filtered, category):
     print(f"평균 매출액: {avg_average_sales:.2f} 만원")
     print(f"초기 비용 평균: {avg_initial_cost:.2f} 만원")
     print(f"인테리어 비용 평균: {avg_interior_cost:.2f} 만원")
-    
+
     # 결과 출력
     for idx, row in enumerate(top_franchises.itertuples(index=False), 1):
         print(f"{idx}. {row.store_name}, 폐업률: {row.closure_rate * 100:.2f}%, 개업률: {row.opening_rate * 100:.2f}%, "
@@ -583,7 +592,7 @@ def process_csv_file(df_filtered, category):
 def load_franchise_data(industry):
     # 산업 카테고리에 맞는 JSON 파일을 불러옴
     json_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage2', f'{industry}_1franchise_ranking.json')
-    
+
     if os.path.exists(json_file_path):
         with open(json_file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
@@ -591,6 +600,7 @@ def load_franchise_data(industry):
     else:
         print(f"{industry}_1franchise_ranking.json 파일을 찾을 수 없습니다.")
         return []
+
 
 # MySQL DB 연결 함수
 def connect_to_db():
@@ -604,11 +614,12 @@ def connect_to_db():
     )
     return connection
 
+
 # DB에서 매물 데이터 가져오기
 def get_property_listings():
     # 사용자 입력에서 주소 필터 생성 ('서울시, 강남구, 역삼동' -> '%서울시 강남구 역삼%')
     address_filter = f"%{gu} {dong_prefix}%"
-    
+
     connection = connect_to_db()
     try:
         with connection.cursor() as cursor:
@@ -638,6 +649,7 @@ def get_property_listings():
     finally:
         connection.close()
 
+
 # 동 이름과 면적 가져오기
 def get_total_area_from_db(gu, dong_prefix):
     connection = connect_to_db()
@@ -653,6 +665,7 @@ def get_total_area_from_db(gu, dong_prefix):
             return result['total_area'] if result['total_area'] else 0
     finally:
         connection.close()
+
 
 # 동 리스트 가져오기
 def get_dong_names_from_db(gu, dong_prefix):
@@ -670,6 +683,7 @@ def get_dong_names_from_db(gu, dong_prefix):
     finally:
         connection.close()
 
+
 # 카카오 맵 API로 가게 검색
 def search_store_kakao(gu, dong_list, store_name):
     headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
@@ -678,15 +692,16 @@ def search_store_kakao(gu, dong_list, store_name):
     for dong in dong_list:
         query = f"{gu} {dong} {store_name}"
         url = f"https://dapi.kakao.com/v2/local/search/keyword.json?query={query}"
-        
+
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             places = response.json().get('documents', [])
             total_places.extend(places)
         else:
             print(f"Error {response.status_code}: {response.text}")
-    
+
     return total_places
+
 
 # 브랜드 별로 검색 후 밀도 구하기
 def search_brand_in_region():
@@ -719,7 +734,7 @@ def search_brand_in_region():
         else:
             densities.append(0)  # 밀도가 없을 경우 0으로 처리
             print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 없습니다.")
-    
+
     return densities  # 계산된 밀도 리스트 반환
 
 
@@ -728,20 +743,20 @@ def filter_franchises_by_cost(initial_capital):
     franchise_data = load_franchise_data(industry_category)  # JSON 파일에서 프랜차이즈 데이터 가져오기
     filtered_franchises = []
     excluded_franchises = []
-    
+
     for store in franchise_data:
         initial_cost = float(store['initial_cost'].replace('만원', '').replace(',', ''))  # 초기 비용 변환
         business_fee = float(store['business_fee'].replace('만원', '').replace(',', ''))  # 가맹비 변환
         interior_cost = float(store['interior_cost'].replace('만원', '').replace(',', ''))  # 인테리어 비용 변환
-        
+
         # 조건: 초기 비용 + 가맹비 + 인테리어 비용 <= 사용자가 입력한 자본금
         total_initial_cost = initial_cost + business_fee + interior_cost
-        
+
         if total_initial_cost <= initial_capital:
             filtered_franchises.append(store)  # 조건 만족
         else:
             excluded_franchises.append(store)  # 조건 불만족 (제외됨)
-    
+
     return filtered_franchises, excluded_franchises
 
 
@@ -749,7 +764,7 @@ def filter_franchises_by_cost(initial_capital):
 def adjust_density_scores(densities):
     mean_density = np.mean(densities)
     std_density = np.std(densities)
-    
+
     adjusted_scores = []
     for density in densities:
         if density < mean_density:
@@ -758,10 +773,11 @@ def adjust_density_scores(densities):
         else:
             # 평균보다 크면 감점
             score_adjustment = 1 - (density - mean_density) / std_density
-        
+
         adjusted_scores.append(score_adjustment)
-    
+
     return adjusted_scores, mean_density, std_density
+
 
 # 밀도 점수와 기존 랭킹 점수를 결합하여 최종 점수를 계산
 def calculate_final_scores(franchise_data, adjusted_density_scores):
@@ -769,17 +785,18 @@ def calculate_final_scores(franchise_data, adjusted_density_scores):
     for i, store in enumerate(franchise_data):
         rank_score = float(store['score'])  # 기존 랭킹 점수
         density_score = adjusted_density_scores[i] * 5  # 밀도 점수 (5점 만점)
-        
+
         # 기존 랭킹 점수와 밀도 점수의 가중치를 5:5로 반영
         final_score = (rank_score * 5 + density_score * 5) / 10
         final_scores.append((store['store_name'], final_score))
-    
+
     return final_scores
+
 
 # 매물 면적과 프랜차이즈 평균 면적을 비교하여 추천할 수 있는 매물 필터링
 def filter_listings_by_franchise_area(listings, franchise_data):
     valid_recommendations = []  # 프랜차이즈와 매물이 모두 추천 가능한 리스트
-    
+
     for franchise in franchise_data:
         try:
             # 프랜차이즈의 표준 스토어 면적을 가져와서 '㎡'를 제거하고 숫자로 변환
@@ -788,7 +805,7 @@ def filter_listings_by_franchise_area(listings, franchise_data):
         except ValueError:
             print(f"Error converting franchise area: {franchise_area_str}")
             continue
-        
+
         # 매물과 프랜차이즈의 면적을 비교하여 추천 가능한 매물 필터링
         for listing in listings:
             if listing['area2'] >= franchise_area:  # 매물 면적이 프랜차이즈 요구 면적 이상인 경우
@@ -801,8 +818,9 @@ def filter_listings_by_franchise_area(listings, franchise_data):
                     'property_deposit': listing['bsc_tnth_wunt_amt'],
                     'property_area': listing['area2']  # 매물 면적
                 })
-    
+
     return valid_recommendations
+
 
 # 서울시 상권 API 비동기 호출 함수
 async def fetch_sangwon_data(session, api_key, start_index, end_index):
@@ -814,13 +832,14 @@ async def fetch_sangwon_data(session, api_key, start_index, end_index):
             print(f"Error: {response.status}")
             return None
 
+
 # Kakao Map API 비동기 호출 함수
 async def get_nearby_station(session, region, kakao_api_key):
     gu_name, dong_name = region.split(", ")[1:]  # 구와 동 정보 추출
     query = f"{gu_name} {dong_name} 근처역"
     url = f"https://dapi.kakao.com/v2/local/search/keyword.json?query={query}"
     headers = {"Authorization": f"KakaoAK {kakao_api_key}"}
-    
+
     async with session.get(url, headers=headers) as response:
         if response.status == 200:
             data = await response.json()
@@ -839,6 +858,7 @@ async def get_nearby_station(session, region, kakao_api_key):
             print(f"Error: {response.status}")
             return []
 
+
 # 서울시 승차 인원 API 비동기 호출 함수
 async def fetch_passenger_data(session, api_key, station_name, use_ymd):
     url = f"http://openapi.seoul.go.kr:8088/{api_key}/xml/CardSubwayStatsNew/1/1000/{use_ymd}"
@@ -848,7 +868,7 @@ async def fetch_passenger_data(session, api_key, station_name, use_ymd):
             root = ET.fromstring(xml_data)
             total_boarding = 0
             total_alighting = 0
-            
+
             for row in root.findall(".//row"):
                 station = row.find('SBWY_STNS_NM').text
                 if station_name == station:  # 역 이름이 완전히 일치할 때만 처리
@@ -856,16 +876,18 @@ async def fetch_passenger_data(session, api_key, station_name, use_ymd):
                     alighting = int(row.find('GTOFF_TNOPE').text)
                     total_boarding += boarding
                     total_alighting += alighting
-            
+
             return total_boarding + total_alighting
         else:
             print(f"Error: {response.status}")
             return 0
 
+
 # 날짜 -2일 설정 함수
 def get_date_minus_days(days):
     target_date = datetime.now() - timedelta(days=days)
     return target_date.strftime("%Y%m%d")
+
 
 # 비동기적으로 서울시 상권 데이터, 카카오 API, 승차 인원 API를 모두 호출하는 함수
 async def fetch_all_data(page_size):
@@ -897,8 +919,8 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
-    simulation_response=fetch_simulation_response_by_id("670c78ddc9263c1f31d2089b")
-    user_data=update_user_data_from_response(simulation_response)
+    simulation_response = fetch_simulation_response_by_id("670f168612fcd26045bb6570")
+    user_data = update_user_data_from_response(simulation_response)
 
     if simulation_response:
         user_id = simulation_response.get('user_id')
@@ -922,13 +944,13 @@ if __name__ == "__main__":
 
     print(f"Industry category: {industry_category}")
 
-    
     # 0. 사용자 입력에 따른 CSV 파일 처리 (프랜차이즈 랭킹 매기기)
-    csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1', f'{industry_category}_franchise_data_with_trend_10plus.csv')
-    
+    csv_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage1',
+                                 f'{industry_category}_franchise_data_with_trend_10plus.csv')
+
     if os.path.exists(csv_file_path):
         print(f"{industry_category} 업종에 해당하는 데이터를 성공적으로 불러왔습니다.")
-        
+
         # CSV 파일 처리 (df_filtered 반환)
         df_filtered = pd.read_csv(csv_file_path)
 
@@ -938,12 +960,12 @@ if __name__ == "__main__":
         print(f"{csv_file_path} 파일을 찾을 수 없습니다.")
         exit()
 
-
     # 1. 매물 리스트 가져오기
     property_listings = get_property_listings()
     print("\n=== 매물 리스트 (plno) ===")
     for listing in property_listings:
-        print(f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
+        print(
+            f"매물 ID: {listing['plno']}, 월세: {listing['add_tnth_wunt_amt']}만원, 보증금: {listing['bsc_tnth_wunt_amt']}만원, 주소: {listing['addr']}, 면적: {listing['area2']}평")
 
     # 2. 프랜차이즈 밀도 계산 후 밀도 리스트 얻기
     densities = search_brand_in_region()  # 밀도 계산 후 지역별 밀도 리스트 반환
@@ -958,8 +980,8 @@ if __name__ == "__main__":
         print(f"밀도 평균: {mean_density}, 표준편차: {std_density}")
 
         # 4. 초기 자본금 조건을 만족하는 프랜차이즈 필터링 (제외된 프랜차이즈 포함)
-        filtered_franchises, excluded_franchises = filter_franchises_by_cost(user_data['initial_capital'])  
-        
+        filtered_franchises, excluded_franchises = filter_franchises_by_cost(user_data['initial_capital'])
+
         # 5. 필터링된 프랜차이즈의 최종 점수 계산
         final_scores = calculate_final_scores(filtered_franchises, adjusted_density_scores)
 
@@ -969,30 +991,31 @@ if __name__ == "__main__":
         for franchise, score in top_franchises:
             print(f"{franchise} - 최종 점수: {score:.2f}")
 
-            
         # 7. 제외된 프랜차이즈 3개를 출력
         print("\n=== 초기 자본금이 부족해서 제외된 프랜차이즈 3개 ===")
         excluded_franchises_sorted = sorted(
-            excluded_franchises, 
+            excluded_franchises,
             key=lambda x: (
-                float(x['initial_cost'].replace('만원', '').replace(',', '').strip()), 
+                float(x['initial_cost'].replace('만원', '').replace(',', '').strip()),
                 float(x['business_fee'].replace('만원', '').replace(',', '').strip()),
                 float(x['interior_cost'].replace('만원', '').replace(',', '').strip())
             )
         )[:3]
         for franchise in excluded_franchises_sorted:
             total_cost = (
-                float(franchise['initial_cost'].replace('만원', '').replace(',', '').strip()) +
-                float(franchise['business_fee'].replace('만원', '').replace(',', '').strip()) +
-                float(franchise['interior_cost'].replace('만원', '').replace(',', '').strip())
+                    float(franchise['initial_cost'].replace('만원', '').replace(',', '').strip()) +
+                    float(franchise['business_fee'].replace('만원', '').replace(',', '').strip()) +
+                    float(franchise['interior_cost'].replace('만원', '').replace(',', '').strip())
             )
             print(f"프랜차이즈: {franchise['store_name']}, 가맹비: {franchise['business_fee']}만원, "
-                f"초기 비용: {franchise['initial_cost']}만원, 인테리어 비용: {franchise['interior_cost']}만원, "
-                f"총 비용: {total_cost}만원, 점수: {franchise['score']}")
+                  f"초기 비용: {franchise['initial_cost']}만원, 인테리어 비용: {franchise['interior_cost']}만원, "
+                  f"총 비용: {total_cost}만원, 점수: {franchise['score']}")
 
         # 8. 추천된 프랜차이즈 중에서 매물 필터링 (청년치킨에 해당하는 매물만)
         top_franchise_name = top_franchises[0][0]  # 상위 1개의 프랜차이즈 이름 (청년치킨)
-        valid_recommendations = filter_listings_by_franchise_area(property_listings, [store for store in filtered_franchises if store['store_name'] == top_franchise_name])
+        valid_recommendations = filter_listings_by_franchise_area(property_listings,
+                                                                  [store for store in filtered_franchises if
+                                                                   store['store_name'] == top_franchise_name])
 
         # 9. 보증금과 월세가 적은 매물 3개 선택
         top_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
@@ -1001,9 +1024,11 @@ if __name__ == "__main__":
         if top_listings:
             for recommendation in top_listings:
                 print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
-                print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
+                print(
+                    f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
         else:
             print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_listings)
-
+        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density,
+                                             std_density, stations, passenger_results, excluded_franchises_sorted,
+                                             user_id, top_listings)
