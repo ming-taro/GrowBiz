@@ -5,6 +5,8 @@ import com.kb.simulation.dto.report.RequestReport;
 import com.kb.simulation.dto.report.ResponseReport;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,9 +22,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@PropertySource({"classpath:/application.properties"})
 public class ReportService {
     private final MongoTemplate mongoTemplate;
-    private final String REPORT_COLLECTION = "report";
+
+    @Value("${spring.data.mongodb.collection.report}")
+    private String REPORT_COLLECTION;
 
     public Document findById(String id) {
         Query query = new Query();
