@@ -58,7 +58,7 @@ public class SimulationService {
             File workingDirectory = new File(aiAnalysisPath);
             String scriptPath = "report.py";
 
-            ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", scriptPath, id);
             processBuilder.directory(workingDirectory);
             processBuilder.redirectErrorStream(true);
 
