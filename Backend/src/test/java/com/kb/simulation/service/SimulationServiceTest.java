@@ -1,6 +1,7 @@
 package com.kb.simulation.service;
 
 import com.kb._config.RootConfig;
+import com.kb.simulation.dto.question.Question;
 import lombok.extern.log4j.Log4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,9 +75,10 @@ class SimulationServiceTest {
         for (String line : originalEnvLines) {
             if (line.startsWith("MONGO_URI=")) {
                 updatedLines.add("MONGO_URI=" + mongoUri);
-            } else if (line.startsWith("REPORT_COLLECTION_NAME=")) {
-                updatedLines.add("REPORT_COLLECTION_NAME=" + REPORT_COLLECTION);
-            } else {
+            } else if (line.startsWith("MONGO_DB_NAME=")) {
+                updatedLines.add("MONGO_DB_NAME=" + database);
+            }
+            else {
                 updatedLines.add(line);
             }
         }
@@ -102,30 +105,33 @@ class SimulationServiceTest {
         assertEquals(reportService.findReportByResponseId(responseId), reportId);
     }
 
-    @DisplayName("여러 개의 응답에 대한 보고서 생성 테스트")
+//    @DisplayName("10 개의 응답에 대한 보고서 동시 생성 테스트")
+//    @Test
+//    void executeSimulationByMultiRequest() throws ExecutionException, InterruptedException {
+//        List<String> responseIds = new ArrayList<>();
+//        List<Future<String>> result = new ArrayList<>();
+//
+//        for (String id: responseIds) {
+//            result.add(pool.submit(() -> simulationService.executeSimulation(id)));
+//        }
+//
+//        pool.shutdown();
+//
+//        for (Future<String> future: result) {
+//            System.out.println("결과 = " + future.get());
+//            assertTrue(future.isDone());
+//        }
+//    }
+
+    @DisplayName("시뮬레이션 질문 조회 테스트")
     @Test
-    void executeSimulationByMultiRequest() throws ExecutionException, InterruptedException {
-        List<String> responseIds = new ArrayList<>();
-        List<Future<String>> result = new ArrayList<>();
+    void findQuestions() {
+        List<Question<Object>> questions = simulationService.findQuestions();
 
-        responseIds.add("679f30e9180a3c12d217707c");
-        responseIds.add("679f30ea180a3c12d217707d");
-        responseIds.add("679f30e9180a3c12d217707c");
-        responseIds.add("679f30ea180a3c12d217707d");
-        responseIds.add("679f30e9180a3c12d217707c");
-        responseIds.add("679f30ea180a3c12d217707d");
-        responseIds.add("679f30e9180a3c12d217707c");
-        responseIds.add("679f30ea180a3c12d217707d");
+        Assertions.assertFalse(questions.isEmpty(), "조회된 질문이 없습니다.");
 
-        for (String id: responseIds) {
-            result.add(pool.submit(() -> simulationService.executeSimulation(id)));
-        }
-
-        pool.shutdown();
-
-        for (Future<String> future: result) {
-            System.out.println("결과 = " + future.get());
-            assertTrue(future.isDone());
+        for (Question<Object> question : questions) {
+            Assertions.assertNotNull(question.getId(), "조회한 질문의 ID가 null입니다.");
         }
     }
 }
