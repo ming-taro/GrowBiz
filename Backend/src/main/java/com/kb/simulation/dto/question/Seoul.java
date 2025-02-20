@@ -1,14 +1,12 @@
 package com.kb.simulation.dto.question;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class Seoul {

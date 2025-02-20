@@ -1,8 +1,11 @@
 package com.kb.simulation.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kb.simulation.dto.question.Question;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,6 +18,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,9 +40,20 @@ public class SimulationService {
         return question;
     }
 
-    public List<Question> findQuestions() {
-        List<Question> question = mongoTemplate.findAll(Question.class);
-        return question;
+    public <T> List<Question<T>> findQuestions() {
+        List<LinkedHashMap> rawData = mongoTemplate.findAll(LinkedHashMap.class, "questions");
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Question<T>> questions = new ArrayList<>();
+
+        for (LinkedHashMap<String, Object> data : rawData) {
+            if (data.get("_id") instanceof ObjectId) {
+                data.put("_id", data.get("_id").toString());
+            }
+            Question<T> question = objectMapper.convertValue(data, new TypeReference<Question<T>>() {});
+            questions.add(question);
+        }
+
+        return questions;
     }
 
     public Document createResponse(String answer) {
