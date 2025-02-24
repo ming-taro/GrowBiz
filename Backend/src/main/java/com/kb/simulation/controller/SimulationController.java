@@ -5,9 +5,9 @@ import com.kb.simulation.service.SimulationService;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +28,8 @@ public class SimulationController {
     }
 
     @GetMapping("/question")
-    public ResponseEntity<List<Question>> findQuestions() {
-        List<Question> storeQuestions = service.findQuestions();
+    public ResponseEntity<List<Question<Object>>> findQuestions() {
+        List<Question<Object>> storeQuestions = service.findQuestions();
 
         storeQuestions.sort((o1, o2) -> o1.getInd() - o2.getInd());
 
@@ -39,12 +39,14 @@ public class SimulationController {
         return ResponseEntity.ok(storeQuestions);
     }
 
+    @Transactional
     @PostMapping("/answer")
     public ResponseEntity<Document> createResponse(@RequestBody String answer) {
         Document savedData = simulationService.createResponse(answer);
 
         Document responseData = new Document("answer", savedData.get("answer"))
                 .append("id", savedData.getObjectId("_id").toString());
+        System.out.println(responseData);
 
         if (savedData == null) {
             return ResponseEntity.noContent().build();

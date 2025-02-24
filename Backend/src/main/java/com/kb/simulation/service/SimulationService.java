@@ -2,7 +2,7 @@ package com.kb.simulation.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kb.simulation.dto.question.Question;
+import com.kb.simulation.dto.question.*;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -49,8 +50,15 @@ public class SimulationService {
             if (data.get("_id") instanceof ObjectId) {
                 data.put("_id", data.get("_id").toString());
             }
-            Question<T> question = objectMapper.convertValue(data, new TypeReference<Question<T>>() {});
-            questions.add(question);
+
+            switch (QuestionType.fromString(data.get("questionType").toString())) {
+                case DISTRICT ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Seoul>>() {}));
+                case INDUSTRY ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Industry>>() {}));
+                default ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Choice>>() {}));
+            }
         }
 
         return questions;
@@ -65,6 +73,17 @@ public class SimulationService {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
         return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
+    }
+
+    public List<String> findResponseByMemberId(String memberId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("user_id").is(memberId));
+
+        List<ObjectId> objectIds = mongoTemplate.findDistinct(query, "_id", SIMULATION_RESPONSE_COLLECTION, ObjectId.class);
+
+        return objectIds.stream()
+                .map(ObjectId::toString)
+                .collect(Collectors.toList());
     }
 
     public String executeSimulation(String id) {
@@ -82,7 +101,7 @@ public class SimulationService {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println(Thread.currentThread().getName() + " - " + line);
                 result.add(line);
             }
 
