@@ -103,15 +103,14 @@ class SimulationServiceTest {
         assertEquals(reportService.findReportByResponseId(responseId), reportId);
     }
 
-    @DisplayName("10개 응답에 대한 보고서 동시 생성 테스트")
+    @DisplayName("20개 응답에 대한 보고서 동시 생성 테스트")
     @ParameterizedTest
-    @ValueSource(ints = {10})
+    @ValueSource(ints = {20})
     void executeSimulationByMultiRequest(int reportCount) throws ExecutionException, InterruptedException {
         List<String> responseIds = simulationService.findResponseByMemberId("foreigners");
         List<Future<ReportTest>> result = new ArrayList<>();
         ExecutorService pool = Executors.newFixedThreadPool(reportCount);
 
-        long startTime = System.currentTimeMillis();
         for (int i = 0; i < reportCount; i++) {
             final String id = responseIds.get(i);
             result.add(pool.submit(() -> {
@@ -121,16 +120,12 @@ class SimulationServiceTest {
                 return new ReportTest(reportId, taskStartTime, taskEndTime, taskEndTime - taskStartTime);
             }));
         }
-        long endTime = System.currentTimeMillis();
         pool.shutdown();
 
         for (int i = 0; i < reportCount; i++) {
-            assertTrue(!reportService.findById(result.get(i).get().getReportId()).isEmpty());
-            System.out.println((i + 1) + "번 보고서 결과 = " + result.get(i).get());
+            ReportTest report = result.get(i).get();
+            assertEquals(reportService.findReportByResponseId(responseIds.get(i)), report.getReportId());
         }
-
-        System.out.println("총 보고서 개수 = " + reportCount + ", 생성된 보고서 개수 = " + result.size());
-        System.out.println("전체 소요 시간 = " + (endTime - startTime) + "ms");
     }
 
     @DisplayName("2개 응답에 대한 보고서 동시 생성 테스트")
