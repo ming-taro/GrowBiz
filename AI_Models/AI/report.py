@@ -29,7 +29,7 @@ client = MongoClient(MONGO_URI)
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
 simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
-report_collection=db[os.getenv("REPORT_COLLECTION_NAME")]
+report_collection = db[os.getenv("REPORT_COLLECTION_NAME")]
 
 def fetch_simulation_response_by_id(simulation_response_id):
     query = {"_id": ObjectId(simulation_response_id)}
@@ -718,7 +718,7 @@ def search_brand_in_region():
             # print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 {store_count}개 있습니다. 밀도: {density:.2f} 가게/km²")
         else:
             densities.append(0)  # 밀도가 없을 경우 0으로 처리
-            print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 없습니다.")
+            # print(f"{store_name}가 {gu}의 '{dong_prefix}'로 시작하는 동들에 없습니다.")
     
     return densities  # 계산된 밀도 리스트 반환
 
@@ -899,8 +899,9 @@ async def fetch_all_data(page_size):
 
 # 메인 실행 함수
 if __name__ == "__main__":
-    print("받은값: ", sys.argv[1])
-    simulation_response=fetch_simulation_response_by_id(sys.argv[1]) # simulation id
+    response_id = sys.argv[1]
+    print("사용자 응답 ID: ", response_id)
+    simulation_response=fetch_simulation_response_by_id(response_id) # simulation id
     # simulation_response=fetch_simulation_response_by_id("670f168612fcd26045bb6570") # 테스트 케이스
     user_data=update_user_data_from_response(simulation_response)
 
@@ -911,7 +912,7 @@ if __name__ == "__main__":
     if 'region' in user_data and len(user_data['region'].split(', ')) >= 3:
         gu = user_data['region'].split(', ')[1].strip()  # '강남구' 공백 제거
         dong_prefix = user_data['region'].split(', ')[2].strip()[:2]  # '역삼' 공백 제거
-        print(f"구: {gu}, 동: {dong_prefix}")
+        # print(f"구: {gu}, 동: {dong_prefix}")
     else:
         print("Error: Invalid region format in user_data['region']")
 
@@ -1005,14 +1006,14 @@ if __name__ == "__main__":
         # 9. 보증금과 월세가 적은 매물 3개 선택
         top_property_listings = sorted(valid_recommendations, key=lambda x: (x['property_deposit'], x['property_rent']))[:3]
 
-        print("\n=== 추천 가능한 매물 (청년치킨에 해당하는 상위 3개) ===")
-        if top_property_listings:
-            for recommendation in top_property_listings:
-                print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
-                print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
-        else:
-            print("조건에 맞는 추천 가능한 매물이 없습니다.")
+        # print("\n=== 추천 가능한 매물 (청년치킨에 해당하는 상위 3개) ===")
+        # if top_property_listings:
+        #     for recommendation in top_property_listings:
+        #         print(f"프랜차이즈: {recommendation['franchise_name']}, 점수: {recommendation['franchise_score']}")
+        #         print(f"매물 ID: {recommendation['property_id']}, 주소: {recommendation['property_address']}, 월세: {recommendation['property_rent']}만원, 보증금: {recommendation['property_deposit']}만원, 면적: {recommendation['property_area']}평\n")
+        # else:
+        #     print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, sys.argv[1]) #수정
+process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, response_id) #수정
 # process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670f168612fcd26045bb6570")
 
