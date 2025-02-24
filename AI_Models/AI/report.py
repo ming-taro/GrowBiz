@@ -18,6 +18,7 @@ from pymongo import MongoClient
 import uuid  # UUID 생성용
 from bson.objectid import ObjectId
 import sys
+import tempfile
 
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -30,6 +31,8 @@ MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
 simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
 report_collection = db[os.getenv("REPORT_COLLECTION_NAME")]
+
+industry_1franchise_ranking_file_path = ""
 
 def fetch_simulation_response_by_id(simulation_response_id):
     query = {"_id": ObjectId(simulation_response_id)}
@@ -569,25 +572,32 @@ def process_csv_file(df_filtered, category):
     output_folder = os.path.join('..', 'franchise_rank', 'preprocessing_stage2')
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-    json_file_name = f"{category}_1franchise_ranking.json"
-    json_file_path = os.path.join(output_folder, json_file_name)
-    with open(json_file_path, 'w', encoding='utf-8') as json_file:
-        json.dump(results, json_file, ensure_ascii=False, indent=4)
+    # json_file_name = f"{response_id}_1franchise_ranking.json"
+    # json_file_path = os.path.join(output_folder, json_file_name)
+    print("파일 경로 = " + output_folder)
 
-    print(f"Data saved to '{json_file_path}'")
+    global industry_1franchise_ranking_file_path
+    with tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix='.json',
+            mode='w',
+            encoding='utf-8',
+            dir=output_folder) as json_file:
+        json.dump(results, json_file, ensure_ascii=False, indent=4)
+        industry_1franchise_ranking_file_path = json_file.name
+
+    print(f"Data saved to '{output_folder}'")
 
 
 # 치킨 프랜차이즈 데이터를 json 파일에서 읽기
 def load_franchise_data(industry):
     # 산업 카테고리에 맞는 JSON 파일을 불러옴
-    json_file_path = os.path.join('..', 'franchise_rank', 'preprocessing_stage2', f'{industry}_1franchise_ranking.json')
-    
-    if os.path.exists(json_file_path):
-        with open(json_file_path, 'r', encoding='utf-8') as file:
+    if os.path.exists(industry_1franchise_ranking_file_path):
+        with open(industry_1franchise_ranking_file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
         return data
     else:
-        print(f"{industry}_1franchise_ranking.json 파일을 찾을 수 없습니다.")
+        print(f"{response_id}_1franchise_ranking.json 파일을 찾을 수 없습니다.")
         return []
 
 # MySQL DB 연결 함수
@@ -901,8 +911,7 @@ async def fetch_all_data(page_size):
 if __name__ == "__main__":
     response_id = sys.argv[1]
     print("사용자 응답 ID: ", response_id)
-    simulation_response=fetch_simulation_response_by_id(response_id) # simulation id
-    # simulation_response=fetch_simulation_response_by_id("670f168612fcd26045bb6570") # 테스트 케이스
+    simulation_response = fetch_simulation_response_by_id(response_id) # simulation id
     user_data=update_user_data_from_response(simulation_response)
 
     if simulation_response:
@@ -1014,6 +1023,6 @@ if __name__ == "__main__":
         # else:
         #     print("조건에 맞는 추천 가능한 매물이 없습니다.")
 
-process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, response_id) #수정
-# process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, "670f168612fcd26045bb6570")
+        process_and_insert_simulation_report(user_data, top_franchises, filtered_franchises, densities, mean_density, std_density, stations, passenger_results, excluded_franchises_sorted,user_id,top_property_listings, response_id) #수정
 
+    os.remove(industry_1franchise_ranking_file_path); # 상위 프랜차이즈 순위 분석 json 파일 삭제
