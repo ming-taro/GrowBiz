@@ -2,9 +2,12 @@ package com.kb.simulation.service;
 
 import com.kb._config.RootConfig;
 import com.kb.simulation.dto.question.Question;
+import com.kb.simulation.dto.test.ReportTest;
 import lombok.extern.log4j.Log4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,10 +24,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,8 +61,6 @@ class SimulationServiceTest {
     @Autowired
     private ReportService reportService;
 
-    private ExecutorService pool = Executors.newFixedThreadPool(10);
-
     @BeforeEach
     void setup() throws IOException {
         String mongoUri = String.format("mongodb://%s:%s@%s:%d/%s?authSource=%s", username, password, host, port, database, authenticationDatabase);
@@ -89,14 +87,14 @@ class SimulationServiceTest {
     void tearDown() throws IOException {
         // .env 파일 복구
         Files.write(envPath, originalEnvLines, StandardCharsets.UTF_8);
-        mongoTemplate.dropCollection(REPORT_COLLECTION);
+//        mongoTemplate.dropCollection(REPORT_COLLECTION);
     }
 
     @DisplayName("1개의 응답에 대한 보고서 생성 테스트")
     @Test
     void executeSimulation() {
         // Given
-        String responseId = "679f30e9180a3c12d217707c";
+        String responseId = "67bab0d04a6d57312bde038a";
 
         // When
         String reportId = simulationService.executeSimulation(responseId);
@@ -105,23 +103,75 @@ class SimulationServiceTest {
         assertEquals(reportService.findReportByResponseId(responseId), reportId);
     }
 
-//    @DisplayName("10 개의 응답에 대한 보고서 동시 생성 테스트")
-//    @Test
-//    void executeSimulationByMultiRequest() throws ExecutionException, InterruptedException {
-//        List<String> responseIds = new ArrayList<>();
-//        List<Future<String>> result = new ArrayList<>();
-//
-//        for (String id: responseIds) {
-//            result.add(pool.submit(() -> simulationService.executeSimulation(id)));
-//        }
-//
-//        pool.shutdown();
-//
-//        for (Future<String> future: result) {
-//            System.out.println("결과 = " + future.get());
-//            assertTrue(future.isDone());
-//        }
-//    }
+    @DisplayName("10개 응답에 대한 보고서 동시 생성 테스트")
+    @ParameterizedTest
+    @ValueSource(ints = {10})
+    void executeSimulationByMultiRequest(int reportCount) throws ExecutionException, InterruptedException {
+        List<String> responseIds = simulationService.findResponseByMemberId("foreigners");
+        List<Future<ReportTest>> result = new ArrayList<>();
+        ExecutorService pool = Executors.newFixedThreadPool(reportCount);
+
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < reportCount; i++) {
+            final String id = responseIds.get(i);
+            result.add(pool.submit(() -> {
+                long taskStartTime = System.currentTimeMillis();
+                String reportId = simulationService.executeSimulation(id);
+                long taskEndTime = System.currentTimeMillis();
+                return new ReportTest(reportId, taskStartTime, taskEndTime, taskEndTime - taskStartTime);
+            }));
+        }
+        long endTime = System.currentTimeMillis();
+        pool.shutdown();
+
+        for (int i = 0; i < reportCount; i++) {
+            assertTrue(!reportService.findById(result.get(i).get().getReportId()).isEmpty());
+            System.out.println((i + 1) + "번 보고서 결과 = " + result.get(i).get());
+        }
+
+        System.out.println("총 보고서 개수 = " + reportCount + ", 생성된 보고서 개수 = " + result.size());
+        System.out.println("전체 소요 시간 = " + (endTime - startTime) + "ms");
+    }
+
+    @DisplayName("2개 응답에 대한 보고서 동시 생성 테스트")
+    @Test
+    void executeSimulationByTwoRequest() throws ExecutionException, InterruptedException {
+        int reportCount = 2;
+        List<String> responseIds = simulationService.findResponseByMemberId("foreigners");
+        List<Future<ReportTest>> result = new ArrayList<>();
+
+        CountDownLatch latch = new CountDownLatch(reportCount);
+        ExecutorService pool = Executors.newFixedThreadPool(reportCount);
+
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < reportCount; i++) {
+            final String id = responseIds.get(i);
+            try {
+                result.add(pool.submit(() -> {
+                    long taskStartTime = System.currentTimeMillis();
+                    String reportId = simulationService.executeSimulation(id);
+                    long taskEndTime = System.currentTimeMillis();
+                    return new ReportTest(reportId, taskStartTime, taskEndTime, taskEndTime - taskStartTime);
+                }));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                latch.countDown();
+            }
+        }
+        long endTime = System.currentTimeMillis();
+
+        latch.await();
+        pool.shutdown();
+
+        for (int i = 0; i < reportCount; i++) {
+            assertFalse(reportService.findById(result.get(i).get().getReportId()).isEmpty());
+            System.out.println((i + 1) + "번 보고서 결과 = " + result.get(i).get());
+        }
+
+        System.out.println("총 보고서 개수 = " + reportCount + ", 생성된 보고서 개수 = " + result.size());
+        System.out.println("전체 소요 시간 = " + (endTime - startTime) + "ms");
+    }
 
     @DisplayName("시뮬레이션 질문 조회 테스트")
     @Test
