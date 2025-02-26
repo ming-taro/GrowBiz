@@ -4,12 +4,13 @@ import com.kb.member.dto.Member;
 import com.kb.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-@Log4j
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages  = {"com.kb.**"})
-@ComponentScan(basePackages = {"com.kb.**"})
+@ComponentScan(basePackages = {"com.kb.**", "com.kb.simulation.service"})
 @Slf4j
 @EnableTransactionManagement
 public class RootConfig {
