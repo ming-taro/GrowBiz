@@ -4,6 +4,7 @@ import com.kb._config.RootConfig;
 import com.kb.simulation.dto.question.Question;
 import com.kb.simulation.dto.test.ReportTest;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RootConfig.class)
-@Log4j
+@Slf4j
 @TestPropertySource(locations = "classpath:application.properties")
 class SimulationServiceTest {
     @Value("${spring.data.mongodb.host}")
@@ -87,7 +88,7 @@ class SimulationServiceTest {
     void tearDown() throws IOException {
         // .env 파일 복구
         Files.write(envPath, originalEnvLines, StandardCharsets.UTF_8);
-//        mongoTemplate.dropCollection(REPORT_COLLECTION);
+        mongoTemplate.dropCollection(REPORT_COLLECTION);
     }
 
     @DisplayName("1개의 응답에 대한 보고서 생성 테스트")
@@ -146,26 +147,28 @@ class SimulationServiceTest {
                     long taskStartTime = System.currentTimeMillis();
                     String reportId = simulationService.executeSimulation(id);
                     long taskEndTime = System.currentTimeMillis();
+                    latch.countDown();
                     return new ReportTest(reportId, taskStartTime, taskEndTime, taskEndTime - taskStartTime);
                 }));
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            } finally {
-                latch.countDown();
             }
         }
-        long endTime = System.currentTimeMillis();
 
         latch.await();
+        long endTime = System.currentTimeMillis();
+
         pool.shutdown();
 
+        System.out.println();
         for (int i = 0; i < reportCount; i++) {
             assertFalse(reportService.findById(result.get(i).get().getReportId()).isEmpty());
-            System.out.println((i + 1) + "번 보고서 결과 = " + result.get(i).get());
+            log.info((i + 1) + "번 보고서 결과 = " + result.get(i).get());
         }
 
-        System.out.println("총 보고서 개수 = " + reportCount + ", 생성된 보고서 개수 = " + result.size());
-        System.out.println("전체 소요 시간 = " + (endTime - startTime) + "ms");
+        log.info("총 보고서 개수 = " + reportCount + ", 생성된 보고서 개수 = " + result.size());
+        log.info("시작 시간 = " + startTime + ", 종료 시간 = " + endTime);
+        log.info("전체 소요 시간 = " + (endTime - startTime) + "ms");
     }
 
     @DisplayName("시뮬레이션 질문 조회 테스트")
