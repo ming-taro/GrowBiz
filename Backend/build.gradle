@@ -79,19 +79,6 @@ dependencies {
   runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
   implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-  // 테스트
-  testImplementation "org.springframework:spring-test:${springVersion}"
-  testCompileOnly"org.projectlombok:lombok:${lombokVersion}"
-  testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-
-  testImplementation "org.mockito:mockito-core:5.15.2"
-  testImplementation 'org.jeasy:easy-random-core:5.0.0'
-
-  testImplementation "org.junit.jupiter:junit-jupiter-params:5.10.0"
-
   // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
   implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
@@ -104,8 +91,25 @@ dependencies {
   implementation 'org.mongodb:mongo-java-driver:3.10.1'
   implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
-  // python
+  // redis
+  implementation 'org.springframework.data:spring-data-redis:2.7.18'
+  implementation 'io.lettuce:lettuce-core:6.5.4.RELEASE'
+
+  // jython
   implementation 'org.python:jython-slim:2.7.4'
+
+  // 테스트
+  testImplementation "org.springframework:spring-test:${springVersion}"
+  testCompileOnly"org.projectlombok:lombok:${lombokVersion}"
+  testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+  testImplementation "org.mockito:mockito-core:5.15.2"
+  testImplementation 'org.jeasy:easy-random-core:5.0.0'
+
+  testImplementation "org.junit.jupiter:junit-jupiter-params:5.10.0"
 }
 
 
