@@ -19,19 +19,29 @@ import uuid  # UUID 생성용
 from bson.objectid import ObjectId
 import sys
 import tempfile
+# import redis
+
+from store.store import count_store_by_location_with_kakao
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 # .env 파일에서 API 키 및 DB 정보 불러오기
 load_dotenv()
 
+# mongoDB
 MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
-db = client[MONGO_DB_NAME]  # 여기는 데이터베이스 객체를 가져오는 부분입니다.
+db = client[MONGO_DB_NAME]
 simulation_response_collection = db['simulation_response']  # 컬렉션에 접근
 report_collection = db[os.getenv("REPORT_COLLECTION_NAME")]
 
+# redis
+# REDIS_HOST = os.getenv('REDIS_HOST')
+# REDIS_PORT = os.getenv('REDIS_PORT')
+# redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+
+# 상수
 industry_1franchise_ranking_file_path = ""
 
 def fetch_simulation_response_by_id(simulation_response_id):
@@ -678,28 +688,6 @@ def get_dong_names_from_db(gu, dong_prefix):
     finally:
         connection.close()
 
-# 카카오 맵 API로 가게 검색
-def count_store_by_location_with_kakao(gu, dong_list, store_name):
-    headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
-    # total_places = []
-    count = 0
-
-    for dong in dong_list:
-        query = f"{gu} {dong} {store_name}"
-        url = f"https://dapi.kakao.com/v2/local/search/keyword.json?query={query}"
-
-        print("[요청 쿼리 정보] 위치 = %s %s, 가게명 = %s" %(gu, dong, store_name))
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            places = response.json().get('documents', [])
-            if not places:
-                count += 1
-            # total_places.extend(places)
-            # print(f"[카카오 맵 가게 조회 결과]", places)
-        else:
-            print(f"[카카오 맵 가게 조회] Error {response.status_code}: {response.text}")
-
-    return count
 
 # 브랜드 별로 검색 후 밀도 구하기
 def search_brand_in_region():
@@ -724,7 +712,7 @@ def search_brand_in_region():
 
     for store in franchise_data:
         store_name = store['store_name']
-        store_count = count_store_by_location_with_kakao(gu, dong_list, store_name)
+        store_count, api_status = count_store_by_location_with_kakao(gu, dong_list, store_name)
         if store_count > 0:
             density = store_count / total_area  # 밀도 계산
             densities.append(density)  # 밀도를 리스트에 저장
