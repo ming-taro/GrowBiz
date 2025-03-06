@@ -2,9 +2,10 @@ import os
 import requests
 from dotenv import load_dotenv
 import redis
+import logging
 
+# env
 load_dotenv()
-
 KAKAO_API_KEY = os.getenv("KAKAO_API_KEY")
 
 # redis
@@ -25,11 +26,20 @@ def count_store_by_location_with_kakao(gu, dong_list, store_name):
         key = store_name
 
         if not redis_client.hexists(name, key):
-            count, api_status = count_store_by_new_location(gu, dong, store_name)
-            if api_status:
-                redis_client.hset(name, key, count)
-                store_count += count
+            lock_key = f"{name}:{key}"
+            logging.info(f"lock_key = {lock_key}")
+            if redis_client.setnx(lock_key, 1):
+                try:
+                    count, api_status = count_store_by_new_location(gu, dong, store_name)
+                    if api_status:
+                        redis_client.hset(name, key, count)
+                        store_count += count
+                        logging.info(f"[검색 API] {name}:{key} = {count}")
+                finally:
+                    redis_client.expire(lock_key, 1)
         else:
+            value = int(redis_client.hget(name, key))
+            logging.info(f"[redis] {name}:{key} = {value}")
             store_count += int(redis_client.hget(name, key))
 
     return store_count, True
