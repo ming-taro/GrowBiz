@@ -67,3 +67,14 @@ def count_store_by_new_location(gu, dong, store_name):
         api_status = False
 
     return count, api_status
+
+
+# 서울시 상권 API 비동기 호출 함수
+async def fetch_sangwon_data(session, api_key, start_index, end_index):
+    url = f"http://openapi.seoul.go.kr:8088/{api_key}/xml/VwsmSignguStorW/{start_index}/{end_index}/"
+    async with session.get(url) as response:
+        if response.status == 200:
+            return await response.text()
+        else:
+            print(f"[서울시 상권 조회] Error: {response.status}")
+            return None
