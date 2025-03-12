@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 import logging
-from store import count_store_by_location_with_kakao
+from ..store.store import count_store_by_location_with_kakao
 
 
 class Test(TestCase):
@@ -16,11 +16,6 @@ class Test(TestCase):
 
         logging.info(f"[실행 결과] {gu} {store_name}, 가게 개수 = {count}")
         assert api_status
-
-    def test_count_store_by_location_with_kakao_for_multi_users(self):
-        gu = '강남구'
-        dong_list = ['역삼1동', '역삼2동']
-        store_name = '자담치킨'
 
 
 if __name__ == '__main__':
