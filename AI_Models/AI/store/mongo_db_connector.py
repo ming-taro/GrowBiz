@@ -9,13 +9,10 @@ class MongoDBConnector:
     _instance = None
 
     def __new__(cls, *args, **kwargs):
-        # 싱글톤 인스턴스를 생성
         if not cls._instance:
             cls._instance = super(MongoDBConnector, cls).__new__(cls)
-            MONGO_URI = os.getenv("MONGO_URI")
-            MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
-            cls._client = MongoClient(MONGO_URI)
-            cls._db = cls._client[MONGO_DB_NAME]
+            cls._client = MongoClient(os.getenv("MONGO_URI"))
+            cls._db = cls._client[os.getenv("MONGO_DB_NAME")]
         return cls._instance
 
     def get_db(self):
