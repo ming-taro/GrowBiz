@@ -71,7 +71,7 @@ if __name__ == "__main__":
             exit()
 
         # 1. 매물 리스트 가져오기
-        property_listings = get_property_listings(gu, dong_prefix, user_data)
+        property_listings = get_property_listings(gu, dong_prefix, user_data['monthly_rent'], user_data['deposit'])
         # 매물 리스트 출력
         # print("\n=== 매물 리스트 (plno) ===")
         # for listing in property_listings:

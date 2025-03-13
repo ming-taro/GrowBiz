@@ -1,36 +1,24 @@
 from .mysql_connector import MySQLConnector
 
 
-# DB에서 매물 데이터 가져오기
-def get_property_listings(gu, dong_prefix, user_data):
-    # 사용자 입력에서 주소 필터 생성 ('서울시, 강남구, 역삼동' -> '%서울시 강남구 역삼%')
-    address_filter = f"%{gu} {dong_prefix}%"
+SELECT_PROPERTY_LISTING = f"""
+    SELECT plno, add_tnth_wunt_amt, bsc_tnth_wunt_amt, addr, area2  -- 매물 ID, 월세, 보증금, 주소, 면적
+    FROM KB.property_listing
+    WHERE add_tnth_wunt_amt <= %s
+        AND bsc_tnth_wunt_amt <= %s
+        AND MATCH(addr) AGAINST(%s IN BOOLEAN MODE)
+        AND MATCH(addr) AGAINST(%s IN BOOLEAN MODE)
+        AND ctgry_cd1_nm = '상가점포'
+        AND deal_kind_cd_nm = '월세'
+        AND is_first_floor = 1
+    ORDER BY atcl_reg_dttm DESC;
+    """
 
-    connection = MySQLConnector().get_connection()
-    with connection.cursor() as cursor:
-        query = f"""
-        SELECT 
-            plno,                  -- 매물 ID
-            add_tnth_wunt_amt,      -- 월세
-            bsc_tnth_wunt_amt,      -- 보증금
-            addr,                  -- 주소
-            area2
-        FROM 
-            KB.property_listing  -- 테이블 명
-        WHERE 
-            ctgry_cd1_nm = '상가점포'      -- 카테고리 1에서 '상가점포'만
-            AND deal_kind_cd_nm = '월세'       -- 거래 유형이 '월세'
-            AND addr LIKE %s                  -- 주소 필터 적용 (주소에서 강남구 역삼 포함)
-            AND add_tnth_wunt_amt <= %s       -- 사용자 입력 월세 필터
-            AND bsc_tnth_wunt_amt <= %s       -- 사용자 입력 보증금 필터
-            AND is_first_floor =1
-        ORDER BY 
-            atcl_reg_dttm DESC;  -- 정렬
-        """
-        # 파라미터로 주소 필터, 월세, 보증금 전달
-        cursor.execute(query, (address_filter, user_data['monthly_rent'], user_data['deposit']))
-        results = cursor.fetchall()
-        return results
+
+# 매물 데이터 - 사용자 입력에서 추출한 주소 필터 기반 검색('강남구, 역삼동' -> "역삼1동", "역삼2동" 데이터가 있을 수 있으므로 "역삼+"로 검색)
+def get_property_listings(gu, dong_prefix, monthly_rent, deposit):
+    return MySQLConnector().execute_select_query(
+        SELECT_PROPERTY_LISTING, (monthly_rent, deposit, gu, dong_prefix + "*"))
 
 
 # 동 이름과 면적 가져오기
