@@ -32,6 +32,18 @@ class MySQLConnector:
             )
         return self._connection
 
+    def execute_select_query(self, query, params):
+        try:
+            connection = self.get_connection()
+            cursor = connection.cursor()
+            cursor.execute(query, params)
+            result = cursor.fetchall()
+            return result
+        except pymysql.Error as err:
+            print(f"Error: {err}")
+        finally:
+            cursor.close()
+
     def execute_query(self, query):
         try:
             connection = self.get_connection()
