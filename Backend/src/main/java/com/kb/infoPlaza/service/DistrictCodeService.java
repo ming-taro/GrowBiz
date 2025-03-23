@@ -4,12 +4,13 @@ import com.kb.infoPlaza.dto.DistrictCodeDTO;
 import com.kb.infoPlaza.mapper.DistrictCodeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@Log4j
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DistrictCodeService {

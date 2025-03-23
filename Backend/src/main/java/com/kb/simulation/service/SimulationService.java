@@ -1,8 +1,11 @@
 package com.kb.simulation.service;
 
-import com.kb.simulation.dto.question.Question;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kb.simulation.dto.question.*;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +18,9 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -36,9 +41,27 @@ public class SimulationService {
         return question;
     }
 
-    public List<Question> findQuestions() {
-        List<Question> question = mongoTemplate.findAll(Question.class);
-        return question;
+    public <T> List<Question<T>> findQuestions() {
+        List<LinkedHashMap> rawData = mongoTemplate.findAll(LinkedHashMap.class, "questions");
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Question<T>> questions = new ArrayList<>();
+
+        for (LinkedHashMap<String, Object> data : rawData) {
+            if (data.get("_id") instanceof ObjectId) {
+                data.put("_id", data.get("_id").toString());
+            }
+
+            switch (QuestionType.fromString(data.get("questionType").toString())) {
+                case DISTRICT ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Seoul>>() {}));
+                case INDUSTRY ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Industry>>() {}));
+                default ->
+                        questions.add((Question<T>) objectMapper.convertValue(data, new TypeReference<Question<Choice>>() {}));
+            }
+        }
+
+        return questions;
     }
 
     public Document createResponse(String answer) {
@@ -52,13 +75,24 @@ public class SimulationService {
         return mongoTemplate.findOne(query, Document.class, SIMULATION_RESPONSE_COLLECTION);
     }
 
+    public List<String> findResponseByMemberId(String memberId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("user_id").is(memberId));
+
+        List<ObjectId> objectIds = mongoTemplate.findDistinct(query, "_id", SIMULATION_RESPONSE_COLLECTION, ObjectId.class);
+
+        return objectIds.stream()
+                .map(ObjectId::toString)
+                .collect(Collectors.toList());
+    }
+
     public String executeSimulation(String id) {
         List<String> result = new ArrayList<>();
         try {
             File workingDirectory = new File(aiAnalysisPath);
             String scriptPath = "report.py";
 
-            ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath, id);
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", scriptPath, id);
             processBuilder.directory(workingDirectory);
             processBuilder.redirectErrorStream(true);
 
@@ -67,7 +101,7 @@ public class SimulationService {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println(Thread.currentThread().getName() + " - " + line);
                 result.add(line);
             }
 

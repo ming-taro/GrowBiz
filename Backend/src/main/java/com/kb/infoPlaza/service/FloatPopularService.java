@@ -5,11 +5,12 @@ import com.kb.infoPlaza.dto.FloatPopularReqDTO;
 import com.kb.infoPlaza.mapper.FloatPopularMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Log4j
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FloatPopularService {

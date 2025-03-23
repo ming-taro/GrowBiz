@@ -1,6 +1,6 @@
 package com.multi.security;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import com.kb._config.RootConfig;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
         RootConfig.class,
         SecurityConfig.class
 })
-@Log4j
+@Slf4j
 public class PasswordEncoderTest {
     @Autowired
     private PasswordEncoder pwEncoder;

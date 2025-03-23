@@ -1,7 +1,7 @@
 package com.multi.config;
 
 import com.kb._config.RootConfig;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes= {RootConfig.class})
-@Log4j
+@Slf4j
 class RootConfigTest {
 
     @Autowired
@@ -34,8 +34,7 @@ class RootConfigTest {
     @DisplayName("DataSource 연결이 된다.")
     public void dataSource() throws SQLException {
         try(Connection con = dataSource.getConnection()){
-            log.info("DataSource 준비 완료");
-            log.info(con);
+            log.info("DataSource 준비 완료", con);
         }
     }
 
@@ -45,8 +44,8 @@ class RootConfigTest {
                 SqlSession session = sqlSessionFactory.openSession();
                 Connection con = session.getConnection();
         ) {
-            log.info(session);
-            log.info(con);
+            log.info(session.toString());
+            log.info(String.valueOf(con));
         } catch (Exception e) {
             fail(e.getMessage());
         }
